@@ -1,0 +1,2462 @@
+; version 9 - module specs, also see s303.txt for text substitutions.
+0 Invalid
+remarks "not an actual module type"
+cycles 0.00000
+progMem 0.00000
+xmem 0.00000
+ymem 0.00000
+zeropage 0.00000
+dynmem 0.00000
+height 0
+parameters
+inputs
+outputs
+custom
+----------
+1 Keyboard
+remarks "only 1"
+cycles 0.00000
+progMem 0.00000
+xmem 0.00000
+ymem 0.00000
+zeropage 3.00000
+dynmem 1.00000
+height 2
+parameters
+inputs
+outputs
+0 "Note" control
+1 "gate" logic
+2 "velocity on" control
+3 "velocity off" control
+custom
+----------
+2 AudioIn
+remarks ""
+cycles 2.20000
+progMem 1.00000
+xmem 1.00000
+ymem 1.00000
+zeropage 2.00000
+dynmem 1.00000
+height 2
+parameters
+inputs
+outputs
+0 "left" audio
+1 "right" audio
+custom
+----------
+3 4Output
+remarks ""
+cycles 2.06250
+progMem 0.46875
+xmem 0.09375
+ymem 0.00000
+zeropage 0.00000
+dynmem 0.28125
+height 3
+parameters
+0 "level" 0..127 ""
+inputs
+0 "out 1" audio
+1 "out 2" audio
+2 "out 3" audio
+3 "out 4" audio
+outputs
+custom
+----------
+4 2Output
+remarks ""
+cycles 1.40625
+progMem 0.34375
+xmem 0.09375
+ymem 0.09375
+zeropage 0.00000
+dynmem 0.37500
+height 3
+parameters
+0 "level" 0..127 ""
+1 "destination" 0..2 "2destination"
+2 "mute" 0..1 "onoff"
+inputs
+0 "out left" audio
+1 "out right" audio
+outputs
+custom
+----------
+5 1Output
+remarks ""
+cycles 1.28125
+progMem 0.31250
+xmem 0.09375
+ymem 0.09375
+zeropage 0.00000
+dynmem 0.37500
+height 3
+parameters
+0 "level" 0..127 ""
+1 "dest" 0..5 "1destination"
+2 "mute" 0..1 "onoff"
+inputs
+0 "out" audio
+outputs
+custom
+----------
+7 OscA
+remarks ""
+cycles 10.81250
+progMem 6.56250
+xmem 0.84375
+ymem 0.34375
+zeropage 1.75000
+dynmem 0.37500
+height 6
+parameters
+0 "freq coarse" 0..127 "freqcoarse"
+1 "freq fine" 0..127 "freqfine"
+2 "freq KBT" 0..127 "freqkbt"
+3 "Pulse width" 0..127 "pulsewidth"
+4 "waveform" 0..3 "waveform1"
+5 "pitch mod 1" 0..127 ""
+6 "pitch mod 2" 0..127 ""
+7 "fma mod" 0..127 ""
+8 "PW mod" 0..127 ""
+9 "Mute" 0..1 "onoff"
+inputs
+0 "sync" audio
+1 "FMA" audio
+2 "pitch 1" audio
+3 "pitch 2" audio
+4 "pulse width mod" audio
+outputs
+0 "out" audio
+1 "slv" slave
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+8 OscB
+remarks ""
+cycles 8.28125
+progMem 6.25000
+xmem 0.68750
+ymem 0.50000
+zeropage 1.75000
+dynmem 0.68750
+height 6
+parameters
+0 "Freq coarse" 0..127 "freqcoarse"
+1 "Freq fine" 0..127 "freqfine"
+2 "Freq KBT" 0..127 "freqkbt"
+3 "waveform" 0..3 "waveform1"
+4 "pitch mod 1" 0..127 ""
+5 "pitch mod 2" 0..127 ""
+6 "fma mod" 0..127 ""
+7 "PWidth" 0..127 "pulsewidth"
+8 "mute" 0..1 "onoff"
+inputs
+0 "FMA" audio
+1 "pitch 1" control
+2 "pitch 2" control
+3 "PW mod" control
+outputs
+0 "out" audio
+1 "slv" slave
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+9 OscC
+remarks ""
+cycles 4.96875
+progMem 1.09375
+xmem 0.56250
+ymem 0.09375
+zeropage 1.75000
+dynmem 0.53125
+height 4
+parameters
+0 "pitch coarse" 0..127 "freqcoarse"
+1 "pitch fine" 0..127 "freqfine"
+2 "pitch KBT" 0..1 "onoff"
+3 "pitch mod amount" 0..127 ""
+4 "FMA" 0..127 ""
+5 "mute" 0..1 "onoff"
+inputs
+0 "FMA" audio
+1 "pitch" audio
+2 "AM" audio
+outputs
+0 "out" audio
+1 "slv" slave
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+10 OscSlvB
+remarks ""
+cycles 7.12500
+progMem 2.15625
+xmem 0.21875
+ymem 0.34375
+zeropage 0.87500
+dynmem 0.50000
+height 3
+parameters
+0 "detune coarse" 0..127 "symetric"
+1 "detune fine" 0..127 "symetric"
+2 "PW" 0..127 "pulsewidth"
+3 "PW mod" 0..127 ""
+4 "mute" 0..1 "onoff"
+inputs
+0 "mst" slave
+1 "PWmod" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..2 "freqdisplunits3"
+----------
+11 OscSlvC
+remarks ""
+cycles 6.00000
+progMem 1.75000
+xmem 0.15625
+ymem 0.21875
+zeropage 0.87500
+dynmem 0.50000
+height 3
+parameters
+0 "detune coarse" 0..127 "symetric"
+1 "detune fine" 0..127 "symetric"
+2 "FMA mod" 0..127 ""
+3 "mute" 0..1 "onoff"
+inputs
+0 "mst" slave
+1 "FMA" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..2 "freqdisplunits3"
+----------
+12 OscSlvD
+remarks ""
+cycles 5.87500
+progMem 1.31250
+xmem 0.15625
+ymem 0.21875
+zeropage 0.87500
+dynmem 0.43750
+height 3
+parameters
+0 "detune coarse" 0..127 "symetric"
+1 "detune fine" 0..127 "symetric"
+2 "FMA mod" 0..127 ""
+3 "mute" 0..1 "onoff"
+inputs
+0 "mst" slave
+1 "FMA" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..2 "freqdisplunits3"
+----------
+13 OscSlvE
+remarks ""
+cycles 3.06250
+progMem 0.68750
+xmem 0.34375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.43750
+height 3
+parameters
+0 "detune coarse" 0..127 "symetric"
+1 "detune fine" 0..127 "symetric"
+2 "FMA mod" 0..127 ""
+3 "mute" 0..1 "onoff"
+inputs
+0 "mst" slave
+1 "FMA" audio
+2 "AM" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..2 "freqdisplunits3"
+----------
+14 OscSlvA
+remarks ""
+cycles 7.62500
+progMem 5.87500
+xmem 0.43750
+ymem 0.28125
+zeropage 0.87500
+dynmem 0.50000
+height 4
+parameters
+0 "detune coarse" 0..127 "symetric"
+1 "detune fine" 0..127 "symetric"
+2 "shape" 0..3 ""
+3 "FMA mod" 0..127 ""
+4 "mute" 0..1 "onoff"
+inputs
+0 "mst" slave
+1 "FMA" audio
+2 "AM" audio
+3 "sync" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..2 "freqdisplunits3"
+----------
+15 NoteSeqA
+remarks ""
+cycles 1.43750
+progMem 1.15625
+xmem 0.56250
+ymem 1.43750
+zeropage 3.50000
+dynmem 1.25000
+height 7
+parameters
+0 "step 1" 0..127 "symetric"
+1 "step 2" 0..127 "symetric"
+2 "step 3" 0..127 "symetric"
+3 "step 4" 0..127 "symetric"
+4 "step 5" 0..127 "symetric"
+5 "step 6" 0..127 "symetric"
+6 "step 7" 0..127 "symetric"
+7 "step 8" 0..127 "symetric"
+8 "step 9" 0..127 "symetric"
+9 "step 10" 0..127 "symetric"
+10 "step 11" 0..127 "symetric"
+11 "step 12" 0..127 "symetric"
+12 "step 13" 0..127 "symetric"
+13 "step 14" 0..127 "symetric"
+14 "step 15" 0..127 "symetric"
+15 "step 16" 0..127 "symetric"
+16 "step count" 0..127 ""
+17 "edit position" 0..16 "editpos"
+18 "record" 0..1 "onoff"
+19 "pause" 0..1 "onoff"
+20 "active" 0..1 "onoff"
+inputs
+0 "sync" logic
+1 "reset" logic
+outputs
+0 "out" control
+1 "sync" logic
+2 "link" logic
+3 "gclk" logic
+custom
+----------
+16 PortamentoB
+remarks ""
+cycles 0.53125
+progMem 0.46875
+xmem 0.15625
+ymem 0.21875
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "adsrtime"
+inputs
+0 "in" control
+1 "jmp" logic
+outputs
+0 "out" control
+custom
+----------
+17 EventSeq
+remarks ""
+cycles 1.65625
+progMem 1.34375
+xmem 0.62500
+ymem 1.43750
+zeropage 3.50000
+dynmem 2.00000
+height 5
+parameters
+0 "stepcount" 0..127 ""
+1 "active" 0..1 "onoff"
+2 "gate1" 0..1 "onoff"
+3 "gate2" 0..1 "onoff"
+4 "seq 1, step 1" 0..1 "onoff"
+5 "seq 1, step 2" 0..1 "onoff"
+6 "seq 1, step 3" 0..1 "onoff"
+7 "seq 1, step 4" 0..1 "onoff"
+8 "seq 1, step 5" 0..1 "onoff"
+9 "seq 1, step 6" 0..1 "onoff"
+10 "seq 1, step 7" 0..1 "onoff"
+11 "seq 1, step 8" 0..1 "onoff"
+12 "seq 1, step 9" 0..1 "onoff"
+13 "seq 1, step 10" 0..1 "onoff"
+14 "seq 1, step 11" 0..1 "onoff"
+15 "seq 1, step 12" 0..1 "onoff"
+16 "seq 1, step 13" 0..1 "onoff"
+17 "seq 1, step 14" 0..1 "onoff"
+18 "seq 1, step 15" 0..1 "onoff"
+19 "seq 1, step 16" 0..1 "onoff"
+20 "seq 2, step 1" 0..1 "onoff"
+21 "seq 2, step 2" 0..1 "onoff"
+22 "seq 2, step 3" 0..1 "onoff"
+23 "seq 2, step 4" 0..1 "onoff"
+24 "seq 2, step 5" 0..1 "onoff"
+25 "seq 2, step 6" 0..1 "onoff"
+26 "seq 2, step 7" 0..1 "onoff"
+27 "seq 2, step 8" 0..1 "onoff"
+28 "seq 2, step 9" 0..1 "onoff"
+29 "seq 2, step 10" 0..1 "onoff"
+30 "seq 2, step 11" 0..1 "onoff"
+31 "seq 2, step 12" 0..1 "onoff"
+32 "seq 2, step 13" 0..1 "onoff"
+33 "seq 2, step 14" 0..1 "onoff"
+34 "seq 2, step 15" 0..1 "onoff"
+35 "seq 2, step 16" 0..1 "onoff"
+inputs
+0 "clock" logic
+1 "reset" logic
+outputs
+0 "out1" logic
+1 "out2" logic
+2 "sync" logic
+3 "link" logic
+custom
+----------
+18 X-Fade
+remarks ""
+cycles 1.65625
+progMem 0.40625
+xmem 0.09375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.34375
+height 3
+parameters
+0 "modulation" 0..127 ""
+1 "crossfade" 0..127 "symetric"
+inputs
+0 "in1" audio
+1 "in2" audio
+2 "modulation" audio
+outputs
+0 "out" audio
+custom
+----------
+19 Mixer
+remarks "3 input mixer"
+cycles 0.90625
+progMem 0.21875
+xmem 0.15625
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.37500
+height 2
+parameters
+0 "in sense 1" 0..127 ""
+1 "in sense 2" 0..127 ""
+2 "in sense 3" 0..127 ""
+inputs
+0 "in1" audio
+1 "in2" audio
+2 "in3" audio
+outputs
+0 "out" audio
+custom
+----------
+20 ADSR-Env
+remarks ""
+cycles 1.62500
+progMem 1.06250
+xmem 1.03125
+ymem 0.21875
+zeropage 1.75000
+dynmem 0.53125
+height 5
+parameters
+0 "attack shape" 0..2 "adsrshape"
+1 "attack" 0..127 "adsrtime"
+2 "decay" 0..127 "adsrtime"
+3 "sustain" 0..127 ""
+4 "release" 0..127 "adsrtime"
+5 "invert" 0..1 "onoff"
+inputs
+0 "in" audio
+1 "gate" logic
+2 "retrig" logic
+3 "amp" control
+outputs
+0 "env" control
+1 "out" audio
+custom
+----------
+21 Compressor
+remarks ""
+cycles 8.28125
+progMem 1.81250
+xmem 0.56250
+ymem 0.56250
+zeropage 1.75000
+dynmem 0.68750
+height 7
+parameters
+0 "attack" 0..127 "companderattack"
+1 "release" 0..127 "companderrelease"
+2 "treshold" 0..42 "compandertreshold"
+3 "ratio" 0..66 "companderratio"
+4 "ref level" 0..42 "companderref"
+5 "limiter" 0..24 "companderlimit"
+6 "act" 0..1 "onoff"
+7 "mon" 0..1 "onoff"
+8 "bypass" 0..1 "onoff"
+inputs
+0 "left" audio
+1 "right" audio
+2 "side" audio
+outputs
+0 "left" audio
+1 "right" audio
+custom
+----------
+22 PartialGen
+remarks ""
+cycles 0.59375
+progMem 0.53125
+xmem 0.28125
+ymem 2.18750
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "range" 0..127 "symetric"
+inputs
+0 "in" control
+outputs
+0 "out" control
+custom
+----------
+23 Mod-Env
+remarks ""
+cycles 3.34375
+progMem 2.53125
+xmem 2.59375
+ymem 0.15625
+zeropage 1.75000
+dynmem 0.68750
+height 6
+parameters
+0 "attack" 0..127 "adsrtime"
+1 "decay" 0..127 "adsrtime"
+2 "sustain" 0..127 ""
+3 "release" 0..127 "adsrtime"
+4 "attack mod" 0..127 ""
+5 "decay mod" 0..127 ""
+6 "sustain mod" 0..127 ""
+7 "release mod" 0..127 ""
+8 "invert" 0..1 "onoff"
+inputs
+0 "gate" logic
+1 "retrig" logic
+2 "attack mod" control
+3 "decay mod" control
+4 "sustain mod" control
+5 "release mod" control
+6 "in" audio
+7 "amp" control
+outputs
+0 "env" control
+1 "out" audio
+custom
+----------
+24 LFOA
+remarks ""
+cycles 1.78125
+progMem 2.37500
+xmem 0.56250
+ymem 0.21875
+zeropage 1.75000
+dynmem 0.62500
+height 5
+parameters
+0 "rate" 0..127 "lforate"
+1 "range" 0..2 "lforange"
+2 "waveform" 0..4 "lfoshape"
+3 "rate mod" 0..127 ""
+4 "mono" 0..1 "onoff"
+5 "rate kbt" 0..127 "freqkbt"
+6 "phase" 0..127 "phase"
+7 "mute" 0..1 "onoff"
+inputs
+0 "rate" control
+1 "reset" logic
+outputs
+0 "slv" slave
+1 "out" control
+custom
+----------
+25 LFOB
+remarks ""
+cycles 1.18750
+progMem 1.06250
+xmem 0.50000
+ymem 0.28125
+zeropage 1.75000
+dynmem 0.62500
+height 5
+parameters
+0 "rate" 0..127 "lforate"
+1 "range" 0..2 "lforange"
+2 "phase" 0..127 "phase"
+3 "rate mod" 0..127 ""
+4 "mono" 0..1 "onoff"
+5 "rate kbt" 0..127 "freqkbt"
+6 "PW mod" 0..127 ""
+7 "PW" 0..127 "pulsewidth"
+inputs
+0 "rate" control
+1 "rst" logic
+2 "PWmod" control
+outputs
+0 "out" control
+1 "slv" slave
+custom
+----------
+26 LFOC
+remarks ""
+cycles 1.46875
+progMem 1.06250
+xmem 0.50000
+ymem 0.15625
+zeropage 1.75000
+dynmem 0.50000
+height 4
+parameters
+0 "rate" 0..127 "lforate"
+1 "range" 0..2 "lforange"
+2 "waveform" 0..4 "lfoshape"
+3 "rate mod" 0..127 ""
+4 "mono" 0..1 "onoff"
+5 "mute" 0..1 "onoff"
+inputs
+0 "rate" control
+outputs
+0 "out" control
+1 "slv" slave
+custom
+----------
+27 LFOSlvB
+remarks ""
+cycles 0.37500
+progMem 0.34375
+xmem 0.09375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "rate" 0..127 "lfoslvrate"
+inputs
+0 "mst" slave
+outputs
+0 "out" control
+custom
+0 "freq display units" 0..1 "freqdisplunitslfo"
+----------
+28 LFOSlvC
+remarks ""
+cycles 0.78125
+progMem 0.68750
+xmem 0.34375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "rate" 0..127 "lfoslvrate"
+inputs
+0 "mst" slave
+outputs
+0 "out" control
+custom
+0 "freq display units" 0..1 "freqdisplunitslfo"
+----------
+29 LFOSlvD
+remarks ""
+cycles 0.37500
+progMem 0.34375
+xmem 0.15625
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "rate" 0..127 "lfoslvrate"
+inputs
+0 "mst" slave
+outputs
+0 "out" control
+custom
+0 "freq display units" 0..1 "freqdisplunitslfo"
+----------
+30 LFOSlvE
+remarks ""
+cycles 0.34375
+progMem 0.31250
+xmem 0.15625
+ymem 0.15625
+zeropage 0.90625
+dynmem 0.28125
+height 2
+parameters
+0 "rate" 0..127 "lfoslvrate"
+inputs
+0 "mst" slave
+outputs
+0 "out" control
+custom
+0 "freq display units" 0..1 "freqdisplunitslfo"
+----------
+31 Noise
+remarks ""
+cycles 1.65625
+progMem 0.40625
+xmem 0.28125
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "color" 0..127 "noisecolor"
+inputs
+outputs
+0 "out" audio
+custom
+----------
+32 FilterBank
+remarks ""
+cycles 17.93750
+progMem 9.00000
+xmem 5.59375
+ymem 10.21875
+zeropage 0.90625
+dynmem 0.96875
+height 7
+parameters
+0 "50" 0..127 ""
+1 "75" 0..127 ""
+2 "110" 0..127 ""
+3 "170" 0..127 ""
+4 "250" 0..127 ""
+5 "380" 0..127 ""
+6 "570" 0..127 ""
+7 "850" 0..127 ""
+8 "1.3" 0..127 ""
+9 "1.9" 0..127 ""
+10 "2.9" 0..127 ""
+11 "4.2" 0..127 ""
+12 "6.4" 0..127 ""
+13 "8.3" 0..127 ""
+14 "bypass" 0..1 ""
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+33 ClkRndGen
+remarks ""
+cycles 0.62500
+progMem 0.62500
+xmem 0.21875
+ymem 0.21875
+zeropage 0.87500
+dynmem 0.34375
+height 2
+parameters
+0 "mono" 0..1 "onoff"
+1 "col" 0..1 "onoff"
+inputs
+0 "clk" logic
+outputs
+0 "out" control
+custom
+----------
+34 RndStepGen
+remarks ""
+cycles 0.62500
+progMem 0.65625
+xmem 0.21875
+ymem 0.34375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "rate" 0..127 "lfoslvrate"
+inputs
+0 "mst" slave
+outputs
+0 "out" control
+custom
+----------
+35 RndPulsGen
+remarks ""
+cycles 0.34375
+progMem 0.31250
+xmem 0.21875
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "density" 0..127 ""
+inputs
+outputs
+0 "out" logic
+custom
+----------
+36 PosEdgeDelay
+remarks ""
+cycles 0.28125
+progMem 0.25000
+xmem 0.15625
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "logictime"
+inputs
+0 "in" logic
+outputs
+0 "out" logic
+custom
+----------
+37 LogicDelay
+remarks ""
+cycles 0.62500
+progMem 0.56250
+xmem 0.15625
+ymem 0.28125
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "logictime"
+inputs
+0 "in" logic
+outputs
+0 "out" logic
+custom
+----------
+38 Pulse
+remarks ""
+cycles 0.34375
+progMem 0.31250
+xmem 0.21875
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "logictime"
+inputs
+0 "in" logic
+outputs
+0 "out" logic
+custom
+----------
+39 Smooth
+remarks ""
+cycles 0.25000
+progMem 0.21875
+xmem 0.09375
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "smoothtime"
+inputs
+0 "in" control
+outputs
+0 "out" control
+custom
+----------
+40 Mixer
+remarks "8 input mixer"
+cycles 2.18750
+progMem 0.50000
+xmem 0.28125
+ymem 0.34375
+zeropage 0.90625
+dynmem 0.68750
+height 4
+parameters
+0 "in sense 1" 0..127 ""
+1 "in sense 2" 0..127 ""
+2 "in sense 3" 0..127 ""
+3 "in sense 4" 0..127 ""
+4 "in sense 5" 0..127 ""
+5 "in sense 6" 0..127 ""
+6 "in sense 7" 0..127 ""
+7 "in sense 8" 0..127 ""
+8 "-6dB" 0..1 ""
+inputs
+0 "in 1" audio
+1 "in 2" audio
+2 "in 3" audio
+3 "in 3" audio
+4 "in 4" audio
+5 "in 5" audio
+6 "in 6" audio
+7 "in 7" audio
+outputs
+0 "out" audio
+custom
+----------
+43 Constant
+remarks ""
+cycles 0.00000
+progMem 0.00000
+xmem 0.00000
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.34375
+height 2
+parameters
+0 "value" 0..127 "unibi"
+1 "unipolar" 0..1 "onoff"
+inputs
+outputs
+0 "out" control
+custom
+----------
+44 GainControl
+remarks ""
+cycles 0.78125
+progMem 0.21875
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "shift" 0..1 "onoff"
+inputs
+0 "control" audio
+1 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+45 VocalFilter
+remarks ""
+cycles 7.59375
+progMem 3.06250
+xmem 1.78125
+ymem 2.06250
+zeropage 0.87500
+dynmem 0.68750
+height 5
+parameters
+0 "left vowel" 0..8 "vowel"
+1 "middle vowel" 0..8 "vowel"
+2 "right vowel" 0..8 "vowel"
+3 "in amplification" 0..127 ""
+4 "vowel select" 0..127 "symeteric"
+5 "vowel select mod" 0..127 ""
+6 "frequency" 0..127 "symetric"
+7 "frequency mod" 0..127 ""
+8 "resonance" 0..127 ""
+inputs
+0 "in" audio
+1 "vowel select mod" control
+2 "frequency mod" control
+outputs
+0 "out" audio
+custom
+----------
+46 AHD-Env
+remarks ""
+cycles 2.46875
+progMem 1.75000
+xmem 1.31250
+ymem 0.21875
+zeropage 1.75000
+dynmem 0.53125
+height 5
+parameters
+0 "A" 0..127 "adsrtime"
+1 "H" 0..127 "adsrtime"
+2 "D" 0..127 "adsrtime"
+3 "A mod" 0..127 ""
+4 "H mod" 0..127 ""
+5 "D mod" 0..127 ""
+inputs
+0 "trig" logic
+1 "A mod" control
+2 "H mod" control
+3 "D mod" control
+4 "in" audio
+5 "amp" control
+outputs
+0 "env" control
+1 "out" audio
+custom
+----------
+47 Pan
+remarks ""
+cycles 1.65625
+progMem 0.40625
+xmem 0.09375
+ymem 0.09375
+zeropage 1.75000
+dynmem 0.34375
+height 3
+parameters
+0 "pan mod" 0..127 ""
+1 "pan" 0..127 "symetric"
+inputs
+0 "in" audio
+1 "panmod" audio
+outputs
+0 "outL" audio
+1 "outR" audio
+custom
+----------
+48 PortamentoA
+remarks ""
+cycles 0.46875
+progMem 0.43750
+xmem 0.09375
+ymem 0.21875
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "adsrtime"
+inputs
+0 "in" control
+1 "on" logic
+outputs
+0 "out" control
+custom
+----------
+49 FilterD
+remarks ""
+cycles 4.03125
+progMem 1.53125
+xmem 0.56250
+ymem 0.43750
+zeropage 2.62500
+dynmem 0.43750
+height 5
+parameters
+0 "freq" 0..127 "filterfreq"
+1 "kbt" 0..127 "freqkbt"
+2 "resonance" 0..127 ""
+3 "freqmod" 0..127 ""
+inputs
+0 "freq mod" control
+1 "in" audio
+outputs
+0 "hp" audio
+1 "bp" audio
+2 "lp" audio
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+50 FilterC
+remarks ""
+cycles 1.78125
+progMem 0.43750
+xmem 0.21875
+ymem 0.15625
+zeropage 2.62500
+dynmem 0.40625
+height 4
+parameters
+0 "freq" 0..127 "filterfreq"
+1 "resonance" 0..127 ""
+2 "gain control" 0..1 "onoff"
+inputs
+0 "in" audio
+outputs
+0 "LP" audio
+1 "BP" audio
+2 "HP" audio
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+51 FilterE
+remarks ""
+cycles 6.62500
+progMem 1.46875
+xmem 0.56250
+ymem 0.62500
+zeropage 0.87500
+dynmem 0.75000
+height 6
+parameters
+0 "filter type" 0..3 "filtertype"
+1 "gain control" 0..1 "onoff"
+2 "frequency mod 1" 0..127 ""
+3 "frequency" 0..127 "filterfreq"
+4 "kbt" 0..127 "freqkbt"
+5 "resonance mod" 0..127 ""
+6 "resonance" 0..127 ""
+7 "slope" 0..1 "filterslope2"
+8 "frequency mod 2" 0..127 ""
+9 "bypass" 0..1 "onoff"
+inputs
+0 "freq mod 1" audio
+1 "res mod" audio
+2 "in" audio
+3 "freq mod 2" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+52 Multi-Env
+remarks ""
+cycles 1.96875
+progMem 1.40625
+xmem 2.53125
+ymem 0.43750
+zeropage 1.75000
+dynmem 0.78125
+height 7
+parameters
+0 "level 1" 0..127 ""
+1 "level 2" 0..127 ""
+2 "level 3" 0..127 ""
+3 "level 4" 0..127 ""
+4 "time 1" 0..127 "adsrtime"
+5 "time 2" 0..127 "adsrtime"
+6 "time 3" 0..127 "adsrtime"
+7 "time 4" 0..127 "adsrtime"
+8 "time 5" 0..127 "adsrtime"
+9 "sustain" 0..4 "0 ~ off, 4 ~ level 4"
+10 "curve" 0..2 "0 ~ bipolar, 1 ~ uni/exp, 2 ~ uni/lin"
+inputs
+0 "gate" logic
+1 "in" audio
+2 "amp" control
+outputs
+0 "env" control
+1 "out" audio
+custom
+----------
+53 Sample&Hold
+remarks ""
+cycles 1.03125
+progMem 0.25000
+xmem 0.00000
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.25000
+height 2
+parameters
+inputs
+0 "trig" logic
+1 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+54 Quantizer
+remarks ""
+cycles 0.53125
+progMem 0.15625
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "bits" 0..12 "quantbits"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+57 InvLevShift
+remarks ""
+cycles 0.53125
+progMem 0.15625
+xmem 0.09375
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.34375
+height 2
+parameters
+0 "mode" 0..2 "0 ~ bipolar, 1 ~ uni/neg, 2 ~ uni/pos"
+1 "inv" 0..1 "onoff"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+58 DrumSynth
+remarks "preset info is not saved into the patch"
+cycles 12.21875
+progMem 4.71875
+xmem 2.18750
+ymem 1.81250
+zeropage 0.87500
+dynmem 1.03125
+height 9
+parameters
+0 "MTune" 0..127 ""
+1 "STune" 0..127 ""
+2 "MDecay" 0..127 ""
+3 "SDecay" 0..127 ""
+4 "MLevel" 0..127 ""
+5 "SLevel" 0..127 ""
+6 "Filter freq" 0..127 ""
+7 "Filter res" 0..127 ""
+8 "Filter sweep" 0..127 ""
+9 "Filter decay" 0..127 ""
+10 "Filter mode" 0..2 "filtertype1"
+11 "Amount" 0..127 ""
+12 "Decay" 0..127 ""
+13 "Click" 0..127 ""
+14 "Noise" 0..127 ""
+15 "Mute" 0..1 "onoff"
+inputs
+0 "trig" logic
+1 "vel" control
+2 "pitch" control
+outputs
+0 "out" audio
+custom
+----------
+59 CompareLev
+remarks ""
+cycles 0.18750
+progMem 0.18750
+xmem 0.09375
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "level" 0..127 "symetric"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+61 Clip
+remarks ""
+cycles 1.53125
+progMem 0.37500
+xmem 0.09375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.37500
+height 3
+parameters
+0 "clip mod" 0..127 ""
+1 "clip" 0..127 ""
+2 "sym" 0..1 ""
+inputs
+0 "in" audio
+1 "clip" audio
+outputs
+0 "out" audio
+custom
+----------
+62 Overdrive
+remarks ""
+cycles 4.00000
+progMem 1.65625
+xmem 0.28125
+ymem 0.34375
+zeropage 0.87500
+dynmem 0.34375
+height 3
+parameters
+0 "overdrive mod" 0..127 ""
+1 "overdrive" 0..127 ""
+inputs
+0 "overdrive mod" control
+1 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+63 KeyboardPatch
+remarks "only 1"
+cycles 0.00000
+progMem 0.00000
+xmem 0.00000
+ymem 0.00000
+zeropage 4.00000
+dynmem 1.00000
+height 3
+parameters
+inputs
+outputs
+0 "latest note" control
+1 "patch gate" logic
+2 "latest vel on" control
+3 "latest rel vel" control
+custom
+----------
+64 NegEdgeDelay
+remarks ""
+cycles 0.28125
+progMem 0.25000
+xmem 0.15625
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "time" 0..127 "logictime"
+inputs
+0 "in" logic
+outputs
+0 "out" logic
+custom
+----------
+65 MIDIGlobal
+remarks "only 1"
+cycles 0.13000
+progMem 1.00000
+xmem 1.00000
+ymem 0.00000
+zeropage 1.00000
+dynmem 1.00000
+height 2
+parameters
+inputs
+outputs
+0 "clock" logic
+1 "sync" logic
+2 "active" logic
+custom
+----------
+66 ControlMixer
+remarks ""
+cycles 0.18750
+progMem 0.18750
+xmem 0.09375
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.46875
+height 2
+parameters
+0 "inv 1" 0..1 "onoff"
+1 "level 1" 0..127 ""
+2 "inv 2" 0..1 "onoff"
+3 "level 2" 0..127 ""
+4 "mode" 0..1 "0 ~ lin, 1 ~ exp"
+inputs
+0 "in1" control
+1 "in2" control
+outputs
+0 "out" control
+custom
+----------
+67 NoteDetect
+remarks ""
+cycles 0.00000
+progMem 0.00000
+xmem 0.00000
+ymem 0.00000
+zeropage 2.65625
+dynmem 0.28125
+height 2
+parameters
+0 "note" 0..127 "freqcoarse"
+inputs
+outputs
+0 "gate" logic
+1 "velocity" control
+2 "releasevelocity" control
+custom
+----------
+68 ClkGen
+remarks ""
+cycles 1.00000
+progMem 0.78125
+xmem 0.43750
+ymem 0.28125
+zeropage 3.53125
+dynmem 0.34375
+height 3
+parameters
+0 "rate" 0..127 ""
+1 "on/off" 0..1 "onoff"
+inputs
+0 "reset" logic
+outputs
+0 "24 pulses / beat" logic
+1 "4 pulses / beat" logic
+2 "slv" slave
+3 "sync" logic
+custom
+----------
+69 ClkDiv
+remarks ""
+cycles 0.62500
+progMem 0.56250
+xmem 0.50000
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "divider" 0..127 "logicdiv"
+inputs
+0 "clock" logic
+1 "reset" logic
+outputs
+0 "out" logic
+custom
+----------
+70 LogicInv
+remarks ""
+cycles 0.18750
+progMem 0.18750
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.25000
+height 2
+parameters
+inputs
+0 "in" logic
+outputs
+0 "out" logic
+custom
+----------
+71 EnvFollower
+remarks ""
+cycles 2.31250
+progMem 0.50000
+xmem 0.21875
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.34375
+height 3
+parameters
+0 "attack" 0..127 ""
+1 "release" 0..127 ""
+inputs
+0 "in" audio
+outputs
+0 "out" control
+custom
+----------
+72 NoteScaler
+remarks ""
+cycles 0.15625
+progMem 0.15625
+xmem 0.09375
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "transpose" 0..127 ""
+inputs
+0 "in" control
+outputs
+0 "out" control
+custom
+----------
+73 LogicProc
+remarks ""
+cycles 0.28125
+progMem 0.25000
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "mode" 0..2 "0 ~ and, 1 ~ or, 2 ~ xor"
+inputs
+0 "in1" logic
+1 "in2" logic
+outputs
+0 "out" logic
+custom
+----------
+74 WaveWrap
+remarks ""
+cycles 2.68750
+progMem 0.62500
+xmem 0.09375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.34275
+height 3
+parameters
+0 "wrap mod" 0..127 ""
+1 "wrap" 0..127 ""
+inputs
+0 "in" audio
+1 "wrap mod" audio
+outputs
+0 "out" audio
+custom
+----------
+75 NoteQuant
+remarks ""
+cycles 0.43750
+progMem 0.40625
+xmem 0.15625
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.34375
+height 2
+parameters
+0 "range" 0..127 "symetric"
+1 "notes" 0..127 "0 ~ off"
+inputs
+0 "in" control
+outputs
+0 "out" control
+custom
+----------
+76 OnOff
+remarks ""
+cycles 0.40625
+progMem 0.12500
+xmem 0.00000
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "on/off" 0..1 ""
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+77 ClkDivFix
+remarks ""
+cycles 0.84375
+progMem 0.75000
+xmem 0.43750
+ymem 0.09375
+zeropage 2.62500
+dynmem 0.25000
+height 2
+parameters
+inputs
+0 "reset" logic
+1 "midiclock" logic
+outputs
+0 "16" logic
+1 "T8" logic
+2 "8" logic
+custom
+----------
+78 Delay
+remarks "audio delay"
+cycles 8.00000
+progMem 1.84375
+xmem 9.25000
+ymem 9.25000
+zeropage 1.75000
+dynmem 0.34375
+height 3
+parameters
+0 "modulation" 0..127 ""
+1 "time" 0..127 "0 ~ 0 ms, 127 ~ 2.65 ms"
+inputs
+0 "in" audio
+1 "modulation" control
+outputs
+0 "2.65 ms fixed delay" audio
+1 "variable delay out" audio
+custom
+----------
+79 4-1Switch
+remarks ""
+cycles 1.03125
+progMem 0.21875
+xmem 0.28125
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.53125
+height 3
+parameters
+0 "in" 0..3 ""
+1 "level 1" 0..127 ""
+2 "level 2" 0..127 ""
+3 "level 3" 0..127 ""
+4 "level 4" 0..127 ""
+5 "mute" 0..1 "onoff"
+inputs
+0 "in 1" audio
+1 "in 2" audio
+2 "in 3" audio
+3 "in 4" audio
+outputs
+0 "out" audio
+custom
+----------
+80 LFOSlvA
+remarks ""
+cycles 1.21875
+progMem 1.90625
+xmem 0.43750
+ymem 0.21875
+zeropage 0.87500
+dynmem 0.50000
+height 4
+parameters
+0 "rate" 0..127 "lfoslvrate"
+1 "phase" 0..127 "phase"
+2 "waveform" 0..4 "lfoshape"
+3 "mono" 0..1 "onoff"
+4 "mute" 0..1 "onoff"
+inputs
+0 "master" slave
+1 "reset" logic
+outputs
+0 "out" control
+custom
+0 "freq display units" 0..1 "freqdisplunitslfo"
+----------
+81 Amplifier
+remarks ""
+cycles 0.65625
+progMem 0.18750
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "gain" 0..127 "ampgain"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+82 Diode
+remarks ""
+cycles 0.65625
+progMem 0.18750
+xmem 0.00000
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "mode" 0..2 "0 ~ off, 1 ~ half wave, 2 ~ full wave"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+83 Shaper
+remarks ""
+cycles 1.90625
+progMem 0.46875
+xmem 0.21875
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "mode" 0..4 "0 ~ log2, 1 ~ log1, 2 ~ lin, 3 ~ exp1, 4 ~ exp2"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+84 AD-Env
+remarks ""
+cycles 1.43750
+progMem 0.87500
+xmem 0.75000
+ymem 0.21875
+zeropage 1.75000
+dynmem 0.37500
+height 3
+parameters
+0 "attack" 0..127 "adsrtime"
+1 "decay" 0..127 "adsrtime"
+2 "gate" 0..1 "onoff"
+inputs
+0 "trigger" logic
+1 "in" audio
+2 "amp" control
+outputs
+0 "envelope" control
+1 "out" audio
+custom
+----------
+85 OscSlvFM
+remarks ""
+cycles 3.18750
+progMem 0.71875
+xmem 0.43750
+ymem 0.28125
+zeropage 0.87500
+dynmem 0.50000
+height 3
+parameters
+0 "detune" 0..127 ""
+1 "fine" 0..127 "symetric"
+2 "-3oct" 0..1 "onoff"
+3 "fmb" 0..127 ""
+4 "mute" 0..1 "onoff"
+inputs
+0 "master" slave
+1 "fmb" audio
+2 "sync" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+86 FilterA
+remarks ""
+cycles 0.65625
+progMem 0.18750
+xmem 0.09375
+ymem 0.09375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "frequency" 0..127 "filterfreqAB"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+87 FilterB
+remarks ""
+cycles 1.03125
+progMem 0.25000
+xmem 0.09375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "frequency" 0..127 "filterfreqAB"
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+88 1-4Switch
+remarks ""
+cycles 0.90625
+progMem 0.21875
+xmem 0.09375
+ymem 0.00000
+zeropage 3.50000
+dynmem 0.37500
+height 3
+parameters
+0 "in" 0..3 "0 ~ out1, 3 ~ out4"
+1 "level" 0..127 ""
+2 "mute" 0..1 "onoff"
+inputs
+0 "in" audio
+outputs
+0 "out 1" audio
+1 "out 2" audio
+2 "out 3" audio
+3 "out 4" audio
+custom
+----------
+89 CompareAB
+remarks ""
+cycles 0.18750
+progMem 0.18750
+xmem 0.00000
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.25000
+height 2
+parameters
+inputs
+0 "A" control
+1 "B" control
+outputs
+0 "A>=B" logic
+custom
+----------
+90 NoteSeqB
+remarks ""
+cycles 1.43750
+progMem 1.15625
+xmem 0.56250
+ymem 1.43750
+zeropage 3.50000
+dynmem 1.28125
+height 9
+parameters
+0 "note 1" 0..127 "freqcoarse"
+1 "note 2" 0..127 "freqcoarse"
+2 "note 3" 0..127 "freqcoarse"
+3 "note 4" 0..127 "freqcoarse"
+4 "note 5" 0..127 "freqcoarse"
+5 "note 6" 0..127 "freqcoarse"
+6 "note 7" 0..127 "freqcoarse"
+7 "note 8" 0..127 "freqcoarse"
+8 "note 9" 0..127 "freqcoarse"
+9 "note 10" 0..127 "freqcoarse"
+10 "note 11" 0..127 "freqcoarse"
+11 "note 12" 0..127 "freqcoarse"
+12 "note 13" 0..127 "freqcoarse"
+13 "note 14" 0..127 "freqcoarse"
+14 "note 15" 0..127 "freqcoarse"
+15 "note 16" 0..127 "freqcoarse"
+16 "step" 0..127 ""
+17 "currentstep" 0..16 "editpos"
+18 "record" 0..1 "onoff"
+19 "play" 0..1 "onoff"
+20 "loop" 0..1 "onoff"
+inputs
+0 "clock" logic
+1 "reset" logic
+outputs
+0 "out" control
+1 "sync" logic
+2 "link" logic
+3 "gclk" logic
+custom
+0 "zoomfactor" 1..6 ""
+1 "sliderposition" 6..117 ""
+----------
+91 CtrlSeq
+remarks ""
+cycles 1.43750
+progMem 1.15625
+xmem 0.56250
+ymem 1.50000
+zeropage 2.62500
+dynmem 1.15625
+height 7
+parameters
+0 "ctrl 1" 0..127 "unibi"
+1 "ctrl 2" 0..127 "unibi"
+2 "ctrl 3" 0..127 "unibi"
+3 "ctrl 4" 0..127 "unibi"
+4 "ctrl 5" 0..127 "unibi"
+5 "ctrl 6" 0..127 "unibi"
+6 "ctrl 7" 0..127 "unibi"
+7 "ctrl 8" 0..127 "unibi"
+8 "ctrl 9" 0..127 "unibi"
+9 "ctrl 10" 0..127 "unibi"
+10 "ctrl 11" 0..127 "unibi"
+11 "ctrl 12" 0..127 "unibi"
+12 "ctrl 13" 0..127 "unibi"
+13 "ctrl 14" 0..127 "unibi"
+14 "ctrl 15" 0..127 "unibi"
+15 "ctrl 16" 0..127 "unibi"
+16 "step" 0..127 ""
+17 "uni" 0..1 "onoff"
+18 "loop" 0..1 "onoff"
+inputs
+0 "clock" logic
+1 "reset" logic
+outputs
+0 "out" control
+1 "sync" logic
+2 "link" logic
+custom
+----------
+92 FilterF
+remarks ""
+cycles 5.53125
+progMem 2.00000
+xmem 0.68750
+ymem 0.68750
+zeropage 0.87500
+dynmem 0.59375
+height 6
+parameters
+0 "frequency" 0..127 "filterfreq"
+1 "kbt" 0..127 "freqkbt"
+2 "resonance" 0..127 ""
+3 "freq mod 1" 0..127 ""
+4 "freq mod 2" 0..127 ""
+5 "slope" 0..2 "filtertype1"
+6 "bypass" 0..1 "onoff"
+inputs
+0 "freq mod 1" control
+1 "freq mod 2" control
+2 "in" audio
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+94 StereoChorus
+remarks ""
+cycles 9.12500
+progMem 3.00000
+xmem 18.09375
+ymem 10.68750
+zeropage 1.75000
+dynmem 0.37500
+height 3
+parameters
+0 "detune" 0..127 ""
+1 "amount" 0..127 ""
+2 "bypass" 0..1 "onoff"
+inputs
+0 "in" audio
+outputs
+0 "outleft" audio
+1 "outright" audio
+custom
+----------
+95 PercOsc
+remarks ""
+cycles 4.87500
+progMem 1.53125
+xmem 0.50000
+ymem 0.50000
+zeropage 0.87500
+dynmem 0.59375
+height 4
+parameters
+0 "pitch" 0..127 "0 ~ 8.18 Hz, 127 ~ 12.54 kHz"
+1 "click" 0..127 ""
+2 "decay" 0..127 ""
+3 "punch" 0..1 "onoff"
+4 "pitchmod" 0..127 ""
+5 "pitchfine" 0..127 "freqfine"
+6 "mute" 0..1 "onoff"
+inputs
+0 "trig" audio
+1 "amp" audio
+2 "pitchmod" control
+outputs
+0 "out" audio
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+96 FormantOsc
+remarks ""
+cycles 9.06250
+progMem 2.53125
+xmem 0.56250
+ymem 0.50000
+zeropage 1.75000
+dynmem 0.59375
+height 4
+parameters
+0 "pitch" 0..127 "freqcoarse"
+1 "pitch fine" 0..127 "freqfine"
+2 "kbt" 0..1 "onoff"
+3 "mute" 0..1 "onoff"
+4 "timbre" 0..127 ""
+5 "pitch mod 1" 0..127 ""
+6 "pitch mod 2" 0..127 ""
+inputs
+0 "pitch mod 1" control
+1 "pitch mod 2" control
+2 "timbre" control
+outputs
+0 "out" audio
+1 "slave" slave
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+97 MasterOsc
+remarks ""
+cycles 0.78125
+progMem 0.68750
+xmem 0.21875
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.50000
+height 3
+parameters
+0 "pitch" 0..127 "freqcoarse"
+1 "pitch fine" 0..127 "freqfine"
+2 "kbt" 0..1 "onoff"
+3 "pitch mod 1" 0..127 ""
+4 "pitch mod 2" 0..127 ""
+inputs
+0 "pitch mod 1" control
+1 "pitch mod 2" control
+outputs
+0 "slave" slave
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+98 KeyQuant
+remarks ""
+cycles 1.34375
+progMem 1.18750
+xmem 1.03125
+ymem 1.03125
+zeropage 0.87500
+dynmem 0.90625
+height 4
+parameters
+0 "range" 0..127 "symetric"
+1 "cont" 0..1 "onoff"
+2 "E" 0..1 "onoff"
+3 "F" 0..1 "onoff"
+4 "F#" 0..1 "onoff"
+5 "G" 0..1 "onoff"
+6 "G#" 0..1 "onoff"
+7 "A" 0..1 "onoff"
+8 "Bb" 0..1 "onoff"
+9 "B" 0..1 "onoff"
+10 "C" 0..1 "onoff"
+11 "C#" 0..1 "onoff"
+12 "D" 0..1 "onoff"
+13 "D#" 0..1 "onoff"
+inputs
+0 "in" control
+outputs
+0 "out" control
+custom
+----------
+99 PatternGen
+remarks ""
+cycles 2.34375
+progMem 1.53125
+xmem 0.50000
+ymem 0.34375
+zeropage 0.87500
+dynmem 0.46875
+height 4
+parameters
+0 "pattern" 0..127 ""
+1 "bank" 0..127 ""
+2 "low delta" 0..1 "onoff"
+3 "step" 0..127 ""
+4 "mono" 0..1 "onoff"
+inputs
+0 "clock" logic
+1 "reset" logic
+2 "pattern & bank" control
+outputs
+0 "out" control
+custom
+----------
+100 Keyboard
+remarks "only 1"
+cycles 0.79000
+progMem 1.00000
+xmem 1.00000
+ymem 1.00000
+zeropage 3.00000
+dynmem 1.00000
+height 3
+parameters
+0 "lower" 0..127 "freqcoarse"
+1 "upper" 0..127 "freqcoarse"
+inputs
+0 "note" control
+1 "gate" logic
+2 "vel" control
+outputs
+0 "note" control
+1 "gate" logic
+2 "vel" control
+custom
+----------
+102 Phaser
+remarks ""
+cycles 12.56250
+progMem 3.40625
+xmem 1.15625
+ymem 1.09375
+zeropage 0.87500
+dynmem 0.78125
+height 7
+parameters
+0 "rate" 0..127 "0 ~ 62.9 s, 127 ~ 24.4 hHz"
+1 "lfo" 0..1 "onoff"
+2 "center freq mod" 0..127 ""
+3 "center freq" 0..127 "0 ~ 100 Hz, 127 ~ 16 kHz"
+4 "spread mod" 0..127 ""
+5 "feedback" 0..127 ""
+6 "peaks" 0..5 "0 ~ 1 peak, 5 ~ 6 peaks"
+7 "spread" 0..127 ""
+8 "bypass" 0..1 "onoff"
+9 "depth" 0..127 ""
+10 "inlevel" 0..127 ""
+inputs
+0 "in" audio
+1 "center freq mod" control
+2 "spread mod" control
+outputs
+0 "out" audio
+custom
+----------
+103 EqMid
+remarks ""
+cycles 3.34375
+progMem 1.06250
+xmem 0.34375
+ymem 0.56250
+zeropage 0.87500
+dynmem 0.46875
+height 4
+parameters
+0 "freq" 0..127 "eqfreq"
+1 "gain" 0..127 "eqgain"
+2 "bandwidth" 0..127 "0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct"
+3 "bypass" 0..1 "onoff"
+4 "in level" 0..127 ""
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+104 EqShelving
+remarks ""
+cycles 2.43750
+progMem 0.56250
+xmem 0.21875
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.46875
+height 4
+parameters
+0 "freq" 0..127 "eqfreq"
+1 "gain" 0..127 "eqgain"
+2 "mode" 0..1 "0 ~ low, 1 ~ high"
+3 "bypass" 0..1 "onoff"
+4 "in level" 0..127 ""
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+105 Expander
+remarks ""
+cycles 8.28125
+progMem 1.81250
+xmem 0.68750
+ymem 0.62500
+zeropage 1.75000
+dynmem 0.68750
+height 7
+parameters
+0 "attack" 0..127 "companderattack"
+1 "release" 0..127 "companderrelease"
+2 "treshold" 0..84 "compandertreshold"
+3 "ratio" 0..66 "companderratio"
+4 "gate" 0..72 "compandergate"
+5 "hold" 0..127 "companderhold"
+6 "sidechain activation" 0..1 "onoff"
+7 "sidechain monitor" 0..1 "onoff"
+8 "bypass" 0..1 "onoff"
+inputs
+0 "in left" audio
+1 "in right" audio
+2 "sidechain" audio
+outputs
+0 "out left" audio
+1 "out right" audio
+custom
+----------
+106 OscSineBank
+remarks ""
+cycles 16.78125
+progMem 3.56250
+xmem 0.84375
+ymem 2.25000
+zeropage 0.87500
+dynmem 1.40625
+height 10
+parameters
+0 "osc1 coarse" 0..127 ""
+1 "osc1 fine" 0..127 "symetric"
+2 "osc1 level" 0..127 ""
+3 "osc2 coarse" 0..127 ""
+4 "osc2 fine" 0..127 "symetric"
+5 "osc2 level" 0..127 ""
+6 "osc3 coarse" 0..127 ""
+7 "osc3 fine" 0..127 "symetric"
+8 "osc3 level" 0..127 ""
+9 "osc4 coarse" 0..127 ""
+10 "osc4 fine" 0..127 "symetric"
+11 "osc4 level" 0..127 ""
+12 "osc5 coarse" 0..127 ""
+13 "osc5 fine" 0..127 "symetric"
+14 "osc5 level" 0..127 ""
+15 "osc6 coarse" 0..127 ""
+16 "osc6 fine" 0..127 "symetric"
+17 "osc6 level" 0..127 ""
+18 "osc1 mute" 0..1 "onoff"
+19 "osc2 mute" 0..1 "onoff"
+20 "osc3 mute" 0..1 "onoff"
+21 "osc4 mute" 0..1 "onoff"
+22 "osc5 mute" 0..1 "onoff"
+23 "osc6 mute" 0..1 "onoff"
+inputs
+0 "master" slave
+1 "mixin" audio
+2 "sync" audio
+3 "osc1 am" audio
+4 "osc2 am" audio
+5 "osc3 am" audio
+6 "osc4 am" audio
+7 "osc5 am" audio
+8 "osc6 am" audio
+outputs
+0 "out" audio
+custom
+----------
+107 SpectralOsc
+remarks ""
+cycles 7.90625
+progMem 2.40625
+xmem 0.50000
+ymem 0.75000
+zeropage 1.75000
+dynmem 0.75000
+height 5
+parameters
+0 "freq coarse" 0..127 "freqcoarse"
+1 "freq fine" 0..127 "freqfine"
+2 "spectral shape" 0..127 ""
+3 "partials" 0..1 "0 ~ odd, 1 ~ all"
+4 "pitch mod 1" 0..127 ""
+5 "pitch mod 2" 0..127 ""
+6 "fma" 0..127 ""
+7 "spectral shape mod" 0..127 ""
+8 "kbt" 0..1 "onoff"
+9 "mute" 0..1 "onoff"
+inputs
+0 "fma" audio
+1 "pitch mod 1" control
+2 "pitch mod 2" control
+3 "spectral shape mod" control
+outputs
+0 "out" audio
+1 "slave" slave
+custom
+0 "freq display units" 0..1 "freqdisplunits"
+----------
+108 Vocoder
+remarks ""
+cycles 48.93750
+progMem 34.21875
+xmem 23.78125
+ymem 26.71875
+zeropage 0.87500
+dynmem 15.00000
+height 8
+parameters
+0 "band 1" 0..16 "vocoband"
+1 "band 2" 0..16 "vocoband"
+2 "band 3" 0..16 "vocoband"
+3 "band 4" 0..16 "vocoband"
+4 "band 5" 0..16 "vocoband"
+5 "band 6" 0..16 "vocoband"
+6 "band 7" 0..16 "vocoband"
+7 "band 8" 0..16 "vocoband"
+8 "band 9" 0..16 "vocoband"
+9 "band 10" 0..16 "vocoband"
+10 "band 11" 0..16 "vocoband"
+11 "band 12" 0..16 "vocoband"
+12 "band 13" 0..16 "vocoband"
+13 "band 14" 0..16 "vocoband"
+14 "band 15" 0..16 "vocoband"
+15 "band 16" 0..16 "vocoband"
+16 "outgain" 0..127 ""
+17 "high freq emphasis" 0..1 ""
+18 "monitor" 0..1 ""
+inputs
+0 "control" audio
+1 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+110 RandomGen
+remarks ""
+cycles 1.43750
+progMem 1.18750
+xmem 0.50000
+ymem 0.34375
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "rate" 0..127 "lfoslvrate"
+inputs
+0 "master" slave
+outputs
+0 "out" control
+custom
+----------
+111 LevMult
+remarks ""
+cycles 0.53125
+progMem 0.15625
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.34375
+height 2
+parameters
+0 "multiplier" 0..127 "unibi"
+1 "unipolar" 0..1 ""
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+112 LevAdd
+remarks ""
+cycles 0.53125
+progMem 0.15625
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.34375
+height 2
+parameters
+0 "offset" 0..127 "unibi"
+1 "unipolar" 0..1 ""
+inputs
+0 "in" audio
+outputs
+0 "out" audio
+custom
+----------
+113 1to2Fade
+remarks ""
+cycles 0.78125
+progMem 0.21875
+xmem 0.09375
+ymem 0.09375
+zeropage 1.75000
+dynmem 0.28125
+height 2
+parameters
+0 "fade" 0..127 "symetric"
+inputs
+0 "in" audio
+outputs
+0 "out 1" audio
+1 "out 2" audio
+custom
+----------
+114 2to1Fade
+remarks ""
+cycles 0.78125
+progMem 0.21875
+xmem 0.09375
+ymem 0.00000
+zeropage 0.87500
+dynmem 0.28125
+height 2
+parameters
+0 "fade" 0..127 "symetric"
+inputs
+0 "in 1" audio
+1 "in 2" audio
+outputs
+0 "out" audio
+custom
+----------
+115 NoteVelScal
+remarks ""
+cycles 0.87500
+progMem 0.78125
+xmem 0.34375
+ymem 0.34375
+zeropage 0.87500
+dynmem 0.43750
+height 4
+parameters
+0 "velocity sensitivity" 0..127 ""
+1 "left gain" 0..48 "velscalgain"
+2 "breakpoint" 0..127 "freqcoarse"
+3 "right gain" 0..48 "velscalgain"
+inputs
+0 "velocity" control
+1 "note" control
+outputs
+0 "out" control
+custom
+----------
+117 RingMod
+remarks ""
+cycles 1.90625
+progMem 0.43750
+xmem 0.09375
+ymem 0.15625
+zeropage 0.87500
+dynmem 0.34375
+height 3
+parameters
+0 "ringmod depth mod" 0..127 ""
+1 "ringmod depth" 0..127 "0 ~ 0, 64 ~ AM, 127 ~ RM"
+inputs
+0 "in" audio
+1 "modulation" audio
+2 "modulationdepth" audio
+outputs
+0 "out" audio
+custom
+----------
+118 Digitizer
+remarks ""
+cycles 3.43750
+progMem 0.78125
+xmem 0.28125
+ymem 0.21875
+zeropage 0.43750
+dynmem 0.46875
+height 3
+parameters
+0 "quant bits" 0..11 "quantbits"
+1 "sample rate" 0..127 "0 ~ 34.65 Hz, 127 ~ 50.18 kHz"
+2 "sample rate mod" 0..127 ""
+3 "quant off" 0..1 "onoff"
+4 "sampling off" 0..1 "onoff"
+inputs
+0 "in" audio
+1 "sample rate mod" control
+outputs
+0 "out" audio
+custom
+----------
+127 PolyAreaIn
+remarks "only 1"
+cycles 2.20000
+progMem 1.00000
+xmem 1.00000
+ymem 1.00000
+zeropage 2.00000
+dynmem 1.00000
+height 2
+parameters
+0 "+6db" 0..1 "onoff"
+inputs
+outputs
+0 "Left" audio
+1 "Right" audio
+custom
+----------
