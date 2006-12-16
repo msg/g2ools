@@ -6,6 +6,8 @@
 #
 
 import re, string, sys
+from nord.net import updatenetlist
+from nord.module import Module
 import modules
 
 NMORPHS = 4
@@ -49,9 +51,6 @@ class Header(Section):
      self.red,self.blue,self.yellow,self.gray,self.green,self.purple,self.white
     ) = values[:23]
 
-class Module:
-  pass
-
 class ModuleDump(Section):
   def parse(self):
     for line in self.lines:
@@ -67,10 +66,9 @@ class ModuleDump(Section):
       (index,type,col,row) = values
       module = area.findmodule(index)
       if not module:
-        module = Module()
+        module = Module(modules.fromtype[type])
         area.modules.append(module)
       module.index,module.col,module.row=index,col,row
-      module.type = modules.fromtype[type]
 
 class Note:
   pass
@@ -90,45 +88,6 @@ class CurrentNoteDump(Section):
       notes[i].attack = attack
       notes[i].release = release
 
-# ---- this needs to be a separate module, duplicated in nord.g2.file
-class Node(Struct):
-  pass
-
-class Net(Struct):
-  # ininputs - check if input is in net's input list
-  def ininputs(self, input):
-    for i in self.inputs:
-      if input.module.index == i.module.index and \
-        input.conn == i.conn and input.type == i.type:
-        return 1
-    return 0
-
-# updatenetlist - update the netlist based on source and dest
-def updatenetlist(netlist, source, dest):
-  found = 0
-  for net in netlist:
-    if source == net.output or net.ininputs(source) or net.ininputs(dest):
-      found = 1
-      if not dest in net.inputs:
-        net.inputs.append(dest)
-      if source.type:
-        if net.output:
-          raise \
-            'Two outputs connected to net: source=%d:%d net.source=%d:%d' % (
-            source.module.index, source.conn,
-            net.source.module.index, net.source.conn)
-        net.output = source
-      elif not source in net.inputs:
-        net.inputs.append(source)
-      break
-  if not found:
-    if source.type:
-      net = Net(output=source,inputs=[dest])
-    else:
-      net = Net(output=None,inputs=[dest,source])
-    netlist.append(net)
-# end ---- this needs to be a separate module, duplicated in nord.g2.file
-
 class Cable:
   pass
 
@@ -146,15 +105,28 @@ class CableDump(Section):
     area.cables = []
     area.netlist = []
     for line in self.lines:
-      color,dmod,dconn,dtype,smod,sconn,stype = map(int, line.split())
+      color,dmod,dconn,ddir,smod,sconn,sdir = map(int, line.split())
       dmodule = area.findmodule(dmod)
       smodule = area.findmodule(smod)
-      dest = Node(module=dmodule,conn=dconn,type=dtype)
-      source = Node(module=smodule,conn=sconn,type=stype)
+      if ddir:
+        dest = dmodule.outputs[dconn]
+      else:
+        dest = dmodule.inputs[dconn]
+      if sdir:
+        source = smodule.outputs[sconn]
+      else:
+        source = smodule.inputs[sconn]
+
       # if dest is an output, make it the source
-      if dest.type:
+      if dest.direction:
         dest,source = source,dest
       c = Cable()
+      if not hasattr(source,'cables'):
+        source.cables = []
+      source.cables.append(c)
+      if not hasattr(dest,'cables'):
+        dest.cables = []
+      dest.cables.append(c)
       c.color,c.source,c.dest = color,source,dest
       area.cables.append(c)
       # update netlist with nodes
@@ -175,19 +147,17 @@ class ParameterDump(Section):
       line = lines.pop(0)
       values = map(int, line.split())
       index = values.pop(0)
+      type = modules.fromtype[int(values.pop(0))]
       module = area.findmodule(index)
       if not module:
-        module = Module()
+        module = Module(type)
         area.modules.append(module)
       module.index = index
-      module.type = modules.fromtype[int(values.pop(0))]
       count = values.pop(0)
-      module.params = values
-      if len(module.params) < count:
-        module.params.extend(map(int,lines.pop(0).split()))
-
-class Custom:
-  pass
+      if len(values) < count:
+        values.extend(map(int,lines.pop(0).split()))
+      for i in range(len(module.params)):
+        module.params[i].variations[0] = values[i]
 
 class CustomDump(Section):
   def parse(self):
@@ -202,8 +172,8 @@ class CustomDump(Section):
       module = area.findmodule(index)
       if not module:
         raise ParseNM1Error('CustomDump: invalid module index %s' % index)
-      custom = module.custom = Custom()
-      custom.parameters = values
+      for i in range(len(module.modes)):
+        module.modes[i] = values[i]
 
 class Morph:
   def __init__(self):

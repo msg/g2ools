@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import string, struct, sys
+from nord.net import updatenetlist
+from nord.module import Module
 from array import array
 from home import hexdump, bin
 import modules
@@ -143,8 +145,8 @@ class PatchDescription(Section):
     return data.tostring()
 
 # holder object for patch modules
-class Module:
-  pass
+#class Module:
+#  pass
 
 # ModuleList - section object for parse/format 
 class ModuleList(Section):
@@ -157,14 +159,13 @@ class ModuleList(Section):
     else:
       area = patch.fx
 
-    #print 'modules:'
-    if not hasattr(area,'modules'):
-      area.modules = [ Module() for i in range(modulecnt) ]
-
+    area.modules = []
     for i in range(modulecnt):
-      m = area.modules[i]
+      #m = area.modules[i]
       bit,type       = getbits(bit,8,data)
-      m.type = modules.fromtype[type] # use type object instead of number
+      m = Module(modules.fromtype[type])
+      area.modules.append(m)
+      #m.type = modules.fromtype[type] # use type object instead of number
       bit,m.index    = getbits(bit,8,data)
       bit,m.horiz    = getbits(bit,7,data)
       bit,m.vert     = getbits(bit,7,data)
@@ -185,10 +186,9 @@ class ModuleList(Section):
       #    m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved, nmodes)
 
       # mode data for module (if there is any)
-      m.modes = []
       for mode in range(nmodes):
         bit,val = getbits(bit,6,data)
-        m.modes.append(val)
+        m.modes[mode] = val
 
       # add missing mode data. some .pch2 versions didn't contain
       #   the all the modes in version 23 BUILD 266
@@ -265,67 +265,22 @@ class Unknown0x69(Section):
 class Cable:
   pass
 
-# ---- this needs to be a separate module, duplicated in nord.nm1.file
-class Node(Struct):
-  pass
-
-class Net(Struct):
-  # determine if a node is in the input list of a net
-  def ininputs(self, input):
-    for i in self.inputs:
-      if input.module.index == i.module.index and \
-        input.conn == i.conn and input.type == i.type:
-        return 1
-    return 0
-
-# updatenetlist - update the netlist based on source and dest
-def updatenetlist(netlist, source, dest):
-  found = 0
-  for net in netlist:
-    if source == net.output or net.ininputs(source) or net.ininputs(dest):
-      found = 1
-      if not dest in net.inputs:
-        net.inputs.append(dest)
-      if source.type:
-        if net.output:
-          raise \
-            'Two outputs connected to net: source=%d:%d net.source=%d:%d' % (
-            source.module.index, source.conn,
-            net.source.module.index, net.source.conn)
-        net.output = source
-      elif not source in net.inputs:
-        net.inputs.append(source)
-      break
-  if not found:
-    if source.type:
-      net = Net(output=source,inputs=[dest])
-    else:
-      net = Net(output=None,inputs=[dest,source])
-    netlist.append(net)
-# end ---- this needs to be a separate module, duplicated in nord.nm1.file
-
 # validatecable - if connection valid return 0, otherwise error
-def validcable(area, cable):
-  # verify modules
-  source,dest = cable.source, cable.dest
-  if not source or not dest:
-    return 1
-
-  if not source.module.type or not dest.module.type:
-    # i think exception thrown so we never get here
-    return 2
+def validcable(area, smodule, sconn, direction, dmodule, dconn):
 
   # verify from
   # out -> in
-  if source.type == 1 and source.conn >= len(source.module.type.outputs):
-      return 3
-  # out -> in
-  elif source.conn >= len(source.module.type.inputs):
-      return 3
+  if direction == 1:
+    if sconn >= len(smodule.outputs):
+      return 1
+  # in -> in
+  elif sconn >= len(smodule.inputs):
+    return 2
 
   # verify to
-  if dest.conn >= len(dest.module.type.inputs):
-    return 4
+  if dconn >= len(dmodule.inputs):
+    return 3
+
   # if we got here, everything's cool.
   return 0
 
@@ -351,25 +306,33 @@ class CableList(Section):
       bit,c.color = getbits(bit,3,data)
       bit,smod    = getbits(bit,8,data)
       bit,sconn   = getbits(bit,6,data)
-      bit,type    = getbits(bit,1,data)
+      bit,dir     = getbits(bit,1,data)
       bit,dmod    = getbits(bit,8,data)
       bit,dconn   = getbits(bit,6,data)
 
       smodule     = area.findmodule(smod)
       dmodule     = area.findmodule(dmod)
-      source      = Node(module=smodule,conn=sconn,type=type) # input/output
-      dest        = Node(module=dmodule,conn=dconn,type=0)    # always input
-      c.source,c.dest = source,dest
+      #source      = Node(module=smodule,conn=sconn,type=type) # input/output
+      #dest        = Node(module=dmodule,conn=dconn,type=0)    # always input
+      #c.source,c.dest = source,dest
 
-      invalid = validcable(area, c)
+      invalid = validcable(area, smodule, sconn, dir, dmodule, dconn)
       if invalid:
         print 'Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)' % (
-            invalid, source.module.type.shortnm,
-            source.module.index, source.conn, source.type,
-            dest.module.type.shortnm, dest.module.index, dest.conn)
+            invalid, smodule.type.shortnm, smodule.index, sconn, dir,
+            dmodule.type.shortnm, dmodule.index, dconn)
       else:
+        if dir == 1:
+          c.source = smodule.outputs[sconn]
+        else:
+          c.source = smodule.inputs[sconn]
+        if not hasattr(c.source,'cables'): 
+          c.source.cables = []
+        c.dest = dmodule.inputs[dconn]
+        if not hasattr(c.dest,'cables'):
+          c.dest.cables = []
         area.cables.append(c)
-        updatenetlist(area.netlist, source, dest)
+        updatenetlist(area.netlist, c.source, c.dest)
 
   def format(self, patch):
     data = array('B',[])
@@ -386,10 +349,10 @@ class CableList(Section):
       c = area.cables[i]
       bit = setbits(bit,3,data,c.color)
       bit = setbits(bit,8,data,c.source.module.index)
-      bit = setbits(bit,6,data,c.source.conn)
-      bit = setbits(bit,1,data,c.source.type)
+      bit = setbits(bit,6,data,c.source.index)
+      bit = setbits(bit,1,data,c.source.direction)
       bit = setbits(bit,8,data,c.dest.module.index)
-      bit = setbits(bit,6,data,c.dest.conn)
+      bit = setbits(bit,6,data,c.dest.index)
 
     return data.tostring()
 
@@ -575,42 +538,22 @@ class ModuleParameters(Section):
     else:
       area = patch.fx
 
-    if not hasattr(area,'modules'):
-      area.modules = [ Module() for i in range(modulecnt) ]
-
     for i in range(modulecnt):
       bit,index = getbits(bit,8,data)
       m = area.findmodule(index)
 
       bit,paramcnt = getbits(bit,7,data)
 
-      params = m.params = [ Parameter() for i in range(paramcnt) ]
-      for i in range(paramcnt):
-        params[i].variations = [ 0 for variation in range(nvariations) ]
-
+      params = m.params
       mt = m.type
       for i in range(nvariations):
         bit,variation = getbits(bit,8,data)
         for param in range(paramcnt):
-          bit,params[param].variations[variation] = getbits(bit,7,data)
+          if param < len(m.params):
+            bit,params[param].variations[variation] = getbits(bit,7,data)
+          else:
+            bit,junk = getbits(bit,7,data)
             
-      if paramcnt >= len(mt.params):
-        for param in range(len(mt.params), paramcnt):
-          print 'Removing unknown param %d from %d "%s"' % (
-              param, m.index, mt.shortnm)
-          del params[param]
-
-      mt = m.type
-      if len(m.params) < len(mt.params):
-        for i in range(len(m.params),len(mt.params)):
-          print 'Adding %s to %d "%s"' % (mt.params[i].type.name,
-              m.index, mt.shortnm)
-          p = Parameter()
-          p.variations = [
-            mt.params[i].type.default for variation in range(nvariations) ]
-          params.append(p)
-
-
   def format(self, patch):
     data  = array('B',[])
 
@@ -641,10 +584,9 @@ class ModuleParameters(Section):
 
       params = m.params
       bit = setbits(bit,7,data,len(params))
-
       for variation in range(NVARIATIONS):
         bit = setbits(bit,8,data,variation)
-        for param in range(len(m.params)):
+        for param in range(len(params)):
           bit = setbits(bit,7,data,params[param].variations[variation])
 
     return data.tostring()
@@ -1027,11 +969,10 @@ class Area:
       if not index in indexes:
         break
     if index < 128:
-      m = Module()
+      m = Module(type)
       m.name = type.shortnm
       m.index = index
       m.color = 0
-      m.type = type
       m.horiz = 0
       m.vert = 0
       m.uprate = 0
@@ -1039,39 +980,22 @@ class Area:
       for member in members:
         if kw.has_key(member):
           setattr(m,member,kw[member])
-      m.modes = []
-      for mode in range(len(type.modes)):
-        m.modes.append(type.modes.type.default)
-      m.params = [ Parameter() for i in range(len(type.params)) ]
-      for i in range(len(type.params)):
-        m.params[i].variations = [
-            type.params[i].type.default for variation in range(NVARIATIONS) ]
-        if len(type.params[i].labels):
-          m.params[i].labels = type.params[i].labels[:]
       self.modules.append(m)
       return m
 
-  def addcable(self, smod, sconn, type, dmod, dconn, color):
-    if type and sconn >= len(smod.type.outputs):
-      raise NordG2Error('addcable: sconn(%d) >= len(type.outputs)(%d)' % (
-          sconn, len(smod.type.outputs)))
-    elif sconn >= len(smod.type.inputs):
-      raise NordG2Error('addcable: sconn(%d) >= len(smod.type.inputs)(%d)' % (
-          sconn, len(smod.type.outputs)))
-    if dconn >= len(dmod.type.inputs):
-      raise NordG2Error('addcable: dconn(%d) >= len(dmod.type.inputs)(%d)' % (
-          sconn, len(smod.type.outputs)))
-    source = Node(module=smod,conn=sconn,type=type)
-    dest   = Node(module=dmod,conn=dconn,type=0)
+  def addcable(self, source, dest, color):
     cable = Cable()
     cable.color = color
-    cable.source,cable.dest = source,dest
+    print 'addcable source.direction=%d' % source.direction
+    print 'source.index=%d' % source.index
+    cable.source = source
+    cable.dest = dest
     if not hasattr(self,'cables'):
       self.cables = []
     self.cables.append(cable)
     if not hasattr(self,'netlist'):
       self.netlist = []
-    updatenetlist(self.netlist, source, dest)
+    updatenetlist(self.netlist, cable.source, cable.dest)
 
 
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)

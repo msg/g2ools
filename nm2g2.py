@@ -2,71 +2,20 @@
 
 import sys
 sys.path.append('.')
-from nord.nm1.file import PchFile
+#from nord.nm1.file import PchFile
 from nord.g2.file import *
 from nord.g2 import colors
 
-def printpatch(patch):
-  for areanm in ['voice','fx']:
-    area = getattr(patch, areanm)
-    print '%s:' % areanm
-    print ' modules:'
-    for module in area.modules:
-      mtype = module.type
-      print '  %s: %d "%s" type=%d loc=(%d,%d) ht=%d' % (mtype.name,
-          module.mod, module.name, module.type,
-          module.col, module.row, mtype.height)
-      for param in range(len(mtype.parameters)):
-        print '   %s(%d): %d' % (mtype.parameters[param].name,
-            param, module.params[param])
-      for custom in range(len(mtype.customs)):
-        print '   >%s(%d): %d' % (mtype.customs[custom].name,
-            custom, module.custom.parameters[custom])
-    print ' cables:'
-    for cable in area.cables:
-      source,dest = cable.source,cable.dest
-      smod,dmod = source.module, dest.module
-      stype,dtype = smod.type, dmode.type
-      #c = cable
-      #print c.color,c.dest.mod,c.dest.conn,c.dest.type,c.source.mod,c.source.conn,c.source.type
-      if source.type:
-        snm = stype.outputs[source.conn].name
-      else:
-        snm = stype.inputs[source.conn].name
-      if dest.type:
-        dnm = dtype.outputs[dest.conn].name
-      else:
-        dnm = dtype.inputs[dest.conn].name
-      print '  %s.%s - %s.%s: c=%d' % (
-          stype.name, snm, dtype.name, dnm, cable.color)
-    print ' nets:'
-    for net in area.netlist:
-      source = net.output
-      if source:
-        smod = source.module
-        stype = smod.type
-        snm = stype.outputs[source.conn].name
-        s = '%s.%s' % (stype.name, snm)
-      else:
-        s = 'nosrc'
-      t = []
-      for dest in net.inputs:
-        dmod = dest.module
-        dtype = dmod.type
-        dnm = dtype.inputs[dest.conn].name
-        t.append('%s.%s' % (dtype.name, dnm))
-      print '  %s -> %s' % (s, ','.join(t))
-        
-def Convert2Output(module, connections, newpatch):
+def Convert2Output(module, newpatch):
   pass
 
-def ConvertOscB(module, connections, newpatch):
+def ConvertOscB(module, newpatch):
   pass
 
-def ConvertADSR_Env(module, connections, newpatch):
+def ConvertADSR_Env(module, newpatch):
   pass
 
-def ConvertKeyboard(module, connections, newpatch):
+def ConvertKeyboard(module, newpatch):
   pass
 
 moduleconvertion = {
@@ -76,18 +25,7 @@ moduleconvertion = {
   100: ConvertKeyboard, 
 }
 
-def convert(patch):
-  pass
-  
-prog = sys.argv.pop(0)
-while len(sys.argv):
-  fname = sys.argv.pop(0)
-  print '"%s"' % fname
-  pch = PchFile(fname)
-  printpatch(pch.patch)
-
-  # general algorithm for converter:
-  convert(pch.patch)
+def convert(pch):
   #   loop through each module
   #     determine and store separation from module above >= 0
   #     if mod in convertion table
@@ -108,6 +46,26 @@ while len(sys.argv):
   # create patch equal function
   # create patch merge function that updates variations
   #   of one patch from another.
+  pch2 = Pch2File('initpatch.pch2')
+  nmpatch = pch.patch
+  g2patch = pch2.patch
+  for module in nmpatch.modules:
+    if module.type.type in moduleconvertion:
+      typeconvert(module.type.type, g2patch)
+    else:
+      print 'No converter for module "%s"' % module.type.name
+  print 'Writing patch'
+  pch2.write(pch.fname+'2')
+  
+prog = sys.argv.pop(0)
+while len(sys.argv):
+  fname = sys.argv.pop(0)
+  print '"%s"' % fname
+  # general algorithm for converter:
+  convert(PchFile(fname)
+
+sys.exit(0)
+
 pch2 = Pch2File('initpatch.pch2')
 patch = pch2.patch
 
@@ -150,17 +108,14 @@ for i in range(len(lines)):
   m.color = allcolors[i%len(allcolors)]
   m.name = line
   m.vert = i
-oscb = patch.voice.addmodule(modules.modulemap.OscB,horiz=1,vert=0)
-flt = patch.voice.addmodule(modules.modulemap.FltNord,horiz=1,vert=5)
-# build module so that in/out connections can be easily done like:
-# patch.voice.addcable(oscb.Out,flt.In,0)
-# output = oscb.Out
-# Cable(oscb.Out.module,oscb.Out.index,oscb.Out.type,
-#       flt.In.module,flt.Out.index,flt.In.type,color)
-# input = flt.In
-# input.index = 0, input.type = 0
 
-patch.voice.addcable(oscb,0,1,flt,0,0)
+oscb = patch.voice.addmodule(modules.fromname['OscB'],horiz=1,vert=0)
+flt = patch.voice.addmodule(modules.fromname['FltNord'],horiz=1,vert=5)
+out = patch.voice.addmodule(modules.fromname['2-Out'],horiz=1,vert=10)
+
+patch.voice.addcable(oscb.outputs.Out,flt.inputs.In,0)
+patch.voice.addcable(flt.outputs.Out,out.inputs.InL,0)
+patch.voice.addcable(flt.outputs.Out,out.inputs.InR,0)
 
 print 'Writing patch'
 pch2.write('newpatch.pch2')

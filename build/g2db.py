@@ -55,22 +55,18 @@ paramlabels = { # [ param#, [ strlist ] ]
              'Out 5','Out 6','Out 7','Out 8'], }, # Sw1-8
 }                                                      
 
-Mode,Param='Mode','Param'
-
 params = build_table('param_table.txt', 'param', 'parameters')
+for param in params:
+  param.pop(0)
 paramstructs = [ eval('Struct('+''.join(param)+')') for param in params ]
 
 f=open('../nord/g2/params.py','w')
 f.write('''#!/usr/bin/env python
 
-class Struct:
-  def __init__(self, **kw):
-    self.__dict__ = kw
+from nord.types import Struct
 
-class ParameterDef(Struct): pass
 class ParameterMap(Struct): pass
-
-Mode,Param = 'Mode', 'Param'
+class ParameterDef(Struct): pass
 
 params = [
 ''')
@@ -96,18 +92,8 @@ modulestructs = [ eval('Struct('+''.join(module)+')') for module in modules ]
 f=open('../nord/g2/modules.py','w')
 f.write('''#!/usr/bin/env python
 
+from nord.types import *
 from params import parammap
-
-class Struct:
-  def __init__(self, **kw):
-    self.__dict__ = kw
-
-class ModuleDef(Struct): pass
-class Input(Struct): pass
-class Output(Struct): pass
-class Mode(Struct): pass
-class Param(Struct): pass
-class Page(Struct): pass
 
 class ModuleMap(Struct): pass
 
@@ -119,7 +105,7 @@ for struct in modulestructs:
     height=%s,
     longnm='%s',
     shortnm='%s',
-    page=Page(name='%s', index=%s),
+    page=PageType('%s', %s),
 ''' % (struct.type, struct.height, struct.longnm, struct.shortnm,
        struct.page, struct.pageindex)
 
@@ -127,7 +113,7 @@ for struct in modulestructs:
     s += '''    inputs=[
 %s
     ],\n''' % (
-      '\n'.join(["      Input(name=%-16stype='%s')," % ("'%s'," % nm,t) 
+      '\n'.join(["      InputType(%-16s'%s')," % ("'%s'," % nm,t) 
 	  for nm,t in zip(struct.inputs, struct.inputtypes) ]),
       )
   else:
@@ -137,7 +123,7 @@ for struct in modulestructs:
     s += '''    outputs=[
 %s
     ],\n''' % (
-      '\n'.join(["      Output(name=%-16stype='%s')," % ("'%s'," % nm,t) 
+      '\n'.join(["      OutputType(%-16s'%s')," % ("'%s'," % nm,t) 
 	  for nm,t in zip(struct.outputs, struct.outputtypes) ]),
       )
   else:
@@ -147,15 +133,13 @@ for struct in modulestructs:
     s += '    params=[\n'
     for p in range(len(struct.params)):
       nm, t = struct.params[p], struct.paramtypes[p]
-      s += '      Param(name=%-16stype=parammap.%s' % ("'%s'," % nm, t)
+      s += '      ParameterType(%-16sparammap.%s' % ("'%s'," % nm, t)
       # add param labels
       if paramlabels.has_key(struct.type):
         if paramlabels[struct.type].has_key(p):
           labels = paramlabels[struct.type][p]
           s += ',\n        labels=[%s]\n      ' % ','.join(
               [ "'%s'" % label for label in labels ])
-      else:
-        s += ', labels=[]'
       s += '),\n'
     s += '    ],\n'
   else:
@@ -165,15 +149,17 @@ for struct in modulestructs:
     s += '''    modes=[
 %s
     ],\n''' % (
-      '\n'.join(["      Mode(name=%-16stype=parammap.%s)," % ("'%s'," % nm,t) 
+      '\n'.join(["      ModeType(%-16sparammap.%s)," % ("'%s'," % nm,t) 
 	  for nm,t in zip(struct.modes, struct.modetypes) ]),
       )
   else:
     s += '    modes=[],\n'
 
-  f.write('''  ModuleDef(
+  s = '''  ModuleType(
 %s  ),
-''' % (s))
+''' % (s)
+  print s
+  f.write(s)
 
 f.write(''']
 

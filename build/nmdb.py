@@ -70,15 +70,9 @@ for entry in entries:
 out = open('../nord/nm1/modules.py','w')
 out.write('''#!/usr/bin/env python
 
-class Struct:
-  def __init__(self, **kw):
-    self.__dict__ = kw
+from nord.types import *
 
-class Module(Struct): pass
-class Input(Struct): pass
-class Output(Struct): pass
-class Parameter(Struct): pass
-class Custom(Struct): pass
+class ParameterDef(Struct): pass
 
 class ModuleMap(Struct): pass
 
@@ -86,7 +80,7 @@ modules = [
 ''')
 
 for module in modules:
-  s = '''  Module(
+  s = '''  ModuleType(
     name='%s',
     type=%s,
     height=%s,
@@ -95,7 +89,7 @@ for module in modules:
     s += '''    inputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      Input(name=%-16stype='%s')," % (
+        '\n'.join(["      InputType(%-16s'%s')," % (
           "'%s'," %  nm.title().replace(' ',''),
           t.title().replace(' ',''))
           for (n,nm,t) in module.inputs
@@ -107,7 +101,7 @@ for module in modules:
     s += '''    outputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      Output(name=%-16stype='%s')," % (
+        '\n'.join(["      OutputType(%-16s'%s')," % (
           "'%s'," %  nm.title().replace(' ',''),
           t.title().replace(' ',''))
           for (n,nm,t) in module.outputs
@@ -116,38 +110,41 @@ for module in modules:
   else:
     s += '    outputs=[],\n'
   if len(module.parameters):
-    s += '''    parameters=[
+    s += '''    params=[
 %s
     ],\n''' % (
         '\n'.join(
-        ['''      Parameter(
-        name='%s',
-        low=%s,
-        high=%s,
-        comment='%s'
+        ['''      ParameterType('%s',
+        ParameterDef(  
+          default=%s,
+          low=%s,
+          high=%s,
+          comment='%s'
+        ),
       ),''' % (
-          nm.title().replace(' ',''), l, h, c)
+          nm.title().replace(' ',''), l, l, h, c)
           for (n,nm,l,h,c) in module.parameters
         ])
     )
   else:
-    s += '    parameters=[],\n'
+    s += '    params=[],\n'
   if len(module.custom):
-    s += '''    customs=[
+    s += '''    modes=[
 %s
     ],\n''' % (
-        '\n'.join(['''      Custom(
-        name='%s',
-        low=%s,
-        high=%s,
-        comment='%s'
+        '\n'.join(['''      ModeType('%s',
+        ParameterDef(  
+          low=%s,
+          high=%s,
+          comment='%s'
+        ),
       ),''' % (
           nm.title().replace(' ',''), l, h, c)
           for (n,nm,h,l,c) in module.custom
         ])
     )
   else:
-    s += '    customs=[],\n'
+    s += '    modes=[],\n'
   s += '  ),\n'
 
   print s

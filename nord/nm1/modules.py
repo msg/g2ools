@@ -1,4944 +1,5992 @@
 #!/usr/bin/env python
 
-class Struct:
-  def __init__(self, **kw):
-    self.__dict__ = kw
+from nord.types import *
 
-class Module(Struct): pass
-class Input(Struct): pass
-class Output(Struct): pass
-class Parameter(Struct): pass
-class Custom(Struct): pass
+class ParameterDef(Struct): pass
 
 class ModuleMap(Struct): pass
 
 modules = [
-  Module(
+  ModuleType(
     name='Keyboard',
     type=1,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Note',         type='Control'),
-      Output(name='Gate',         type='Logic'),
-      Output(name='VelocityOn',   type='Control'),
-      Output(name='VelocityOff',  type='Control'),
+      OutputType('Note',         'Control'),
+      OutputType('Gate',         'Logic'),
+      OutputType('VelocityOn',   'Control'),
+      OutputType('VelocityOff',  'Control'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='AudioIn',
     type=2,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Left',         type='Audio'),
-      Output(name='Right',        type='Audio'),
+      OutputType('Left',         'Audio'),
+      OutputType('Right',        'Audio'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='4Output',
     type=3,
     height=3,
     inputs=[
-      Input(name='Out1',         type='Audio'),
-      Input(name='Out2',         type='Audio'),
-      Input(name='Out3',         type='Audio'),
-      Input(name='Out4',         type='Audio'),
+      InputType('Out1',         'Audio'),
+      InputType('Out2',         'Audio'),
+      InputType('Out3',         'Audio'),
+      InputType('Out4',         'Audio'),
     ],
     outputs=[],
-    parameters=[
-      Parameter(
-        name='Level',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='2Output',
     type=4,
     height=3,
     inputs=[
-      Input(name='OutLeft',      type='Audio'),
-      Input(name='OutRight',     type='Audio'),
+      InputType('OutLeft',      'Audio'),
+      InputType('OutRight',     'Audio'),
     ],
     outputs=[],
-    parameters=[
-      Parameter(
-        name='Level',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Destination',
-        low=0,
-        high=2,
-        comment='2destination'
+      ParameterType('Destination',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='2destination'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='1Output',
     type=5,
     height=3,
     inputs=[
-      Input(name='Out',          type='Audio'),
+      InputType('Out',          'Audio'),
     ],
     outputs=[],
-    parameters=[
-      Parameter(
-        name='Level',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Dest',
-        low=0,
-        high=5,
-        comment='1destination'
+      ParameterType('Dest',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=5,
+          comment='1destination'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='OscA',
     type=7,
     height=6,
     inputs=[
-      Input(name='Sync',         type='Audio'),
-      Input(name='Fma',          type='Audio'),
-      Input(name='Pitch1',       type='Audio'),
-      Input(name='Pitch2',       type='Audio'),
-      Input(name='PulseWidthMod',type='Audio'),
+      InputType('Sync',         'Audio'),
+      InputType('Fma',          'Audio'),
+      InputType('Pitch1',       'Audio'),
+      InputType('Pitch2',       'Audio'),
+      InputType('PulseWidthMod','Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
-      Output(name='Slv',          type='Slave'),
+      OutputType('Out',          'Audio'),
+      OutputType('Slv',          'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='FreqCoarse',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('FreqCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='FreqFine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('FreqFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='FreqKbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('FreqKbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='PulseWidth',
-        low=0,
-        high=127,
-        comment='pulsewidth'
+      ParameterType('PulseWidth',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='pulsewidth'
+        ),
       ),
-      Parameter(
-        name='Waveform',
-        low=0,
-        high=3,
-        comment='waveform1'
+      ParameterType('Waveform',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=3,
+          comment='waveform1'
+        ),
       ),
-      Parameter(
-        name='PitchMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PitchMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FmaMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FmaMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PwMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PwMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscB',
     type=8,
     height=6,
     inputs=[
-      Input(name='Fma',          type='Audio'),
-      Input(name='Pitch1',       type='Control'),
-      Input(name='Pitch2',       type='Control'),
-      Input(name='PwMod',        type='Control'),
+      InputType('Fma',          'Audio'),
+      InputType('Pitch1',       'Control'),
+      InputType('Pitch2',       'Control'),
+      InputType('PwMod',        'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
-      Output(name='Slv',          type='Slave'),
+      OutputType('Out',          'Audio'),
+      OutputType('Slv',          'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='FreqCoarse',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('FreqCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='FreqFine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('FreqFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='FreqKbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('FreqKbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='Waveform',
-        low=0,
-        high=3,
-        comment='waveform1'
+      ParameterType('Waveform',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=3,
+          comment='waveform1'
+        ),
       ),
-      Parameter(
-        name='PitchMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PitchMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FmaMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FmaMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Pwidth',
-        low=0,
-        high=127,
-        comment='pulsewidth'
+      ParameterType('Pwidth',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='pulsewidth'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscC',
     type=9,
     height=4,
     inputs=[
-      Input(name='Fma',          type='Audio'),
-      Input(name='Pitch',        type='Audio'),
-      Input(name='Am',           type='Audio'),
+      InputType('Fma',          'Audio'),
+      InputType('Pitch',        'Audio'),
+      InputType('Am',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
-      Output(name='Slv',          type='Slave'),
+      OutputType('Out',          'Audio'),
+      OutputType('Slv',          'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='PitchCoarse',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('PitchCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='PitchFine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('PitchFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='PitchKbt',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('PitchKbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='PitchModAmount',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchModAmount',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Fma',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Fma',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscSlvB',
     type=10,
     height=3,
     inputs=[
-      Input(name='Mst',          type='Slave'),
-      Input(name='Pwmod',        type='Audio'),
+      InputType('Mst',          'Slave'),
+      InputType('Pwmod',        'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='DetuneCoarse',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('DetuneCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='DetuneFine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('DetuneFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Pw',
-        low=0,
-        high=127,
-        comment='pulsewidth'
+      ParameterType('Pw',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='pulsewidth'
+        ),
       ),
-      Parameter(
-        name='PwMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PwMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=2,
-        high=0,
-        comment='freqdisplunits3'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=2,
+          high=0,
+          comment='freqdisplunits3'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscSlvC',
     type=11,
     height=3,
     inputs=[
-      Input(name='Mst',          type='Slave'),
-      Input(name='Fma',          type='Audio'),
+      InputType('Mst',          'Slave'),
+      InputType('Fma',          'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='DetuneCoarse',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('DetuneCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='DetuneFine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('DetuneFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='FmaMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FmaMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=2,
-        high=0,
-        comment='freqdisplunits3'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=2,
+          high=0,
+          comment='freqdisplunits3'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscSlvD',
     type=12,
     height=3,
     inputs=[
-      Input(name='Mst',          type='Slave'),
-      Input(name='Fma',          type='Audio'),
+      InputType('Mst',          'Slave'),
+      InputType('Fma',          'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='DetuneCoarse',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('DetuneCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='DetuneFine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('DetuneFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='FmaMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FmaMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=2,
-        high=0,
-        comment='freqdisplunits3'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=2,
+          high=0,
+          comment='freqdisplunits3'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscSlvE',
     type=13,
     height=3,
     inputs=[
-      Input(name='Mst',          type='Slave'),
-      Input(name='Fma',          type='Audio'),
-      Input(name='Am',           type='Audio'),
+      InputType('Mst',          'Slave'),
+      InputType('Fma',          'Audio'),
+      InputType('Am',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='DetuneCoarse',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('DetuneCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='DetuneFine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('DetuneFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='FmaMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FmaMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=2,
-        high=0,
-        comment='freqdisplunits3'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=2,
+          high=0,
+          comment='freqdisplunits3'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='OscSlvA',
     type=14,
     height=4,
     inputs=[
-      Input(name='Mst',          type='Slave'),
-      Input(name='Fma',          type='Audio'),
-      Input(name='Am',           type='Audio'),
-      Input(name='Sync',         type='Audio'),
+      InputType('Mst',          'Slave'),
+      InputType('Fma',          'Audio'),
+      InputType('Am',           'Audio'),
+      InputType('Sync',         'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='DetuneCoarse',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('DetuneCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='DetuneFine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('DetuneFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Shape',
-        low=0,
-        high=3,
-        comment=''
+      ParameterType('Shape',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=3,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FmaMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FmaMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=2,
-        high=0,
-        comment='freqdisplunits3'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=2,
+          high=0,
+          comment='freqdisplunits3'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='NoteSeqA',
     type=15,
     height=7,
     inputs=[
-      Input(name='Sync',         type='Logic'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Sync',         'Logic'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
-      Output(name='Sync',         type='Logic'),
-      Output(name='Link',         type='Logic'),
-      Output(name='Gclk',         type='Logic'),
+      OutputType('Out',          'Control'),
+      OutputType('Sync',         'Logic'),
+      OutputType('Link',         'Logic'),
+      OutputType('Gclk',         'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Step1',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Step1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step2',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step3',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step4',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step5',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step6',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step7',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step8',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step9',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step10',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step10',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step11',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step11',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step12',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step12',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step13',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step13',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step14',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step14',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step15',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step15',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Step16',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Step16',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='StepCount',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('StepCount',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='EditPosition',
-        low=0,
-        high=16,
-        comment='editpos'
+      ParameterType('EditPosition',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='editpos'
+        ),
       ),
-      Parameter(
-        name='Record',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Record',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Pause',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Pause',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Active',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Active',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PortamentoB',
     type=16,
     height=2,
     inputs=[
-      Input(name='In',           type='Control'),
-      Input(name='Jmp',          type='Logic'),
+      InputType('In',           'Control'),
+      InputType('Jmp',          'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='adsrtime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='EventSeq',
     type=17,
     height=5,
     inputs=[
-      Input(name='Clock',        type='Logic'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Clock',        'Logic'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Out1',         type='Logic'),
-      Output(name='Out2',         type='Logic'),
-      Output(name='Sync',         type='Logic'),
-      Output(name='Link',         type='Logic'),
+      OutputType('Out1',         'Logic'),
+      OutputType('Out2',         'Logic'),
+      OutputType('Sync',         'Logic'),
+      OutputType('Link',         'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Stepcount',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Stepcount',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Active',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Active',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Gate1',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Gate1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Gate2',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Gate2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step1',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step2',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step3',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step4',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step5',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step6',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step7',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step8',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step9',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step10',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step10',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step11',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step11',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step12',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step12',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step13',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step13',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step14',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step14',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step15',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step15',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq1,Step16',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq1,Step16',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step1',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step2',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step3',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step4',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step5',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step6',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step7',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step8',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step9',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step10',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step10',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step11',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step11',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step12',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step12',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step13',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step13',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step14',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step14',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step15',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step15',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Seq2,Step16',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Seq2,Step16',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='X-Fade',
     type=18,
     height=3,
     inputs=[
-      Input(name='In1',          type='Audio'),
-      Input(name='In2',          type='Audio'),
-      Input(name='Modulation',   type='Audio'),
+      InputType('In1',          'Audio'),
+      InputType('In2',          'Audio'),
+      InputType('Modulation',   'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Modulation',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Modulation',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Crossfade',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Crossfade',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Mixer',
     type=19,
     height=2,
     inputs=[
-      Input(name='In1',          type='Audio'),
-      Input(name='In2',          type='Audio'),
-      Input(name='In3',          type='Audio'),
+      InputType('In1',          'Audio'),
+      InputType('In2',          'Audio'),
+      InputType('In3',          'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='InSense1',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('InSense1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense3',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='ADSR-Env',
     type=20,
     height=5,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='Gate',         type='Logic'),
-      Input(name='Retrig',       type='Logic'),
-      Input(name='Amp',          type='Control'),
+      InputType('In',           'Audio'),
+      InputType('Gate',         'Logic'),
+      InputType('Retrig',       'Logic'),
+      InputType('Amp',          'Control'),
     ],
     outputs=[
-      Output(name='Env',          type='Control'),
-      Output(name='Out',          type='Audio'),
+      OutputType('Env',          'Control'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='AttackShape',
-        low=0,
-        high=2,
-        comment='adsrshape'
+    params=[
+      ParameterType('AttackShape',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='adsrshape'
+        ),
       ),
-      Parameter(
-        name='Attack',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Attack',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Decay',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Decay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Sustain',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Sustain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Release',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Release',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Invert',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Invert',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Compressor',
     type=21,
     height=7,
     inputs=[
-      Input(name='Left',         type='Audio'),
-      Input(name='Right',        type='Audio'),
-      Input(name='Side',         type='Audio'),
+      InputType('Left',         'Audio'),
+      InputType('Right',        'Audio'),
+      InputType('Side',         'Audio'),
     ],
     outputs=[
-      Output(name='Left',         type='Audio'),
-      Output(name='Right',        type='Audio'),
+      OutputType('Left',         'Audio'),
+      OutputType('Right',        'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Attack',
-        low=0,
-        high=127,
-        comment='companderattack'
+    params=[
+      ParameterType('Attack',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='companderattack'
+        ),
       ),
-      Parameter(
-        name='Release',
-        low=0,
-        high=127,
-        comment='companderrelease'
+      ParameterType('Release',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='companderrelease'
+        ),
       ),
-      Parameter(
-        name='Treshold',
-        low=0,
-        high=42,
-        comment='compandertreshold'
+      ParameterType('Treshold',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=42,
+          comment='compandertreshold'
+        ),
       ),
-      Parameter(
-        name='Ratio',
-        low=0,
-        high=66,
-        comment='companderratio'
+      ParameterType('Ratio',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=66,
+          comment='companderratio'
+        ),
       ),
-      Parameter(
-        name='RefLevel',
-        low=0,
-        high=42,
-        comment='companderref'
+      ParameterType('RefLevel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=42,
+          comment='companderref'
+        ),
       ),
-      Parameter(
-        name='Limiter',
-        low=0,
-        high=24,
-        comment='companderlimit'
+      ParameterType('Limiter',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=24,
+          comment='companderlimit'
+        ),
       ),
-      Parameter(
-        name='Act',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Act',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Mon',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mon',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PartialGen',
     type=22,
     height=2,
     inputs=[
-      Input(name='In',           type='Control'),
+      InputType('In',           'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Range',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Range',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Mod-Env',
     type=23,
     height=6,
     inputs=[
-      Input(name='Gate',         type='Logic'),
-      Input(name='Retrig',       type='Logic'),
-      Input(name='AttackMod',    type='Control'),
-      Input(name='DecayMod',     type='Control'),
-      Input(name='SustainMod',   type='Control'),
-      Input(name='ReleaseMod',   type='Control'),
-      Input(name='In',           type='Audio'),
-      Input(name='Amp',          type='Control'),
+      InputType('Gate',         'Logic'),
+      InputType('Retrig',       'Logic'),
+      InputType('AttackMod',    'Control'),
+      InputType('DecayMod',     'Control'),
+      InputType('SustainMod',   'Control'),
+      InputType('ReleaseMod',   'Control'),
+      InputType('In',           'Audio'),
+      InputType('Amp',          'Control'),
     ],
     outputs=[
-      Output(name='Env',          type='Control'),
-      Output(name='Out',          type='Audio'),
+      OutputType('Env',          'Control'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Attack',
-        low=0,
-        high=127,
-        comment='adsrtime'
+    params=[
+      ParameterType('Attack',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Decay',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Decay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Sustain',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Sustain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Release',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Release',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='AttackMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('AttackMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='DecayMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('DecayMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='SustainMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('SustainMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='ReleaseMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('ReleaseMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Invert',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Invert',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LFOA',
     type=24,
     height=5,
     inputs=[
-      Input(name='Rate',         type='Control'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Rate',         'Control'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Slv',          type='Slave'),
-      Output(name='Out',          type='Control'),
+      OutputType('Slv',          'Slave'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lforate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lforate'
+        ),
       ),
-      Parameter(
-        name='Range',
-        low=0,
-        high=2,
-        comment='lforange'
+      ParameterType('Range',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='lforange'
+        ),
       ),
-      Parameter(
-        name='Waveform',
-        low=0,
-        high=4,
-        comment='lfoshape'
+      ParameterType('Waveform',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=4,
+          comment='lfoshape'
+        ),
       ),
-      Parameter(
-        name='RateMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('RateMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mono',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mono',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='RateKbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('RateKbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='Phase',
-        low=0,
-        high=127,
-        comment='phase'
+      ParameterType('Phase',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='phase'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LFOB',
     type=25,
     height=5,
     inputs=[
-      Input(name='Rate',         type='Control'),
-      Input(name='Rst',          type='Logic'),
-      Input(name='Pwmod',        type='Control'),
+      InputType('Rate',         'Control'),
+      InputType('Rst',          'Logic'),
+      InputType('Pwmod',        'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
-      Output(name='Slv',          type='Slave'),
+      OutputType('Out',          'Control'),
+      OutputType('Slv',          'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lforate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lforate'
+        ),
       ),
-      Parameter(
-        name='Range',
-        low=0,
-        high=2,
-        comment='lforange'
+      ParameterType('Range',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='lforange'
+        ),
       ),
-      Parameter(
-        name='Phase',
-        low=0,
-        high=127,
-        comment='phase'
+      ParameterType('Phase',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='phase'
+        ),
       ),
-      Parameter(
-        name='RateMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('RateMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mono',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mono',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='RateKbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('RateKbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='PwMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PwMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Pw',
-        low=0,
-        high=127,
-        comment='pulsewidth'
+      ParameterType('Pw',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='pulsewidth'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LFOC',
     type=26,
     height=4,
     inputs=[
-      Input(name='Rate',         type='Control'),
+      InputType('Rate',         'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
-      Output(name='Slv',          type='Slave'),
+      OutputType('Out',          'Control'),
+      OutputType('Slv',          'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lforate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lforate'
+        ),
       ),
-      Parameter(
-        name='Range',
-        low=0,
-        high=2,
-        comment='lforange'
+      ParameterType('Range',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='lforange'
+        ),
       ),
-      Parameter(
-        name='Waveform',
-        low=0,
-        high=4,
-        comment='lfoshape'
+      ParameterType('Waveform',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=4,
+          comment='lfoshape'
+        ),
       ),
-      Parameter(
-        name='RateMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('RateMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mono',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mono',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LFOSlvB',
     type=27,
     height=2,
     inputs=[
-      Input(name='Mst',          type='Slave'),
+      InputType('Mst',          'Slave'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunitslfo'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunitslfo'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='LFOSlvC',
     type=28,
     height=2,
     inputs=[
-      Input(name='Mst',          type='Slave'),
+      InputType('Mst',          'Slave'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunitslfo'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunitslfo'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='LFOSlvD',
     type=29,
     height=2,
     inputs=[
-      Input(name='Mst',          type='Slave'),
+      InputType('Mst',          'Slave'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunitslfo'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunitslfo'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='LFOSlvE',
     type=30,
     height=2,
     inputs=[
-      Input(name='Mst',          type='Slave'),
+      InputType('Mst',          'Slave'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunitslfo'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunitslfo'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='Noise',
     type=31,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Color',
-        low=0,
-        high=127,
-        comment='noisecolor'
+    params=[
+      ParameterType('Color',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='noisecolor'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='FilterBank',
     type=32,
     height=7,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='50',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('50',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='75',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('75',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='110',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('110',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='170',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('170',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='250',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('250',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='380',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('380',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='570',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('570',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='850',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('850',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='1.3',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('1.3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='1.9',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('1.9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='2.9',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('2.9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='4.2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('4.2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='6.4',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('6.4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='8.3',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('8.3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='ClkRndGen',
     type=33,
     height=2,
     inputs=[
-      Input(name='Clk',          type='Logic'),
+      InputType('Clk',          'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Mono',
-        low=0,
-        high=1,
-        comment='onoff'
+    params=[
+      ParameterType('Mono',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Col',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Col',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='RndStepGen',
     type=34,
     height=2,
     inputs=[
-      Input(name='Mst',          type='Slave'),
+      InputType('Mst',          'Slave'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='RndPulsGen',
     type=35,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Density',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Density',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PosEdgeDelay',
     type=36,
     height=2,
     inputs=[
-      Input(name='In',           type='Logic'),
+      InputType('In',           'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='logictime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='logictime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LogicDelay',
     type=37,
     height=2,
     inputs=[
-      Input(name='In',           type='Logic'),
+      InputType('In',           'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='logictime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='logictime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Pulse',
     type=38,
     height=2,
     inputs=[
-      Input(name='In',           type='Logic'),
+      InputType('In',           'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='logictime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='logictime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Smooth',
     type=39,
     height=2,
     inputs=[
-      Input(name='In',           type='Control'),
+      InputType('In',           'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='smoothtime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='smoothtime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Mixer',
     type=40,
     height=4,
     inputs=[
-      Input(name='In1',          type='Audio'),
-      Input(name='In2',          type='Audio'),
-      Input(name='In3',          type='Audio'),
-      Input(name='In3',          type='Audio'),
-      Input(name='In4',          type='Audio'),
-      Input(name='In5',          type='Audio'),
-      Input(name='In6',          type='Audio'),
-      Input(name='In7',          type='Audio'),
+      InputType('In1',          'Audio'),
+      InputType('In2',          'Audio'),
+      InputType('In3',          'Audio'),
+      InputType('In3',          'Audio'),
+      InputType('In4',          'Audio'),
+      InputType('In5',          'Audio'),
+      InputType('In6',          'Audio'),
+      InputType('In7',          'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='InSense1',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('InSense1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense3',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense4',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense5',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense6',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense7',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='InSense8',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InSense8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='-6Db',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('-6Db',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Constant',
     type=43,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Value',
-        low=0,
-        high=127,
-        comment='unibi'
+    params=[
+      ParameterType('Value',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Unipolar',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Unipolar',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='GainControl',
     type=44,
     height=2,
     inputs=[
-      Input(name='Control',      type='Audio'),
-      Input(name='In',           type='Audio'),
+      InputType('Control',      'Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Shift',
-        low=0,
-        high=1,
-        comment='onoff'
+    params=[
+      ParameterType('Shift',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='VocalFilter',
     type=45,
     height=5,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='VowelSelectMod',type='Control'),
-      Input(name='FrequencyMod', type='Control'),
+      InputType('In',           'Audio'),
+      InputType('VowelSelectMod','Control'),
+      InputType('FrequencyMod', 'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='LeftVowel',
-        low=0,
-        high=8,
-        comment='vowel'
+    params=[
+      ParameterType('LeftVowel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=8,
+          comment='vowel'
+        ),
       ),
-      Parameter(
-        name='MiddleVowel',
-        low=0,
-        high=8,
-        comment='vowel'
+      ParameterType('MiddleVowel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=8,
+          comment='vowel'
+        ),
       ),
-      Parameter(
-        name='RightVowel',
-        low=0,
-        high=8,
-        comment='vowel'
+      ParameterType('RightVowel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=8,
+          comment='vowel'
+        ),
       ),
-      Parameter(
-        name='InAmplification',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InAmplification',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='VowelSelect',
-        low=0,
-        high=127,
-        comment='symeteric'
+      ParameterType('VowelSelect',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symeteric'
+        ),
       ),
-      Parameter(
-        name='VowelSelectMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('VowelSelectMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Frequency',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Frequency',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='FrequencyMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FrequencyMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Resonance',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Resonance',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='AHD-Env',
     type=46,
     height=5,
     inputs=[
-      Input(name='Trig',         type='Logic'),
-      Input(name='AMod',         type='Control'),
-      Input(name='HMod',         type='Control'),
-      Input(name='DMod',         type='Control'),
-      Input(name='In',           type='Audio'),
-      Input(name='Amp',          type='Control'),
+      InputType('Trig',         'Logic'),
+      InputType('AMod',         'Control'),
+      InputType('HMod',         'Control'),
+      InputType('DMod',         'Control'),
+      InputType('In',           'Audio'),
+      InputType('Amp',          'Control'),
     ],
     outputs=[
-      Output(name='Env',          type='Control'),
-      Output(name='Out',          type='Audio'),
+      OutputType('Env',          'Control'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='A',
-        low=0,
-        high=127,
-        comment='adsrtime'
+    params=[
+      ParameterType('A',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='H',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('H',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='D',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('D',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='AMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('AMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='HMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('HMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='DMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('DMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Pan',
     type=47,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='Panmod',       type='Audio'),
+      InputType('In',           'Audio'),
+      InputType('Panmod',       'Audio'),
     ],
     outputs=[
-      Output(name='Outl',         type='Audio'),
-      Output(name='Outr',         type='Audio'),
+      OutputType('Outl',         'Audio'),
+      OutputType('Outr',         'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='PanMod',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('PanMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Pan',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Pan',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PortamentoA',
     type=48,
     height=2,
     inputs=[
-      Input(name='In',           type='Control'),
-      Input(name='On',           type='Logic'),
+      InputType('In',           'Control'),
+      InputType('On',           'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='adsrtime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='FilterD',
     type=49,
     height=5,
     inputs=[
-      Input(name='FreqMod',      type='Control'),
-      Input(name='In',           type='Audio'),
+      InputType('FreqMod',      'Control'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Hp',           type='Audio'),
-      Output(name='Bp',           type='Audio'),
-      Output(name='Lp',           type='Audio'),
+      OutputType('Hp',           'Audio'),
+      OutputType('Bp',           'Audio'),
+      OutputType('Lp',           'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Freq',
-        low=0,
-        high=127,
-        comment='filterfreq'
+    params=[
+      ParameterType('Freq',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='filterfreq'
+        ),
       ),
-      Parameter(
-        name='Kbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('Kbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='Resonance',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Resonance',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Freqmod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Freqmod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='FilterC',
     type=50,
     height=4,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Lp',           type='Audio'),
-      Output(name='Bp',           type='Audio'),
-      Output(name='Hp',           type='Audio'),
+      OutputType('Lp',           'Audio'),
+      OutputType('Bp',           'Audio'),
+      OutputType('Hp',           'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Freq',
-        low=0,
-        high=127,
-        comment='filterfreq'
+    params=[
+      ParameterType('Freq',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='filterfreq'
+        ),
       ),
-      Parameter(
-        name='Resonance',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Resonance',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='GainControl',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('GainControl',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='FilterE',
     type=51,
     height=6,
     inputs=[
-      Input(name='FreqMod1',     type='Audio'),
-      Input(name='ResMod',       type='Audio'),
-      Input(name='In',           type='Audio'),
-      Input(name='FreqMod2',     type='Audio'),
+      InputType('FreqMod1',     'Audio'),
+      InputType('ResMod',       'Audio'),
+      InputType('In',           'Audio'),
+      InputType('FreqMod2',     'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='FilterType',
-        low=0,
-        high=3,
-        comment='filtertype'
+    params=[
+      ParameterType('FilterType',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=3,
+          comment='filtertype'
+        ),
       ),
-      Parameter(
-        name='GainControl',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('GainControl',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='FrequencyMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FrequencyMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Frequency',
-        low=0,
-        high=127,
-        comment='filterfreq'
+      ParameterType('Frequency',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='filterfreq'
+        ),
       ),
-      Parameter(
-        name='Kbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('Kbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='ResonanceMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('ResonanceMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Resonance',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Resonance',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Slope',
-        low=0,
-        high=1,
-        comment='filterslope2'
+      ParameterType('Slope',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='filterslope2'
+        ),
       ),
-      Parameter(
-        name='FrequencyMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FrequencyMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='Multi-Env',
     type=52,
     height=7,
     inputs=[
-      Input(name='Gate',         type='Logic'),
-      Input(name='In',           type='Audio'),
-      Input(name='Amp',          type='Control'),
+      InputType('Gate',         'Logic'),
+      InputType('In',           'Audio'),
+      InputType('Amp',          'Control'),
     ],
     outputs=[
-      Output(name='Env',          type='Control'),
-      Output(name='Out',          type='Audio'),
+      OutputType('Env',          'Control'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Level1',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Level1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level3',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level4',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Time1',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Time1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Time2',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Time2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Time3',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Time3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Time4',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Time4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Time5',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Time5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Sustain',
-        low=0,
-        high=4,
-        comment='0 ~ off, 4 ~ level 4'
+      ParameterType('Sustain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=4,
+          comment='0 ~ off, 4 ~ level 4'
+        ),
       ),
-      Parameter(
-        name='Curve',
-        low=0,
-        high=2,
-        comment='0 ~ bipolar, 1 ~ uni/exp, 2 ~ uni/lin'
+      ParameterType('Curve',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='0 ~ bipolar, 1 ~ uni/exp, 2 ~ uni/lin'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Sample&Hold',
     type=53,
     height=2,
     inputs=[
-      Input(name='Trig',         type='Logic'),
-      Input(name='In',           type='Audio'),
+      InputType('Trig',         'Logic'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Quantizer',
     type=54,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Bits',
-        low=0,
-        high=12,
-        comment='quantbits'
+    params=[
+      ParameterType('Bits',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=12,
+          comment='quantbits'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='InvLevShift',
     type=57,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Mode',
-        low=0,
-        high=2,
-        comment='0 ~ bipolar, 1 ~ uni/neg, 2 ~ uni/pos'
+    params=[
+      ParameterType('Mode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='0 ~ bipolar, 1 ~ uni/neg, 2 ~ uni/pos'
+        ),
       ),
-      Parameter(
-        name='Inv',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Inv',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='DrumSynth',
     type=58,
     height=9,
     inputs=[
-      Input(name='Trig',         type='Logic'),
-      Input(name='Vel',          type='Control'),
-      Input(name='Pitch',        type='Control'),
+      InputType('Trig',         'Logic'),
+      InputType('Vel',          'Control'),
+      InputType('Pitch',        'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Mtune',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Mtune',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Stune',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Stune',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mdecay',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Mdecay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Sdecay',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Sdecay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mlevel',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Mlevel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Slevel',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Slevel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FilterFreq',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FilterFreq',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FilterRes',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FilterRes',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FilterSweep',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FilterSweep',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FilterDecay',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FilterDecay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FilterMode',
-        low=0,
-        high=2,
-        comment='filtertype1'
+      ParameterType('FilterMode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='filtertype1'
+        ),
       ),
-      Parameter(
-        name='Amount',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Amount',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Decay',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Decay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Click',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Click',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Noise',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Noise',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='CompareLev',
     type=59,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Level',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Clip',
     type=61,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='Clip',         type='Audio'),
+      InputType('In',           'Audio'),
+      InputType('Clip',         'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='ClipMod',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('ClipMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Clip',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Clip',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Sym',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('Sym',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Overdrive',
     type=62,
     height=3,
     inputs=[
-      Input(name='OverdriveMod', type='Control'),
-      Input(name='In',           type='Audio'),
+      InputType('OverdriveMod', 'Control'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='OverdriveMod',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('OverdriveMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Overdrive',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Overdrive',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='KeyboardPatch',
     type=63,
     height=3,
     inputs=[],
     outputs=[
-      Output(name='LatestNote',   type='Control'),
-      Output(name='PatchGate',    type='Logic'),
-      Output(name='LatestVelOn',  type='Control'),
-      Output(name='LatestRelVel', type='Control'),
+      OutputType('LatestNote',   'Control'),
+      OutputType('PatchGate',    'Logic'),
+      OutputType('LatestVelOn',  'Control'),
+      OutputType('LatestRelVel', 'Control'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='NegEdgeDelay',
     type=64,
     height=2,
     inputs=[
-      Input(name='In',           type='Logic'),
+      InputType('In',           'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='logictime'
+    params=[
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='logictime'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='MIDIGlobal',
     type=65,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Clock',        type='Logic'),
-      Output(name='Sync',         type='Logic'),
-      Output(name='Active',       type='Logic'),
+      OutputType('Clock',        'Logic'),
+      OutputType('Sync',         'Logic'),
+      OutputType('Active',       'Logic'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='ControlMixer',
     type=66,
     height=2,
     inputs=[
-      Input(name='In1',          type='Control'),
-      Input(name='In2',          type='Control'),
+      InputType('In1',          'Control'),
+      InputType('In2',          'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Inv1',
-        low=0,
-        high=1,
-        comment='onoff'
+    params=[
+      ParameterType('Inv1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Level1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Inv2',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Inv2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Level2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mode',
-        low=0,
-        high=1,
-        comment='0 ~ lin, 1 ~ exp'
+      ParameterType('Mode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='0 ~ lin, 1 ~ exp'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='NoteDetect',
     type=67,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Gate',         type='Logic'),
-      Output(name='Velocity',     type='Control'),
-      Output(name='Releasevelocity',type='Control'),
+      OutputType('Gate',         'Logic'),
+      OutputType('Velocity',     'Control'),
+      OutputType('Releasevelocity','Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Note',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('Note',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='ClkGen',
     type=68,
     height=3,
     inputs=[
-      Input(name='Reset',        type='Logic'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='24Pulses/Beat',type='Logic'),
-      Output(name='4Pulses/Beat', type='Logic'),
-      Output(name='Slv',          type='Slave'),
-      Output(name='Sync',         type='Logic'),
+      OutputType('24Pulses/Beat','Logic'),
+      OutputType('4Pulses/Beat', 'Logic'),
+      OutputType('Slv',          'Slave'),
+      OutputType('Sync',         'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='On/Off',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('On/Off',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='ClkDiv',
     type=69,
     height=2,
     inputs=[
-      Input(name='Clock',        type='Logic'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Clock',        'Logic'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Divider',
-        low=0,
-        high=127,
-        comment='logicdiv'
+    params=[
+      ParameterType('Divider',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='logicdiv'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LogicInv',
     type=70,
     height=2,
     inputs=[
-      Input(name='In',           type='Logic'),
+      InputType('In',           'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='EnvFollower',
     type=71,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Attack',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Attack',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Release',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Release',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='NoteScaler',
     type=72,
     height=2,
     inputs=[
-      Input(name='In',           type='Control'),
+      InputType('In',           'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Transpose',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Transpose',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LogicProc',
     type=73,
     height=2,
     inputs=[
-      Input(name='In1',          type='Logic'),
-      Input(name='In2',          type='Logic'),
+      InputType('In1',          'Logic'),
+      InputType('In2',          'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Logic'),
+      OutputType('Out',          'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Mode',
-        low=0,
-        high=2,
-        comment='0 ~ and, 1 ~ or, 2 ~ xor'
+    params=[
+      ParameterType('Mode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='0 ~ and, 1 ~ or, 2 ~ xor'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='WaveWrap',
     type=74,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='WrapMod',      type='Audio'),
+      InputType('In',           'Audio'),
+      InputType('WrapMod',      'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='WrapMod',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('WrapMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Wrap',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Wrap',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='NoteQuant',
     type=75,
     height=2,
     inputs=[
-      Input(name='In',           type='Control'),
+      InputType('In',           'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Range',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Range',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Notes',
-        low=0,
-        high=127,
-        comment='0 ~ off'
+      ParameterType('Notes',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ off'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='OnOff',
     type=76,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='On/Off',
-        low=0,
-        high=1,
-        comment=''
+    params=[
+      ParameterType('On/Off',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='ClkDivFix',
     type=77,
     height=2,
     inputs=[
-      Input(name='Reset',        type='Logic'),
-      Input(name='Midiclock',    type='Logic'),
+      InputType('Reset',        'Logic'),
+      InputType('Midiclock',    'Logic'),
     ],
     outputs=[
-      Output(name='16',           type='Logic'),
-      Output(name='T8',           type='Logic'),
-      Output(name='8',            type='Logic'),
+      OutputType('16',           'Logic'),
+      OutputType('T8',           'Logic'),
+      OutputType('8',            'Logic'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Delay',
     type=78,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='Modulation',   type='Control'),
+      InputType('In',           'Audio'),
+      InputType('Modulation',   'Control'),
     ],
     outputs=[
-      Output(name='2.65MsFixedDelay',type='Audio'),
-      Output(name='VariableDelayOut',type='Audio'),
+      OutputType('2.65MsFixedDelay','Audio'),
+      OutputType('VariableDelayOut','Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Modulation',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Modulation',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Time',
-        low=0,
-        high=127,
-        comment='0 ~ 0 ms, 127 ~ 2.65 ms'
+      ParameterType('Time',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 0 ms, 127 ~ 2.65 ms'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='4-1Switch',
     type=79,
     height=3,
     inputs=[
-      Input(name='In1',          type='Audio'),
-      Input(name='In2',          type='Audio'),
-      Input(name='In3',          type='Audio'),
-      Input(name='In4',          type='Audio'),
+      InputType('In1',          'Audio'),
+      InputType('In2',          'Audio'),
+      InputType('In3',          'Audio'),
+      InputType('In4',          'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='In',
-        low=0,
-        high=3,
-        comment=''
+    params=[
+      ParameterType('In',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=3,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level3',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Level4',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LFOSlvA',
     type=80,
     height=4,
     inputs=[
-      Input(name='Master',       type='Slave'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Master',       'Slave'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
-      Parameter(
-        name='Phase',
-        low=0,
-        high=127,
-        comment='phase'
+      ParameterType('Phase',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='phase'
+        ),
       ),
-      Parameter(
-        name='Waveform',
-        low=0,
-        high=4,
-        comment='lfoshape'
+      ParameterType('Waveform',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=4,
+          comment='lfoshape'
+        ),
       ),
-      Parameter(
-        name='Mono',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mono',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunitslfo'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunitslfo'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='Amplifier',
     type=81,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Gain',
-        low=0,
-        high=127,
-        comment='ampgain'
+    params=[
+      ParameterType('Gain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='ampgain'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Diode',
     type=82,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Mode',
-        low=0,
-        high=2,
-        comment='0 ~ off, 1 ~ half wave, 2 ~ full wave'
+    params=[
+      ParameterType('Mode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='0 ~ off, 1 ~ half wave, 2 ~ full wave'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Shaper',
     type=83,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Mode',
-        low=0,
-        high=4,
-        comment='0 ~ log2, 1 ~ log1, 2 ~ lin, 3 ~ exp1, 4 ~ exp2'
+    params=[
+      ParameterType('Mode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=4,
+          comment='0 ~ log2, 1 ~ log1, 2 ~ lin, 3 ~ exp1, 4 ~ exp2'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='AD-Env',
     type=84,
     height=3,
     inputs=[
-      Input(name='Trigger',      type='Logic'),
-      Input(name='In',           type='Audio'),
-      Input(name='Amp',          type='Control'),
+      InputType('Trigger',      'Logic'),
+      InputType('In',           'Audio'),
+      InputType('Amp',          'Control'),
     ],
     outputs=[
-      Output(name='Envelope',     type='Control'),
-      Output(name='Out',          type='Audio'),
+      OutputType('Envelope',     'Control'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Attack',
-        low=0,
-        high=127,
-        comment='adsrtime'
+    params=[
+      ParameterType('Attack',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Decay',
-        low=0,
-        high=127,
-        comment='adsrtime'
+      ParameterType('Decay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='adsrtime'
+        ),
       ),
-      Parameter(
-        name='Gate',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Gate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='OscSlvFM',
     type=85,
     height=3,
     inputs=[
-      Input(name='Master',       type='Slave'),
-      Input(name='Fmb',          type='Audio'),
-      Input(name='Sync',         type='Audio'),
+      InputType('Master',       'Slave'),
+      InputType('Fmb',          'Audio'),
+      InputType('Sync',         'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Detune',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Detune',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='-3Oct',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('-3Oct',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Fmb',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Fmb',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='FilterA',
     type=86,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Frequency',
-        low=0,
-        high=127,
-        comment='filterfreqAB'
+    params=[
+      ParameterType('Frequency',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='filterfreqAB'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='FilterB',
     type=87,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Frequency',
-        low=0,
-        high=127,
-        comment='filterfreqAB'
+    params=[
+      ParameterType('Frequency',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='filterfreqAB'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='1-4Switch',
     type=88,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out1',         type='Audio'),
-      Output(name='Out2',         type='Audio'),
-      Output(name='Out3',         type='Audio'),
-      Output(name='Out4',         type='Audio'),
+      OutputType('Out1',         'Audio'),
+      OutputType('Out2',         'Audio'),
+      OutputType('Out3',         'Audio'),
+      OutputType('Out4',         'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='In',
-        low=0,
-        high=3,
-        comment='0 ~ out1, 3 ~ out4'
+    params=[
+      ParameterType('In',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=3,
+          comment='0 ~ out1, 3 ~ out4'
+        ),
       ),
-      Parameter(
-        name='Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='CompareAB',
     type=89,
     height=2,
     inputs=[
-      Input(name='A',            type='Control'),
-      Input(name='B',            type='Control'),
+      InputType('A',            'Control'),
+      InputType('B',            'Control'),
     ],
     outputs=[
-      Output(name='A>=B',         type='Logic'),
+      OutputType('A>=B',         'Logic'),
     ],
-    parameters=[],
-    customs=[],
+    params=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='NoteSeqB',
     type=90,
     height=9,
     inputs=[
-      Input(name='Clock',        type='Logic'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Clock',        'Logic'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
-      Output(name='Sync',         type='Logic'),
-      Output(name='Link',         type='Logic'),
-      Output(name='Gclk',         type='Logic'),
+      OutputType('Out',          'Control'),
+      OutputType('Sync',         'Logic'),
+      OutputType('Link',         'Logic'),
+      OutputType('Gclk',         'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Note1',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('Note1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note2',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note3',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note4',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note5',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note6',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note7',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note8',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note9',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note10',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note10',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note11',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note11',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note12',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note12',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note13',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note13',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note14',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note14',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note15',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note15',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Note16',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Note16',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Step',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Step',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Currentstep',
-        low=0,
-        high=16,
-        comment='editpos'
+      ParameterType('Currentstep',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='editpos'
+        ),
       ),
-      Parameter(
-        name='Record',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Record',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Play',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Play',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Loop',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Loop',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='Zoomfactor',
-        low=6,
-        high=1,
-        comment=''
+    modes=[
+      ModeType('Zoomfactor',
+        ParameterDef(  
+          low=6,
+          high=1,
+          comment=''
+        ),
       ),
-      Custom(
-        name='Sliderposition',
-        low=117,
-        high=6,
-        comment=''
+      ModeType('Sliderposition',
+        ParameterDef(  
+          low=117,
+          high=6,
+          comment=''
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='CtrlSeq',
     type=91,
     height=7,
     inputs=[
-      Input(name='Clock',        type='Logic'),
-      Input(name='Reset',        type='Logic'),
+      InputType('Clock',        'Logic'),
+      InputType('Reset',        'Logic'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
-      Output(name='Sync',         type='Logic'),
-      Output(name='Link',         type='Logic'),
+      OutputType('Out',          'Control'),
+      OutputType('Sync',         'Logic'),
+      OutputType('Link',         'Logic'),
     ],
-    parameters=[
-      Parameter(
-        name='Ctrl1',
-        low=0,
-        high=127,
-        comment='unibi'
+    params=[
+      ParameterType('Ctrl1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl2',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl3',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl4',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl5',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl6',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl7',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl8',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl9',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl10',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl10',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl11',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl11',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl12',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl12',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl13',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl13',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl14',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl14',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl15',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl15',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Ctrl16',
-        low=0,
-        high=127,
-        comment='unibi'
+      ParameterType('Ctrl16',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Step',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Step',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Uni',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Uni',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Loop',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Loop',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='FilterF',
     type=92,
     height=6,
     inputs=[
-      Input(name='FreqMod1',     type='Control'),
-      Input(name='FreqMod2',     type='Control'),
-      Input(name='In',           type='Audio'),
+      InputType('FreqMod1',     'Control'),
+      InputType('FreqMod2',     'Control'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Frequency',
-        low=0,
-        high=127,
-        comment='filterfreq'
+    params=[
+      ParameterType('Frequency',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='filterfreq'
+        ),
       ),
-      Parameter(
-        name='Kbt',
-        low=0,
-        high=127,
-        comment='freqkbt'
+      ParameterType('Kbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqkbt'
+        ),
       ),
-      Parameter(
-        name='Resonance',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Resonance',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FreqMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FreqMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='FreqMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('FreqMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Slope',
-        low=0,
-        high=2,
-        comment='filtertype1'
+      ParameterType('Slope',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=2,
+          comment='filtertype1'
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='StereoChorus',
     type=94,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Outleft',      type='Audio'),
-      Output(name='Outright',     type='Audio'),
+      OutputType('Outleft',      'Audio'),
+      OutputType('Outright',     'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Detune',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Detune',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Amount',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Amount',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PercOsc',
     type=95,
     height=4,
     inputs=[
-      Input(name='Trig',         type='Audio'),
-      Input(name='Amp',          type='Audio'),
-      Input(name='Pitchmod',     type='Control'),
+      InputType('Trig',         'Audio'),
+      InputType('Amp',          'Audio'),
+      InputType('Pitchmod',     'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Pitch',
-        low=0,
-        high=127,
-        comment='0 ~ 8.18 Hz, 127 ~ 12.54 kHz'
+    params=[
+      ParameterType('Pitch',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 8.18 Hz, 127 ~ 12.54 kHz'
+        ),
       ),
-      Parameter(
-        name='Click',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Click',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Decay',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Decay',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Punch',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Punch',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Pitchmod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Pitchmod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Pitchfine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('Pitchfine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='FormantOsc',
     type=96,
     height=4,
     inputs=[
-      Input(name='PitchMod1',    type='Control'),
-      Input(name='PitchMod2',    type='Control'),
-      Input(name='Timbre',       type='Control'),
+      InputType('PitchMod1',    'Control'),
+      InputType('PitchMod2',    'Control'),
+      InputType('Timbre',       'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
-      Output(name='Slave',        type='Slave'),
+      OutputType('Out',          'Audio'),
+      OutputType('Slave',        'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='Pitch',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('Pitch',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='PitchFine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('PitchFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='Kbt',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Kbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Timbre',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Timbre',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PitchMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PitchMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='MasterOsc',
     type=97,
     height=3,
     inputs=[
-      Input(name='PitchMod1',    type='Control'),
-      Input(name='PitchMod2',    type='Control'),
+      InputType('PitchMod1',    'Control'),
+      InputType('PitchMod2',    'Control'),
     ],
     outputs=[
-      Output(name='Slave',        type='Slave'),
+      OutputType('Slave',        'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='Pitch',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('Pitch',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='PitchFine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('PitchFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='Kbt',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Kbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='PitchMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PitchMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='KeyQuant',
     type=98,
     height=4,
     inputs=[
-      Input(name='In',           type='Control'),
+      InputType('In',           'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Range',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Range',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Cont',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Cont',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='E',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('E',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='F',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('F',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='F#',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('F#',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='G',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('G',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='G#',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('G#',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='A',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('A',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Bb',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bb',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='B',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('B',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='C',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('C',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='C#',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('C#',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='D',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('D',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='D#',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('D#',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PatternGen',
     type=99,
     height=4,
     inputs=[
-      Input(name='Clock',        type='Logic'),
-      Input(name='Reset',        type='Logic'),
-      Input(name='Pattern&Bank', type='Control'),
+      InputType('Clock',        'Logic'),
+      InputType('Reset',        'Logic'),
+      InputType('Pattern&Bank', 'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Pattern',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Pattern',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Bank',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Bank',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='LowDelta',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('LowDelta',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Step',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Step',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Mono',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mono',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Keyboard',
     type=100,
     height=3,
     inputs=[
-      Input(name='Note',         type='Control'),
-      Input(name='Gate',         type='Logic'),
-      Input(name='Vel',          type='Control'),
+      InputType('Note',         'Control'),
+      InputType('Gate',         'Logic'),
+      InputType('Vel',          'Control'),
     ],
     outputs=[
-      Output(name='Note',         type='Control'),
-      Output(name='Gate',         type='Logic'),
-      Output(name='Vel',          type='Control'),
+      OutputType('Note',         'Control'),
+      OutputType('Gate',         'Logic'),
+      OutputType('Vel',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Lower',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('Lower',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='Upper',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Upper',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Phaser',
     type=102,
     height=7,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='CenterFreqMod',type='Control'),
-      Input(name='SpreadMod',    type='Control'),
+      InputType('In',           'Audio'),
+      InputType('CenterFreqMod','Control'),
+      InputType('SpreadMod',    'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='0 ~ 62.9 s, 127 ~ 24.4 hHz'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 62.9 s, 127 ~ 24.4 hHz'
+        ),
       ),
-      Parameter(
-        name='Lfo',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Lfo',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='CenterFreqMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('CenterFreqMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='CenterFreq',
-        low=0,
-        high=127,
-        comment='0 ~ 100 Hz, 127 ~ 16 kHz'
+      ParameterType('CenterFreq',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 100 Hz, 127 ~ 16 kHz'
+        ),
       ),
-      Parameter(
-        name='SpreadMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('SpreadMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Feedback',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Feedback',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Peaks',
-        low=0,
-        high=5,
-        comment='0 ~ 1 peak, 5 ~ 6 peaks'
+      ParameterType('Peaks',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=5,
+          comment='0 ~ 1 peak, 5 ~ 6 peaks'
+        ),
       ),
-      Parameter(
-        name='Spread',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Spread',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Depth',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Depth',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Inlevel',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Inlevel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='EqMid',
     type=103,
     height=4,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Freq',
-        low=0,
-        high=127,
-        comment='eqfreq'
+    params=[
+      ParameterType('Freq',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='eqfreq'
+        ),
       ),
-      Parameter(
-        name='Gain',
-        low=0,
-        high=127,
-        comment='eqgain'
+      ParameterType('Gain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='eqgain'
+        ),
       ),
-      Parameter(
-        name='Bandwidth',
-        low=0,
-        high=127,
-        comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'
+      ParameterType('Bandwidth',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='InLevel',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InLevel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='EqShelving',
     type=104,
     height=4,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Freq',
-        low=0,
-        high=127,
-        comment='eqfreq'
+    params=[
+      ParameterType('Freq',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='eqfreq'
+        ),
       ),
-      Parameter(
-        name='Gain',
-        low=0,
-        high=127,
-        comment='eqgain'
+      ParameterType('Gain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='eqgain'
+        ),
       ),
-      Parameter(
-        name='Mode',
-        low=0,
-        high=1,
-        comment='0 ~ low, 1 ~ high'
+      ParameterType('Mode',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='0 ~ low, 1 ~ high'
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='InLevel',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('InLevel',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Expander',
     type=105,
     height=7,
     inputs=[
-      Input(name='InLeft',       type='Audio'),
-      Input(name='InRight',      type='Audio'),
-      Input(name='Sidechain',    type='Audio'),
+      InputType('InLeft',       'Audio'),
+      InputType('InRight',      'Audio'),
+      InputType('Sidechain',    'Audio'),
     ],
     outputs=[
-      Output(name='OutLeft',      type='Audio'),
-      Output(name='OutRight',     type='Audio'),
+      OutputType('OutLeft',      'Audio'),
+      OutputType('OutRight',     'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Attack',
-        low=0,
-        high=127,
-        comment='companderattack'
+    params=[
+      ParameterType('Attack',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='companderattack'
+        ),
       ),
-      Parameter(
-        name='Release',
-        low=0,
-        high=127,
-        comment='companderrelease'
+      ParameterType('Release',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='companderrelease'
+        ),
       ),
-      Parameter(
-        name='Treshold',
-        low=0,
-        high=84,
-        comment='compandertreshold'
+      ParameterType('Treshold',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=84,
+          comment='compandertreshold'
+        ),
       ),
-      Parameter(
-        name='Ratio',
-        low=0,
-        high=66,
-        comment='companderratio'
+      ParameterType('Ratio',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=66,
+          comment='companderratio'
+        ),
       ),
-      Parameter(
-        name='Gate',
-        low=0,
-        high=72,
-        comment='compandergate'
+      ParameterType('Gate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=72,
+          comment='compandergate'
+        ),
       ),
-      Parameter(
-        name='Hold',
-        low=0,
-        high=127,
-        comment='companderhold'
+      ParameterType('Hold',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='companderhold'
+        ),
       ),
-      Parameter(
-        name='SidechainActivation',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('SidechainActivation',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='SidechainMonitor',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('SidechainMonitor',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Bypass',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Bypass',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='OscSineBank',
     type=106,
     height=10,
     inputs=[
-      Input(name='Master',       type='Slave'),
-      Input(name='Mixin',        type='Audio'),
-      Input(name='Sync',         type='Audio'),
-      Input(name='Osc1Am',       type='Audio'),
-      Input(name='Osc2Am',       type='Audio'),
-      Input(name='Osc3Am',       type='Audio'),
-      Input(name='Osc4Am',       type='Audio'),
-      Input(name='Osc5Am',       type='Audio'),
-      Input(name='Osc6Am',       type='Audio'),
+      InputType('Master',       'Slave'),
+      InputType('Mixin',        'Audio'),
+      InputType('Sync',         'Audio'),
+      InputType('Osc1Am',       'Audio'),
+      InputType('Osc2Am',       'Audio'),
+      InputType('Osc3Am',       'Audio'),
+      InputType('Osc4Am',       'Audio'),
+      InputType('Osc5Am',       'Audio'),
+      InputType('Osc6Am',       'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Osc1Coarse',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('Osc1Coarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc1Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Osc1Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Osc1Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc1Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc2Coarse',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc2Coarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc2Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Osc2Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Osc2Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc2Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc3Coarse',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc3Coarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc3Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Osc3Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Osc3Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc3Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc4Coarse',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc4Coarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc4Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Osc4Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Osc4Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc4Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc5Coarse',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc5Coarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc5Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Osc5Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Osc5Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc5Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc6Coarse',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc6Coarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc6Fine',
-        low=0,
-        high=127,
-        comment='symetric'
+      ParameterType('Osc6Fine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
-      Parameter(
-        name='Osc6Level',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Osc6Level',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Osc1Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Osc1Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Osc2Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Osc2Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Osc3Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Osc3Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Osc4Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Osc4Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Osc5Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Osc5Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Osc6Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Osc6Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='SpectralOsc',
     type=107,
     height=5,
     inputs=[
-      Input(name='Fma',          type='Audio'),
-      Input(name='PitchMod1',    type='Control'),
-      Input(name='PitchMod2',    type='Control'),
-      Input(name='SpectralShapeMod',type='Control'),
+      InputType('Fma',          'Audio'),
+      InputType('PitchMod1',    'Control'),
+      InputType('PitchMod2',    'Control'),
+      InputType('SpectralShapeMod','Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
-      Output(name='Slave',        type='Slave'),
+      OutputType('Out',          'Audio'),
+      OutputType('Slave',        'Slave'),
     ],
-    parameters=[
-      Parameter(
-        name='FreqCoarse',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+    params=[
+      ParameterType('FreqCoarse',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='FreqFine',
-        low=0,
-        high=127,
-        comment='freqfine'
+      ParameterType('FreqFine',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqfine'
+        ),
       ),
-      Parameter(
-        name='SpectralShape',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('SpectralShape',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Partials',
-        low=0,
-        high=1,
-        comment='0 ~ odd, 1 ~ all'
+      ParameterType('Partials',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='0 ~ odd, 1 ~ all'
+        ),
       ),
-      Parameter(
-        name='PitchMod1',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='PitchMod2',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('PitchMod2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Fma',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Fma',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='SpectralShapeMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('SpectralShapeMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Kbt',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Kbt',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='Mute',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('Mute',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[
-      Custom(
-        name='FreqDisplayUnits',
-        low=1,
-        high=0,
-        comment='freqdisplunits'
+    modes=[
+      ModeType('FreqDisplayUnits',
+        ParameterDef(  
+          low=1,
+          high=0,
+          comment='freqdisplunits'
+        ),
       ),
     ],
   ),
-  Module(
+  ModuleType(
     name='Vocoder',
     type=108,
     height=8,
     inputs=[
-      Input(name='Control',      type='Audio'),
-      Input(name='In',           type='Audio'),
+      InputType('Control',      'Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Band1',
-        low=0,
-        high=16,
-        comment='vocoband'
+    params=[
+      ParameterType('Band1',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band2',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band2',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band3',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band3',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band4',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band4',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band5',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band5',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band6',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band6',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band7',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band7',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band8',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band8',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band9',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band9',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band10',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band10',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band11',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band11',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band12',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band12',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band13',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band13',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band14',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band14',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band15',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band15',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Band16',
-        low=0,
-        high=16,
-        comment='vocoband'
+      ParameterType('Band16',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=16,
+          comment='vocoband'
+        ),
       ),
-      Parameter(
-        name='Outgain',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('Outgain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='HighFreqEmphasis',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('HighFreqEmphasis',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='Monitor',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('Monitor',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='RandomGen',
     type=110,
     height=2,
     inputs=[
-      Input(name='Master',       type='Slave'),
+      InputType('Master',       'Slave'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='Rate',
-        low=0,
-        high=127,
-        comment='lfoslvrate'
+    params=[
+      ParameterType('Rate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='lfoslvrate'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LevMult',
     type=111,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Multiplier',
-        low=0,
-        high=127,
-        comment='unibi'
+    params=[
+      ParameterType('Multiplier',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Unipolar',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('Unipolar',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='LevAdd',
     type=112,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Offset',
-        low=0,
-        high=127,
-        comment='unibi'
+    params=[
+      ParameterType('Offset',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='unibi'
+        ),
       ),
-      Parameter(
-        name='Unipolar',
-        low=0,
-        high=1,
-        comment=''
+      ParameterType('Unipolar',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment=''
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='1to2Fade',
     type=113,
     height=2,
     inputs=[
-      Input(name='In',           type='Audio'),
+      InputType('In',           'Audio'),
     ],
     outputs=[
-      Output(name='Out1',         type='Audio'),
-      Output(name='Out2',         type='Audio'),
+      OutputType('Out1',         'Audio'),
+      OutputType('Out2',         'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Fade',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Fade',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='2to1Fade',
     type=114,
     height=2,
     inputs=[
-      Input(name='In1',          type='Audio'),
-      Input(name='In2',          type='Audio'),
+      InputType('In1',          'Audio'),
+      InputType('In2',          'Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='Fade',
-        low=0,
-        high=127,
-        comment='symetric'
+    params=[
+      ParameterType('Fade',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='symetric'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='NoteVelScal',
     type=115,
     height=4,
     inputs=[
-      Input(name='Velocity',     type='Control'),
-      Input(name='Note',         type='Control'),
+      InputType('Velocity',     'Control'),
+      InputType('Note',         'Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Control'),
+      OutputType('Out',          'Control'),
     ],
-    parameters=[
-      Parameter(
-        name='VelocitySensitivity',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('VelocitySensitivity',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='LeftGain',
-        low=0,
-        high=48,
-        comment='velscalgain'
+      ParameterType('LeftGain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=48,
+          comment='velscalgain'
+        ),
       ),
-      Parameter(
-        name='Breakpoint',
-        low=0,
-        high=127,
-        comment='freqcoarse'
+      ParameterType('Breakpoint',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='freqcoarse'
+        ),
       ),
-      Parameter(
-        name='RightGain',
-        low=0,
-        high=48,
-        comment='velscalgain'
+      ParameterType('RightGain',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=48,
+          comment='velscalgain'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='RingMod',
     type=117,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='Modulation',   type='Audio'),
-      Input(name='Modulationdepth',type='Audio'),
+      InputType('In',           'Audio'),
+      InputType('Modulation',   'Audio'),
+      InputType('Modulationdepth','Audio'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='RingmodDepthMod',
-        low=0,
-        high=127,
-        comment=''
+    params=[
+      ParameterType('RingmodDepthMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='RingmodDepth',
-        low=0,
-        high=127,
-        comment='0 ~ 0, 64 ~ AM, 127 ~ RM'
+      ParameterType('RingmodDepth',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 0, 64 ~ AM, 127 ~ RM'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='Digitizer',
     type=118,
     height=3,
     inputs=[
-      Input(name='In',           type='Audio'),
-      Input(name='SampleRateMod',type='Control'),
+      InputType('In',           'Audio'),
+      InputType('SampleRateMod','Control'),
     ],
     outputs=[
-      Output(name='Out',          type='Audio'),
+      OutputType('Out',          'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='QuantBits',
-        low=0,
-        high=11,
-        comment='quantbits'
+    params=[
+      ParameterType('QuantBits',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=11,
+          comment='quantbits'
+        ),
       ),
-      Parameter(
-        name='SampleRate',
-        low=0,
-        high=127,
-        comment='0 ~ 34.65 Hz, 127 ~ 50.18 kHz'
+      ParameterType('SampleRate',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment='0 ~ 34.65 Hz, 127 ~ 50.18 kHz'
+        ),
       ),
-      Parameter(
-        name='SampleRateMod',
-        low=0,
-        high=127,
-        comment=''
+      ParameterType('SampleRateMod',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=127,
+          comment=''
+        ),
       ),
-      Parameter(
-        name='QuantOff',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('QuantOff',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
-      Parameter(
-        name='SamplingOff',
-        low=0,
-        high=1,
-        comment='onoff'
+      ParameterType('SamplingOff',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
-  Module(
+  ModuleType(
     name='PolyAreaIn',
     type=127,
     height=2,
     inputs=[],
     outputs=[
-      Output(name='Left',         type='Audio'),
-      Output(name='Right',        type='Audio'),
+      OutputType('Left',         'Audio'),
+      OutputType('Right',        'Audio'),
     ],
-    parameters=[
-      Parameter(
-        name='+6Db',
-        low=0,
-        high=1,
-        comment='onoff'
+    params=[
+      ParameterType('+6Db',
+        ParameterDef(  
+          default=0,
+          low=0,
+          high=1,
+          comment='onoff'
+        ),
       ),
     ],
-    customs=[],
+    modes=[],
   ),
 ]
 
