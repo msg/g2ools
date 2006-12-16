@@ -322,16 +322,22 @@ class CableList(Section):
             invalid, smodule.type.shortnm, smodule.index, sconn, dir,
             dmodule.type.shortnm, dmodule.index, dconn)
       else:
+        area.cables.append(c)
+
         if dir == 1:
           c.source = smodule.outputs[sconn]
         else:
           c.source = smodule.inputs[sconn]
+        c.dest = dmodule.inputs[dconn]
+
         if not hasattr(c.source,'cables'): 
           c.source.cables = []
-        c.dest = dmodule.inputs[dconn]
+        c.source.cables.append(c)
+
         if not hasattr(c.dest,'cables'):
           c.dest.cables = []
-        area.cables.append(c)
+        c.dest.cables.append(c)
+
         updatenetlist(area.netlist, c.source, c.dest)
 
   def format(self, patch):
@@ -983,20 +989,25 @@ class Area:
       self.modules.append(m)
       return m
 
-  def addcable(self, source, dest, color):
+  # connect input/output to input
+  def connect(self, source, dest, color):
     cable = Cable()
     cable.color = color
-    print 'addcable source.direction=%d' % source.direction
-    print 'source.index=%d' % source.index
+
     cable.source = source
+    if not hasattr(source,'cables'):
+      source.cables = []
+    source.cables.append(cable)
+
     cable.dest = dest
-    if not hasattr(self,'cables'):
-      self.cables = []
-    self.cables.append(cable)
-    if not hasattr(self,'netlist'):
-      self.netlist = []
+    if not hasattr(dest,'cables'):
+      dest.cables = []
+    dest.cables.append(cable)
+
     updatenetlist(self.netlist, cable.source, cable.dest)
 
+  def disconnect(self, connection):
+    raise 'disconnect: function not implemented'
 
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch:

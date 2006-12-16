@@ -24,11 +24,23 @@ def updatenetlist(netlist, source, dest):
         net.output = source
       elif not source in net.inputs: # just in case two connections are made
         net.inputs.append(source)
-      break
-  if not found:
+
+  # add new net if one not found
+  if found == 0:
     if source.direction:
       net = Net(source,[dest])
     else:
       net = Net(None,[dest,source])
     netlist.append(net)
+
+  # update source and dest nets list
+  if not hasattr(source,'nets'):
+    source.nets = []
+  if not net in source.nets:
+    source.nets.append(net)
+
+  if not hasattr(dest,'nets'):
+    dest.nets = []
+  if not net in dest.nets:
+    dest.nets.append(net)
 

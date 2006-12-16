@@ -63,12 +63,12 @@ class ModuleDump(Section):
           area = self.patch.fx
         if not len(values):
           continue
-      (index,type,col,row) = values
+      (index,type,horiz,vert) = values
       module = area.findmodule(index)
       if not module:
         module = Module(modules.fromtype[type])
         area.modules.append(module)
-      module.index,module.col,module.row=index,col,row
+      module.index,module.horiz,module.vert=index,horiz,vert
 
 class Note:
   pass
@@ -120,15 +120,19 @@ class CableDump(Section):
       # if dest is an output, make it the source
       if dest.direction:
         dest,source = source,dest
+
       c = Cable()
+      area.cables.append(c)
+      c.color,c.source,c.dest = color,source,dest
+
       if not hasattr(source,'cables'):
         source.cables = []
       source.cables.append(c)
+
       if not hasattr(dest,'cables'):
         dest.cables = []
       dest.cables.append(c)
-      c.color,c.source,c.dest = color,source,dest
-      area.cables.append(c)
+
       # update netlist with nodes
       updatenetlist(area.netlist, source, dest)
 
@@ -290,6 +294,7 @@ class PchFile:
       self.read(fname)
 
   def read(self, fname):
+    self.fname = fname
     validtags = [
       'Header','ModuleDump','CurrentNoteDump','CableDump','ParameterDump',
       'CustomDump','MorphMapDump','KeyboardAssignment','KnobMapDump',
