@@ -2,28 +2,11 @@
 
 import sys
 sys.path.append('.')
-#from nord.nm1.file import PchFile
-from nord.g2.file import *
+from nord.g2.file import Pch2File
+from nord.g2.modules import fromname as g2name
+from nord.nm1.file import PchFile
 from nord.g2 import colors
-
-def Convert2Output(module, newpatch):
-  pass
-
-def ConvertOscB(module, newpatch):
-  pass
-
-def ConvertADSR_Env(module, newpatch):
-  pass
-
-def ConvertKeyboard(module, newpatch):
-  pass
-
-moduleconvertion = {
-    4: Convert2Output,
-    8: ConvertOscB,
-   20: ConvertADSR_Env,
-  100: ConvertKeyboard, 
-}
+from nord.convert import typetable
 
 def convert(pch):
   #   loop through each module
@@ -32,7 +15,7 @@ def convert(pch):
   #       call convertion table module function
   #   loop through each cable
   #     if source and dest in convertion table
-  #       call convertion table cable function
+  #       create new connection
   #   update midi controller assignments
   #   update knob assignments (on pags A1:1, A1:2 and A1:3)
   #   update morph assignments
@@ -49,12 +32,75 @@ def convert(pch):
   pch2 = Pch2File('initpatch.pch2')
   nmpatch = pch.patch
   g2patch = pch2.patch
-  for module in nmpatch.modules:
-    if module.type.type in moduleconvertion:
-      typeconvert(module.type.type, g2patch)
-    else:
-      print 'No converter for module "%s"' % module.type.name
-  print 'Writing patch'
+  cablecolors = {
+    'Audio': 0,
+    'Control': 1,
+    'Logic': 2,
+    'Slave': 3,
+    'User1': 4,
+    'User2': 5,
+    'NoSrc': 6,
+  }
+  for areanm in 'voice','fx':
+    nmarea = getattr(nmpatch,areanm)
+    g2area = getattr(g2patch,areanm)
+    print 'Area %s' % areanm
+
+    converters = []
+    # do the modules
+    for module in nmarea.modules:
+      if module.type.type in typetable:
+        conv = typetable[module.type.type](nmarea,g2area,module)
+        converters.append(conv)
+        conv.domodule()
+        #g2module = conv.g2module
+        #print '%s (%d,%d)' % (g2module.type.shortnm,
+        #    g2module.horiz, g2module.vert)
+      else:
+        print 'No converter for module "%s"' % module.type.shortnm
+
+    # reposition modules
+    locsorted = converters[:]
+    def loccmp(a, b):
+      if a.horiz == b.horiz:
+        return cmp(a.nmmodule.vert, b.nmmodule.vert)
+      return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
+    locsorted.sort(loccmp)
+
+    if len(locsorted):
+      locsorted[0].reposition(None)
+      for i in range(1,len(locsorted)):
+        ca = locsorted[i-1]
+        cb = locsorted[i]
+        if ca.nmmodule.horiz == cb.nmmodule.horiz:
+          cb.reposition(ca)
+        else:
+          cb.reposition(None)
+
+    # now do the cables
+    for cable in nmarea.cables:
+      source = cable.source
+      g2source = None
+      if source.direction:
+        if source.index < len(source.conv.outputs):
+          g2source = source.conv.outputs[source.index]
+      elif source.index < len(source.conv.inputs):
+        g2source = source.conv.inputs[source.index]
+      dest = cable.dest
+      print '%s:%s -> %s:%s:' % (source.module.type.shortnm,source.type.name,
+          dest.module.type.shortnm,dest.type.name),
+      if dest.index >= len(dest.conv.inputs) or not g2source:
+        print ' UNCONNECTED'
+      else:
+        print ' connected'
+        g2dest = dest.conv.inputs[dest.index]
+        #print source.index, dest.index
+        #print source.module.type.shortnm, dest.module.type.shortnm
+        #print source.module.type.shortnm, dest.module.type.shortnm
+        g2area.connect(g2source,g2dest,cablecolors[source.type.type])
+
+
+  print 'Writing patch "%s2"' % (pch.fname)
   pch2.write(pch.fname+'2')
   
 prog = sys.argv.pop(0)
@@ -62,9 +108,11 @@ while len(sys.argv):
   fname = sys.argv.pop(0)
   print '"%s"' % fname
   # general algorithm for converter:
-  convert(PchFile(fname)
+  convert(PchFile(fname))
 
 sys.exit(0)
+
+# test code ...
 
 pch2 = Pch2File('initpatch.pch2')
 patch = pch2.patch
@@ -113,9 +161,9 @@ oscb = patch.voice.addmodule(modules.fromname['OscB'],horiz=1,vert=0)
 flt = patch.voice.addmodule(modules.fromname['FltNord'],horiz=1,vert=5)
 out = patch.voice.addmodule(modules.fromname['2-Out'],horiz=1,vert=10)
 
-patch.voice.addcable(oscb.outputs.Out,flt.inputs.In,0)
-patch.voice.addcable(flt.outputs.Out,out.inputs.InL,0)
-patch.voice.addcable(flt.outputs.Out,out.inputs.InR,0)
+patch.voice.connect(oscb.outputs.Out,flt.inputs.In,0)
+patch.voice.connect(flt.outputs.Out,out.inputs.InL,0)
+patch.voice.connect(flt.outputs.Out,out.inputs.InR,0)
 
 print 'Writing patch'
 pch2.write('newpatch.pch2')
