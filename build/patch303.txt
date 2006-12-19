@@ -175,10 +175,10 @@ zeropage 1.75000
 dynmem 0.53125
 height 4
 parameters
-0 "pitch coarse" 0..127 "freqcoarse"
-1 "pitch fine" 0..127 "freqfine"
-2 "pitch KBT" 0..1 "onoff"
-3 "pitch mod amount" 0..127 ""
+0 "freq coarse" 0..127 "freqcoarse"
+1 "freq fine" 0..127 "freqfine"
+2 "freq KBT" 0..1 "onoff"
+3 "freq mod" 0..127 ""
 4 "FMA" 0..127 ""
 5 "mute" 0..1 "onoff"
 inputs
@@ -203,7 +203,7 @@ height 3
 parameters
 0 "detune coarse" 0..127 "symetric"
 1 "detune fine" 0..127 "symetric"
-2 "PW" 0..127 "pulsewidth"
+2 "PulseWidth" 0..127 "pulsewidth"
 3 "PW mod" 0..127 ""
 4 "mute" 0..1 "onoff"
 inputs
@@ -412,8 +412,8 @@ parameters
 34 "seq 2, step 15" 0..1 "onoff"
 35 "seq 2, step 16" 0..1 "onoff"
 inputs
-0 "clock" logic
-1 "reset" logic
+0 "clk" logic
+1 "rst" logic
 outputs
 0 "out1" logic
 1 "out2" logic
@@ -451,9 +451,9 @@ zeropage 0.87500
 dynmem 0.37500
 height 2
 parameters
-0 "in sense 1" 0..127 ""
-1 "in sense 2" 0..127 ""
-2 "in sense 3" 0..127 ""
+0 "lev 1" 0..127 ""
+1 "lev 2" 0..127 ""
+2 "lev 3" 0..127 ""
 inputs
 0 "in1" audio
 1 "in2" audio
@@ -1053,7 +1053,7 @@ parameters
 0 "freq" 0..127 "filterfreq"
 1 "kbt" 0..127 "freqkbt"
 2 "resonance" 0..127 ""
-3 "freqmod" 0..127 ""
+3 "freq mod" 0..127 ""
 inputs
 0 "freq mod" control
 1 "in" audio
@@ -1208,21 +1208,21 @@ zeropage 0.87500
 dynmem 1.03125
 height 9
 parameters
-0 "MTune" 0..127 ""
-1 "STune" 0..127 ""
-2 "MDecay" 0..127 ""
-3 "SDecay" 0..127 ""
-4 "MLevel" 0..127 ""
-5 "SLevel" 0..127 ""
-6 "Filter freq" 0..127 ""
-7 "Filter res" 0..127 ""
-8 "Filter sweep" 0..127 ""
-9 "Filter decay" 0..127 ""
-10 "Filter mode" 0..2 "filtertype1"
-11 "Amount" 0..127 ""
-12 "Decay" 0..127 ""
-13 "Click" 0..127 ""
-14 "Noise" 0..127 ""
+0 "masterfreq" 0..127 ""
+1 "slave ratio" 0..127 ""
+2 "master decay" 0..127 ""
+3 "slave decay" 0..127 ""
+4 "master level" 0..127 ""
+5 "slave level" 0..127 ""
+6 "noise flt freq" 0..127 ""
+7 "noise flt res" 0..127 ""
+8 "noise flt sweep" 0..127 ""
+9 "noise flt decay" 0..127 ""
+10 "noise flt mode" 0..2 "filtertype1"
+11 "bend amount" 0..127 ""
+12 "bend decay" 0..127 ""
+13 "click" 0..127 ""
+14 "noise" 0..127 ""
 15 "Mute" 0..1 "onoff"
 inputs
 0 "trig" logic
@@ -1335,7 +1335,7 @@ height 2
 parameters
 inputs
 outputs
-0 "clock" logic
+0 "clk" logic
 1 "sync" logic
 2 "active" logic
 custom
@@ -1393,7 +1393,7 @@ parameters
 0 "rate" 0..127 ""
 1 "on/off" 0..1 "onoff"
 inputs
-0 "reset" logic
+0 "rst" logic
 outputs
 0 "24 pulses / beat" logic
 1 "4 pulses / beat" logic
@@ -1413,8 +1413,8 @@ height 2
 parameters
 0 "divider" 0..127 "logicdiv"
 inputs
-0 "clock" logic
-1 "reset" logic
+0 "clk" logic
+1 "rst" logic
 outputs
 0 "out" logic
 custom
@@ -1554,7 +1554,7 @@ height 2
 parameters
 inputs
 0 "reset" logic
-1 "midiclock" logic
+1 "midi clock" logic
 outputs
 0 "16" logic
 1 "T8" logic
@@ -1622,7 +1622,7 @@ parameters
 3 "mono" 0..1 "onoff"
 4 "mute" 0..1 "onoff"
 inputs
-0 "master" slave
+0 "mst" slave
 1 "reset" logic
 outputs
 0 "out" control
@@ -1712,14 +1712,14 @@ zeropage 0.87500
 dynmem 0.50000
 height 3
 parameters
-0 "detune" 0..127 ""
-1 "fine" 0..127 "symetric"
+0 "detunecoarse" 0..127 ""
+1 "detunefine" 0..127 "symetric"
 2 "-3oct" 0..1 "onoff"
-3 "fmb" 0..127 ""
+3 "FMA mod" 0..127 ""
 4 "mute" 0..1 "onoff"
 inputs
-0 "master" slave
-1 "fmb" audio
+0 "mst" slave
+1 "FMA" audio
 2 "sync" audio
 outputs
 0 "out" audio
@@ -1831,8 +1831,8 @@ parameters
 19 "play" 0..1 "onoff"
 20 "loop" 0..1 "onoff"
 inputs
-0 "clock" logic
-1 "reset" logic
+0 "clk" logic
+1 "rst" logic
 outputs
 0 "out" control
 1 "sync" logic
@@ -1872,8 +1872,8 @@ parameters
 17 "uni" 0..1 "onoff"
 18 "loop" 0..1 "onoff"
 inputs
-0 "clock" logic
-1 "reset" logic
+0 "clk" logic
+1 "rst" logic
 outputs
 0 "out" control
 1 "sync" logic
@@ -1940,13 +1940,13 @@ parameters
 1 "click" 0..127 ""
 2 "decay" 0..127 ""
 3 "punch" 0..1 "onoff"
-4 "pitchmod" 0..127 ""
-5 "pitchfine" 0..127 "freqfine"
+4 "pitch mod" 0..127 ""
+5 "pitch fine" 0..127 "freqfine"
 6 "mute" 0..1 "onoff"
 inputs
 0 "trig" audio
 1 "amp" audio
-2 "pitchmod" control
+2 "pitch mod" control
 outputs
 0 "out" audio
 custom
@@ -2048,14 +2048,14 @@ parameters
 3 "step" 0..127 ""
 4 "mono" 0..1 "onoff"
 inputs
-0 "clock" logic
-1 "reset" logic
+0 "clk" logic
+1 "rst" logic
 2 "pattern & bank" control
 outputs
 0 "out" control
 custom
 ----------
-100 Keyboard
+100 KeyboardSplit
 remarks "only 1"
 cycles 0.79000
 progMem 1.00000
@@ -2211,7 +2211,7 @@ parameters
 22 "osc5 mute" 0..1 "onoff"
 23 "osc6 mute" 0..1 "onoff"
 inputs
-0 "master" slave
+0 "mst" slave
 1 "mixin" audio
 2 "sync" audio
 3 "osc1 am" audio
@@ -2303,7 +2303,7 @@ height 2
 parameters
 0 "rate" 0..127 "lfoslvrate"
 inputs
-0 "master" slave
+0 "mst" slave
 outputs
 0 "out" control
 custom

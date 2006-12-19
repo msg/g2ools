@@ -85,7 +85,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('OscBWaveForm')
+    name('OscBWaveform')
     low(0)
     high(4)
     default(0)
@@ -103,7 +103,7 @@ ParamKnowledge(
   )
   param(
     type(Mode)
-    name('OscWaveForm_3')
+    name('OscWaveform_3')
     low(0)
     high(7)
     default(0)
@@ -112,7 +112,7 @@ ParamKnowledge(
   )
   param(
     type(Mode)
-    name('OscWaveForm_2')
+    name('OscWaveform_2')
     low(0)
     high(5)
     default(0)
@@ -283,7 +283,7 @@ ParamKnowledge(
   )
   param(
     type(Mode)
-    name('LfoWaveForm_1')
+    name('LfoWaveform_1')
     low(0)
     high(7)
     default(0)
@@ -337,7 +337,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('LfoShpA__WaveForm')
+    name('LfoShpA__Waveform')
     low(0)
     high(5)
     default(0)
@@ -346,7 +346,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('LfoA_WaveForm')
+    name('LfoA_Waveform')
     low(0)
     high(5)
     default(0)
@@ -904,7 +904,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('OscA_WaveForm')
+    name('OscA_Waveform')
     low(0)
     high(5)
     default(2)
@@ -1228,7 +1228,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('OscShpA_WaveForm')
+    name('OscShpA_Waveform')
     low(0)
     high(5)
     default(0)
@@ -1488,7 +1488,7 @@ ParamKnowledge(
   )
   param(
     type(Mode)
-    name('OscWaveForm_1')
+    name('OscWaveform_1')
     low(0)
     high(1)
     default(0)
@@ -1524,7 +1524,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('LfoB_WaveForm')
+    name('LfoB_Waveform')
     low(0)
     high(3)
     default(0)
