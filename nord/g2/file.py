@@ -159,7 +159,6 @@ class ModuleList(Section):
     else:
       area = patch.fx
 
-    area.modules = []
     for i in range(modulecnt):
       #m = area.modules[i]
       bit,type       = getbits(bit,8,data)
@@ -188,14 +187,14 @@ class ModuleList(Section):
       # mode data for module (if there is any)
       for mode in range(nmodes):
         bit,val = getbits(bit,6,data)
-        m.modes[mode] = val
+        m.modes[mode].value = val
 
       # add missing mode data. some .pch2 versions didn't contain
       #   the all the modes in version 23 BUILD 266
       mt = m.type
       if len(m.modes) < len(mt.modes):
         for i in range(len(m.modes),len(mt.modes)):
-          m.modes.append(mt.modes[i].type.default)
+          m.modes[i].value = mt.modes[i].type.default
 
   # make sure leds bit is set for specific modules
   # - some earlier generated .pch2 files where different
@@ -241,7 +240,7 @@ class ModuleList(Section):
       nmodes = len(area.modules[i].modes)
       bit = setbits(bit,4,data,nmodes)
       for mode in range(nmodes):
-        bit = setbits(bit,6,data,area.modules[i].modes[mode])
+        bit = setbits(bit,6,data,area.modules[i].modes[mode].value)
 
     return data.tostring()
     
@@ -296,11 +295,6 @@ class CableList(Section):
     else:
       area = patch.fx
 
-    if not hasattr(area,'cables'):
-      area.cables = []
-    if not hasattr(area,'netlist'):
-      area.netlist = []
-
     for i in range(cablecnt):
       c = Cable()
       bit,c.color = getbits(bit,3,data)
@@ -330,12 +324,7 @@ class CableList(Section):
           c.source = smodule.inputs[sconn]
         c.dest = dmodule.inputs[dconn]
 
-        if not hasattr(c.source,'cables'): 
-          c.source.cables = []
         c.source.cables.append(c)
-
-        if not hasattr(c.dest,'cables'):
-          c.dest.cables = []
         c.dest.cables.append(c)
 
         updatenetlist(area.netlist, c.source, c.dest)
@@ -938,7 +927,7 @@ class ModuleNames(Section):
     for i in range(len(area.modules)):
       bit = setbits(bit,8,data,area.modules[i].index)
       nm = area.modules[i].name
-      print '%d "%s"' % (area.modules[i].index, nm)
+      #print '%d "%s"' % (area.modules[i].index, nm)
       if len(nm) < 16:
         nm += '\0'
       for c in nm:
@@ -962,11 +951,17 @@ class Performance:
 
 # holder object for patch voice and fx area data (modules, cables, etc..)
 class Area:
+  def __init__(self):
+    self.modules = []
+    self.cables = []
+    self.netlist = []
+
   def findmodule(self, index):
     for i in range(len(self.modules)):
       if self.modules[i].index == index:
         return self.modules[i]
     return None
+
   def addmodule(self, type, **kw):
     members = [ 'name','index','color','horiz','vert','uprate','leds' ]
     # get next available index
@@ -992,16 +987,14 @@ class Area:
   # connect input/output to input
   def connect(self, source, dest, color):
     cable = Cable()
+    self.cables.append(cable)
+
     cable.color = color
 
     cable.source = source
-    if not hasattr(source,'cables'):
-      source.cables = []
     source.cables.append(cable)
 
     cable.dest = dest
-    if not hasattr(dest,'cables'):
-      dest.cables = []
     dest.cables.append(cable)
 
     updatenetlist(self.netlist, cable.source, cable.dest)
@@ -1088,7 +1081,7 @@ Info=BUILD 266\r
     for section in self.sectiontypes:
       f = section.format(self.patch)
       nm = section.__class__.__name__
-      print '0x%02x %-25s             len:%d' % (section.type,nm,len(f))
+      #print '0x%02x %-25s             len:%d' % (section.type,nm,len(f))
       s += struct.pack('>BH',section.type,len(f)) + f
     ccrc = crc(s)
     s += struct.pack('>H',ccrc)

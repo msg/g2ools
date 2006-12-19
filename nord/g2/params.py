@@ -69,7 +69,7 @@ params = [
     definitions=['0 ~ 50%, 127 ~ 99%'],
     comments=''
   ),
-  ParameterDef(name='OscBWaveForm',
+  ParameterDef(name='OscBWaveform',
     low=0,
     high=4,
     default=0,
@@ -83,14 +83,14 @@ params = [
     definitions=['0 ~ Lin, 1 ~ Trk'],
     comments=''
   ),
-  ParameterDef(name='OscWaveForm_3',
+  ParameterDef(name='OscWaveform_3',
     low=0,
     high=7,
     default=0,
     definitions=['0 ~ Sine1, 1 ~ Sine2, 2 ~ Sine3, 4 ~ TriSaw, 5 ~ DoubleSaw, 6 ~ Pulse, 7 ~ SymPuls'],
     comments=''
   ),
-  ParameterDef(name='OscWaveForm_2',
+  ParameterDef(name='OscWaveform_2',
     low=0,
     high=5,
     default=0,
@@ -223,7 +223,7 @@ params = [
     definitions=['0 ~ Rate Sub, 1 ~ Rate Lo, 2 ~ Rate Hi, 3 ~ BPM'],
     comments='Determines [LfoRate_3]'
   ),
-  ParameterDef(name='LfoWaveForm_1',
+  ParameterDef(name='LfoWaveform_1',
     low=0,
     high=7,
     default=0,
@@ -265,14 +265,14 @@ params = [
     definitions=['0 ~ 0, 64 ~ 180, 127 ~ 357'],
     comments='In degrees, 360 degrees in a full circle'
   ),
-  ParameterDef(name='LfoShpA__WaveForm',
+  ParameterDef(name='LfoShpA__Waveform',
     low=0,
     high=5,
     default=0,
     definitions=['0 ~ Sine, 1 ~ CosBell, 2 ~ TriBell, 3 ~ Saw2Tri, 4 ~ Sqr2Tri, 5 ~ Sqr'],
     comments=''
   ),
-  ParameterDef(name='LfoA_WaveForm',
+  ParameterDef(name='LfoA_Waveform',
     low=0,
     high=5,
     default=0,
@@ -706,7 +706,7 @@ params = [
     definitions=['0 ~ 12 dB/Oct, 1 ~ 18 dB/Oct, 2 ~ 24 dB/Oct'],
     comments=''
   ),
-  ParameterDef(name='OscA_WaveForm',
+  ParameterDef(name='OscA_Waveform',
     low=0,
     high=5,
     default=2,
@@ -958,7 +958,7 @@ params = [
     definitions=['0 ~ Notch, 1 ~ Peak, 2 ~ Deep'],
     comments=''
   ),
-  ParameterDef(name='OscShpA_WaveForm',
+  ParameterDef(name='OscShpA_Waveform',
     low=0,
     high=5,
     default=0,
@@ -1166,7 +1166,7 @@ params = [
     definitions=['0 ~ 500 m, 1 ~ 1.0 s, 2 ~ 2.0 s, 3 ~ 1.35 s'],
     comments='Determines [DelayTime_1]'
   ),
-  ParameterDef(name='OscWaveForm_1',
+  ParameterDef(name='OscWaveform_1',
     low=0,
     high=1,
     default=0,
@@ -1194,7 +1194,7 @@ params = [
     definitions=['0 ~ 0.50 m, 64 ~ 86.4 m, 127 ~ 1.00 s'],
     comments=''
   ),
-  ParameterDef(name='LfoB_WaveForm',
+  ParameterDef(name='LfoB_Waveform',
     low=0,
     high=3,
     default=0,

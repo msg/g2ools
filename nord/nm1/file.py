@@ -12,7 +12,7 @@ import modules
 
 NMORPHS = 4
 
-class ParseNM1Error(Exception):
+class NM1Error(Exception):
   def __init__(self, value):
     self.value = value
   def __str__(self):
@@ -41,7 +41,7 @@ class Header(Section):
       if 'Version=' in line:
         self.version = line
         if float(self.version.split()[-1]) < 3:
-          raise ParseNM1Error('Header: Cannot parse .pch with version < 3')
+          raise NM1Error('Header: Cannot parse .pch with version < 3')
         break
     values = map(int,lines[0].split()) + [1]*23 # make sure we have enough
     (self.keymin,self.keymax, self.velmin,self.velmax,
@@ -161,7 +161,7 @@ class ParameterDump(Section):
       if len(values) < count:
         values.extend(map(int,lines.pop(0).split()))
       for i in range(len(module.params)):
-        module.params[i].variations[0] = values[i]
+        module.params[i].variations = [ values[i] for variations in range(9) ]
 
 class CustomDump(Section):
   def parse(self):
@@ -175,7 +175,7 @@ class CustomDump(Section):
       index = values.pop(0)
       module = area.findmodule(index)
       if not module:
-        raise ParseNM1Error('CustomDump: invalid module index %s' % index)
+        raise NM1Error('CustomDump: invalid module index %s' % index)
       for i in range(len(module.modes)):
         module.modes[i] = values[i]
 
@@ -206,7 +206,7 @@ class MorphMapDump(Section):
         area = self.patch.fx
       morphmap.module = area.findmodule(index)
       if not morph in range(4):
-        raise ParseNM1Error('MorphMapDump: invalid morph index %d' % morph)
+        raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
       morphs[morph].maps.append(morphmap)
 
 class KeyboardAssignment(Section):
@@ -302,7 +302,7 @@ class PchFile:
     ]
     lines = map(string.strip, open(fname).readlines())
     if not len(lines):
-      raise ParseNM1Error('NM1File: no valid data: not parsing')
+      raise NM1Error('NM1File: no valid data: not parsing')
     if lines[0] != '[Header]':
       print 'added missing [Header]'
       lines.insert(0,'[Header]')
@@ -328,7 +328,7 @@ class PchFile:
         lines.append(lasttag)
         endtags.append(len(lines)-1)
       if len(starttags) != len(endtags):
-        raise ParseNM1Error(
+        raise NM1Error(
             'NM1File: Start/End tag mismatch: Cannot parse\n%s\n%s' %
             repr(starttags), repr(endtags))
       sections = map(lambda s,e,l=lines: l[s:e+1], starttags, endtags)
@@ -337,7 +337,7 @@ class PchFile:
 
     for s,e in zip(starttags,endtags):
       if e < s:
-        raise ParseNM1Error(
+        raise NM1Error(
             'NM1File: tags "%s" comes before "%s"' % (lines[e],lines[s]))
     for section in sections:
       section = filter(lambda a: a, section)
@@ -355,7 +355,7 @@ if __name__ == '__main__':
     print '"%s"' % fname
     try:
       nm1 = PchFile(fname)
-    except ParseNM1Error, s:
+    except NM1Error, s:
       print s
 
 # object ledgend when finished parsing

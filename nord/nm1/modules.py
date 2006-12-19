@@ -8,7 +8,7 @@ class ModuleMap(Struct): pass
 
 modules = [
   ModuleType(
-    name='Keyboard',
+    shortnm='Keyboard',
     type=1,
     height=2,
     inputs=[],
@@ -22,7 +22,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='AudioIn',
+    shortnm='AudioIn',
     type=2,
     height=2,
     inputs=[],
@@ -34,7 +34,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='4Output',
+    shortnm='4Output',
     type=3,
     height=3,
     inputs=[
@@ -57,7 +57,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='2Output',
+    shortnm='2Output',
     type=4,
     height=3,
     inputs=[
@@ -94,7 +94,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='1Output',
+    shortnm='1Output',
     type=5,
     height=3,
     inputs=[
@@ -130,7 +130,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='OscA',
+    shortnm='OscA',
     type=7,
     height=6,
     inputs=[
@@ -230,6 +230,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -237,7 +238,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscB',
+    shortnm='OscB',
     type=8,
     height=6,
     inputs=[
@@ -328,6 +329,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -335,7 +337,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscC',
+    shortnm='OscC',
     type=9,
     height=4,
     inputs=[
@@ -348,7 +350,7 @@ modules = [
       OutputType('Slv',          'Slave'),
     ],
     params=[
-      ParameterType('PitchCoarse',
+      ParameterType('FreqCoarse',
         ParameterDef(  
           default=0,
           low=0,
@@ -356,7 +358,7 @@ modules = [
           comment='freqcoarse'
         ),
       ),
-      ParameterType('PitchFine',
+      ParameterType('FreqFine',
         ParameterDef(  
           default=0,
           low=0,
@@ -364,7 +366,7 @@ modules = [
           comment='freqfine'
         ),
       ),
-      ParameterType('PitchKbt',
+      ParameterType('FreqKbt',
         ParameterDef(  
           default=0,
           low=0,
@@ -372,7 +374,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('PitchModAmount',
+      ParameterType('FreqMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -401,6 +403,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -408,7 +411,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscSlvB',
+    shortnm='OscSlvB',
     type=10,
     height=3,
     inputs=[
@@ -435,7 +438,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Pw',
+      ParameterType('Pulsewidth',
         ParameterDef(  
           default=0,
           low=0,
@@ -464,6 +467,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=2,
+          default=2,
           high=0,
           comment='freqdisplunits3'
         ),
@@ -471,7 +475,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscSlvC',
+    shortnm='OscSlvC',
     type=11,
     height=3,
     inputs=[
@@ -519,6 +523,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=2,
+          default=2,
           high=0,
           comment='freqdisplunits3'
         ),
@@ -526,7 +531,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscSlvD',
+    shortnm='OscSlvD',
     type=12,
     height=3,
     inputs=[
@@ -574,6 +579,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=2,
+          default=2,
           high=0,
           comment='freqdisplunits3'
         ),
@@ -581,7 +587,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscSlvE',
+    shortnm='OscSlvE',
     type=13,
     height=3,
     inputs=[
@@ -630,6 +636,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=2,
+          default=2,
           high=0,
           comment='freqdisplunits3'
         ),
@@ -637,7 +644,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='OscSlvA',
+    shortnm='OscSlvA',
     type=14,
     height=4,
     inputs=[
@@ -695,6 +702,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=2,
+          default=2,
           high=0,
           comment='freqdisplunits3'
         ),
@@ -702,7 +710,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='NoteSeqA',
+    shortnm='NoteSeqA',
     type=15,
     height=7,
     inputs=[
@@ -888,7 +896,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PortamentoB',
+    shortnm='PortamentoB',
     type=16,
     height=2,
     inputs=[
@@ -911,12 +919,12 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='EventSeq',
+    shortnm='EventSeq',
     type=17,
     height=5,
     inputs=[
-      InputType('Clock',        'Logic'),
-      InputType('Reset',        'Logic'),
+      InputType('Clk',          'Logic'),
+      InputType('Rst',          'Logic'),
     ],
     outputs=[
       OutputType('Out1',         'Logic'),
@@ -1217,7 +1225,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='X-Fade',
+    shortnm='X-Fade',
     type=18,
     height=3,
     inputs=[
@@ -1249,7 +1257,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Mixer',
+    shortnm='Mixer',
     type=19,
     height=2,
     inputs=[
@@ -1261,7 +1269,7 @@ modules = [
       OutputType('Out',          'Audio'),
     ],
     params=[
-      ParameterType('InSense1',
+      ParameterType('Lev1',
         ParameterDef(  
           default=0,
           low=0,
@@ -1269,7 +1277,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense2',
+      ParameterType('Lev2',
         ParameterDef(  
           default=0,
           low=0,
@@ -1277,7 +1285,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense3',
+      ParameterType('Lev3',
         ParameterDef(  
           default=0,
           low=0,
@@ -1289,7 +1297,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='ADSR-Env',
+    shortnm='ADSR-Env',
     type=20,
     height=5,
     inputs=[
@@ -1355,7 +1363,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Compressor',
+    shortnm='Compressor',
     type=21,
     height=7,
     inputs=[
@@ -1444,7 +1452,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PartialGen',
+    shortnm='PartialGen',
     type=22,
     height=2,
     inputs=[
@@ -1466,7 +1474,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Mod-Env',
+    shortnm='Mod-Env',
     type=23,
     height=6,
     inputs=[
@@ -1560,7 +1568,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LFOA',
+    shortnm='LFOA',
     type=24,
     height=5,
     inputs=[
@@ -1640,7 +1648,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LFOB',
+    shortnm='LFOB',
     type=25,
     height=5,
     inputs=[
@@ -1721,7 +1729,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LFOC',
+    shortnm='LFOC',
     type=26,
     height=4,
     inputs=[
@@ -1784,7 +1792,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LFOSlvB',
+    shortnm='LFOSlvB',
     type=27,
     height=2,
     inputs=[
@@ -1807,6 +1815,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunitslfo'
         ),
@@ -1814,7 +1823,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='LFOSlvC',
+    shortnm='LFOSlvC',
     type=28,
     height=2,
     inputs=[
@@ -1837,6 +1846,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunitslfo'
         ),
@@ -1844,7 +1854,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='LFOSlvD',
+    shortnm='LFOSlvD',
     type=29,
     height=2,
     inputs=[
@@ -1867,6 +1877,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunitslfo'
         ),
@@ -1874,7 +1885,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='LFOSlvE',
+    shortnm='LFOSlvE',
     type=30,
     height=2,
     inputs=[
@@ -1897,6 +1908,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunitslfo'
         ),
@@ -1904,7 +1916,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='Noise',
+    shortnm='Noise',
     type=31,
     height=2,
     inputs=[],
@@ -1924,7 +1936,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='FilterBank',
+    shortnm='FilterBank',
     type=32,
     height=7,
     inputs=[
@@ -2058,7 +2070,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='ClkRndGen',
+    shortnm='ClkRndGen',
     type=33,
     height=2,
     inputs=[
@@ -2088,7 +2100,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='RndStepGen',
+    shortnm='RndStepGen',
     type=34,
     height=2,
     inputs=[
@@ -2110,7 +2122,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='RndPulsGen',
+    shortnm='RndPulsGen',
     type=35,
     height=2,
     inputs=[],
@@ -2130,7 +2142,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PosEdgeDelay',
+    shortnm='PosEdgeDelay',
     type=36,
     height=2,
     inputs=[
@@ -2152,7 +2164,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LogicDelay',
+    shortnm='LogicDelay',
     type=37,
     height=2,
     inputs=[
@@ -2174,7 +2186,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Pulse',
+    shortnm='Pulse',
     type=38,
     height=2,
     inputs=[
@@ -2196,7 +2208,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Smooth',
+    shortnm='Smooth',
     type=39,
     height=2,
     inputs=[
@@ -2218,7 +2230,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Mixer',
+    shortnm='Mixer',
     type=40,
     height=4,
     inputs=[
@@ -2311,7 +2323,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Constant',
+    shortnm='Constant',
     type=43,
     height=2,
     inputs=[],
@@ -2339,7 +2351,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='GainControl',
+    shortnm='GainControl',
     type=44,
     height=2,
     inputs=[
@@ -2362,7 +2374,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='VocalFilter',
+    shortnm='VocalFilter',
     type=45,
     height=5,
     inputs=[
@@ -2450,7 +2462,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='AHD-Env',
+    shortnm='AHD-Env',
     type=46,
     height=5,
     inputs=[
@@ -2518,7 +2530,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Pan',
+    shortnm='Pan',
     type=47,
     height=3,
     inputs=[
@@ -2550,7 +2562,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PortamentoA',
+    shortnm='PortamentoA',
     type=48,
     height=2,
     inputs=[
@@ -2573,7 +2585,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='FilterD',
+    shortnm='FilterD',
     type=49,
     height=5,
     inputs=[
@@ -2610,7 +2622,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Freqmod',
+      ParameterType('FreqMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2623,6 +2635,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -2630,7 +2643,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='FilterC',
+    shortnm='FilterC',
     type=50,
     height=4,
     inputs=[
@@ -2671,6 +2684,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -2678,7 +2692,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='FilterE',
+    shortnm='FilterE',
     type=51,
     height=6,
     inputs=[
@@ -2776,6 +2790,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -2783,7 +2798,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='Multi-Env',
+    shortnm='Multi-Env',
     type=52,
     height=7,
     inputs=[
@@ -2888,7 +2903,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Sample&Hold',
+    shortnm='Sample&Hold',
     type=53,
     height=2,
     inputs=[
@@ -2902,7 +2917,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Quantizer',
+    shortnm='Quantizer',
     type=54,
     height=2,
     inputs=[
@@ -2924,7 +2939,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='InvLevShift',
+    shortnm='InvLevShift',
     type=57,
     height=2,
     inputs=[
@@ -2954,7 +2969,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='DrumSynth',
+    shortnm='DrumSynth',
     type=58,
     height=9,
     inputs=[
@@ -2966,7 +2981,7 @@ modules = [
       OutputType('Out',          'Audio'),
     ],
     params=[
-      ParameterType('Mtune',
+      ParameterType('Masterfreq',
         ParameterDef(  
           default=0,
           low=0,
@@ -2974,7 +2989,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Stune',
+      ParameterType('SlaveRatio',
         ParameterDef(  
           default=0,
           low=0,
@@ -2982,7 +2997,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Mdecay',
+      ParameterType('MasterDecay',
         ParameterDef(  
           default=0,
           low=0,
@@ -2990,7 +3005,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Sdecay',
+      ParameterType('SlaveDecay',
         ParameterDef(  
           default=0,
           low=0,
@@ -2998,7 +3013,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Mlevel',
+      ParameterType('MasterLevel',
         ParameterDef(  
           default=0,
           low=0,
@@ -3006,7 +3021,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Slevel',
+      ParameterType('SlaveLevel',
         ParameterDef(  
           default=0,
           low=0,
@@ -3014,7 +3029,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FilterFreq',
+      ParameterType('NoiseFltFreq',
         ParameterDef(  
           default=0,
           low=0,
@@ -3022,7 +3037,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FilterRes',
+      ParameterType('NoiseFltRes',
         ParameterDef(  
           default=0,
           low=0,
@@ -3030,7 +3045,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FilterSweep',
+      ParameterType('NoiseFltSweep',
         ParameterDef(  
           default=0,
           low=0,
@@ -3038,7 +3053,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FilterDecay',
+      ParameterType('NoiseFltDecay',
         ParameterDef(  
           default=0,
           low=0,
@@ -3046,7 +3061,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FilterMode',
+      ParameterType('NoiseFltMode',
         ParameterDef(  
           default=0,
           low=0,
@@ -3054,7 +3069,7 @@ modules = [
           comment='filtertype1'
         ),
       ),
-      ParameterType('Amount',
+      ParameterType('BendAmount',
         ParameterDef(  
           default=0,
           low=0,
@@ -3062,7 +3077,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Decay',
+      ParameterType('BendDecay',
         ParameterDef(  
           default=0,
           low=0,
@@ -3098,7 +3113,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='CompareLev',
+    shortnm='CompareLev',
     type=59,
     height=2,
     inputs=[
@@ -3120,7 +3135,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Clip',
+    shortnm='Clip',
     type=61,
     height=3,
     inputs=[
@@ -3159,7 +3174,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Overdrive',
+    shortnm='Overdrive',
     type=62,
     height=3,
     inputs=[
@@ -3190,7 +3205,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='KeyboardPatch',
+    shortnm='KeyboardPatch',
     type=63,
     height=3,
     inputs=[],
@@ -3204,7 +3219,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='NegEdgeDelay',
+    shortnm='NegEdgeDelay',
     type=64,
     height=2,
     inputs=[
@@ -3226,12 +3241,12 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='MIDIGlobal',
+    shortnm='MIDIGlobal',
     type=65,
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Clock',        'Logic'),
+      OutputType('Clk',          'Logic'),
       OutputType('Sync',         'Logic'),
       OutputType('Active',       'Logic'),
     ],
@@ -3239,7 +3254,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='ControlMixer',
+    shortnm='ControlMixer',
     type=66,
     height=2,
     inputs=[
@@ -3294,7 +3309,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='NoteDetect',
+    shortnm='NoteDetect',
     type=67,
     height=2,
     inputs=[],
@@ -3316,11 +3331,11 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='ClkGen',
+    shortnm='ClkGen',
     type=68,
     height=3,
     inputs=[
-      InputType('Reset',        'Logic'),
+      InputType('Rst',          'Logic'),
     ],
     outputs=[
       OutputType('24Pulses/Beat','Logic'),
@@ -3349,12 +3364,12 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='ClkDiv',
+    shortnm='ClkDiv',
     type=69,
     height=2,
     inputs=[
-      InputType('Clock',        'Logic'),
-      InputType('Reset',        'Logic'),
+      InputType('Clk',          'Logic'),
+      InputType('Rst',          'Logic'),
     ],
     outputs=[
       OutputType('Out',          'Logic'),
@@ -3372,7 +3387,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LogicInv',
+    shortnm='LogicInv',
     type=70,
     height=2,
     inputs=[
@@ -3385,7 +3400,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='EnvFollower',
+    shortnm='EnvFollower',
     type=71,
     height=3,
     inputs=[
@@ -3415,7 +3430,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='NoteScaler',
+    shortnm='NoteScaler',
     type=72,
     height=2,
     inputs=[
@@ -3437,7 +3452,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LogicProc',
+    shortnm='LogicProc',
     type=73,
     height=2,
     inputs=[
@@ -3460,7 +3475,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='WaveWrap',
+    shortnm='WaveWrap',
     type=74,
     height=3,
     inputs=[
@@ -3491,7 +3506,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='NoteQuant',
+    shortnm='NoteQuant',
     type=75,
     height=2,
     inputs=[
@@ -3521,7 +3536,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='OnOff',
+    shortnm='OnOff',
     type=76,
     height=2,
     inputs=[
@@ -3543,12 +3558,12 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='ClkDivFix',
+    shortnm='ClkDivFix',
     type=77,
     height=2,
     inputs=[
       InputType('Reset',        'Logic'),
-      InputType('Midiclock',    'Logic'),
+      InputType('MidiClock',    'Logic'),
     ],
     outputs=[
       OutputType('16',           'Logic'),
@@ -3559,7 +3574,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Delay',
+    shortnm='Delay',
     type=78,
     height=3,
     inputs=[
@@ -3591,7 +3606,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='4-1Switch',
+    shortnm='4-1Switch',
     type=79,
     height=3,
     inputs=[
@@ -3656,11 +3671,11 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LFOSlvA',
+    shortnm='LFOSlvA',
     type=80,
     height=4,
     inputs=[
-      InputType('Master',       'Slave'),
+      InputType('Mst',          'Slave'),
       InputType('Reset',        'Logic'),
     ],
     outputs=[
@@ -3712,6 +3727,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunitslfo'
         ),
@@ -3719,7 +3735,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='Amplifier',
+    shortnm='Amplifier',
     type=81,
     height=2,
     inputs=[
@@ -3741,7 +3757,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Diode',
+    shortnm='Diode',
     type=82,
     height=2,
     inputs=[
@@ -3763,7 +3779,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Shaper',
+    shortnm='Shaper',
     type=83,
     height=2,
     inputs=[
@@ -3785,7 +3801,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='AD-Env',
+    shortnm='AD-Env',
     type=84,
     height=3,
     inputs=[
@@ -3826,19 +3842,19 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='OscSlvFM',
+    shortnm='OscSlvFM',
     type=85,
     height=3,
     inputs=[
-      InputType('Master',       'Slave'),
-      InputType('Fmb',          'Audio'),
+      InputType('Mst',          'Slave'),
+      InputType('Fma',          'Audio'),
       InputType('Sync',         'Audio'),
     ],
     outputs=[
       OutputType('Out',          'Audio'),
     ],
     params=[
-      ParameterType('Detune',
+      ParameterType('Detunecoarse',
         ParameterDef(  
           default=0,
           low=0,
@@ -3846,7 +3862,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Fine',
+      ParameterType('Detunefine',
         ParameterDef(  
           default=0,
           low=0,
@@ -3862,7 +3878,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Fmb',
+      ParameterType('FmaMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -3883,6 +3899,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -3890,7 +3907,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='FilterA',
+    shortnm='FilterA',
     type=86,
     height=2,
     inputs=[
@@ -3912,7 +3929,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='FilterB',
+    shortnm='FilterB',
     type=87,
     height=2,
     inputs=[
@@ -3934,7 +3951,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='1-4Switch',
+    shortnm='1-4Switch',
     type=88,
     height=3,
     inputs=[
@@ -3975,7 +3992,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='CompareAB',
+    shortnm='CompareAB',
     type=89,
     height=2,
     inputs=[
@@ -3989,12 +4006,12 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='NoteSeqB',
+    shortnm='NoteSeqB',
     type=90,
     height=9,
     inputs=[
-      InputType('Clock',        'Logic'),
-      InputType('Reset',        'Logic'),
+      InputType('Clk',          'Logic'),
+      InputType('Rst',          'Logic'),
     ],
     outputs=[
       OutputType('Out',          'Control'),
@@ -4176,6 +4193,7 @@ modules = [
       ModeType('Zoomfactor',
         ParameterDef(  
           low=6,
+          default=6,
           high=1,
           comment=''
         ),
@@ -4183,6 +4201,7 @@ modules = [
       ModeType('Sliderposition',
         ParameterDef(  
           low=117,
+          default=117,
           high=6,
           comment=''
         ),
@@ -4190,12 +4209,12 @@ modules = [
     ],
   ),
   ModuleType(
-    name='CtrlSeq',
+    shortnm='CtrlSeq',
     type=91,
     height=7,
     inputs=[
-      InputType('Clock',        'Logic'),
-      InputType('Reset',        'Logic'),
+      InputType('Clk',          'Logic'),
+      InputType('Rst',          'Logic'),
     ],
     outputs=[
       OutputType('Out',          'Control'),
@@ -4359,7 +4378,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='FilterF',
+    shortnm='FilterF',
     type=92,
     height=6,
     inputs=[
@@ -4432,6 +4451,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -4439,7 +4459,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='StereoChorus',
+    shortnm='StereoChorus',
     type=94,
     height=3,
     inputs=[
@@ -4478,13 +4498,13 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PercOsc',
+    shortnm='PercOsc',
     type=95,
     height=4,
     inputs=[
       InputType('Trig',         'Audio'),
       InputType('Amp',          'Audio'),
-      InputType('Pitchmod',     'Control'),
+      InputType('PitchMod',     'Control'),
     ],
     outputs=[
       OutputType('Out',          'Audio'),
@@ -4522,7 +4542,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Pitchmod',
+      ParameterType('PitchMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -4530,7 +4550,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Pitchfine',
+      ParameterType('PitchFine',
         ParameterDef(  
           default=0,
           low=0,
@@ -4551,6 +4571,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -4558,7 +4579,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='FormantOsc',
+    shortnm='FormantOsc',
     type=96,
     height=4,
     inputs=[
@@ -4632,6 +4653,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -4639,7 +4661,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='MasterOsc',
+    shortnm='MasterOsc',
     type=97,
     height=3,
     inputs=[
@@ -4695,6 +4717,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -4702,7 +4725,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='KeyQuant',
+    shortnm='KeyQuant',
     type=98,
     height=4,
     inputs=[
@@ -4828,12 +4851,12 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PatternGen',
+    shortnm='PatternGen',
     type=99,
     height=4,
     inputs=[
-      InputType('Clock',        'Logic'),
-      InputType('Reset',        'Logic'),
+      InputType('Clk',          'Logic'),
+      InputType('Rst',          'Logic'),
       InputType('Pattern&Bank', 'Control'),
     ],
     outputs=[
@@ -4884,7 +4907,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Keyboard',
+    shortnm='KeyboardSplit',
     type=100,
     height=3,
     inputs=[
@@ -4918,7 +4941,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Phaser',
+    shortnm='Phaser',
     type=102,
     height=7,
     inputs=[
@@ -5022,7 +5045,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='EqMid',
+    shortnm='EqMid',
     type=103,
     height=4,
     inputs=[
@@ -5076,7 +5099,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='EqShelving',
+    shortnm='EqShelving',
     type=104,
     height=4,
     inputs=[
@@ -5130,7 +5153,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Expander',
+    shortnm='Expander',
     type=105,
     height=7,
     inputs=[
@@ -5219,11 +5242,11 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='OscSineBank',
+    shortnm='OscSineBank',
     type=106,
     height=10,
     inputs=[
-      InputType('Master',       'Slave'),
+      InputType('Mst',          'Slave'),
       InputType('Mixin',        'Audio'),
       InputType('Sync',         'Audio'),
       InputType('Osc1Am',       'Audio'),
@@ -5433,7 +5456,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='SpectralOsc',
+    shortnm='SpectralOsc',
     type=107,
     height=5,
     inputs=[
@@ -5532,6 +5555,7 @@ modules = [
       ModeType('FreqDisplayUnits',
         ParameterDef(  
           low=1,
+          default=1,
           high=0,
           comment='freqdisplunits'
         ),
@@ -5539,7 +5563,7 @@ modules = [
     ],
   ),
   ModuleType(
-    name='Vocoder',
+    shortnm='Vocoder',
     type=108,
     height=8,
     inputs=[
@@ -5706,11 +5730,11 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='RandomGen',
+    shortnm='RandomGen',
     type=110,
     height=2,
     inputs=[
-      InputType('Master',       'Slave'),
+      InputType('Mst',          'Slave'),
     ],
     outputs=[
       OutputType('Out',          'Control'),
@@ -5728,7 +5752,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LevMult',
+    shortnm='LevMult',
     type=111,
     height=2,
     inputs=[
@@ -5758,7 +5782,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='LevAdd',
+    shortnm='LevAdd',
     type=112,
     height=2,
     inputs=[
@@ -5788,7 +5812,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='1to2Fade',
+    shortnm='1to2Fade',
     type=113,
     height=2,
     inputs=[
@@ -5811,7 +5835,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='2to1Fade',
+    shortnm='2to1Fade',
     type=114,
     height=2,
     inputs=[
@@ -5834,7 +5858,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='NoteVelScal',
+    shortnm='NoteVelScal',
     type=115,
     height=4,
     inputs=[
@@ -5881,7 +5905,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='RingMod',
+    shortnm='RingMod',
     type=117,
     height=3,
     inputs=[
@@ -5913,7 +5937,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='Digitizer',
+    shortnm='Digitizer',
     type=118,
     height=3,
     inputs=[
@@ -5968,7 +5992,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    name='PolyAreaIn',
+    shortnm='PolyAreaIn',
     type=127,
     height=2,
     inputs=[],
@@ -5994,8 +6018,23 @@ fromtype = {}
 fromname = {}
 modulemap = Struct()
 for module in modules:
-  fromname[module.name] = module
+  fromname[module.shortnm] = module
   fromtype[module.type] = module
-  name = module.name.replace('-','_').replace('&','n').replace(' ','_')
-  setattr(modulemap, name, module)
+  shortnm = module.shortnm.replace('-','_').replace('&','n').replace(' ','_')
+  setattr(modulemap, shortnm, module)
 
+if __name__ == '__main__':
+  for module in modules:
+    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    for i in range(len(module.inputs)):
+      input = module.inputs[i]
+      print ' .inputs[%d] .%s' % (i, input.name)
+    for i in range(len(module.outputs)):
+      output = module.outputs[i]
+      print ' .outputs[%d] .%s' % (i, output.name)
+    for i in range(len(module.params)):
+      param = module.params[i]
+      print ' .params[%d] .%s' % (i, param.name)
+    for i in range(len(module.modes)):
+      mode = module.modes[i]
+      print ' .modes[%d] .%s' % (i, mode.name)

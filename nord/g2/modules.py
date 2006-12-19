@@ -104,7 +104,7 @@ modules = [
       ParameterType('FmAmount',     parammap.Level_100),
       ParameterType('Shape',        parammap.PW),
       ParameterType('ShapeMod',     parammap.Level_100),
-      ParameterType('WaveForm',     parammap.OscBWaveForm),
+      ParameterType('Waveform',     parammap.OscBWaveform),
       ParameterType('Active',       parammap.OffOn),
       ParameterType('FmMode',       parammap.FmLinTrk),
     ],
@@ -139,7 +139,7 @@ modules = [
       ParameterType('FmMode',       parammap.FmLinTrk),
     ],
     modes=[
-      ModeType('WaveForm',     parammap.OscWaveForm_3),
+      ModeType('Waveform',     parammap.OscWaveform_3),
     ],
   ),
   ModuleType(
@@ -168,7 +168,7 @@ modules = [
       ParameterType('PitchMod',     parammap.Level_100),
     ],
     modes=[
-      ModeType('WaveForm',     parammap.OscWaveForm_2),
+      ModeType('Waveform',     parammap.OscWaveform_2),
     ],
   ),
   ModuleType(
@@ -435,7 +435,7 @@ modules = [
       ParameterType('Active',       parammap.OffOn),
     ],
     modes=[
-      ModeType('WaveForm',     parammap.LfoWaveForm_1),
+      ModeType('Waveform',     parammap.LfoWaveform_1),
     ],
   ),
   ModuleType(
@@ -468,7 +468,7 @@ modules = [
       ParameterType('ShapeMod',     parammap.Level_100),
       ParameterType('PolyMono',     parammap.PolyMono),
       ParameterType('OutputType',   parammap.OutTypeLfo),
-      ParameterType('WaveForm',     parammap.LfoShpA__WaveForm),
+      ParameterType('Waveform',     parammap.LfoShpA__Waveform),
     ],
     modes=[],
   ),
@@ -490,7 +490,7 @@ modules = [
       ParameterType('PolyMono',     parammap.PolyMono),
       ParameterType('KBT',          parammap.KBT_4),
       ParameterType('RateMod',      parammap.Level_100),
-      ParameterType('WaveForm',     parammap.LfoA_WaveForm),
+      ParameterType('Waveform',     parammap.LfoA_Waveform),
       ParameterType('Active',       parammap.OffOn),
       ParameterType('OutputType',   parammap.OutTypeLfo),
       ParameterType('Range',        parammap.LfoRange_3),
@@ -1303,11 +1303,11 @@ modules = [
     shortnm='ClkGen',
     page=PageType('LFO', 4),
     inputs=[
-      InputType('Reset',        'yellow'),
+      InputType('Rst',          'yellow'),
     ],
     outputs=[
       OutputType('1/96',         'yellow'),
-      OutputType('1/18',         'yellow'),
+      OutputType('1/16',         'yellow'),
       OutputType('ClkActive',    'yellow'),
       OutputType('Sync',         'yellow'),
     ],
@@ -1775,7 +1775,7 @@ modules = [
       ParameterType('Active',       parammap.OffOn),
     ],
     modes=[
-      ModeType('WaveForm',     parammap.OscWaveForm_2),
+      ModeType('Waveform',     parammap.OscWaveform_2),
     ],
   ),
   ModuleType(
@@ -1796,7 +1796,7 @@ modules = [
       ParameterType('FreqFine',     parammap.FreqFine),
       ParameterType('KBT',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
-      ParameterType('WaveForm',     parammap.OscA_WaveForm),
+      ParameterType('Waveform',     parammap.OscA_Waveform),
       ParameterType('Active',       parammap.OffOn),
       ParameterType('FreqMode',     parammap.FreqMode_3),
     ],
@@ -3091,7 +3091,7 @@ modules = [
       ParameterType('FmMode',       parammap.FmLinTrk),
       ParameterType('Shape',        parammap.PW),
       ParameterType('ShapeMod',     parammap.Level_100),
-      ParameterType('WaveForm',     parammap.OscShpA_WaveForm),
+      ParameterType('Waveform',     parammap.OscShpA_Waveform),
       ParameterType('Active',       parammap.OffOn),
     ],
     modes=[],
@@ -3573,7 +3573,7 @@ modules = [
       ParameterType('FreqMod',      parammap.Level_100),
     ],
     modes=[
-      ModeType('WaveForm',     parammap.OscWaveForm_1),
+      ModeType('Waveform',     parammap.OscWaveform_1),
     ],
   ),
   ModuleType(
@@ -3724,7 +3724,7 @@ modules = [
       ParameterType('RateMod',      parammap.Level_100),
       ParameterType('Range',        parammap.LfoRange_4),
       ParameterType('KBT',          parammap.KBT_4),
-      ParameterType('WaveForm',     parammap.LfoB_WaveForm),
+      ParameterType('Waveform',     parammap.LfoB_Waveform),
       ParameterType('PolyMono',     parammap.PolyMono),
       ParameterType('Phase',        parammap.Phase),
       ParameterType('Active',       parammap.OffOn),
@@ -4046,7 +4046,7 @@ modules = [
       ParameterType('Active',       parammap.OffOn),
     ],
     modes=[
-      ModeType('WaveForm',     parammap.RndStepPulse),
+      ModeType('Waveform',     parammap.RndStepPulse),
     ],
   ),
 ]
@@ -4060,3 +4060,18 @@ for module in modules:
   name = module.shortnm.replace('-','_').replace('&','n')
   setattr(modulemap, name, module)
 
+if __name__ == '__main__':
+  for module in modules:
+    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    for i in range(len(module.inputs)):
+      input = module.inputs[i]
+      print ' .inputs[%d] .%s' % (i, input.name)
+    for i in range(len(module.outputs)):
+      output = module.outputs[i]
+      print ' .outputs[%d] .%s' % (i, output.name)
+    for i in range(len(module.params)):
+      param = module.params[i]
+      print ' .params[%d] .%s' % (i, param.name)
+    for i in range(len(module.modes)):
+      mode = module.modes[i]
+      print ' .modes[%d] .%s' % (i, mode.name)

@@ -34,13 +34,9 @@ def updatenetlist(netlist, source, dest):
     netlist.append(net)
 
   # update source and dest nets list
-  if not hasattr(source,'nets'):
-    source.nets = []
   if not net in source.nets:
     source.nets.append(net)
 
-  if not hasattr(dest,'nets'):
-    dest.nets = []
   if not net in dest.nets:
     dest.nets.append(net)
 

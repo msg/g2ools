@@ -11,10 +11,16 @@ class Member:
     self.type = type
     self.index = index
 
-class Input(Member):
+class IOMember(Member):
+  def __init__(self, module, type, index):
+    Member.__init__(self, module, type, index)
+    self.cables = []
+    self.nets = []
+
+class Input(IOMember):
   direction = 0
 
-class Output(Member):
+class Output(IOMember):
   direction = 1
 
 class Param(Member):
@@ -23,7 +29,10 @@ class Param(Member):
     self.variations = [ type.type.default for variation in range(9) ]
 
 class Mode(Member):
-  pass
+  def __init__(self, module, type, index):
+    Member.__init__(self, module, type, index)
+    self.value = type.type.default
+
 
 def sattr(obj,nm,val):
   if hasattr(obj,nm):
@@ -40,8 +49,8 @@ class Module:
                 ['params', Param ], ['modes', Mode ] ]
     for nm,cls in entries:
       sattr(self, nm, Array())
-      for i in range(len(getattr(type,nm))):
-        t = getattr(type,nm)
+      t = getattr(type,nm)
+      for i in range(len(t)):
         o = cls(self,t[i],i)
         a = getattr(self,nm)
         a.append(o)
