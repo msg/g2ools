@@ -26,3 +26,20 @@ magenta1 = 21
 magenta2 = 22
 magenta3 = 23
 magenta4 = 24
+
+class g2cablecolors:
+  red = 0
+  blue = 1
+  yellow = 2
+  orange = 3
+  green = 4
+  purple = 5
+  white = 6
+
+class g2portcolors:
+  red = 0
+  blue = 1
+  yellow = 2
+  blue_red = 3
+  yellow_orange = 4
+

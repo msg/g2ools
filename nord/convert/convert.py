@@ -63,8 +63,6 @@ def dualpitchmod(nmm,g2m,conv):
     g2mm.name = 'PitchMod'
     conv.g2modules.append(g2mm)
     g2mm.vert = g2m.type.height
-    g2m.uprate = 1
-    g2mm.uprate = 1
     conv.height = g2mm.vert + g2mm.type.height
     color=0
     g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)

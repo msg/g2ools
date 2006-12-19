@@ -4,7 +4,9 @@ import sys
 sys.path.append('.')
 from nord.g2.file import Pch2File
 from nord.g2.modules import fromname as g2name
+from nord.g2.colors import g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
+from nord.nm1.colors import nm1cablecolors, nm1portcolors
 from nord.g2 import colors
 from nord.convert import typetable
 
@@ -33,18 +35,17 @@ def convert(pch):
   nmpatch = pch.patch
   g2patch = pch2.patch
   cablecolors = {
-    'Audio': 0,
-    'Control': 1,
-    'Logic': 2,
-    'Slave': 3,
-    'User1': 4,
-    'User2': 5,
-    'NoSrc': 6,
+    nm1cablecolors.red:    g2cablecolors.red,
+    nm1cablecolors.blue:   g2cablecolors.blue,
+    nm1cablecolors.yellow: g2cablecolors.yellow,
+    nm1cablecolors.grey:   g2cablecolors.blue,
+    nm1cablecolors.green:  g2cablecolors.green,
+    nm1cablecolors.purple: g2cablecolors.purple,
   }
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
     g2area = getattr(g2patch,areanm)
-    print 'Area %s' % areanm
+    print 'Area %s:' % areanm
 
     converters = []
     # do the modules
@@ -87,8 +88,9 @@ def convert(pch):
       elif source.index < len(source.conv.inputs):
         g2source = source.conv.inputs[source.index]
       dest = cable.dest
-      print '%s:%s -> %s:%s:' % (source.module.type.shortnm,source.type.name,
-          dest.module.type.shortnm,dest.type.name),
+      print '%s:%s:%d -> %s:%s:%d :' % (
+          source.module.type.shortnm,source.type.name, source.type.type,
+          dest.module.type.shortnm,dest.type.name, dest.type.type),
       if dest.index >= len(dest.conv.inputs) or not g2source:
         print ' UNCONNECTED'
       else:
@@ -97,8 +99,36 @@ def convert(pch):
         #print source.index, dest.index
         #print source.module.type.shortnm, dest.module.type.shortnm
         #print source.module.type.shortnm, dest.module.type.shortnm
-        g2area.connect(g2source,g2dest,cablecolors[source.type.type])
+        g2area.connect(g2source,g2dest,cablecolors[source.nets[0].output.type.type])
 
+    # now parse the entire netlist of the area and .uprate=1 all
+    # modules with blue_red and yello_orange inputs connected to red outputs.
+    # scan module list until we done change any modules
+    print 'Uprate:'
+    done = 0
+    while not done:
+      uprated = 0
+      for module in g2area.modules:
+        #print module.name
+        for input in module.inputs:
+          if len(input.nets) == 0:
+            continue
+          #print '',input.type.name, input.rate
+          if input.rate != g2portcolors.blue_red and input.rate != g2portcolors.yellow_orange:
+            continue
+          if not input.nets[0].output:
+            continue
+          if input.nets[0].output.rate == g2portcolors.red:
+            print module.name,input.type.name,input.nets[0].output.type.name
+            uprated = 1
+            module.uprate = 1
+            input.rate = g2portcolors.red
+            # change all outputs to red for next iteration
+            for output in module.outputs:
+              output.rate = g2portcolors.red
+            break
+      if not uprated:
+        done = 1
 
   print 'Writing patch "%s2"' % (pch.fname)
   pch2.write(pch.fname+'2')

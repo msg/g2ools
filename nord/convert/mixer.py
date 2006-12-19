@@ -11,8 +11,6 @@ class ConvMixer(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    g2m.uprate = 1 # hack to make it work as original (possible optimization)
-
     # update parameters
     cpv(g2mp.Lev1,nmmp.Lev1)
     cpv(g2mp.Lev2,nmmp.Lev2)

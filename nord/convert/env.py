@@ -11,11 +11,6 @@ class ConvADSR_Env(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    g2m.uprate = 1  # up the processing rate, just fake it for now
-    # i will route a loop against the inputs to see if they originate
-    # from an audio or control source and then change this parameter
-    # appropriately.
-
     # update parameters
     # fix Attack, Decay, Release
     cpv(g2mp.Attack,nmmp.Attack)
@@ -38,11 +33,6 @@ class ConvAD_Env(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-
-    g2m.uprate = 1  # up the processing rate, just fake it for now
-    # i will route a loop against the inputs to see if they originate
-    # from an audio or control source and then change this parameter
-    # appropriately.
 
     cpv(g2mp.Attack,nmmp.Attack)
     cpv(g2mp.Release,nmmp.Decay)

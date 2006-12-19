@@ -14,6 +14,7 @@ class Member:
 class IOMember(Member):
   def __init__(self, module, type, index):
     Member.__init__(self, module, type, index)
+    self.rate = type.type
     self.cables = []
     self.nets = []
 
@@ -32,7 +33,6 @@ class Mode(Member):
   def __init__(self, module, type, index):
     Member.__init__(self, module, type, index)
     self.value = type.type.default
-
 
 def sattr(obj,nm,val):
   if hasattr(obj,nm):
