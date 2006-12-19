@@ -81,7 +81,7 @@ modules = [
 
 for module in modules:
   s = '''  ModuleType(
-    name='%s',
+    shortnm='%s',
     type=%s,
     height=%s,
 ''' % (module.name, module.type, module.height)
@@ -135,11 +135,12 @@ for module in modules:
         '\n'.join(['''      ModeType('%s',
         ParameterDef(  
           low=%s,
+          default=%s,
           high=%s,
           comment='%s'
         ),
       ),''' % (
-          nm.title().replace(' ',''), l, h, c)
+          nm.title().replace(' ',''), l, l, h, c)
           for (n,nm,h,l,c) in module.custom
         ])
     )
@@ -156,9 +157,25 @@ fromtype = {}
 fromname = {}
 modulemap = Struct()
 for module in modules:
-  fromname[module.name] = module
+  fromname[module.shortnm] = module
   fromtype[module.type] = module
-  name = module.name.replace('-','_').replace('&','n').replace(' ','_')
-  setattr(modulemap, name, module)
+  shortnm = module.shortnm.replace('-','_').replace('&','n').replace(' ','_')
+  setattr(modulemap, shortnm, module)
 
+if __name__ == '__main__':
+  for module in modules:
+    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    for i in range(len(module.inputs)):
+      input = module.inputs[i]
+      print ' .inputs[%d] .%s' % (i, input.name)
+    for i in range(len(module.outputs)):
+      output = module.outputs[i]
+      print ' .outputs[%d] .%s' % (i, output.name)
+    for i in range(len(module.params)):
+      param = module.params[i]
+      print ' .params[%d] .%s' % (i, param.name)
+    for i in range(len(module.modes)):
+      mode = module.modes[i]
+      print ' .modes[%d] .%s' % (i, mode.name)
 ''')
+

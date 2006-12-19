@@ -172,6 +172,21 @@ for module in modules:
   name = module.shortnm.replace('-','_').replace('&','n')
   setattr(modulemap, name, module)
 
+if __name__ == '__main__':
+  for module in modules:
+    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    for i in range(len(module.inputs)):
+      input = module.inputs[i]
+      print ' .inputs[%d] .%s' % (i, input.name)
+    for i in range(len(module.outputs)):
+      output = module.outputs[i]
+      print ' .outputs[%d] .%s' % (i, output.name)
+    for i in range(len(module.params)):
+      param = module.params[i]
+      print ' .params[%d] .%s' % (i, param.name)
+    for i in range(len(module.modes)):
+      mode = module.modes[i]
+      print ' .modes[%d] .%s' % (i, mode.name)
 ''')
 
 
