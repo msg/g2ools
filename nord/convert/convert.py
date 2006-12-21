@@ -2,6 +2,7 @@
 # convert.py - main convert object
 #
 from nord.g2.modules import fromname as g2name
+from nord.g2.colors import g2cablecolors
 
 def setv(g2param,val):
   g2param.variations = [ val for variation in range(9) ]
@@ -17,7 +18,6 @@ def cpv(g2param,nmparam):
 
 class Convert:
   def __init__(self, nmarea, g2area, nmmodule):
-    print nmmodule.type.shortnm
     self.nmarea = nmarea
     self.g2area = g2area
     nmm = self.nmmodule = nmmodule
@@ -36,6 +36,31 @@ class Convert:
     self.horiz = g2m.horiz = nmm.horiz
     #self.vert = g2m.vert = nmm.vert # calculated later
     self.height = g2m.type.height
+
+    if hasattr(self,'parammap'):
+      for param in self.parammap:
+        if type(param) == type(''):
+          cpv(getattr(g2m.params,param),getattr(nmm.params,param))
+        elif type(param) == type([]):
+          cpv(getattr(g2m.params,param[0]),getattr(nmm.params,param[1]))
+        else:
+          raise 'Invalid param %r in parammap' % (param)
+
+    if hasattr(self,'inputmap'):
+      for input in self.inputmap:
+        if input:
+          input = getattr(g2m.inputs,input)
+        self.inputs.append(input)
+          
+    if hasattr(self,'outputmap'):
+      for output in self.outputmap:
+        if output:
+          output = getattr(g2m.outputs,output)
+        self.outputs.append(output)
+
+  # domodule - process module, setup paramaters, inputs, outputs
+  def domodule(self):
+    pass
 
   # reposition module based on nm1's separation from module above
   def reposition(self, convabove):
@@ -62,9 +87,10 @@ def dualpitchmod(nmm,g2m,conv):
     g2mm = g2area.addmodule(g2name['Mix2-1B'])
     g2mm.name = 'PitchMod'
     conv.g2modules.append(g2mm)
+    g2mm.horiz = g2m.horiz
     g2mm.vert = g2m.type.height
     conv.height = g2mm.vert + g2mm.type.height
-    color=0
+    color=g2cablecolors.red
     g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
     setv(g2m.params.PitchMod,127)

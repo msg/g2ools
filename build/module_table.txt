@@ -35,7 +35,7 @@ ModuleKnowledge(
     outputtypes([])
     paramranges(['0 .. 2', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['Dst_2', 'OffOn', 'Pad_1'])
+    paramtypes(['Dst_2', 'ActiveMonitor', 'Pad_1'])
     modetypes([])
   )
   module(
@@ -53,7 +53,7 @@ ModuleKnowledge(
     outputtypes([])
     paramranges(['0 .. 5', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['Dst_1', 'OffOn', 'Pad_1'])
+    paramtypes(['Dst_1', 'ActiveMonitor', 'Pad_1'])
     modetypes([])
   )
   module(
@@ -89,7 +89,9 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 4', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'OscBWaveform', 'OffOn', 'FmLinTrk'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100',
+    'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'OscBWaveform',
+    'ActiveMonitor', 'FmLinTrk'])
     modetypes([])
   )
   module(
@@ -107,7 +109,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges(['0 .. 7'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'OffOn', 'FmLinTrk'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'ActiveMonitor', 'FmLinTrk'])
     modetypes(['OscWaveform_3'])
   )
   module(
@@ -125,7 +127,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 127', '0 .. 1', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 5'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'Level_100', 'OffOn', 'FmLinTrk', 'Level_100'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'Level_100', 'ActiveMonitor', 'FmLinTrk', 'Level_100'])
     modetypes(['OscWaveform_2'])
   )
   module(
@@ -143,7 +145,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges(['0 .. 3'])
-    paramtypes(['ReverbTime', 'Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['ReverbTime', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes(['RoomType'])
   )
   module(
@@ -161,7 +163,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -297,9 +299,9 @@ ModuleKnowledge(
     shortnm('ModADSR')
     longnm('Envelope Modulation ADSR')
     height(5)
-    inputs(['Gate', 'AMod', 'DMod', 'SMod', 'RMod', 'In', 'AM'])
+    inputs(['Gate', 'AttackMod', 'DecayMod', 'SustainMod', 'ReleaseMod', 'In', 'AM'])
     outputs(['Env', 'Out'])
-    params(['Attack', 'Decay', 'Sustain', 'Release', 'A_Mod', 'D_Mod', 'S_Mod', 'R_Mod', 'OutputType', 'KB'])
+    params(['Attack', 'Decay', 'Sustain', 'Release', 'AttackMod', 'DecayMod', 'SustainMod', 'ReleaseMod', 'OutputType', 'KB'])
     modes([])
     inputtypes(['yellow', 'blue', 'blue', 'blue', 'blue', 'blue_red', 'blue'])
     outputtypes(['blue', 'blue_red'])
@@ -323,7 +325,7 @@ ModuleKnowledge(
     outputtypes(['blue'])
     paramranges(['0 .. 127', '0 .. 1', '0 .. 5', '0 .. 3', '0 .. 1'])
     moderanges(['0 .. 7'])
-    paramtypes(['LfoRate_3', 'PolyMono', 'OutTypeLfo', 'LfoRange_3', 'OffOn'])
+    paramtypes(['LfoRate_3', 'PolyMono', 'OutTypeLfo', 'LfoRange_3', 'ActiveMonitor'])
     modetypes(['LfoWaveform_1'])
   )
   module(
@@ -341,7 +343,7 @@ ModuleKnowledge(
     outputtypes(['blue', 'blue'])
     paramranges(['0 .. 127', '0 .. 4', '0 .. 4', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 5', '0 .. 5'])
     moderanges([])
-    paramtypes(['LfoRate_4', 'LfoRange_4', 'KBT_4', 'Level_100', 'OffOn', 'LfoShpAPW', 'Level_100', 'Phase', 'Level_100', 'PolyMono', 'OutTypeLfo', 'LfoShpA__Waveform'])
+    paramtypes(['LfoRate_4', 'LfoRange_4', 'KBT_4', 'Level_100', 'ActiveMonitor', 'LfoShpAPW', 'Level_100', 'Phase', 'Level_100', 'PolyMono', 'OutTypeLfo', 'LfoShpA__Waveform'])
     modetypes([])
   )
   module(
@@ -359,7 +361,7 @@ ModuleKnowledge(
     outputtypes(['blue'])
     paramranges(['0 .. 127', '0 .. 1', '0 .. 4', '0 .. 127', '0 .. 5', '0 .. 1', '0 .. 5', '0 .. 3'])
     moderanges([])
-    paramtypes(['LfoRate_3', 'PolyMono', 'KBT_4', 'Level_100', 'LfoA_Waveform', 'OffOn', 'OutTypeLfo', 'LfoRange_3'])
+    paramtypes(['LfoRate_3', 'PolyMono', 'KBT_4', 'Level_100', 'LfoA_Waveform', 'ActiveMonitor', 'OutTypeLfo', 'LfoRange_3'])
     modetypes([])
   )
   module(
@@ -395,7 +397,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn', 'SaturateCurve'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor', 'SaturateCurve'])
     modetypes([])
   )
   module(
@@ -413,7 +415,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn', 'Level_100', 'Level_100'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor', 'Level_100', 'Level_100'])
     modetypes([])
   )
   module(
@@ -449,7 +451,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['NoiseColor', 'OffOn'])
+    paramtypes(['NoiseColor', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -467,7 +469,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 2', '0 .. 2'])
     moderanges([])
-    paramtypes(['EqdB', 'EqdB', 'Level_100', 'OffOn', 'EqLoFreq', 'EqHiFreq'])
+    paramtypes(['EqdB', 'EqdB', 'Level_100', 'ActiveMonitor', 'EqLoFreq', 'EqHiFreq'])
     modetypes([])
   )
   module(
@@ -485,7 +487,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 2', '0 .. 2'])
     moderanges([])
-    paramtypes(['EqdB', 'EqdB', 'EqMidFreq', 'EqdB', 'Level_100', 'OffOn', 'EqLoFreq', 'EqHiFreq'])
+    paramtypes(['EqdB', 'EqdB', 'EqMidFreq', 'EqdB', 'Level_100', 'ActiveMonitor', 'EqLoFreq', 'EqHiFreq'])
     modetypes([])
   )
   module(
@@ -503,7 +505,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn', 'ShpExpCurve'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor', 'ShpExpCurve'])
     modetypes([])
   )
   module(
@@ -639,7 +641,7 @@ ModuleKnowledge(
     shortnm('FltVoice')
     longnm('Filter Voice')
     height(4)
-    inputs(['In', 'Vowel', 'FreqMod'])
+    inputs(['In', 'VowelMod', 'FreqMod'])
     outputs(['Out'])
     params(['Vowel1', 'Vowel2', 'Vowel3', 'Level', 'Vowel', 'VowelMod', 'Freq', 'FreqMod', 'Res', 'Active'])
     modes([])
@@ -647,7 +649,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 8', '0 .. 8', '0 .. 8', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['Vowel', 'Vowel', 'Vowel', 'Level_100', 'Level_100', 'Bipolar_127', 'Level_100', 'Bipolar_127', 'Bipolar_127', 'OffOn'])
+    paramtypes(['Vowel', 'Vowel', 'Vowel', 'Level_100', 'Level_100', 'Bipolar_127', 'Level_100', 'Bipolar_127', 'Bipolar_127', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -719,7 +721,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red', 'red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 1', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['FltFreq', 'Level_200', 'KBT_4', 'GcOffOn', 'Res_1', 'FltSlope_1', 'OffOn'])
+    paramtypes(['FltFreq', 'Level_200', 'KBT_4', 'GcOffOn', 'Res_1', 'FltSlope_1', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -755,7 +757,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 1', '0 .. 127', '0 .. 1', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127'])
     moderanges([])
-    paramtypes(['FltFreq', 'Level_200', 'KBT_4', 'GcOffOn', 'Res_1', 'FltSlope_2', 'OffOn', 'Level_100', 'LpBpHpBr', 'Level_100'])
+    paramtypes(['FltFreq', 'Level_200', 'KBT_4', 'GcOffOn', 'Res_1', 'FltSlope_2', 'ActiveMonitor', 'Level_100', 'LpBpHpBr', 'Level_100'])
     modetypes([])
   )
   module(
@@ -764,7 +766,7 @@ ModuleKnowledge(
     pageindex(6)
     shortnm('EnvMulti')
     longnm('Envelope Multi')
-    height(3)
+    height(6)
     inputs(['Gate', 'In', 'AM'])
     outputs(['Env', 'Out'])
     params(['Level1', 'Level2', 'Level3', 'Level4', 'Time1', 'Time2', 'Time3', 'Time4', 'NR', 'SustainMode', 'OutputType', 'KB', 'Shape'])
@@ -809,7 +811,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 2', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['FltFreq', 'Res_1', 'LpBpHp', 'OffOn', 'GcOffOn'])
+    paramtypes(['FltFreq', 'Res_1', 'LpBpHp', 'ActiveMonitor', 'GcOffOn'])
     modetypes([])
   )
   module(
@@ -863,7 +865,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 2', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['DrumSynthFreq', 'DrumSynthRatio', 'EnvTime', 'EnvTime', 'Level_100', 'Level_100', 'DrumSynthNoiseFlt', 'Level_100', 'Level_100', 'EnvTime', 'LpBpHp', 'Level_100', 'EnvTime', 'Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['DrumSynthFreq', 'DrumSynthRatio', 'EnvTime', 'EnvTime', 'Level_100', 'Level_100', 'DrumSynthNoiseFlt', 'Level_100', 'Level_100', 'EnvTime', 'LpBpHp', 'Level_100', 'EnvTime', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -917,7 +919,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'ClipShape', 'OffOn'])
+    paramtypes(['Level_100', 'Level_100', 'ClipShape', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -935,7 +937,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn', 'OverdriveType', 'ClipShape'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor', 'OverdriveType', 'ClipShape'])
     modetypes([])
   )
   module(
@@ -953,7 +955,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 3', '0 .. 1'])
     moderanges([])
-    paramtypes(['ScratchRatio', 'Level_100', 'ScratchDelay', 'OffOn'])
+    paramtypes(['ScratchRatio', 'Level_100', 'ScratchDelay', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1007,7 +1009,7 @@ ModuleKnowledge(
     outputtypes(['yellow', 'yellow', 'yellow', 'yellow'])
     paramranges(['0 .. 127', '0 .. 1', '0 .. 1', '0 .. 5', '0 .. 127'])
     moderanges([])
-    paramtypes(['RateBpm', 'OffOn', 'InternalMaster', 'ClkGenBeatSync', 'ClkGenSwing'])
+    paramtypes(['RateBpm', 'ActiveMonitor', 'InternalMaster', 'ClkGenBeatSync', 'ClkGenSwing'])
     modetypes([])
   )
   module(
@@ -1017,7 +1019,7 @@ ModuleKnowledge(
     shortnm('ClkDiv')
     longnm('Clock Divider')
     height(2)
-    inputs(['Clk', 'Reset'])
+    inputs(['Clk', 'Rst'])
     outputs(['Out'])
     params(['Divider'])
     modes(['DivMode'])
@@ -1079,7 +1081,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1187,7 +1189,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 3', '0 .. 1'])
     moderanges([])
-    paramtypes(['RectMode', 'OffOn'])
+    paramtypes(['RectMode', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1205,7 +1207,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 3', '0 .. 1'])
     moderanges([])
-    paramtypes(['ShpStaticMode', 'OffOn'])
+    paramtypes(['ShpStaticMode', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1277,7 +1279,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 1'])
     moderanges(['0 .. 5'])
-    paramtypes(['FltFreq', 'Level_100', 'KBT_4', 'OffOn'])
+    paramtypes(['FltFreq', 'Level_100', 'KBT_4', 'ActiveMonitor'])
     modetypes(['HpLpSlopeMode'])
   )
   module(
@@ -1313,7 +1315,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FlangerRate', 'Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['FlangerRate', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1367,7 +1369,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 127', '0 .. 2', '0 .. 1'])
     moderanges([])
-    paramtypes(['FltFreq', 'Level_200', 'KBT_4', 'Level_100', 'ClassicSlope', 'OffOn'])
+    paramtypes(['FltFreq', 'Level_200', 'KBT_4', 'Level_100', 'ClassicSlope', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1385,7 +1387,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1403,7 +1405,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 1'])
     moderanges(['0 .. 5'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'ActiveMonitor'])
     modetypes(['OscWaveform_2'])
   )
   module(
@@ -1421,7 +1423,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 5', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'OscA_Waveform', 'OffOn', 'FreqMode_3'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'OscA_Waveform', 'ActiveMonitor', 'FreqMode_3'])
     modetypes([])
   )
   module(
@@ -1439,7 +1441,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 2', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqShiftFreq', 'Level_100', 'FreqShiftRange', 'OffOn'])
+    paramtypes(['FreqShiftFreq', 'Level_100', 'FreqShiftRange', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1475,7 +1477,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 5', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 2', '0 .. 4'])
     moderanges([])
-    paramtypes(['Level_100', 'Freq_2', 'Level_100', 'Bipolar_127', 'FltPhaseNotchCount', 'Level_100', 'OffOn', 'Level_100', 'Level_100', 'FltPhaseType', 'KBT_4'])
+    paramtypes(['Level_100', 'Freq_2', 'Level_100', 'Bipolar_127', 'FltPhaseNotchCount', 'Level_100', 'ActiveMonitor', 'Level_100', 'Level_100', 'FltPhaseType', 'KBT_4'])
     modetypes([])
   )
   module(
@@ -1493,7 +1495,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127'])
     moderanges([])
-    paramtypes(['Freq_3', 'EqdB', 'EqPeakBandwidth', 'OffOn', 'Level_100'])
+    paramtypes(['Freq_3', 'EqdB', 'EqPeakBandwidth', 'ActiveMonitor', 'Level_100'])
     modetypes([])
   )
   module(
@@ -1529,7 +1531,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1541,7 +1543,7 @@ ModuleKnowledge(
     height(8)
     inputs(['Ctrl', 'In'])
     outputs(['Out'])
-    params(['BandSel_01', 'BandSel_02', 'BandSel_03', 'BandSel_04', 'BandSel_05', 'BandSel_06', 'BandSel_07', 'BandSel_08', 'BandSel_09', 'BandSel_10', 'BandSel_11', 'BandSel_12', 'BandSel_13', 'BandSel_14', 'BandSel_15', 'BandSel_16', 'Emphasis', 'Monitor'])
+    params(['Band1', 'Band2', 'Band3', 'Band4', 'Band5', 'Band6', 'Band7', 'Band8', 'Band9', 'Band10', 'Band11', 'Band12', 'Band13', 'Band14', 'Band15', 'Band16', 'Emphasis', 'Monitor'])
     modes([])
     inputtypes(['red', 'red'])
     outputtypes(['red'])
@@ -1576,7 +1578,7 @@ ModuleKnowledge(
     longnm('Fade 1-2')
     height(2)
     inputs(['In', 'Mod'])
-    outputs(['OutL', 'OutR'])
+    outputs(['Out1', 'Out2'])
     params(['Mix', 'MixMod'])
     modes([])
     inputtypes(['blue_red', 'blue_red'])
@@ -1673,7 +1675,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 12', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['DigitizerBits', 'DigitizerRate', 'Level_100', 'OffOn'])
+    paramtypes(['DigitizerBits', 'DigitizerRate', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1703,7 +1705,7 @@ ModuleKnowledge(
     height(9)
     inputs(['Clk', 'Rst', 'Loop', 'Park', 'Note', 'Trig', 'RecVal', 'RecEnable'])
     outputs(['Link', 'Note', 'Trig'])
-    params(['Val_01', 'Val_02', 'Val_03', 'Val_04', 'Val_05', 'Val_06', 'Val_07', 'Val_08', 'Val_09', 'Val_10', 'Val_11', 'Val_12', 'Val_13', 'Val_14', 'Val_15', 'Val_16', 'Ev_01', 'Ev_02', 'Ev_03', 'Ev_04', 'Ev_05', 'Ev_06', 'Ev_07', 'Ev_08', 'Ev_09', 'Ev_10', 'Ev_11', 'Ev_12', 'Ev_13', 'Ev_14', 'Ev_15', 'Ev_16', 'Loop', 'Length', 'TG', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
+    params(['Seq1Step1', 'Seq1Step2', 'Seq1Step3', 'Seq1Step4', 'Seq1Step5', 'Seq1Step6', 'Seq1Step7', 'Seq1Step8', 'Seq1Step9', 'Seq1Step10', 'Seq1Step11', 'Seq1Step12', 'Seq1Step13', 'Seq1Step14', 'Seq1Step15', 'Seq1Step16', 'Seq2Step1', 'Seq2Step2', 'Seq2Step3', 'Seq2Step4', 'Seq2Step5', 'Seq2Step6', 'Seq2Step7', 'Seq2Step8', 'Seq2Step9', 'Seq2Step10', 'Seq2Step11', 'Seq2Step12', 'Seq2Step13', 'Seq2Step14', 'Seq2Step15', 'Seq2Step16', 'Loop', 'Length', 'TG', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
     modes([])
     inputtypes(['yellow_orange', 'yellow_orange', 'yellow_orange', 'yellow_orange', 'blue_red', 'yellow_orange', 'blue_red', 'yellow_orange'])
     outputtypes(['yellow_orange', 'blue_red', 'yellow_orange'])
@@ -1763,7 +1765,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1799,7 +1801,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red'])
     paramranges(['0 .. 1', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['Source_1', 'OffOn', 'Pad_4'])
+    paramtypes(['Source_1', 'ActiveMonitor', 'Pad_4'])
     modetypes([])
   )
   module(
@@ -1889,7 +1891,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 1'])
     moderanges(['0 .. 5'])
-    paramtypes(['FltFreq', 'Level_100', 'KBT_4', 'OffOn'])
+    paramtypes(['FltFreq', 'Level_100', 'KBT_4', 'ActiveMonitor'])
     modetypes(['HpLpSlopeMode'])
   )
   module(
@@ -1991,7 +1993,7 @@ ModuleKnowledge(
     height(5)
     inputs(['Clk', 'Rst', 'Loop', 'Park', 'Trig1', 'Trig2'])
     outputs(['Link', 'Trig1', 'Trig2'])
-    params(['Ev1_01', 'Ev1_02', 'Ev1_03', 'Ev1_04', 'Ev1_05', 'Ev1_06', 'Ev1_07', 'Ev1_08', 'Ev1_09', 'Ev1_10', 'Ev1_11', 'Ev1_12', 'Ev1_13', 'Ev1_14', 'Ev1_15', 'Ev1_16', 'Ev2_01', 'Ev2_02', 'Ev2_03', 'Ev2_04', 'Ev2_05', 'Ev2_06', 'Ev2_07', 'Ev2_08', 'Ev2_09', 'Ev2_10', 'Ev2_11', 'Ev2_12', 'Ev2_13', 'Ev2_14', 'Ev2_15', 'Ev2_16', 'Loop', 'Length', 'TG1', 'TG2'])
+    params(['Seq1Step1', 'Seq1Step2', 'Seq1Step3', 'Seq1Step4', 'Seq1Step5', 'Seq1Step6', 'Seq1Step7', 'Seq1Step8', 'Seq1Step9', 'Seq1Step10', 'Seq1Step11', 'Seq1Step12', 'Seq1Step13', 'Seq1Step14', 'Seq1Step15', 'Seq1Step16', 'Seq2Step1', 'Seq2Step2', 'Seq2Step3', 'Seq2Step4', 'Seq2Step5', 'Seq2Step6', 'Seq2Step7', 'Seq2Step8', 'Seq2Step9', 'Seq2Step10', 'Seq2Step11', 'Seq2Step12', 'Seq2Step13', 'Seq2Step14', 'Seq2Step15', 'Seq2Step16', 'Loop', 'Length', 'TG1', 'TG2'])
     modes([])
     inputtypes(['yellow_orange', 'yellow', 'yellow', 'yellow', 'yellow', 'yellow'])
     outputtypes(['yellow', 'yellow_orange', 'yellow_orange'])
@@ -2009,7 +2011,7 @@ ModuleKnowledge(
     height(8)
     inputs(['Clk', 'Rst', 'Loop', 'Park', 'Val', 'Trig'])
     outputs(['Link', 'Val', 'Trig'])
-    params(['Val_01', 'Val_02', 'Val_03', 'Val_04', 'Val_05', 'Val_06', 'Val_07', 'Val_08', 'Val_09', 'Val_10', 'Val_11', 'Val_12', 'Val_13', 'Val_14', 'Val_15', 'Val_16', 'Ev_01', 'Ev_02', 'Ev_03', 'Ev_04', 'Ev_05', 'Ev_06', 'Ev_07', 'Ev_08', 'Ev_09', 'Ev_10', 'Ev_11', 'Ev_12', 'Ev_13', 'Ev_14', 'Ev_15', 'Ev_16', 'Loop', 'Length', 'BipUni', 'TG', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
+    params(['Seq1Step1', 'Seq1Step2', 'Seq1Step3', 'Seq1Step4', 'Seq1Step5', 'Seq1Step6', 'Seq1Step7', 'Seq1Step8', 'Seq1Step9', 'Seq1Step10', 'Seq1Step11', 'Seq1Step12', 'Seq1Step13', 'Seq1Step14', 'Seq1Step15', 'Seq1Step16', 'Seq2Step1', 'Seq2Step2', 'Seq2Step3', 'Seq2Step4', 'Seq2Step5', 'Seq2Step6', 'Seq2Step7', 'Seq2Step8', 'Seq2Step9', 'Seq2Step10', 'Seq2Step11', 'Seq2Step12', 'Seq2Step13', 'Seq2Step14', 'Seq2Step15', 'Seq2Step16', 'Loop', 'Length', 'BipUni', 'TG', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
     modes([])
     inputtypes(['yellow_orange', 'yellow', 'yellow', 'yellow', 'blue_red', 'yellow'])
     outputtypes(['yellow', 'blue_red', 'yellow_orange'])
@@ -2027,7 +2029,7 @@ ModuleKnowledge(
     height(8)
     inputs(['Clk', 'Rst', 'Loop', 'Park', 'Val', 'Trig'])
     outputs(['Link', 'Val', 'Trig'])
-    params(['Val_01', 'Val_02', 'Val_03', 'Val_04', 'Val_05', 'Val_06', 'Val_07', 'Val_08', 'Val_09', 'Val_10', 'Val_11', 'Val_12', 'Val_13', 'Val_14', 'Val_15', 'Val_16', 'Ev_01', 'Ev_02', 'Ev_03', 'Ev_04', 'Ev_05', 'Ev_06', 'Ev_07', 'Ev_08', 'Ev_09', 'Ev_10', 'Ev_11', 'Ev_12', 'Ev_13', 'Ev_14', 'Ev_15', 'Ev_16', 'Loop', 'Length', 'BipUni', 'TG', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
+    params(['Seq1Step1', 'Seq1Step2', 'Seq1Step3', 'Seq1Step4', 'Seq1Step5', 'Seq1Step6', 'Seq1Step7', 'Seq1Step8', 'Seq1Step9', 'Seq1Step10', 'Seq1Step11', 'Seq1Step12', 'Seq1Step13', 'Seq1Step14', 'Seq1Step15', 'Seq1Step16', 'Seq2Step1', 'Seq2Step2', 'Seq2Step3', 'Seq2Step4', 'Seq2Step5', 'Seq2Step6', 'Seq2Step7', 'Seq2Step8', 'Seq2Step9', 'Seq2Step10', 'Seq2Step11', 'Seq2Step12', 'Seq2Step13', 'Seq2Step14', 'Seq2Step15', 'Seq2Step16', 'Loop', 'Length', 'BipUni', 'TG', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
     modes([])
     inputtypes(['yellow_orange', 'yellow_orange', 'yellow_orange', 'yellow_orange', 'blue_red', 'yellow_orange'])
     outputtypes(['yellow_orange', 'blue_red', 'yellow_orange'])
@@ -2099,13 +2101,13 @@ ModuleKnowledge(
     height(5)
     inputs(['InL', 'InR', 'SideChain'])
     outputs(['OutR', 'OutL'])
-    params(['Treshold', 'Ratio', 'Attack', 'Release', 'RefLevel', 'SideChain', 'Active'])
+    params(['Threshold', 'Ratio', 'Attack', 'Release', 'RefLevel', 'SideChain', 'Active'])
     modes([])
     inputtypes(['red', 'red', 'red'])
     outputtypes(['red', 'red'])
     paramranges(['0 .. 42', '0 .. 66', '0 .. 127', '0 .. 127', '0 .. 42', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['Treshold_42', 'CompressorRatio', 'CompressorAttack', 'CompressorRelease', 'CompressorRefLevel', 'OffOn', 'OffOn'])
+    paramtypes(['Treshold_42', 'CompressorRatio', 'CompressorAttack', 'CompressorRelease', 'CompressorRefLevel', 'OffOn', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2135,7 +2137,7 @@ ModuleKnowledge(
     height(8)
     inputs(['Ctrl', 'Val', 'Trig'])
     outputs(['Val', 'Trig'])
-    params(['Val_01', 'Val_02', 'Val_03', 'Val_04', 'Val_05', 'Val_06', 'Val_07', 'Val_08', 'Val_09', 'Val_10', 'Val_11', 'Val_12', 'Val_13', 'Val_14', 'Val_15', 'Val_16', 'Ev_01', 'Ev_02', 'Ev_03', 'Ev_04', 'Ev_05', 'Ev_06', 'Ev_07', 'Ev_08', 'Ev_09', 'Ev_10', 'Ev_11', 'Ev_12', 'Ev_13', 'Ev_14', 'Ev_15', 'Ev_16', 'TG', 'BipUni', 'XFade', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
+    params(['Seq1Step1', 'Seq1Step2', 'Seq1Step3', 'Seq1Step4', 'Seq1Step5', 'Seq1Step6', 'Seq1Step7', 'Seq1Step8', 'Seq1Step9', 'Seq1Step10', 'Seq1Step11', 'Seq1Step12', 'Seq1Step13', 'Seq1Step14', 'Seq1Step15', 'Seq1Step16', 'Seq2Step1', 'Seq2Step2', 'Seq2Step3', 'Seq2Step4', 'Seq2Step5', 'Seq2Step6', 'Seq2Step7', 'Seq2Step8', 'Seq2Step9', 'Seq2Step10', 'Seq2Step11', 'Seq2Step12', 'Seq2Step13', 'Seq2Step14', 'Seq2Step15', 'Seq2Step16', 'TG', 'BipUni', 'XFade', 'Clr_Or_Rnd', 'Rnd_Or_Clr'])
     modes([])
     inputtypes(['blue_red', 'blue_red', 'yellow_orange'])
     outputtypes(['blue_red', 'yellow_orange'])
@@ -2267,7 +2269,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 127', '0 .. 127', '0 .. 2', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['Freq_1', 'Level_100', 'KBT_4', 'Bipolar_127', 'Level_100', 'CombType', 'Level_100', 'OffOn'])
+    paramtypes(['Freq_1', 'Level_100', 'KBT_4', 'Bipolar_127', 'Level_100', 'CombType', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2285,7 +2287,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 5', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'FmLinTrk', 'PW', 'Level_100', 'OscShpA_Waveform', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'FmLinTrk', 'PW', 'Level_100', 'OscShpA_Waveform', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2303,7 +2305,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'Level_100', 'Phase', 'Level_100', 'OffOn', 'PW', 'Level_100', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'Level_100', 'Phase', 'Level_100', 'ActiveMonitor', 'PW', 'Level_100', 'OffOn'])
     modetypes([])
   )
   module(
@@ -2339,7 +2341,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 3', '0 .. 1'])
     moderanges([])
-    paramtypes(['PShiftCoarse', 'PShiftFine', 'Level_100', 'ScratchDelay', 'OffOn'])
+    paramtypes(['PShiftCoarse', 'PShiftFine', 'Level_100', 'ScratchDelay', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2349,9 +2351,9 @@ ModuleKnowledge(
     shortnm('ModAHD')
     longnm('Envelope Modulation AHD')
     height(5)
-    inputs(['Trig', 'A', 'H', 'D', 'In', 'AM'])
+    inputs(['Trig', 'AttackMod', 'HoldMod', 'DecayMod', 'In', 'AM'])
     outputs(['Env', 'Out'])
-    params(['Attack', 'Hold', 'Decay', 'A_Mod', 'H_Mod', 'D_Mod', 'OutputType', 'KB'])
+    params(['Attack', 'Hold', 'Decay', 'AttackMod', 'HoldMod', 'DecayMod', 'OutputType', 'KB'])
     modes([])
     inputtypes(['yellow', 'blue', 'blue', 'blue', 'blue_red', 'blue'])
     outputtypes(['blue', 'blue_red'])
@@ -2375,7 +2377,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red'])
     paramranges(['0 .. 3', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['Source_2', 'OffOn', 'Pad_4'])
+    paramtypes(['Source_2', 'ActiveMonitor', 'Pad_4'])
     modetypes([])
   )
   module(
@@ -2393,7 +2395,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red', 'red', 'red'])
     paramranges(['0 .. 1', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['Source_3', 'OffOn', 'Pad_4'])
+    paramtypes(['Source_3', 'ActiveMonitor', 'Pad_4'])
     modetypes([])
   )
   module(
@@ -2483,7 +2485,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges(['0 .. 3'])
-    paramtypes(['DelayTime_2', 'Level_100', 'Level_100', 'Level_100', 'OffOn', 'TimeClk'])
+    paramtypes(['DelayTime_2', 'Level_100', 'Level_100', 'Level_100', 'ActiveMonitor', 'TimeClk'])
     modetypes(['DelayRange_2'])
   )
   module(
@@ -2501,7 +2503,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 3'])
-    paramtypes(['DelayTime_2', 'Level_100', 'Level_100', 'Level_100', 'TimeClk', 'Level_100', 'Level_100', 'OffOn', 'Level_100'])
+    paramtypes(['DelayTime_2', 'Level_100', 'Level_100', 'Level_100', 'TimeClk', 'Level_100', 'Level_100', 'ActiveMonitor', 'Level_100'])
     modetypes(['DelayRange_2'])
   )
   module(
@@ -2555,7 +2557,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 1', '0 .. 1', '0 .. 1', '0 .. 31', '0 .. 99', '0 .. 14', '0 .. 7', '0 .. 7', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 7', '0 .. 99', '0 .. 3', '0 .. 99', '0 .. 3', '0 .. 99', '0 .. 99', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['OffOn', 'OffOn', 'RatioFixed', 'OpFreqCoarse', 'OpFreqFine', 'OpFreqDetune', 'OpVel', 'OpRateScale', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpAmod', 'OpBrPpoint', 'OpDepthMode', 'OpDepth', 'OpDepthMode', 'OpDepth', 'OpLevel', 'OffOn', 'OffOn'])
+    paramtypes(['OffOn', 'OffOn', 'RatioFixed', 'OpFreqCoarse', 'OpFreqFine', 'OpFreqDetune', 'OpVel', 'OpRateScale', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpAmod', 'OpBrPpoint', 'OpDepthMode', 'OpDepth', 'OpDepthMode', 'OpDepth', 'OpLevel', 'ActiveMonitor', 'OffOn'])
     modetypes([])
   )
   module(
@@ -2591,7 +2593,7 @@ ModuleKnowledge(
     outputtypes(['red', 'red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 2'])
-    paramtypes(['DelayTime_1', 'DelayTime_1', 'Level_100', 'Level_100', 'Level_100', 'Level_100', 'TimeClk', 'Level_100', 'Level_100', 'OffOn', 'Level_100'])
+    paramtypes(['DelayTime_1', 'DelayTime_1', 'Level_100', 'Level_100', 'Level_100', 'Level_100', 'TimeClk', 'Level_100', 'Level_100', 'ActiveMonitor', 'Level_100'])
     modetypes(['DelayRange_1'])
   )
   module(
@@ -2609,7 +2611,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 127', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 1'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'Level_100', 'OffOn', 'Level_100'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'Level_100', 'ActiveMonitor', 'Level_100'])
     modetypes(['OscWaveform_1'])
   )
   module(
@@ -2717,7 +2719,7 @@ ModuleKnowledge(
     outputtypes(['blue_red', 'blue'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['Treshold_127', 'NoiseGateAttack', 'NoiseGateRelease', 'OffOn'])
+    paramtypes(['Treshold_127', 'NoiseGateAttack', 'NoiseGateRelease', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2726,7 +2728,7 @@ ModuleKnowledge(
     pageindex(1)
     shortnm('LfoB')
     longnm('LFO B')
-    height(3)
+    height(4)
     inputs(['Rate', 'RateVar', 'Rst', 'Phase'])
     outputs(['Out', 'Sync'])
     params(['Rate', 'RateMod', 'Range', 'KBT', 'Waveform', 'PolyMono', 'Phase', 'Active', 'OutputType', 'PhaseMod'])
@@ -2735,7 +2737,7 @@ ModuleKnowledge(
     outputtypes(['blue', 'blue'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 4', '0 .. 4', '0 .. 3', '0 .. 1', '0 .. 127', '0 .. 1', '0 .. 5', '0 .. 127'])
     moderanges([])
-    paramtypes(['LfoRate_4', 'Level_100', 'LfoRange_4', 'KBT_4', 'LfoB_Waveform', 'PolyMono', 'Phase', 'OffOn', 'OutTypeLfo', 'Level_100'])
+    paramtypes(['LfoRate_4', 'Level_100', 'LfoRange_4', 'KBT_4', 'LfoB_Waveform', 'PolyMono', 'Phase', 'ActiveMonitor', 'OutTypeLfo', 'Level_100'])
     modetypes([])
   )
   module(
@@ -2753,7 +2755,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 1', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['PhaserType', 'PhaserFreq', 'Level_100', 'OffOn'])
+    paramtypes(['PhaserType', 'PhaserFreq', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2816,7 +2818,7 @@ ModuleKnowledge(
     pageindex(11)
     shortnm('OscPerc')
     longnm('Osc Percussion')
-    height(2)
+    height(3)
     inputs(['Pitch', 'PitchVar', 'Trig'])
     outputs(['Out'])
     params(['FreqCoarse', 'FreqFine', 'FreqMode', 'KBT', 'PitchMod', 'Decay', 'Click', 'Punch', 'Active'])
@@ -2825,7 +2827,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 3', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'FreqMode_3', 'OffOn', 'Level_100', 'Level_100', 'Level_100', 'OffOn', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'FreqMode_3', 'OffOn', 'Level_100', 'Level_100', 'Level_100', 'OffOn', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2897,7 +2899,7 @@ ModuleKnowledge(
     outputtypes(['blue'])
     paramranges(['0 .. 127', '0 .. 1', '0 .. 2', '0 .. 3', '0 .. 1', '0 .. 4', '0 .. 3'])
     moderanges([])
-    paramtypes(['LfoRate_3', 'PolyMono', 'BipPosNeg', 'LfoRange_3', 'OffOn', 'RndEdge', 'RandomAStepProb'])
+    paramtypes(['LfoRate_3', 'PolyMono', 'BipPosNeg', 'LfoRange_3', 'ActiveMonitor', 'RndEdge', 'RandomAStepProb'])
     modetypes([])
   )
   module(
@@ -2915,7 +2917,7 @@ ModuleKnowledge(
     outputtypes(['blue'])
     paramranges(['0 .. 127', '0 .. 1', '0 .. 4', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 2', '0 .. 3', '0 .. 4'])
     moderanges([])
-    paramtypes(['LfoRate_3', 'PolyMono', 'KBT_4', 'Level_100', 'Level_100', 'OffOn', 'BipPosNeg', 'LfoRange_3', 'RndEdge'])
+    paramtypes(['LfoRate_3', 'PolyMono', 'KBT_4', 'Level_100', 'Level_100', 'ActiveMonitor', 'BipPosNeg', 'LfoRange_3', 'RndEdge'])
     modetypes([])
   )
   module(
@@ -2933,7 +2935,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 1', '0 .. 1', '0 .. 2', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'PolyMono', 'OffOn', 'BipPosNeg', 'OffOn'])
+    paramtypes(['Level_100', 'PolyMono', 'OffOn', 'BipPosNeg', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2951,7 +2953,7 @@ ModuleKnowledge(
     outputtypes(['yellow_orange'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['Level_100', 'Level_100', 'OffOn', 'PolyMono'])
+    paramtypes(['Level_100', 'Level_100', 'ActiveMonitor', 'PolyMono'])
     modetypes([])
   )
   module(
@@ -2969,7 +2971,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 2', '0 .. 1', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 1'])
-    paramtypes(['Level_100', 'BipPosNeg', 'OffOn', 'PolyMono', 'Level_100'])
+    paramtypes(['Level_100', 'BipPosNeg', 'ActiveMonitor', 'PolyMono', 'Level_100'])
     modetypes(['Rnd_1'])
   )
   module(
@@ -2984,7 +2986,7 @@ ModuleKnowledge(
     outputs(['Out'])
     outputtypes(['blue_red'])
     params(['PatternA', 'PatternB', 'StepProb', 'LoopCount', 'StepProbMod', 'OutputType', 'Active'])
-    paramtypes(['RangeBip_128', 'Level_100', 'RangeBip_128', 'Range_128', 'Level_100', 'BipPosNeg', 'OffOn'])
+    paramtypes(['RangeBip_128', 'Level_100', 'RangeBip_128', 'Range_128', 'Level_100', 'BipPosNeg', 'ActiveMonitor'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 2', '0 .. 1'])
     modes(['Waveform'])
     modetypes(['RndStepPulse'])

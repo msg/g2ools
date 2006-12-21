@@ -9,10 +9,10 @@ import lfo
 import env
 import filter
 import mixer
-#import audio
+import audio
 import ctrl
-#import logic
-#import seq
+import logic
+import seq
 
 typetable = {
     1: inout.ConvKeyboard, 
@@ -60,13 +60,75 @@ typetable = {
 
    20: env.ConvADSR_Env,
    84: env.ConvAD_Env,
+   23: env.ConvMod_Env,
+   46: env.ConvAHD_Env,
+   52: env.ConvMulti_Env,
+   71: env.ConvEnvFollower,
 
+   86: filter.ConvFilterA,
+   87: filter.ConvFilterB,
    50: filter.ConvFilterC,
    49: filter.ConvFilterD,
    51: filter.ConvFilterE,
+   92: filter.ConvFilterF,
+   45: filter.ConvVocalFilter,
+  108: filter.ConvVocoder,
+  103: filter.ConvEqMid,
 
-   19: mixer.ConvMixer,
+   19: mixer.Conv3Mixer,
+   40: mixer.Conv8Mixer,
+   44: mixer.ConvGainControl,
+   18: mixer.ConvX_Fade,
+   47: mixer.ConvPan,
+  113: mixer.Conv1to2Fade,
+  114: mixer.Conv2to1Fade,
+  111: mixer.ConvLevMult,
+  112: mixer.ConvLevAdd,
+   76: mixer.ConvOnOff,
+   79: mixer.Conv4_1Switch,
+   88: mixer.Conv1_4Switch,
+   81: mixer.ConvAmplifier,
+
+   61: audio.ConvClip,
+   62: audio.ConvOverdrive,
+   74: audio.ConvWaveWrap,
+   54: audio.ConvQuantizer,
+   78: audio.ConvDelay,
+   53: audio.ConvSampleNHold,
+   82: audio.ConvDiode,
+   94: audio.ConvStereoChorus,
+  102: audio.ConvPhaser,
+   57: audio.ConvInvLevShift,
+   83: audio.ConvShaper,
+   21: audio.ConvCompressor,
+  118: audio.ConvDigitizer,
+  117: audio.ConvRingMod,
 
    43: ctrl.ConvConstant,
+   39: ctrl.ConvSmooth,
+   48: ctrl.ConvPortamentoA,
+   16: ctrl.ConvPortamentoB,
+   72: ctrl.ConvNoteScaler,
+   75: ctrl.ConvNoteQuant,
+   98: ctrl.ConvKeyQuant,
+   22: ctrl.ConvPartialGen,
+   66: ctrl.ConvControlMixer,
+  115: ctrl.ConvNoteVelScal,
+
+   36: logic.ConvPosEdgeDly,
+   64: logic.ConvNegEdgeDly,
+   38: logic.ConvPulse,
+   37: logic.ConvLogicDelay,
+   70: logic.ConvLogicInv,
+   73: logic.ConvLogicProc,
+   59: logic.ConvCompareLev,
+   89: logic.ConvCompareAB,
+   69: logic.ConvClkDiv,
+   77: logic.ConvClkDivFix,
+
+   17: seq.ConvEventSeq,
+   91: seq.ConvCtrlSeq,
+   15: seq.ConvNoteSeqA,
+   90: seq.ConvNoteSeqB,
 }
 

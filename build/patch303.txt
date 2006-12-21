@@ -120,12 +120,12 @@ parameters
 4 "waveform" 0..3 "waveform1"
 5 "pitch mod 1" 0..127 ""
 6 "pitch mod 2" 0..127 ""
-7 "fma mod" 0..127 ""
+7 "fm mod" 0..127 ""
 8 "PW mod" 0..127 ""
 9 "Mute" 0..1 "onoff"
 inputs
 0 "sync" audio
-1 "FMA" audio
+1 "fm mod" audio
 2 "pitch 1" audio
 3 "pitch 2" audio
 4 "pulse width mod" audio
@@ -151,11 +151,11 @@ parameters
 3 "waveform" 0..3 "waveform1"
 4 "pitch mod 1" 0..127 ""
 5 "pitch mod 2" 0..127 ""
-6 "fma mod" 0..127 ""
-7 "PWidth" 0..127 "pulsewidth"
+6 "fm mod" 0..127 ""
+7 "pulse width" 0..127 "pulsewidth"
 8 "mute" 0..1 "onoff"
 inputs
-0 "FMA" audio
+0 "fm mod" audio
 1 "pitch 1" control
 2 "pitch 2" control
 3 "PW mod" control
@@ -179,10 +179,10 @@ parameters
 1 "freq fine" 0..127 "freqfine"
 2 "freq KBT" 0..1 "onoff"
 3 "freq mod" 0..127 ""
-4 "FMA" 0..127 ""
+4 "fm mod" 0..127 ""
 5 "mute" 0..1 "onoff"
 inputs
-0 "FMA" audio
+0 "fm mod" audio
 1 "pitch" audio
 2 "AM" audio
 outputs
@@ -203,7 +203,7 @@ height 3
 parameters
 0 "detune coarse" 0..127 "symetric"
 1 "detune fine" 0..127 "symetric"
-2 "PulseWidth" 0..127 "pulsewidth"
+2 "Pulse Width" 0..127 "pulsewidth"
 3 "PW mod" 0..127 ""
 4 "mute" 0..1 "onoff"
 inputs
@@ -226,11 +226,11 @@ height 3
 parameters
 0 "detune coarse" 0..127 "symetric"
 1 "detune fine" 0..127 "symetric"
-2 "FMA mod" 0..127 ""
+2 "fm mod" 0..127 ""
 3 "mute" 0..1 "onoff"
 inputs
 0 "mst" slave
-1 "FMA" audio
+1 "fm mod" audio
 outputs
 0 "out" audio
 custom
@@ -248,11 +248,11 @@ height 3
 parameters
 0 "detune coarse" 0..127 "symetric"
 1 "detune fine" 0..127 "symetric"
-2 "FMA mod" 0..127 ""
+2 "fm mod" 0..127 ""
 3 "mute" 0..1 "onoff"
 inputs
 0 "mst" slave
-1 "FMA" audio
+1 "fm mod" audio
 outputs
 0 "out" audio
 custom
@@ -270,11 +270,11 @@ height 3
 parameters
 0 "detune coarse" 0..127 "symetric"
 1 "detune fine" 0..127 "symetric"
-2 "FMA mod" 0..127 ""
+2 "fm mod" 0..127 ""
 3 "mute" 0..1 "onoff"
 inputs
 0 "mst" slave
-1 "FMA" audio
+1 "fm mod" audio
 2 "AM" audio
 outputs
 0 "out" audio
@@ -293,12 +293,12 @@ height 4
 parameters
 0 "detune coarse" 0..127 "symetric"
 1 "detune fine" 0..127 "symetric"
-2 "shape" 0..3 ""
-3 "FMA mod" 0..127 ""
+2 "waveform" 0..3 ""
+3 "fm mod" 0..127 ""
 4 "mute" 0..1 "onoff"
 inputs
 0 "mst" slave
-1 "FMA" audio
+1 "fm mod" audio
 2 "AM" audio
 3 "sync" audio
 outputs
@@ -316,33 +316,33 @@ zeropage 3.50000
 dynmem 1.25000
 height 7
 parameters
-0 "step 1" 0..127 "symetric"
-1 "step 2" 0..127 "symetric"
-2 "step 3" 0..127 "symetric"
-3 "step 4" 0..127 "symetric"
-4 "step 5" 0..127 "symetric"
-5 "step 6" 0..127 "symetric"
-6 "step 7" 0..127 "symetric"
-7 "step 8" 0..127 "symetric"
-8 "step 9" 0..127 "symetric"
-9 "step 10" 0..127 "symetric"
-10 "step 11" 0..127 "symetric"
-11 "step 12" 0..127 "symetric"
-12 "step 13" 0..127 "symetric"
-13 "step 14" 0..127 "symetric"
-14 "step 15" 0..127 "symetric"
-15 "step 16" 0..127 "symetric"
-16 "step count" 0..127 ""
+0 "note 1" 0..127 "symetric"
+1 "note 2" 0..127 "symetric"
+2 "note 3" 0..127 "symetric"
+3 "note 4" 0..127 "symetric"
+4 "note 5" 0..127 "symetric"
+5 "note 6" 0..127 "symetric"
+6 "note 7" 0..127 "symetric"
+7 "note 8" 0..127 "symetric"
+8 "note 9" 0..127 "symetric"
+9 "note 10" 0..127 "symetric"
+10 "note 11" 0..127 "symetric"
+11 "note 12" 0..127 "symetric"
+12 "note 13" 0..127 "symetric"
+13 "note 14" 0..127 "symetric"
+14 "note 15" 0..127 "symetric"
+15 "note 16" 0..127 "symetric"
+16 "length" 0..15 ""
 17 "edit position" 0..16 "editpos"
 18 "record" 0..1 "onoff"
 19 "pause" 0..1 "onoff"
-20 "active" 0..1 "onoff"
+20 "loop" 0..1 "onoff"
 inputs
-0 "sync" logic
+0 "clk" logic
 1 "reset" logic
 outputs
 0 "out" control
-1 "sync" logic
+1 "snc" logic
 2 "link" logic
 3 "gclk" logic
 custom
@@ -375,49 +375,49 @@ zeropage 3.50000
 dynmem 2.00000
 height 5
 parameters
-0 "stepcount" 0..127 ""
-1 "active" 0..1 "onoff"
+0 "length" 0..15 ""
+1 "loop" 0..1 "onoff"
 2 "gate1" 0..1 "onoff"
 3 "gate2" 0..1 "onoff"
-4 "seq 1, step 1" 0..1 "onoff"
-5 "seq 1, step 2" 0..1 "onoff"
-6 "seq 1, step 3" 0..1 "onoff"
-7 "seq 1, step 4" 0..1 "onoff"
-8 "seq 1, step 5" 0..1 "onoff"
-9 "seq 1, step 6" 0..1 "onoff"
-10 "seq 1, step 7" 0..1 "onoff"
-11 "seq 1, step 8" 0..1 "onoff"
-12 "seq 1, step 9" 0..1 "onoff"
-13 "seq 1, step 10" 0..1 "onoff"
-14 "seq 1, step 11" 0..1 "onoff"
-15 "seq 1, step 12" 0..1 "onoff"
-16 "seq 1, step 13" 0..1 "onoff"
-17 "seq 1, step 14" 0..1 "onoff"
-18 "seq 1, step 15" 0..1 "onoff"
-19 "seq 1, step 16" 0..1 "onoff"
-20 "seq 2, step 1" 0..1 "onoff"
-21 "seq 2, step 2" 0..1 "onoff"
-22 "seq 2, step 3" 0..1 "onoff"
-23 "seq 2, step 4" 0..1 "onoff"
-24 "seq 2, step 5" 0..1 "onoff"
-25 "seq 2, step 6" 0..1 "onoff"
-26 "seq 2, step 7" 0..1 "onoff"
-27 "seq 2, step 8" 0..1 "onoff"
-28 "seq 2, step 9" 0..1 "onoff"
-29 "seq 2, step 10" 0..1 "onoff"
-30 "seq 2, step 11" 0..1 "onoff"
-31 "seq 2, step 12" 0..1 "onoff"
-32 "seq 2, step 13" 0..1 "onoff"
-33 "seq 2, step 14" 0..1 "onoff"
-34 "seq 2, step 15" 0..1 "onoff"
-35 "seq 2, step 16" 0..1 "onoff"
+4 "seq 1 step 1" 0..1 "onoff"
+5 "seq 1 step 2" 0..1 "onoff"
+6 "seq 1 step 3" 0..1 "onoff"
+7 "seq 1 step 4" 0..1 "onoff"
+8 "seq 1 step 5" 0..1 "onoff"
+9 "seq 1 step 6" 0..1 "onoff"
+10 "seq 1 step 7" 0..1 "onoff"
+11 "seq 1 step 8" 0..1 "onoff"
+12 "seq 1 step 9" 0..1 "onoff"
+13 "seq 1 step 10" 0..1 "onoff"
+14 "seq 1 step 11" 0..1 "onoff"
+15 "seq 1 step 12" 0..1 "onoff"
+16 "seq 1 step 13" 0..1 "onoff"
+17 "seq 1 step 14" 0..1 "onoff"
+18 "seq 1 step 15" 0..1 "onoff"
+19 "seq 1 step 16" 0..1 "onoff"
+20 "seq 2 step 1" 0..1 "onoff"
+21 "seq 2 step 2" 0..1 "onoff"
+22 "seq 2 step 3" 0..1 "onoff"
+23 "seq 2 step 4" 0..1 "onoff"
+24 "seq 2 step 5" 0..1 "onoff"
+25 "seq 2 step 6" 0..1 "onoff"
+26 "seq 2 step 7" 0..1 "onoff"
+27 "seq 2 step 8" 0..1 "onoff"
+28 "seq 2 step 9" 0..1 "onoff"
+29 "seq 2 step 10" 0..1 "onoff"
+30 "seq 2 step 11" 0..1 "onoff"
+31 "seq 2 step 12" 0..1 "onoff"
+32 "seq 2 step 13" 0..1 "onoff"
+33 "seq 2 step 14" 0..1 "onoff"
+34 "seq 2 step 15" 0..1 "onoff"
+35 "seq 2 step 16" 0..1 "onoff"
 inputs
 0 "clk" logic
 1 "rst" logic
 outputs
 0 "out1" logic
 1 "out2" logic
-2 "sync" logic
+2 "snc" logic
 3 "link" logic
 custom
 ----------
@@ -441,7 +441,7 @@ outputs
 0 "out" audio
 custom
 ----------
-19 Mixer
+19 3Mixer
 remarks "3 input mixer"
 cycles 0.90625
 progMem 0.21875
@@ -500,7 +500,7 @@ height 7
 parameters
 0 "attack" 0..127 "companderattack"
 1 "release" 0..127 "companderrelease"
-2 "treshold" 0..42 "compandertreshold"
+2 "threshold" 0..42 "compandertreshold"
 3 "ratio" 0..66 "companderratio"
 4 "ref level" 0..42 "companderref"
 5 "limiter" 0..24 "companderlimit"
@@ -880,7 +880,7 @@ outputs
 0 "out" control
 custom
 ----------
-40 Mixer
+40 8Mixer
 remarks "8 input mixer"
 cycles 2.18750
 progMem 0.50000
@@ -890,24 +890,24 @@ zeropage 0.90625
 dynmem 0.68750
 height 4
 parameters
-0 "in sense 1" 0..127 ""
-1 "in sense 2" 0..127 ""
-2 "in sense 3" 0..127 ""
-3 "in sense 4" 0..127 ""
-4 "in sense 5" 0..127 ""
-5 "in sense 6" 0..127 ""
-6 "in sense 7" 0..127 ""
-7 "in sense 8" 0..127 ""
+0 "lev 1" 0..127 ""
+1 "lev 2" 0..127 ""
+2 "lev 3" 0..127 ""
+3 "lev 4" 0..127 ""
+4 "lev 5" 0..127 ""
+5 "lev 6" 0..127 ""
+6 "lev 7" 0..127 ""
+7 "lev 8" 0..127 ""
 8 "-6dB" 0..1 ""
 inputs
 0 "in 1" audio
 1 "in 2" audio
 2 "in 3" audio
-3 "in 3" audio
-4 "in 4" audio
-5 "in 5" audio
-6 "in 6" audio
-7 "in 7" audio
+3 "in 4" audio
+4 "in 5" audio
+5 "in 6" audio
+6 "in 7" audio
+7 "in 8" audio
 outputs
 0 "out" audio
 custom
@@ -957,18 +957,18 @@ zeropage 0.87500
 dynmem 0.68750
 height 5
 parameters
-0 "left vowel" 0..8 "vowel"
-1 "middle vowel" 0..8 "vowel"
-2 "right vowel" 0..8 "vowel"
-3 "in amplification" 0..127 ""
-4 "vowel select" 0..127 "symeteric"
-5 "vowel select mod" 0..127 ""
-6 "frequency" 0..127 "symetric"
-7 "frequency mod" 0..127 ""
+0 "vowel1" 0..8 "vowel"
+1 "vowel2" 0..8 "vowel"
+2 "vowel3" 0..8 "vowel"
+3 "level" 0..127 ""
+4 "vowel" 0..127 "symeteric"
+5 "vowel mod" 0..127 ""
+6 "freq" 0..127 "symetric"
+7 "freq mod" 0..127 ""
 8 "resonance" 0..127 ""
 inputs
 0 "in" audio
-1 "vowel select mod" control
+1 "vowel mod" control
 2 "frequency mod" control
 outputs
 0 "out" audio
@@ -984,17 +984,17 @@ zeropage 1.75000
 dynmem 0.53125
 height 5
 parameters
-0 "A" 0..127 "adsrtime"
-1 "H" 0..127 "adsrtime"
-2 "D" 0..127 "adsrtime"
-3 "A mod" 0..127 ""
-4 "H mod" 0..127 ""
-5 "D mod" 0..127 ""
+0 "Attack" 0..127 "adsrtime"
+1 "Hold" 0..127 "adsrtime"
+2 "Decay" 0..127 "adsrtime"
+3 "Attack mod" 0..127 ""
+4 "Hold mod" 0..127 ""
+5 "Decay mod" 0..127 ""
 inputs
 0 "trig" logic
-1 "A mod" control
-2 "H mod" control
-3 "D mod" control
+1 "Attack mod" control
+2 "Hold mod" control
+3 "Decay mod" control
 4 "in" audio
 5 "amp" control
 outputs
@@ -1098,13 +1098,13 @@ height 6
 parameters
 0 "filter type" 0..3 "filtertype"
 1 "gain control" 0..1 "onoff"
-2 "frequency mod 1" 0..127 ""
-3 "frequency" 0..127 "filterfreq"
+2 "freq mod 1" 0..127 ""
+3 "freq" 0..127 "filterfreq"
 4 "kbt" 0..127 "freqkbt"
 5 "resonance mod" 0..127 ""
 6 "resonance" 0..127 ""
 7 "slope" 0..1 "filterslope2"
-8 "frequency mod 2" 0..127 ""
+8 "freq mod 2" 0..127 ""
 9 "bypass" 0..1 "onoff"
 inputs
 0 "freq mod 1" audio
@@ -1244,9 +1244,9 @@ height 2
 parameters
 0 "level" 0..127 "symetric"
 inputs
-0 "in" audio
+0 "in" control
 outputs
-0 "out" audio
+0 "out" logic
 custom
 ----------
 61 Clip
@@ -1712,14 +1712,14 @@ zeropage 0.87500
 dynmem 0.50000
 height 3
 parameters
-0 "detunecoarse" 0..127 ""
-1 "detunefine" 0..127 "symetric"
+0 "detune coarse" 0..127 ""
+1 "detune fine" 0..127 "symetric"
 2 "-3oct" 0..1 "onoff"
-3 "FMA mod" 0..127 ""
+3 "fm mod" 0..127 ""
 4 "mute" 0..1 "onoff"
 inputs
 0 "mst" slave
-1 "FMA" audio
+1 "fm mod" audio
 2 "sync" audio
 outputs
 0 "out" audio
@@ -1736,7 +1736,7 @@ zeropage 0.87500
 dynmem 0.28125
 height 2
 parameters
-0 "frequency" 0..127 "filterfreqAB"
+0 "freq" 0..127 "filterfreqAB"
 inputs
 0 "in" audio
 outputs
@@ -1753,7 +1753,7 @@ zeropage 0.87500
 dynmem 0.28125
 height 2
 parameters
-0 "frequency" 0..127 "filterfreqAB"
+0 "freq" 0..127 "filterfreqAB"
 inputs
 0 "in" audio
 outputs
@@ -1770,7 +1770,7 @@ zeropage 3.50000
 dynmem 0.37500
 height 3
 parameters
-0 "in" 0..3 "0 ~ out1, 3 ~ out4"
+0 "out" 0..3 "0 ~ out1, 3 ~ out4"
 1 "level" 0..127 ""
 2 "mute" 0..1 "onoff"
 inputs
@@ -1825,7 +1825,7 @@ parameters
 13 "note 14" 0..127 "freqcoarse"
 14 "note 15" 0..127 "freqcoarse"
 15 "note 16" 0..127 "freqcoarse"
-16 "step" 0..127 ""
+16 "length" 0..15 ""
 17 "currentstep" 0..16 "editpos"
 18 "record" 0..1 "onoff"
 19 "play" 0..1 "onoff"
@@ -1835,7 +1835,7 @@ inputs
 1 "rst" logic
 outputs
 0 "out" control
-1 "sync" logic
+1 "snc" logic
 2 "link" logic
 3 "gclk" logic
 custom
@@ -1868,7 +1868,7 @@ parameters
 13 "ctrl 14" 0..127 "unibi"
 14 "ctrl 15" 0..127 "unibi"
 15 "ctrl 16" 0..127 "unibi"
-16 "step" 0..127 ""
+16 "length" 0..15 ""
 17 "uni" 0..1 "onoff"
 18 "loop" 0..1 "onoff"
 inputs
@@ -1876,7 +1876,7 @@ inputs
 1 "rst" logic
 outputs
 0 "out" control
-1 "sync" logic
+1 "snc" logic
 2 "link" logic
 custom
 ----------
@@ -1890,7 +1890,7 @@ zeropage 0.87500
 dynmem 0.59375
 height 6
 parameters
-0 "frequency" 0..127 "filterfreq"
+0 "freq" 0..127 "filterfreq"
 1 "kbt" 0..127 "freqkbt"
 2 "resonance" 0..127 ""
 3 "freq mod 1" 0..127 ""
@@ -1945,7 +1945,7 @@ parameters
 6 "mute" 0..1 "onoff"
 inputs
 0 "trig" audio
-1 "amp" audio
+1 "am" audio
 2 "pitch mod" control
 outputs
 0 "out" audio
@@ -2020,7 +2020,7 @@ parameters
 5 "G" 0..1 "onoff"
 6 "G#" 0..1 "onoff"
 7 "A" 0..1 "onoff"
-8 "Bb" 0..1 "onoff"
+8 "A#" 0..1 "onoff"
 9 "B" 0..1 "onoff"
 10 "C" 0..1 "onoff"
 11 "C#" 0..1 "onoff"
@@ -2118,9 +2118,9 @@ height 4
 parameters
 0 "freq" 0..127 "eqfreq"
 1 "gain" 0..127 "eqgain"
-2 "bandwidth" 0..127 "0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct"
-3 "bypass" 0..1 "onoff"
-4 "in level" 0..127 ""
+2 "band width" 0..127 "0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct"
+3 "mute" 0..1 "onoff"
+4 "level" 0..127 ""
 inputs
 0 "in" audio
 outputs
@@ -2240,12 +2240,12 @@ parameters
 3 "partials" 0..1 "0 ~ odd, 1 ~ all"
 4 "pitch mod 1" 0..127 ""
 5 "pitch mod 2" 0..127 ""
-6 "fma" 0..127 ""
+6 "fm mod" 0..127 ""
 7 "spectral shape mod" 0..127 ""
 8 "kbt" 0..1 "onoff"
 9 "mute" 0..1 "onoff"
 inputs
-0 "fma" audio
+0 "fm mod" audio
 1 "pitch mod 1" control
 2 "pitch mod 2" control
 3 "spectral shape mod" control
@@ -2282,7 +2282,7 @@ parameters
 14 "band 15" 0..16 "vocoband"
 15 "band 16" 0..16 "vocoband"
 16 "outgain" 0..127 ""
-17 "high freq emphasis" 0..1 ""
+17 "emphasis" 0..1 ""
 18 "monitor" 0..1 ""
 inputs
 0 "control" audio
@@ -2411,12 +2411,12 @@ zeropage 0.87500
 dynmem 0.34375
 height 3
 parameters
-0 "ringmod depth mod" 0..127 ""
+0 "mod depth" 0..127 ""
 1 "ringmod depth" 0..127 "0 ~ 0, 64 ~ AM, 127 ~ RM"
 inputs
 0 "in" audio
-1 "modulation" audio
-2 "modulationdepth" audio
+1 "mod" audio
+2 "mod depth" audio
 outputs
 0 "out" audio
 custom
@@ -2431,14 +2431,14 @@ zeropage 0.43750
 dynmem 0.46875
 height 3
 parameters
-0 "quant bits" 0..11 "quantbits"
-1 "sample rate" 0..127 "0 ~ 34.65 Hz, 127 ~ 50.18 kHz"
-2 "sample rate mod" 0..127 ""
+0 "bits" 0..11 "quantbits"
+1 "rate" 0..127 "0 ~ 34.65 Hz, 127 ~ 50.18 kHz"
+2 "rate mod" 0..127 ""
 3 "quant off" 0..1 "onoff"
 4 "sampling off" 0..1 "onoff"
 inputs
 0 "in" audio
-1 "sample rate mod" control
+1 "rate mod" control
 outputs
 0 "out" audio
 custom

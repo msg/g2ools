@@ -36,7 +36,7 @@ class Mode(Member):
 
 def sattr(obj,nm,val):
   if hasattr(obj,nm):
-    print '  %s name "%s" exists' % (obj.type.shortnm, nm)
+    print '  %s name "%s" exists' % (obj.__class__.__name__, nm)
   setattr(obj,nm,val)
 
 class Array(list):

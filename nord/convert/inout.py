@@ -2,19 +2,12 @@
 # inout.py - In/Out tab conversion objects
 #
 from nord.g2.modules import fromname as g2name
+from nord.g2.colors import g2cablecolors
 from convert import *
 
 class ConvKeyboard(Convert):
   maing2module = 'Keyboard'
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-
-    # build output array that nmps nm1 outputs
-    self.outputs = [g2m.outputs.Note,
-                    g2m.outputs.Gate,
-                    g2m.outputs.Lin,
-                    g2m.outputs.Release]
+  outputmap = ['Note','Gate','Lin','Release']
 
 class ConvKeyboardPatch(Convert):
   maing2module = 'Status'
@@ -40,12 +33,12 @@ class ConvKeyboardPatch(Convert):
 
     # internally connect the modules
     k,d1,d2,d3 = self.g2modules
-    g2area.connect(k.outputs.Gate,d1.inputs.Clk,2)
-    g2area.connect(k.outputs.Note,d1.inputs.In,1)
-    g2area.connect(d1.inputs.Clk,d2.inputs.Clk,2)
-    g2area.connect(k.outputs.Lin,d2.inputs.In,1)
-    g2area.connect(d2.inputs.Clk,d3.inputs.Clk,2)
-    g2area.connect(k.outputs.Release,d3.inputs.In,1)
+    g2area.connect(k.outputs.Gate,d1.inputs.Clk,g2cablecolors.yellow)
+    g2area.connect(k.outputs.Note,d1.inputs.In,g2cablecolors.blue)
+    g2area.connect(d1.inputs.Clk,d2.inputs.Clk,g2cablecolors.yellow)
+    g2area.connect(k.outputs.Lin,d2.inputs.In,g2cablecolors.blue)
+    g2area.connect(d2.inputs.Clk,d3.inputs.Clk,g2cablecolors.yellow)
+    g2area.connect(k.outputs.Release,d3.inputs.In,g2cablecolors.blue)
 
     # build output array that maps nm1 outputs
     self.outputs = [d1.outputs.Out,
@@ -55,40 +48,19 @@ class ConvKeyboardPatch(Convert):
 
 class ConvMIDIGlobal(Convert):
   maing2module = 'ClkGen'
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-
-    # build output array the maps nm1 outputs
-    # below, the __dict__['1/96'] is used because it's not a valid identifier
-    self.outputs = [g2m.outputs.__dict__['1/96'],
-                    g2m.outputs.Sync,
-                    g2m.outputs.ClkActive]
+  outputmap = ['1/96','Sync','ClkActive']
 
 class ConvAudioIn(Convert):
   maing2module = '2-In'
+  outputmap = ['OutL','OutR']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
-
-    setv(g2m.params.Active,1)
-
-    # build output array the maps nm1 outputs
-    self.outputs = [g2m.outputs.OutL,g2m.outputs.OutR]
 
 class ConvPolyAreaIn(Convert):
   maing2module = 'Fx-In'
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
-    # update parameters
-    # below, the __dict__['+6Db'] is used because it's not a valid identifier
-    cpv(g2mp.Pad,nmm.params.__dict__['+6Db'])
-
-    # build output array the maps nm1 outputs
-    self.outputs = [g2m.outputs.OutL,g2m.outputs.OutR]
+  parammap = [['Pad','+6Db']]
+  outputmap = ['OutL','OutR']
 
 class Conv1Output(Convert):
   maing2module = '2-Out'
@@ -105,43 +77,26 @@ class Conv1Output(Convert):
 
 class Conv4Output(Convert):
   maing2module = '4-Out'
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
-    # ignore level
-
-    self.inputs = [g2m.inputs.In1,g2m.inputs.In2,g2m.inputs.In3,g2m.inputs.In4]
+  inputmap = ['In1','In2','In3','In4']
 
 class Conv2Output(Convert):
   maing2module = '2-Out'
+  parammap = ['Destination']
+  inputmap = ['InL','InR']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    # update parameters
+    # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    cpv(g2mp.Destination,nmmp.Destination)
 
     # maybe adjust patch level from nmm.params.Level
 
-    # build input array that nmps nm1 inputs
-    self.inputs = [g2m.inputs.InL, g2m.inputs.InR]
-
 class ConvNoteDetect(Convert):
   maing2module = 'NoteDet'
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
-    # update parameters
-    cpv(g2mp.Note,nmmp.Note)
-
-    # build output array the maps nm1 outputs
-    self.outputs = [g2m.outputs.Gate,g2m.outputs.Vel,g2m.outputs.RelVel]
+  parammap = ['Note']
+  outputmap = ['Gate','Vel','RelVel']
 
 class ConvKeyboardSplit(Convert):
   maing2module = 'Name'
@@ -169,15 +124,16 @@ class ConvKeyboardSplit(Convert):
     self.height = vert
 
     u,l,lu,g,n,v = self.g2modules
-    g2area.connect(u.outputs.Out,lu.inputs.A,1)
-    g2area.connect(l.inputs.In,lu.inputs.B,1)
-    g2area.connect(l.outputs.Out,g.inputs.In1_1,2)
-    g2area.connect(lu.inputs.B,n.inputs.In,1)
-    g2area.connect(lu.outputs.Out,g.inputs.In1_2,2)
-    g2area.connect(g.outputs.Out1,g.inputs.In2_2,2)
-    g2area.connect(g.outputs.Out2,n.inputs.Clk,2)
-    g2area.connect(n.inputs.Clk,v.inputs.Clk,2)
+    g2area.connect(u.outputs.Out,lu.inputs.A,g2cablecolors.blue)
+    g2area.connect(l.inputs.In,lu.inputs.B,g2cablecolors.blue)
+    g2area.connect(l.outputs.Out,g.inputs.In1_1,g2cablecolors.yellow)
+    g2area.connect(lu.inputs.B,n.inputs.In,g2cablecolors.blue)
+    g2area.connect(lu.outputs.Out,g.inputs.In1_2,g2cablecolors.yellow)
+    g2area.connect(g.outputs.Out1,g.inputs.In2_2,g2cablecolors.yellow)
+    g2area.connect(g.outputs.Out2,n.inputs.Clk,g2cablecolors.yellow)
+    g2area.connect(n.inputs.Clk,v.inputs.Clk,g2cablecolors.yellow)
 
     self.outputs = [n.outputs.Out,g.outputs.Out2,v.outputs.Out]
 
     self.inputs = [l.inputs.In,g.inputs.In2_1,v.inputs.In]
+

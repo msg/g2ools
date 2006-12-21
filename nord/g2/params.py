@@ -772,8 +772,8 @@ params = [
   ParameterDef(name='ActiveMonitor',
     low=0,
     high=1,
-    default=0,
-    definitions=['0 ~ Active, 1 ~ Monitor'],
+    default=1,
+    definitions=['0 ~ Monitor,1 ~ Active '],
     comments=''
   ),
   ParameterDef(name='Fade12Mix',

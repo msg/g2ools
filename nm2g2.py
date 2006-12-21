@@ -51,6 +51,8 @@ def convert(pch):
     # do the modules
     for module in nmarea.modules:
       if module.type.type in typetable:
+        print '%s: %d(0x%02x)' % (module.type.shortnm,
+           module.type.type,module.type.type)
         conv = typetable[module.type.type](nmarea,g2area,module)
         converters.append(conv)
         conv.domodule()
@@ -58,7 +60,8 @@ def convert(pch):
         #print '%s (%d,%d)' % (g2module.type.shortnm,
         #    g2module.horiz, g2module.vert)
       else:
-        print 'No converter for module "%s"' % module.type.shortnm
+        print 'No converter for module "%s" type %d(0x%02x)' % (
+            module.type.shortnm, module.type.type, module.type.type)
 
     # reposition modules
     locsorted = converters[:]
@@ -99,7 +102,8 @@ def convert(pch):
         #print source.index, dest.index
         #print source.module.type.shortnm, dest.module.type.shortnm
         #print source.module.type.shortnm, dest.module.type.shortnm
-        g2area.connect(g2source,g2dest,cablecolors[source.nets[0].output.type.type])
+        g2area.connect(g2source,g2dest,
+            source.nets[0].output.type.type)
 
     # now parse the entire netlist of the area and .uprate=1 all
     # modules with blue_red and yello_orange inputs connected to red outputs.
@@ -107,28 +111,83 @@ def convert(pch):
     print 'Uprate:'
     done = 0
     while not done:
-      uprated = 0
+      modified = 0
       for module in g2area.modules:
         #print module.name
         for input in module.inputs:
           if len(input.nets) == 0:
             continue
           #print '',input.type.name, input.rate
-          if input.rate != g2portcolors.blue_red and input.rate != g2portcolors.yellow_orange:
+          if input.rate != g2portcolors.blue_red:
+            continue
+          if input.rate != g2portcolors.yellow_orange:
             continue
           if not input.nets[0].output:
             continue
           if input.nets[0].output.rate == g2portcolors.red:
-            print module.name,input.type.name,input.nets[0].output.type.name
-            uprated = 1
+            #print module.name,input.type.name,input.nets[0].output.type.name
+            modified = 1
             module.uprate = 1
             input.rate = g2portcolors.red
             # change all outputs to red for next iteration
             for output in module.outputs:
-              output.rate = g2portcolors.red
+              if output.rate == g2portcolors.blue_red:
+                output.rate = g2portcolors.red
+              if output.rate == g2portcolors.yellow_orange:
+                output.rate = g2portcolors.orange
             break
-      if not uprated:
+          elif input.nets[0].output.rate == g2portcolors.blue:
+            modified = 1
+            module.uprate = 0
+            input.rate = g2portcolors.red
+            # change all outputs to red for next iteration
+            for output in module.outputs:
+              if output.rate == g2portcolors.blue_red:
+                output.rate = g2portcolors.blue
+              if output.rate == g2portcolors.yellow_orange:
+                output.rate = g2portcolors.yellow
+            break
+      if not modified:
         done = 1
+
+  # handle Knobs
+  # TBD
+  
+  # handle Midi CCs
+  # TBD
+
+  message = '''
+  nm2g2 patch converter Copyright 2007 Matt Gerassimoff
+  '''
+  lines = []
+  words = message.split()
+  line = words.pop(0)
+  for word in words:
+    if len(line) + len(word) + 1> 16:
+      lines.append(line)
+      line = word
+    else:
+      line += ' ' + word
+  lines.append(line)
+  #print '\n'.join(lines)
+
+  vert = 0
+  for module in pch2.patch.voice.modules:
+    if module.horiz != 0:
+      continue
+    v = module.vert + module.type.height
+    #print '',module.name, module.vert, module.type.height, v
+    if v > vert:
+      vert = v
+
+  vert += 1
+  for i in range(len(lines)):
+    line = lines[i]
+    m = pch2.patch.voice.addmodule(g2name['Name'])
+    m.name = line
+    m.horiz = 0
+    m.vert = vert
+    vert += 1
 
   print 'Writing patch "%s2"' % (pch.fname)
   pch2.write(pch.fname+'2')
@@ -139,62 +198,4 @@ while len(sys.argv):
   print '"%s"' % fname
   # general algorithm for converter:
   convert(PchFile(fname))
-
-sys.exit(0)
-
-# test code ...
-
-pch2 = Pch2File('initpatch.pch2')
-patch = pch2.patch
-
-colorlist = [
-'grey',
-'red1', 'red2', 'red3', 'red4',
-'yellow1', 'yellow2', 'yellow3', 'yellow4',
-'green1', 'green2', 'green3', 'green4',
-'cyan1', 'cyan2', 'cyan3', 'cyan4',
-'blue1', 'blue2', 'blue3', 'blue4',
-'magenta1', 'magenta2', 'magenta3', 'magenta4',
-]
-message = '''
-Copyright qfingers 2006. This patch was converted by the nm2g2.py
-converter and the patch was creatd by some unknown author who
-doesn't need recognition anyways.  This was specifically created
-as a joke for 3phase's amusement.  No hard feelings...
-'''
-lines = []
-words = message.split()
-line = words.pop(0)
-for word in words:
-  if len(line) + len(word) + 1> 16:
-    lines.append(line)
-    line = word
-  else:
-    line += ' ' + word
-lines.append(line)
-print '\n'.join(lines)
-
-allcolors = [ eval('colors.%s' % colorlist[i]) for i in range(len(colorlist)) ]
-#sys.exit(0)
-#for i in range(len(colorlist)):
-#  m = patch.voice.addmodule(modules.modulemap.Name)
-#  m.name = colorlist[i]
-#  m.color = eval('colors.%s' % colorlist[i])
-for i in range(len(lines)):
-  line = lines[i]
-  m = patch.voice.addmodule(modules.modulemap.Name)
-  m.color = allcolors[i%len(allcolors)]
-  m.name = line
-  m.vert = i
-
-oscb = patch.voice.addmodule(modules.fromname['OscB'],horiz=1,vert=0)
-flt = patch.voice.addmodule(modules.fromname['FltNord'],horiz=1,vert=5)
-out = patch.voice.addmodule(modules.fromname['2-Out'],horiz=1,vert=10)
-
-patch.voice.connect(oscb.outputs.Out,flt.inputs.In,0)
-patch.voice.connect(flt.outputs.Out,out.inputs.InL,0)
-patch.voice.connect(flt.outputs.Out,out.inputs.InR,0)
-
-print 'Writing patch'
-pch2.write('newpatch.pch2')
 

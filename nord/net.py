@@ -18,9 +18,9 @@ def updatenetlist(netlist, source, dest):
       if source.direction:
         if net.output and not source is net.output:
           raise \
-            'Two outputs connected to net: source=%d:%d net.source=%d:%d' % (
-            source.module.index, source.index,
-            net.output.module.index, net.output.index)
+            'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
+            source.module.name, source.type.name,
+            net.output.module.name, net.output.type.name)
         net.output = source
       elif not source in net.inputs: # just in case two connections are made
         net.inputs.append(source)

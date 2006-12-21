@@ -138,7 +138,7 @@ modules = [
     height=6,
     inputs=[
       InputType('Sync',         nm1portcolors.audio),
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('Pitch1',       nm1portcolors.audio),
       InputType('Pitch2',       nm1portcolors.audio),
       InputType('PulseWidthMod',nm1portcolors.audio),
@@ -204,7 +204,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -245,7 +245,7 @@ modules = [
     type=8,
     height=6,
     inputs=[
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('Pitch1',       nm1portcolors.control),
       InputType('Pitch2',       nm1portcolors.control),
       InputType('PwMod',        nm1portcolors.control),
@@ -303,7 +303,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -311,7 +311,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Pwidth',
+      ParameterType('PulseWidth',
         ParameterDef(  
           default=0,
           low=0,
@@ -344,7 +344,7 @@ modules = [
     type=9,
     height=4,
     inputs=[
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('Pitch',        nm1portcolors.audio),
       InputType('Am',           nm1portcolors.audio),
     ],
@@ -385,7 +385,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Fma',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -441,7 +441,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Pulsewidth',
+      ParameterType('PulseWidth',
         ParameterDef(  
           default=0,
           low=0,
@@ -483,7 +483,7 @@ modules = [
     height=3,
     inputs=[
       InputType('Mst',          nm1portcolors.slave),
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
@@ -505,7 +505,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -539,7 +539,7 @@ modules = [
     height=3,
     inputs=[
       InputType('Mst',          nm1portcolors.slave),
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
@@ -561,7 +561,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -595,7 +595,7 @@ modules = [
     height=3,
     inputs=[
       InputType('Mst',          nm1portcolors.slave),
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('Am',           nm1portcolors.audio),
     ],
     outputs=[
@@ -618,7 +618,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -652,7 +652,7 @@ modules = [
     height=4,
     inputs=[
       InputType('Mst',          nm1portcolors.slave),
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('Am',           nm1portcolors.audio),
       InputType('Sync',         nm1portcolors.audio),
     ],
@@ -676,7 +676,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Shape',
+      ParameterType('Waveform',
         ParameterDef(  
           default=0,
           low=0,
@@ -684,7 +684,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -717,17 +717,17 @@ modules = [
     type=15,
     height=7,
     inputs=[
-      InputType('Sync',         nm1portcolors.logic),
+      InputType('Clk',          nm1portcolors.logic),
       InputType('Reset',        nm1portcolors.logic),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.control),
-      OutputType('Sync',         nm1portcolors.logic),
+      OutputType('Snc',          nm1portcolors.logic),
       OutputType('Link',         nm1portcolors.logic),
       OutputType('Gclk',         nm1portcolors.logic),
     ],
     params=[
-      ParameterType('Step1',
+      ParameterType('Note1',
         ParameterDef(  
           default=0,
           low=0,
@@ -735,7 +735,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step2',
+      ParameterType('Note2',
         ParameterDef(  
           default=0,
           low=0,
@@ -743,7 +743,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step3',
+      ParameterType('Note3',
         ParameterDef(  
           default=0,
           low=0,
@@ -751,7 +751,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step4',
+      ParameterType('Note4',
         ParameterDef(  
           default=0,
           low=0,
@@ -759,7 +759,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step5',
+      ParameterType('Note5',
         ParameterDef(  
           default=0,
           low=0,
@@ -767,7 +767,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step6',
+      ParameterType('Note6',
         ParameterDef(  
           default=0,
           low=0,
@@ -775,7 +775,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step7',
+      ParameterType('Note7',
         ParameterDef(  
           default=0,
           low=0,
@@ -783,7 +783,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step8',
+      ParameterType('Note8',
         ParameterDef(  
           default=0,
           low=0,
@@ -791,7 +791,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step9',
+      ParameterType('Note9',
         ParameterDef(  
           default=0,
           low=0,
@@ -799,7 +799,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step10',
+      ParameterType('Note10',
         ParameterDef(  
           default=0,
           low=0,
@@ -807,7 +807,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step11',
+      ParameterType('Note11',
         ParameterDef(  
           default=0,
           low=0,
@@ -815,7 +815,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step12',
+      ParameterType('Note12',
         ParameterDef(  
           default=0,
           low=0,
@@ -823,7 +823,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step13',
+      ParameterType('Note13',
         ParameterDef(  
           default=0,
           low=0,
@@ -831,7 +831,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step14',
+      ParameterType('Note14',
         ParameterDef(  
           default=0,
           low=0,
@@ -839,7 +839,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step15',
+      ParameterType('Note15',
         ParameterDef(  
           default=0,
           low=0,
@@ -847,7 +847,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('Step16',
+      ParameterType('Note16',
         ParameterDef(  
           default=0,
           low=0,
@@ -855,11 +855,11 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('StepCount',
+      ParameterType('Length',
         ParameterDef(  
           default=0,
           low=0,
-          high=127,
+          high=15,
           comment=''
         ),
       ),
@@ -887,7 +887,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Active',
+      ParameterType('Loop',
         ParameterDef(  
           default=0,
           low=0,
@@ -932,19 +932,19 @@ modules = [
     outputs=[
       OutputType('Out1',         nm1portcolors.logic),
       OutputType('Out2',         nm1portcolors.logic),
-      OutputType('Sync',         nm1portcolors.logic),
+      OutputType('Snc',          nm1portcolors.logic),
       OutputType('Link',         nm1portcolors.logic),
     ],
     params=[
-      ParameterType('Stepcount',
+      ParameterType('Length',
         ParameterDef(  
           default=0,
           low=0,
-          high=127,
+          high=15,
           comment=''
         ),
       ),
-      ParameterType('Active',
+      ParameterType('Loop',
         ParameterDef(  
           default=0,
           low=0,
@@ -968,7 +968,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step1',
+      ParameterType('Seq1Step1',
         ParameterDef(  
           default=0,
           low=0,
@@ -976,7 +976,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step2',
+      ParameterType('Seq1Step2',
         ParameterDef(  
           default=0,
           low=0,
@@ -984,7 +984,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step3',
+      ParameterType('Seq1Step3',
         ParameterDef(  
           default=0,
           low=0,
@@ -992,7 +992,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step4',
+      ParameterType('Seq1Step4',
         ParameterDef(  
           default=0,
           low=0,
@@ -1000,7 +1000,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step5',
+      ParameterType('Seq1Step5',
         ParameterDef(  
           default=0,
           low=0,
@@ -1008,7 +1008,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step6',
+      ParameterType('Seq1Step6',
         ParameterDef(  
           default=0,
           low=0,
@@ -1016,7 +1016,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step7',
+      ParameterType('Seq1Step7',
         ParameterDef(  
           default=0,
           low=0,
@@ -1024,7 +1024,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step8',
+      ParameterType('Seq1Step8',
         ParameterDef(  
           default=0,
           low=0,
@@ -1032,7 +1032,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step9',
+      ParameterType('Seq1Step9',
         ParameterDef(  
           default=0,
           low=0,
@@ -1040,7 +1040,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step10',
+      ParameterType('Seq1Step10',
         ParameterDef(  
           default=0,
           low=0,
@@ -1048,7 +1048,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step11',
+      ParameterType('Seq1Step11',
         ParameterDef(  
           default=0,
           low=0,
@@ -1056,7 +1056,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step12',
+      ParameterType('Seq1Step12',
         ParameterDef(  
           default=0,
           low=0,
@@ -1064,7 +1064,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step13',
+      ParameterType('Seq1Step13',
         ParameterDef(  
           default=0,
           low=0,
@@ -1072,7 +1072,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step14',
+      ParameterType('Seq1Step14',
         ParameterDef(  
           default=0,
           low=0,
@@ -1080,7 +1080,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step15',
+      ParameterType('Seq1Step15',
         ParameterDef(  
           default=0,
           low=0,
@@ -1088,7 +1088,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1,Step16',
+      ParameterType('Seq1Step16',
         ParameterDef(  
           default=0,
           low=0,
@@ -1096,7 +1096,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step1',
+      ParameterType('Seq2Step1',
         ParameterDef(  
           default=0,
           low=0,
@@ -1104,7 +1104,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step2',
+      ParameterType('Seq2Step2',
         ParameterDef(  
           default=0,
           low=0,
@@ -1112,7 +1112,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step3',
+      ParameterType('Seq2Step3',
         ParameterDef(  
           default=0,
           low=0,
@@ -1120,7 +1120,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step4',
+      ParameterType('Seq2Step4',
         ParameterDef(  
           default=0,
           low=0,
@@ -1128,7 +1128,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step5',
+      ParameterType('Seq2Step5',
         ParameterDef(  
           default=0,
           low=0,
@@ -1136,7 +1136,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step6',
+      ParameterType('Seq2Step6',
         ParameterDef(  
           default=0,
           low=0,
@@ -1144,7 +1144,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step7',
+      ParameterType('Seq2Step7',
         ParameterDef(  
           default=0,
           low=0,
@@ -1152,7 +1152,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step8',
+      ParameterType('Seq2Step8',
         ParameterDef(  
           default=0,
           low=0,
@@ -1160,7 +1160,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step9',
+      ParameterType('Seq2Step9',
         ParameterDef(  
           default=0,
           low=0,
@@ -1168,7 +1168,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step10',
+      ParameterType('Seq2Step10',
         ParameterDef(  
           default=0,
           low=0,
@@ -1176,7 +1176,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step11',
+      ParameterType('Seq2Step11',
         ParameterDef(  
           default=0,
           low=0,
@@ -1184,7 +1184,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step12',
+      ParameterType('Seq2Step12',
         ParameterDef(  
           default=0,
           low=0,
@@ -1192,7 +1192,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step13',
+      ParameterType('Seq2Step13',
         ParameterDef(  
           default=0,
           low=0,
@@ -1200,7 +1200,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step14',
+      ParameterType('Seq2Step14',
         ParameterDef(  
           default=0,
           low=0,
@@ -1208,7 +1208,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step15',
+      ParameterType('Seq2Step15',
         ParameterDef(  
           default=0,
           low=0,
@@ -1216,7 +1216,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2,Step16',
+      ParameterType('Seq2Step16',
         ParameterDef(  
           default=0,
           low=0,
@@ -1260,7 +1260,7 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    shortnm='Mixer',
+    shortnm='3Mixer',
     type=19,
     height=2,
     inputs=[
@@ -1395,7 +1395,7 @@ modules = [
           comment='companderrelease'
         ),
       ),
-      ParameterType('Treshold',
+      ParameterType('Threshold',
         ParameterDef(  
           default=0,
           low=0,
@@ -2233,24 +2233,24 @@ modules = [
     modes=[],
   ),
   ModuleType(
-    shortnm='Mixer',
+    shortnm='8Mixer',
     type=40,
     height=4,
     inputs=[
       InputType('In1',          nm1portcolors.audio),
       InputType('In2',          nm1portcolors.audio),
       InputType('In3',          nm1portcolors.audio),
-      InputType('In3',          nm1portcolors.audio),
       InputType('In4',          nm1portcolors.audio),
       InputType('In5',          nm1portcolors.audio),
       InputType('In6',          nm1portcolors.audio),
       InputType('In7',          nm1portcolors.audio),
+      InputType('In8',          nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('InSense1',
+      ParameterType('Lev1',
         ParameterDef(  
           default=0,
           low=0,
@@ -2258,7 +2258,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense2',
+      ParameterType('Lev2',
         ParameterDef(  
           default=0,
           low=0,
@@ -2266,7 +2266,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense3',
+      ParameterType('Lev3',
         ParameterDef(  
           default=0,
           low=0,
@@ -2274,7 +2274,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense4',
+      ParameterType('Lev4',
         ParameterDef(  
           default=0,
           low=0,
@@ -2282,7 +2282,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense5',
+      ParameterType('Lev5',
         ParameterDef(  
           default=0,
           low=0,
@@ -2290,7 +2290,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense6',
+      ParameterType('Lev6',
         ParameterDef(  
           default=0,
           low=0,
@@ -2298,7 +2298,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense7',
+      ParameterType('Lev7',
         ParameterDef(  
           default=0,
           low=0,
@@ -2306,7 +2306,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('InSense8',
+      ParameterType('Lev8',
         ParameterDef(  
           default=0,
           low=0,
@@ -2382,14 +2382,14 @@ modules = [
     height=5,
     inputs=[
       InputType('In',           nm1portcolors.audio),
-      InputType('VowelSelectMod',nm1portcolors.control),
+      InputType('VowelMod',     nm1portcolors.control),
       InputType('FrequencyMod', nm1portcolors.control),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('LeftVowel',
+      ParameterType('Vowel1',
         ParameterDef(  
           default=0,
           low=0,
@@ -2397,7 +2397,7 @@ modules = [
           comment='vowel'
         ),
       ),
-      ParameterType('MiddleVowel',
+      ParameterType('Vowel2',
         ParameterDef(  
           default=0,
           low=0,
@@ -2405,7 +2405,7 @@ modules = [
           comment='vowel'
         ),
       ),
-      ParameterType('RightVowel',
+      ParameterType('Vowel3',
         ParameterDef(  
           default=0,
           low=0,
@@ -2413,7 +2413,7 @@ modules = [
           comment='vowel'
         ),
       ),
-      ParameterType('InAmplification',
+      ParameterType('Level',
         ParameterDef(  
           default=0,
           low=0,
@@ -2421,7 +2421,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('VowelSelect',
+      ParameterType('Vowel',
         ParameterDef(  
           default=0,
           low=0,
@@ -2429,7 +2429,7 @@ modules = [
           comment='symeteric'
         ),
       ),
-      ParameterType('VowelSelectMod',
+      ParameterType('VowelMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2437,7 +2437,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Frequency',
+      ParameterType('Freq',
         ParameterDef(  
           default=0,
           low=0,
@@ -2445,7 +2445,7 @@ modules = [
           comment='symetric'
         ),
       ),
-      ParameterType('FrequencyMod',
+      ParameterType('FreqMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2470,9 +2470,9 @@ modules = [
     height=5,
     inputs=[
       InputType('Trig',         nm1portcolors.logic),
-      InputType('AMod',         nm1portcolors.control),
-      InputType('HMod',         nm1portcolors.control),
-      InputType('DMod',         nm1portcolors.control),
+      InputType('AttackMod',    nm1portcolors.control),
+      InputType('HoldMod',      nm1portcolors.control),
+      InputType('DecayMod',     nm1portcolors.control),
       InputType('In',           nm1portcolors.audio),
       InputType('Amp',          nm1portcolors.control),
     ],
@@ -2481,7 +2481,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('A',
+      ParameterType('Attack',
         ParameterDef(  
           default=0,
           low=0,
@@ -2489,7 +2489,7 @@ modules = [
           comment='adsrtime'
         ),
       ),
-      ParameterType('H',
+      ParameterType('Hold',
         ParameterDef(  
           default=0,
           low=0,
@@ -2497,7 +2497,7 @@ modules = [
           comment='adsrtime'
         ),
       ),
-      ParameterType('D',
+      ParameterType('Decay',
         ParameterDef(  
           default=0,
           low=0,
@@ -2505,7 +2505,7 @@ modules = [
           comment='adsrtime'
         ),
       ),
-      ParameterType('AMod',
+      ParameterType('AttackMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2513,7 +2513,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('HMod',
+      ParameterType('HoldMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2521,7 +2521,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('DMod',
+      ParameterType('DecayMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2724,7 +2724,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('FrequencyMod1',
+      ParameterType('FreqMod1',
         ParameterDef(  
           default=0,
           low=0,
@@ -2732,7 +2732,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Frequency',
+      ParameterType('Freq',
         ParameterDef(  
           default=0,
           low=0,
@@ -2772,7 +2772,7 @@ modules = [
           comment='filterslope2'
         ),
       ),
-      ParameterType('FrequencyMod2',
+      ParameterType('FreqMod2',
         ParameterDef(  
           default=0,
           low=0,
@@ -3120,10 +3120,10 @@ modules = [
     type=59,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1portcolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1portcolors.logic),
     ],
     params=[
       ParameterType('Level',
@@ -3850,14 +3850,14 @@ modules = [
     height=3,
     inputs=[
       InputType('Mst',          nm1portcolors.slave),
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('Sync',         nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Detunecoarse',
+      ParameterType('DetuneCoarse',
         ParameterDef(  
           default=0,
           low=0,
@@ -3865,7 +3865,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Detunefine',
+      ParameterType('DetuneFine',
         ParameterDef(  
           default=0,
           low=0,
@@ -3881,7 +3881,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('FmaMod',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -3920,7 +3920,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Frequency',
+      ParameterType('Freq',
         ParameterDef(  
           default=0,
           low=0,
@@ -3942,7 +3942,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Frequency',
+      ParameterType('Freq',
         ParameterDef(  
           default=0,
           low=0,
@@ -3967,7 +3967,7 @@ modules = [
       OutputType('Out4',         nm1portcolors.audio),
     ],
     params=[
-      ParameterType('In',
+      ParameterType('Out',
         ParameterDef(  
           default=0,
           low=0,
@@ -4018,7 +4018,7 @@ modules = [
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.control),
-      OutputType('Sync',         nm1portcolors.logic),
+      OutputType('Snc',          nm1portcolors.logic),
       OutputType('Link',         nm1portcolors.logic),
       OutputType('Gclk',         nm1portcolors.logic),
     ],
@@ -4151,11 +4151,11 @@ modules = [
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Step',
+      ParameterType('Length',
         ParameterDef(  
           default=0,
           low=0,
-          high=127,
+          high=15,
           comment=''
         ),
       ),
@@ -4221,7 +4221,7 @@ modules = [
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.control),
-      OutputType('Sync',         nm1portcolors.logic),
+      OutputType('Snc',          nm1portcolors.logic),
       OutputType('Link',         nm1portcolors.logic),
     ],
     params=[
@@ -4353,11 +4353,11 @@ modules = [
           comment='unibi'
         ),
       ),
-      ParameterType('Step',
+      ParameterType('Length',
         ParameterDef(  
           default=0,
           low=0,
-          high=127,
+          high=15,
           comment=''
         ),
       ),
@@ -4393,7 +4393,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Frequency',
+      ParameterType('Freq',
         ParameterDef(  
           default=0,
           low=0,
@@ -4506,7 +4506,7 @@ modules = [
     height=4,
     inputs=[
       InputType('Trig',         nm1portcolors.audio),
-      InputType('Amp',          nm1portcolors.audio),
+      InputType('Am',           nm1portcolors.audio),
       InputType('PitchMod',     nm1portcolors.control),
     ],
     outputs=[
@@ -4802,7 +4802,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Bb',
+      ParameterType('A#',
         ParameterDef(  
           default=0,
           low=0,
@@ -5074,7 +5074,7 @@ modules = [
           comment='eqgain'
         ),
       ),
-      ParameterType('Bandwidth',
+      ParameterType('BandWidth',
         ParameterDef(  
           default=0,
           low=0,
@@ -5082,7 +5082,7 @@ modules = [
           comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'
         ),
       ),
-      ParameterType('Bypass',
+      ParameterType('Mute',
         ParameterDef(  
           default=0,
           low=0,
@@ -5090,7 +5090,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('InLevel',
+      ParameterType('Level',
         ParameterDef(  
           default=0,
           low=0,
@@ -5463,7 +5463,7 @@ modules = [
     type=107,
     height=5,
     inputs=[
-      InputType('Fma',          nm1portcolors.audio),
+      InputType('FmMod',        nm1portcolors.audio),
       InputType('PitchMod1',    nm1portcolors.control),
       InputType('PitchMod2',    nm1portcolors.control),
       InputType('SpectralShapeMod',nm1portcolors.control),
@@ -5521,7 +5521,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Fma',
+      ParameterType('FmMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -5713,7 +5713,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('HighFreqEmphasis',
+      ParameterType('Emphasis',
         ParameterDef(  
           default=0,
           low=0,
@@ -5913,14 +5913,14 @@ modules = [
     height=3,
     inputs=[
       InputType('In',           nm1portcolors.audio),
-      InputType('Modulation',   nm1portcolors.audio),
-      InputType('Modulationdepth',nm1portcolors.audio),
+      InputType('Mod',          nm1portcolors.audio),
+      InputType('ModDepth',     nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('RingmodDepthMod',
+      ParameterType('ModDepth',
         ParameterDef(  
           default=0,
           low=0,
@@ -5945,13 +5945,13 @@ modules = [
     height=3,
     inputs=[
       InputType('In',           nm1portcolors.audio),
-      InputType('SampleRateMod',nm1portcolors.control),
+      InputType('RateMod',      nm1portcolors.control),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('QuantBits',
+      ParameterType('Bits',
         ParameterDef(  
           default=0,
           low=0,
@@ -5959,7 +5959,7 @@ modules = [
           comment='quantbits'
         ),
       ),
-      ParameterType('SampleRate',
+      ParameterType('Rate',
         ParameterDef(  
           default=0,
           low=0,
@@ -5967,7 +5967,7 @@ modules = [
           comment='0 ~ 34.65 Hz, 127 ~ 50.18 kHz'
         ),
       ),
-      ParameterType('SampleRateMod',
+      ParameterType('RateMod',
         ParameterDef(  
           default=0,
           low=0,
