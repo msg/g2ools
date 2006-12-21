@@ -1,0 +1,89 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 477 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 17 0 5 
+2 91 0 11 
+3 15 2 5 
+4 90 2 13 
+5 35 0 0 
+6 35 0 2 
+7 73 1 5 
+8 73 1 7 
+9 73 1 9 
+10 73 1 11 
+12 40 1 18 
+[/ModuleDump]
+[ModuleDump]
+0 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+2 1 0 0 5 0 1 
+2 2 0 0 1 0 0 
+2 4 1 0 2 2 1 
+2 1 1 0 6 0 1 
+2 2 1 0 1 1 0 
+2 3 1 0 6 0 1 
+2 3 0 0 7 0 1 
+2 4 0 0 3 0 0 
+2 7 0 0 1 3 1 
+2 7 1 0 1 0 1 
+2 8 0 0 1 1 1 
+2 8 1 0 3 2 1 
+2 9 0 0 3 3 1 
+2 10 1 0 4 2 1 
+2 10 0 0 4 3 1 
+1 12 0 0 2 0 1 
+1 12 1 0 3 0 1 
+1 12 2 0 4 0 1 
+[/CableDump]
+[CableDump]
+0 
+[/CableDump]
+[ParameterDump]
+1 
+1 17 36 15 0 0 1 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+2 91 19 50 50 120 127 15 50 77 41 42 101 61 10 24 122 43 105 15 0 0 
+3 15 21 49 64 64 64 64 35 108 64 64 64 64 68 64 64 32 64 15 0 0 0 1 
+4 90 21 44 43 42 42 47 46 47 38 38 45 45 41 51 40 44 49 15 0 0 0 1 
+5 35 1 64 
+6 35 1 64 
+7 73 1 0 
+8 73 1 0 
+9 73 1 0 
+10 73 1 0 
+12 40 9 100 100 100 100 100 100 100 100 0 
+[/ParameterDump]
+[ParameterDump]
+0 
+[/ParameterDump]
+[CustomDump]
+1 
+4 2 1 0 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 EventSeq1
+2 CtrlSeq1
+3 NoteSeqA1
+4 NoteSeqB1
+5 RndPulsGen1
+6 RndPulsGen2
+7 LogicProc1
+8 LogicProc1
+9 LogicProc1
+10 LogicProc1
+12 Mixer1
+[/NameDump]
+[NameDump]
+0 
+[/NameDump]

@@ -1,0 +1,109 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 600 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 61 0 5 
+2 62 0 9 
+3 74 0 13 
+4 54 0 17 
+5 78 0 20 
+6 53 0 24 
+7 1 0 0 
+8 2 0 2 
+9 82 1 6 
+10 94 1 9 
+12 57 1 21 
+13 83 1 24 
+14 21 2 6 
+16 117 2 16 
+17 40 2 26 
+15 118 2 22 
+[/ModuleDump]
+[ModuleDump]
+0 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+0 1 1 0 8 0 1 
+0 2 1 0 1 1 0 
+0 3 1 0 2 1 0 
+0 5 1 0 3 1 0 
+0 1 0 0 8 1 1 
+0 9 0 0 8 1 1 
+0 16 2 0 9 0 0 
+0 2 0 0 1 0 1 
+0 3 0 0 2 0 1 
+0 4 0 0 3 0 1 
+0 5 0 0 4 0 1 
+0 6 1 0 5 1 1 
+2 6 0 0 7 1 1 
+0 17 0 0 6 0 1 
+0 10 0 0 9 0 1 
+0 14 2 0 9 0 1 
+0 14 0 0 10 0 1 
+0 14 1 0 10 1 1 
+0 13 0 0 12 0 1 
+0 16 1 0 12 0 1 
+0 16 0 0 13 0 1 
+0 15 0 0 16 0 0 
+0 17 4 0 16 0 1 
+0 17 3 0 14 1 1 
+0 17 2 0 14 0 1 
+0 17 5 0 15 0 1 
+0 12 0 0 5 0 1 
+[/CableDump]
+[CableDump]
+0 
+[/CableDump]
+[ParameterDump]
+1 
+1 61 3 0 82 0 
+2 62 2 0 48 
+3 74 2 0 0 
+4 54 1 12 
+5 78 2 0 64 
+9 82 1 0 
+10 94 3 64 64 0 
+12 57 2 0 0 
+13 83 1 2 
+14 21 9 0 20 18 20 30 12 0 0 0 
+15 118 5 11 67 0 0 0 
+16 117 2 0 64 
+17 40 9 100 100 100 100 101 100 100 100 0 
+[/ParameterDump]
+[ParameterDump]
+0 
+[/ParameterDump]
+[CustomDump]
+1 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 Clip1
+2 Overdrive1
+3 WaveWrap1
+4 Quantizer1
+5 Delay1
+6 Sample&Hold1
+7 Keyboard1
+8 AudioIn1
+9 Diode1
+10 StChorus1
+12 InvLevShift1
+13 Shaper1
+14 Compressor1
+15 Digitizer1
+16 RingMod1
+17 Mixer1
+[/NameDump]
+[NameDump]
+0 
+[/NameDump]

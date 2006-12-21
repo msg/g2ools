@@ -1,0 +1,123 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 408 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 1 0 0 
+2 63 1 0 
+3 65 2 0 
+4 2 0 7 
+5 5 2 6 
+6 4 0 10 
+7 3 0 3 
+8 67 1 8 
+9 3 1 4 
+10 3 1 11 
+11 3 2 2 
+12 5 2 10 
+13 5 2 14 
+14 5 2 18 
+15 5 2 22 
+16 5 2 26 
+17 100 0 14 
+18 3 0 18 
+[/ModuleDump]
+[ModuleDump]
+0 
+1 127 0 0 
+2 4 0 2 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+1 7 0 0 1 0 1 
+1 17 0 0 7 0 0 
+2 7 1 0 1 1 1 
+2 17 1 0 7 1 0 
+1 7 2 0 1 2 1 
+1 17 2 0 7 2 0 
+1 7 3 0 1 3 1 
+0 6 0 0 4 0 1 
+0 6 1 0 4 1 1 
+1 9 0 0 2 0 1 
+2 9 1 0 2 1 1 
+1 9 2 0 2 2 1 
+1 9 3 0 2 3 1 
+2 10 0 0 8 0 1 
+1 10 1 0 8 1 1 
+1 10 2 0 8 2 1 
+2 11 0 0 3 0 1 
+2 11 1 0 3 1 1 
+2 11 2 0 3 2 1 
+2 5 0 0 11 2 0 
+2 12 0 0 5 0 0 
+2 13 0 0 12 0 0 
+2 14 0 0 13 0 0 
+2 15 0 0 14 0 0 
+2 16 0 0 15 0 0 
+1 18 2 0 17 2 1 
+2 18 1 0 17 1 1 
+1 18 0 0 17 0 1 
+[/CableDump]
+[CableDump]
+0 
+0 2 0 0 1 0 1 
+0 2 1 0 1 1 1 
+[/CableDump]
+[ParameterDump]
+1 
+5 5 3 115 0 0 
+6 4 3 115 1 0 
+7 3 1 115 
+8 67 1 60 
+9 3 1 115 
+10 3 1 115 
+11 3 1 115 
+12 5 3 115 1 0 
+13 5 3 115 2 0 
+14 5 3 115 3 0 
+15 5 3 115 4 0 
+16 5 3 115 5 0 
+17 100 2 64 64 
+18 3 1 115 
+[/ParameterDump]
+[ParameterDump]
+0 
+1 127 1 0 
+2 4 3 115 0 0 
+[/ParameterDump]
+[CustomDump]
+1 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 Keyboard1
+2 KbdPatch1
+3 MIDIGlobal1
+4 AudioIn1
+5 1 output1
+6 2 outputs1
+7 4 outputs1
+8 NoteDetect1
+9 4 outputs2
+10 4 outputs3
+11 4 outputs4
+12 1 output2
+13 1 output3
+14 1 output4
+15 1 output5
+16 1 output6
+17 KeybSplit1
+18 4 outputs5
+[/NameDump]
+[NameDump]
+0 
+1 PolyAreaIn1
+2 2 outputs1
+[/NameDump]

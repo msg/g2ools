@@ -1,0 +1,89 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 600 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 44 0 1 
+2 18 0 4 
+3 47 0 8 
+4 113 0 12 
+5 114 0 15 
+6 111 0 18 
+7 112 0 21 
+8 76 1 1 
+9 79 1 4 
+10 88 1 8 
+11 81 1 12 
+[/ModuleDump]
+[ModuleDump]
+0 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+0 2 0 0 3 0 1 
+0 2 1 0 3 1 1 
+0 3 0 0 2 0 1 
+0 1 0 0 2 0 1 
+0 1 1 0 2 0 1 
+0 5 0 0 4 0 1 
+0 5 1 0 4 1 1 
+0 4 0 0 5 0 1 
+0 6 0 0 7 0 1 
+0 7 0 0 6 0 1 
+0 2 2 0 1 0 1 
+0 3 1 0 2 2 0 
+0 9 0 0 10 0 1 
+0 9 1 0 10 1 1 
+0 9 2 0 10 2 1 
+0 9 3 0 10 3 1 
+0 10 0 0 9 0 1 
+0 11 0 0 8 0 1 
+0 8 0 0 11 0 1 
+[/CableDump]
+[CableDump]
+0 
+[/CableDump]
+[ParameterDump]
+1 
+1 44 1 0 
+2 18 2 65 64 
+3 47 2 63 64 
+4 113 1 127 
+5 114 1 0 
+6 111 2 64 0 
+7 112 2 64 1 
+8 76 1 1 
+9 79 6 2 127 127 65 127 0 
+10 88 3 1 127 0 
+11 81 1 64 
+[/ParameterDump]
+[ParameterDump]
+0 
+[/ParameterDump]
+[CustomDump]
+1 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 GainControl1
+2 X-Fade1
+3 Pan1
+4 1to2Fade1
+5 2to1Fade1
+6 LevMult1
+7 LevAdd1
+8 OnOff1
+9 4-1Switch1
+10 1-4Switch1
+11 Amplifier1
+[/NameDump]
+[NameDump]
+0 
+[/NameDump]
