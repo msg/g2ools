@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from Numeric import *
 
 def ts(x,ty):
   return (1-exp(x*ty))/(1-exp(ty))
@@ -58,6 +59,7 @@ for i in range(len(x)):
   else:
     print '%3d %4.0f %4.0f %10.6f' % (x[i], y[i], cy, cy)
 
+print
 print 'Env ADSR Time'
 ytim = array([0.0005,0.0021,0.0073,0.0212,0.0543,0.126,0.269,0.540,1.02,
               1.85,3.21,5.37,8.72,13.8,21.2,32.0,45.0],typecode=Float)
