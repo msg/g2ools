@@ -31,7 +31,7 @@ def convert(pch):
   # create patch equal function
   # create patch merge function that updates variations
   #   of one patch from another.
-  pch2 = Pch2File('initpatch.pch2')
+  pch2 = Pch2File('./nord/convert/initpatch.pch2')
   nmpatch = pch.patch
   g2patch = pch2.patch
   cablecolors = {
