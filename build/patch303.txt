@@ -115,7 +115,7 @@ height 6
 parameters
 0 "freq coarse" 0..127 "freqcoarse"
 1 "freq fine" 0..127 "freqfine"
-2 "freq KBT" 0..127 "freqkbt"
+2 "freq kbt" 0..127 "freqkbt"
 3 "Pulse width" 0..127 "pulsewidth"
 4 "waveform" 0..3 "waveform1"
 5 "pitch mod 1" 0..127 ""
@@ -126,8 +126,8 @@ parameters
 inputs
 0 "sync" audio
 1 "fm mod" audio
-2 "pitch 1" audio
-3 "pitch 2" audio
+2 "pitch mod 1" audio
+3 "pitch mod 2" audio
 4 "pulse width mod" audio
 outputs
 0 "out" audio
@@ -147,7 +147,7 @@ height 6
 parameters
 0 "Freq coarse" 0..127 "freqcoarse"
 1 "Freq fine" 0..127 "freqfine"
-2 "Freq KBT" 0..127 "freqkbt"
+2 "Freq kbt" 0..127 "freqkbt"
 3 "waveform" 0..3 "waveform1"
 4 "pitch mod 1" 0..127 ""
 5 "pitch mod 2" 0..127 ""
@@ -156,8 +156,8 @@ parameters
 8 "mute" 0..1 "onoff"
 inputs
 0 "fm mod" audio
-1 "pitch 1" control
-2 "pitch 2" control
+1 "pitch mod 1" control
+2 "pitch mod 2" control
 3 "PW mod" control
 outputs
 0 "out" audio
@@ -177,7 +177,7 @@ height 4
 parameters
 0 "freq coarse" 0..127 "freqcoarse"
 1 "freq fine" 0..127 "freqfine"
-2 "freq KBT" 0..1 "onoff"
+2 "freq kbt" 0..1 "onoff"
 3 "freq mod" 0..127 ""
 4 "fm mod" 0..127 ""
 5 "mute" 0..1 "onoff"
@@ -1962,8 +1962,8 @@ zeropage 1.75000
 dynmem 0.59375
 height 4
 parameters
-0 "pitch" 0..127 "freqcoarse"
-1 "pitch fine" 0..127 "freqfine"
+0 "freq coarse" 0..127 "freqcoarse"
+1 "freq fine" 0..127 "freqfine"
 2 "kbt" 0..1 "onoff"
 3 "mute" 0..1 "onoff"
 4 "timbre" 0..127 ""

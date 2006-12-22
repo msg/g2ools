@@ -310,7 +310,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('KBT_4')
+    name('Kbt_4')
     low(0)
     high(4)
     default(0)
