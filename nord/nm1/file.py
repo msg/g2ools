@@ -66,7 +66,7 @@ class ModuleDump(Section):
       (index,type,horiz,vert) = values
       module = area.findmodule(index)
       if not module:
-        module = Module(modules.fromtype[type])
+        module = Module(modules.fromtype[type],area)
         area.modules.append(module)
       module.index,module.horiz,module.vert=index,horiz,vert
 
@@ -199,12 +199,12 @@ class MorphMapDump(Section):
       values.extend(map(int, line.split()))
     for i in range(len(values)/5):
       morphmap = MorphMap()
-      sect,index,morphmap.param,morph,morphmap.range = values[i*5:i*5+5]
+      sect,index,param,morph,morphmap.range = values[i*5:i*5+5]
       if sect:
         area = self.patch.voice
       else:
         area = self.patch.fx
-      morphmap.module = area.findmodule(index)
+      morphmap.param = area.findmodule(index).params[param]
       if not morph in range(4):
         raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
       morphs[morph].maps.append(morphmap)
@@ -230,8 +230,7 @@ class KnobMapDump(Section):
         area = self.patch.voice
       else:
         area = self.patch.fx
-      knobs[i].module = area.findmodule(index)
-      knobs[i].param = param
+      knobs[i].param = area.findmodule(index).params[param]
       knobs[i].knob = knob
 
 class Ctrl:
@@ -246,8 +245,7 @@ class CtrlMapDump(Section):
         area = self.patch.voice
       else:
         area = self.patch.fx
-      ctrls[i].module = area.findmodule(index)
-      ctrls[i].param = param
+      ctrls[i].param = area.findmodule(index).params[param]
       ctrls[i].cc = cc
 
 class NameDump(Section):
@@ -270,7 +268,7 @@ class NameDump(Section):
 
 class Notes(Section):
   def parse(self):
-    self.patch.notes = self.lines
+    self.patch.textpad = '\r\n'.join(self.lines)
 
 class Area:
   def __init__(self):
@@ -286,6 +284,7 @@ class Patch:
   def __init__(self):
     self.voice = Area()
     self.fx = Area()
+    self.textpad = ''
 
 class PchFile:
   def __init__(self, fname=None):
@@ -375,28 +374,27 @@ if __name__ == '__main__':
 #     note.release
 #   cable = area.cables[i]
 #     cable.color
-#     cable.smod
-#     cable.sparam
-#     cable.type
-#     cable.dmod
-#     cable.dparam
-#     cable.type
+#   src = cable.source
+#     src.rate
+#     src.cables
+#     src.nets
+#   dest = cable.dest # same as src
+#   net = src.nets[0]
+#     net.output
+#     net.inputs[i]
 #   param = module.params[i]
 #   custom = module.custom
 #     custom.parameters
 #   morph = patch.morphs[i]
 #     morph.knob
-#     mophr.keyassign
+#     morph.keyassign
 #     map = morph.maps[i]
-#       map.module
 #       map.param
 #       map.range
 #   knob = patch.knobs[i]
-#     knob.module
 #     knob.param
 #     knob.knob
 #   ctrl = patch.ctrls[i]
-#     ctrl.module
 #     ctrl.param
 #     ctrl.cc
 #   patch.notes

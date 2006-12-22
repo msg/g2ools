@@ -156,6 +156,9 @@ def convert(pch):
   # handle Midi CCs
   # TBD
 
+  # handle text pad
+  pch2.patch.textpad = pch.patch.textpad
+
   message = '''
   nm2g2 patch converter Copyright 2007 Matt Gerassimoff
   '''

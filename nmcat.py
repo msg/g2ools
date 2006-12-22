@@ -49,6 +49,9 @@ def printpatch(patch):
         t.append('%s.%s' % (dmod.type.shortnm, dest.type.name))
       print '  %s -> %s' % (s, ','.join(t))
         
+  print 'knobs:'
+  for knob in patch.knobs:
+    print ' %02d: %s:%s' % (knob.knob,knob.param.module.name,knob.param.type.name)
 
 prog = sys.argv.pop(0)
 while len(sys.argv):

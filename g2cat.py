@@ -5,7 +5,7 @@ sys.path.append('.')
 from nord.g2.file import Pch2File
 
 def printpatch(patch):
-  print 'PatchDescription:'
+  print 'patchdescription:'
   desc = patch.description
   #print ' header:', hexdump(desc.header)
   print ' voicecnt=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d' % (
@@ -14,20 +14,26 @@ def printpatch(patch):
   print '  red=%d blue=%d yellow=%d orange=%d green=%d purple=%d white=%d' % (
       desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white)
-  print 'Knobs:'
+  print 'knobs:'
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
     if knob.assigned:
-      print ' %s%d:%d mod=%03d param=%03d area=%d isled=0x%02x' % (
+      print ' %s%d:%d %s:"%s":%s isled=0x%02x' % (
           'ABCDE'[i/24],(i/8)%3,i&7,
-          knob.index, knob.paramindex, knob.area, knob.isled)
+          ['fx','voice'][knob.param.module.area.index],
+          knob.param.module.name, knob.param.type.name,
+          knob.isled)
   print 'MIDIAssignments:'
   for midiassignment in patch.midiassignments:
-    print ' type=%s midicc=%d index=%d paramindex=%d' % (
-        {1:'User', 2:'System'}[midiassignment.type], midiassignment.midicc,
-        midiassignment.index, midiassignment.paramindex)
+    if midiassignment.type == 2:
+      index,param = midiassignment.param
+    else:
+      index,param = midiassignment.param.module.index,midiassignment.param.index
+    print ' type=%s midicc=%d index=%d param=%d' % (
+        {0:'fx',1:'voice',2:'system'}[midiassignment.type], midiassignment.midicc,
+        index,param)
   settings = patch.settings
-  print 'Morphs:'
+  print 'morphs:'
   print ' dial settings:'
   for i in range(len(settings.morphs)):
     print ' ',settings.morphs[i].dials
@@ -37,13 +43,13 @@ def printpatch(patch):
   print ' names:'
   print ' ',','.join(
       [ settings.morphs[i].label for i in range(len(settings.morphs))])
-  print 'Variations:'
+  print 'variations:'
   for attr in [ 'activemuted','patchvol','glide','glidetime','bend', 'semi',
                 'vibrato','cents','rate',
                 'arpeggiator','arptime','arptype','octaves',
                 'octaveshift','sustain' ]:
     print ' %-16s' % (attr+':'), [ getattr(var,attr) for var in settings.variations ]
-  print 'Modules:'
+  print 'modules:'
   for module in patch.voice.modules:
     print ' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d' % (
         '"%s"' % module.name, module.type.shortnm,
@@ -63,7 +69,7 @@ def printpatch(patch):
         print '  %-16s %r' % (ptype.name+':', param.variations)
         if hasattr(param,'labels'):
           print '   %r' % param.labels
-  print 'Cables:'
+  print 'cables:'
   for cable in patch.voice.cables:
     source,dest = cable.source,cable.dest
     smod,dmod = source.module,dest.module

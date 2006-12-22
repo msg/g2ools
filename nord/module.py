@@ -43,8 +43,9 @@ class Array(list):
   pass
 
 class Module:
-  def __init__(self, type):
+  def __init__(self, type, area):
     self.type = type
+    self.area = area
     entries = [ ['inputs', Input ], ['outputs', Output ],
                 ['params', Param ], ['modes', Mode ] ]
     for nm,cls in entries:

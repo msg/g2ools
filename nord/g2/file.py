@@ -162,7 +162,7 @@ class ModuleList(Section):
     for i in range(modulecnt):
       #m = area.modules[i]
       bit,type       = getbits(bit,8,data)
-      m = Module(modules.fromtype[type])
+      m = Module(modules.fromtype[type],area)
       area.modules.append(m)
       #m.type = modules.fromtype[type] # use type object instead of number
       bit,m.index    = getbits(bit,8,data)
@@ -262,7 +262,8 @@ class Unknown0x69(Section):
 
 # holder object for patch cables
 class Cable:
-  pass
+  def __init__(self, area):
+    self.area = area
 
 # validatecable - if connection valid return 0, otherwise error
 def validcable(area, smodule, sconn, direction, dmodule, dconn):
@@ -296,7 +297,7 @@ class CableList(Section):
       area = patch.fx
 
     for i in range(cablecnt):
-      c = Cable()
+      c = Cable(area)
       bit,c.color = getbits(bit,3,data)
       bit,smod    = getbits(bit,8,data)
       bit,sconn   = getbits(bit,6,data)
@@ -306,9 +307,6 @@ class CableList(Section):
 
       smodule     = area.findmodule(smod)
       dmodule     = area.findmodule(dmod)
-      #source      = Node(module=smodule,conn=sconn,type=type) # input/output
-      #dest        = Node(module=dmodule,conn=dconn,type=0)    # always input
-      #c.source,c.dest = source,dest
 
       invalid = validcable(area, smodule, sconn, dir, dmodule, dconn)
       if invalid:
@@ -609,13 +607,17 @@ class MorphParameters(Section):
 
       bit, nmorphs = getbits(bit,8,data)
       for i in range(nmorphs):
-        param = MorphParameter()
-        bit,param.area       = getbits(bit,2,data)
-        bit,param.index      = getbits(bit,8,data)
-        bit,param.paramindex = getbits(bit,7,data)
-        bit,param.morph      = getbits(bit,4,data)
-        bit,param.range      = getbits(bit,8,data,1)
-        morphs[param.morph].params[variation].append(param)
+        mparam = MorphParameter()
+        bit,area         = getbits(bit,2,data)
+        bit,index        = getbits(bit,8,data)
+        bit,param        = getbits(bit,7,data)
+        bit,mparam.morph = getbits(bit,4,data)
+        bit,mparam.range = getbits(bit,8,data,1)
+        if area:
+          mparam.param = patch.voice.findmodule(index).params[param]
+        else:
+          mparam.param = patch.fx.findmodule(index).params[param]
+        morphs[param.morph].params[variation].append(mparam)
 
       bit,reserved = getbits(bit,4,data) # always 0
 
@@ -635,18 +637,18 @@ class MorphParameters(Section):
       bit += 4+(6*8)+4 # zeros
 
       # collect all params of this variation into 1 array
-      params = []
+      mparams = []
       for morph in range(NMORPHS):
-        params.extend(morphs[morph].params[variation])
+        mparams.extend(morphs[morph].params[variation])
 
-      bit = setbits(bit,8,data,len(params))
-      for i in range(len(params)):
-        param = params[i]
-        bit = setbits(bit,2,data,param.area)
-        bit = setbits(bit,8,data,param.index)
-        bit = setbits(bit,7,data,param.paramindex)
-        bit = setbits(bit,4,data,param.morph)
-        bit = setbits(bit,8,data,param.range)
+      bit = setbits(bit,8,data,len(mparams))
+      for i in range(len(mparams)):
+        mparam = mparams[i]
+        bit = setbits(bit,2,data,mparam.param.module.area.index)
+        bit = setbits(bit,8,data,mparam.param.module.index)
+        bit = setbits(bit,7,data,mparam.param.index)
+        bit = setbits(bit,4,data,mparam.morph)
+        bit = setbits(bit,8,data,mparam.range)
 
       bit += 4
       #bit = setbits(bit,4,data,0) # always 0
@@ -667,10 +669,14 @@ class KnobAssignments(Section):
       k = patch.knobs[i]
       bit,k.assigned = getbits(bit,1,data)
       if k.assigned:
-        bit,k.area = getbits(bit,2,data)
-        bit,k.index = getbits(bit,8,data)
+        bit,area = getbits(bit,2,data)
+        bit,index = getbits(bit,8,data)
         bit,k.isled = getbits(bit,2,data)
-        bit,k.paramindex = getbits(bit,7,data)
+        bit,param = getbits(bit,7,data)
+        if area == 1:
+          k.param = patch.voice.findmodule(index).params[param]
+        else:
+          k.param = patch.fx.findmodule(index).params[param]
         #print '  %s%d-%d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7)
 
   def format(self, patch):
@@ -682,10 +688,10 @@ class KnobAssignments(Section):
       k = patch.knobs[i]
       bit = setbits(bit,1,data,k.assigned)
       if k.assigned:
-        bit = setbits(bit,2,data,k.area)
-        bit = setbits(bit,8,data,k.index)
+        bit = setbits(bit,2,data,k.param.module.area.index)
+        bit = setbits(bit,8,data,k.param.module.index)
         bit = setbits(bit,2,data,k.isled)
-        bit = setbits(bit,7,data,k.paramindex)
+        bit = setbits(bit,7,data,k.param.index)
 
     return data.tostring()
 
@@ -702,9 +708,15 @@ class MIDIControllerAssignments(Section):
     for i in range(assignmentcnt):
       m = patch.midiassignments[i]
       bit,m.midicc = getbits(bit,7,data)
-      bit,m.type = getbits(bit,2,data)
-      bit,m.index = getbits(bit,8,data)
-      bit,m.paramindex = getbits(bit,7,data)
+      bit,m.type = getbits(bit,2,data) # 1:User, 2:System
+      bit,index = getbits(bit,8,data)
+      bit,param = getbits(bit,7,data)
+      if m.type == 0:
+        m.param = patch.fx.findmodule(index).params[param]
+      elif m.type == 1:
+        m.param = patch.voice.findmodule(index).params[param]
+      else:
+        m.param = index, param
 
   def format(self, patch):
     data  = array('B',[])
@@ -715,8 +727,12 @@ class MIDIControllerAssignments(Section):
       m = patch.midiassignments[i]
       bit = setbits(bit,7,data,m.midicc)
       bit = setbits(bit,2,data,m.type)
-      bit = setbits(bit,8,data,m.index)
-      bit = setbits(bit,7,data,m.paramindex)
+      if m.type < 2:
+        index,param = m.param.module.index,m.param.index
+      else:
+        index,param = m.param
+      bit = setbits(bit,8,data,index)
+      bit = setbits(bit,7,data,param)
 
     return data.tostring()
 
@@ -951,7 +967,8 @@ class Performance:
 
 # holder object for patch voice and fx area data (modules, cables, etc..)
 class Area:
-  def __init__(self):
+  def __init__(self,index):
+    self.index = index
     self.modules = []
     self.cables = []
     self.netlist = []
@@ -970,7 +987,7 @@ class Area:
       if not index in indexes:
         break
     if index < 128:
-      m = Module(type)
+      m = Module(type,self)
       m.name = type.shortnm
       m.index = index
       m.color = 0
@@ -986,7 +1003,7 @@ class Area:
 
   # connect input/output to input
   def connect(self, source, dest, color):
-    cable = Cable()
+    cable = Cable(self)
     self.cables.append(cable)
 
     cable.color = color
@@ -1005,8 +1022,8 @@ class Area:
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch:
   def __init__(self):
-    self.voice = Area()
-    self.fx = Area()
+    self.fx = Area(0)
+    self.voice = Area(1)
     
 
 # Pch2File - main reading/writing object for .pch2 files
@@ -1161,6 +1178,8 @@ Info=BUILD 266\r
 #                   # i may handle it on a module type basis and remove it
 #     module.modes[i]
 #     module.params[i]
+#     module.inputs[i]
+#     module.outputs[i]
 #   param = module.params[i]
 #     param.variations
 #     param.labels
@@ -1169,22 +1188,27 @@ Info=BUILD 266\r
 #     type.shortnm
 #     type.height
 #     type.page
+#     type.modes[i]
+#     type.params[i]
 #     type.inputs[i]
 #     type.outputs[i]
-#     type.params[i]
-#     type.modes[i]
 #   page = type.page
 #     page.name
 #     page.index
-#   input = type.inputs[i]
-#     input.name
+#   input = module.inputs[i]
+#     input.module
+#     input.index
 #     input.type
-#   output = type.outputs[i]
-#     output.name
-#     output.type
-#   param = type.param[i]
-#     param.name
+#     input.rate
+#     input.cables[i]
+#     input.nets[i]
+#   output = module.outputs[i] # same members as input
+#   param = module.params[i]
+#     param.module
+#     param.index
 #     param.type
+#     param.variations[i]
+#     param.labels[i]
 #   ptype = param.type
 #     ptype.type
 #     ptype.name
@@ -1193,9 +1217,11 @@ Info=BUILD 266\r
 #     ptype.default
 #     ptype.definitions
 #     ptype.comments
-#   mode = type.modes[i]
-#     mode.name
+#   mode = module.modes[i]
+#     mode.module
+#     mode.index
 #     mode.type
+#     mode.value
 #   mtype = mode.type
 #     mtype.name
 #     mtype.low
@@ -1205,12 +1231,12 @@ Info=BUILD 266\r
 #     mtype.comments
 #
 #   cable = area.cables[i]
-#     cable.type
 #     cable.color
-#     cable.modfrom
-#     cable.jackfrom
-#     cable.modto
-#     cable.jackto
+#     cable.source
+#     cable.dest
+#
+#   source = cable.source # same as module.inputs[i] or module.outputs[i]
+#   dest = cable.dest # same as module.inputs[i] only
 #
 #   morph = patch.morphs[i]
 #     morph.label
