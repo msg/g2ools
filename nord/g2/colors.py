@@ -40,6 +40,7 @@ class g2portcolors:
   red = 0
   blue = 1
   yellow = 2
-  blue_red = 3
-  yellow_orange = 4
+  orange = 3
+  blue_red = 4
+  yellow_orange = 5
 

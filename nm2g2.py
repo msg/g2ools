@@ -113,14 +113,13 @@ def convert(pch):
     while not done:
       modified = 0
       for module in g2area.modules:
-        #print module.name
+        #print module.name, module.type.shortnm
         for input in module.inputs:
           if len(input.nets) == 0:
             continue
           #print '',input.type.name, input.rate
-          if input.rate != g2portcolors.blue_red:
-            continue
-          if input.rate != g2portcolors.yellow_orange:
+          if (input.rate != g2portcolors.blue_red and
+              input.rate != g2portcolors.yellow_orange):
             continue
           if not input.nets[0].output:
             continue
@@ -136,17 +135,17 @@ def convert(pch):
               if output.rate == g2portcolors.yellow_orange:
                 output.rate = g2portcolors.orange
             break
-          elif input.nets[0].output.rate == g2portcolors.blue:
-            modified = 1
-            module.uprate = 0
-            input.rate = g2portcolors.red
-            # change all outputs to red for next iteration
-            for output in module.outputs:
-              if output.rate == g2portcolors.blue_red:
-                output.rate = g2portcolors.blue
-              if output.rate == g2portcolors.yellow_orange:
-                output.rate = g2portcolors.yellow
-            break
+          #elif input.nets[0].output.rate == g2portcolors.blue:
+          #  modified = 1
+          #  module.uprate = 0
+          #  input.rate = g2portcolors.red
+          #  # change all outputs to red for next iteration
+          #  for output in module.outputs:
+          #    if output.rate == g2portcolors.blue_red:
+          #      output.rate = g2portcolors.blue
+          #    if output.rate == g2portcolors.yellow_orange:
+          #      output.rate = g2portcolors.yellow
+          #  break
       if not modified:
         done = 1
 

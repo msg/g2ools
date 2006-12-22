@@ -30,12 +30,12 @@ class ConvGainControl(Convert):
     shift = getv(nmmp.Shift)
     if shift:
       conv = self.g2area.addmodule(g2name['LevConv'])
-      setv(conv.params.OutpuType,2) # Pos (I think)
+      setv(conv.params.OutputType,2) # Pos (I think)
       conv.horiz = g2m.horiz
       conv.vert = g2m.type.height
       self.height = conv.vert + conv.type.height
       self.g2modules.append(conv)
-      self.g2area.connect(conv.outputs.Out,g2m.inputs.Mod)
+      self.g2area.connect(conv.outputs.Out,g2m.inputs.Mod,g2cablecolors.blue)
       self.inputs[0] = conv.inputs.In
 
 class ConvX_Fade(Convert):
