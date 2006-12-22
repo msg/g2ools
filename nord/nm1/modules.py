@@ -139,8 +139,8 @@ modules = [
     inputs=[
       InputType('Sync',         nm1portcolors.audio),
       InputType('FmMod',        nm1portcolors.audio),
-      InputType('Pitch1',       nm1portcolors.audio),
-      InputType('Pitch2',       nm1portcolors.audio),
+      InputType('PitchMod1',    nm1portcolors.audio),
+      InputType('PitchMod2',    nm1portcolors.audio),
       InputType('PulseWidthMod',nm1portcolors.audio),
     ],
     outputs=[
@@ -246,8 +246,8 @@ modules = [
     height=6,
     inputs=[
       InputType('FmMod',        nm1portcolors.audio),
-      InputType('Pitch1',       nm1portcolors.control),
-      InputType('Pitch2',       nm1portcolors.control),
+      InputType('PitchMod1',    nm1portcolors.control),
+      InputType('PitchMod2',    nm1portcolors.control),
       InputType('PwMod',        nm1portcolors.control),
     ],
     outputs=[
@@ -4595,7 +4595,7 @@ modules = [
       OutputType('Slave',        nm1portcolors.slave),
     ],
     params=[
-      ParameterType('Pitch',
+      ParameterType('FreqCoarse',
         ParameterDef(  
           default=0,
           low=0,
@@ -4603,7 +4603,7 @@ modules = [
           comment='freqcoarse'
         ),
       ),
-      ParameterType('PitchFine',
+      ParameterType('FreqFine',
         ParameterDef(  
           default=0,
           low=0,
