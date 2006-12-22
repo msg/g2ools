@@ -100,7 +100,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
@@ -131,7 +131,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
@@ -162,7 +162,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -214,7 +214,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('Decay',        parammap.Level_100),
@@ -461,7 +461,7 @@ modules = [
     params=[
       ParameterType('Rate',         parammap.LfoRate_4),
       ParameterType('Range',        parammap.LfoRange_4),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('RateMod',      parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),
       ParameterType('Shape',        parammap.LfoShpAPW),
@@ -490,7 +490,7 @@ modules = [
     params=[
       ParameterType('Rate',         parammap.LfoRate_3),
       ParameterType('PolyMono',     parammap.PolyMono),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('RateMod',      parammap.Level_100),
       ParameterType('Waveform',     parammap.LfoA_Waveform),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -515,7 +515,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('FreqMode',     parammap.FreqMode_2),
       ParameterType('PitchMod',     parammap.Level_100),
     ],
@@ -946,7 +946,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.FltFreq),
       ParameterType('PitchMod',     parammap.Level_200),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('GC',           parammap.GcOffOn),
       ParameterType('Res',          parammap.Res_1),
       ParameterType('Slope',        parammap.FltSlope_1),
@@ -992,7 +992,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.FltFreq),
       ParameterType('PitchMod',     parammap.Level_200),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('GC',           parammap.GcOffOn),
       ParameterType('Res',          parammap.Res_1),
       ParameterType('Slope',        parammap.FltSlope_2),
@@ -1624,7 +1624,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.FltFreq),
       ParameterType('FreqMod',      parammap.Level_100),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('Active',       parammap.ActiveMonitor),
     ],
     modes=[
@@ -1730,7 +1730,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.FltFreq),
       ParameterType('PitchMod',     parammap.Level_200),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('Res',          parammap.Level_100),
       ParameterType('Slope',        parammap.ClassicSlope),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -1772,7 +1772,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('Active',       parammap.ActiveMonitor),
     ],
@@ -1796,7 +1796,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('Waveform',     parammap.OscA_Waveform),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -1874,7 +1874,7 @@ modules = [
       ParameterType('Level',        parammap.Level_100),
       ParameterType('FBMod',        parammap.Level_100),
       ParameterType('Type',         parammap.FltPhaseType),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
     ],
     modes=[],
   ),
@@ -1935,7 +1935,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('Width',        parammap.Level_100),
@@ -2055,7 +2055,7 @@ modules = [
       ParameterType('L',            parammap.LevScaledB),
       ParameterType('BP',           parammap.FreqCoarse),
       ParameterType('R',            parammap.LevScaledB),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
     ],
     modes=[],
   ),
@@ -2426,7 +2426,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.FltFreq),
       ParameterType('FreqMod',      parammap.Level_100),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('Active',       parammap.ActiveMonitor),
     ],
     modes=[
@@ -3058,7 +3058,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.Freq_1),
       ParameterType('PitchMod',     parammap.Level_100),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('FB',           parammap.Bipolar_127),
       ParameterType('FBMod',        parammap.Level_100),
       ParameterType('Type',         parammap.CombType),
@@ -3086,7 +3086,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
@@ -3117,7 +3117,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('SqrLevel',     parammap.Level_100),
@@ -3464,7 +3464,7 @@ modules = [
       OutputType('Out',          g2portcolors.red),
     ],
     params=[
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('Sync',         parammap.OffOn,
         labels=['Switch']
       ),
@@ -3568,7 +3568,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('PhaseMod',     parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -3725,7 +3725,7 @@ modules = [
       ParameterType('Rate',         parammap.LfoRate_4),
       ParameterType('RateMod',      parammap.Level_100),
       ParameterType('Range',        parammap.LfoRange_4),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('Waveform',     parammap.LfoB_Waveform),
       ParameterType('PolyMono',     parammap.PolyMono),
       ParameterType('Phase',        parammap.Phase),
@@ -3841,7 +3841,7 @@ modules = [
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
       ParameterType('FreqMode',     parammap.FreqMode_3),
-      ParameterType('KBT',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.OffOn),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('Decay',        parammap.Level_100),
       ParameterType('Click',        parammap.Level_100),
@@ -3940,7 +3940,7 @@ modules = [
     params=[
       ParameterType('Rate',         parammap.LfoRate_3),
       ParameterType('PolyMono',     parammap.PolyMono),
-      ParameterType('KBT',          parammap.KBT_4),
+      ParameterType('Kbt',          parammap.Kbt_4),
       ParameterType('RateMod',      parammap.Level_100),
       ParameterType('StepProb',     parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),

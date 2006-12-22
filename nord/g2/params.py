@@ -244,7 +244,7 @@ params = [
     definitions=['0 ~ Rate Sub, 1 ~ Rate Lo, 2 ~ Rate Hi, 3 ~ BPM, 4 ~ Clock'],
     comments='Determines [LfoRate_4]'
   ),
-  ParameterDef(name='KBT_4',
+  ParameterDef(name='Kbt_4',
     low=0,
     high=4,
     default=0,
