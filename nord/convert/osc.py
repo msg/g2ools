@@ -5,15 +5,42 @@ from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
 from convert import *
 
+# handledualpitchmod -returns p1,p2,g2mm
+# handle pitch inputs and if necessary, create a Mix-21B for input
+# NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
+#       in that case, the Pitch input could be used (if no knob tied
+#       to the said PitchModX dial).
+def handledualpitchmod(nmm,g2m,conv):
+  p1 = p2 = None
+  if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
+    g2area = conv.g2area
+    g2mm = g2area.addmodule(g2name['Mix2-1B'],
+        horiz=g2m.horiz,vert=g2m.type.height)
+    g2mm.name = 'PitchMod'
+    conv.g2modules.append(g2mm)
+    conv.height = g2mm.vert + g2mm.type.height
+    color=g2cablecolors.red
+    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
+    p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
+    setv(g2m.params.PitchMod,127)
+    cpv(g2mm.params.Lev1,nmm.params.PitchMod1)
+    cpv(g2mm.params.Lev2,nmm.params.PitchMod2)
+  elif len(nmm.inputs.PitchMod1.cables):
+    p1 = g2m.inputs.PitchVar
+    cpv(g2m.params.PitchMod,nmm.params.PitchMod1)
+  elif len(nmm.inputs.PitchMod2.cables):
+    p2 = g2m.inputs.PitchVar
+    cpv(g2m.params.PitchMod,nmm.params.PitchMod2)
+
+  return p1, p2
+
 def handleam(nmm, g2m, conv):
   aminput = None
   output = g2m.outputs.Out
   if len(nmm.inputs.Am.cables):
-    am = conv.g2area.addmodule(g2name['LevMod'])
+    am = conv.g2area.addmodule(g2name['LevMod'],name='AM',
+      horiz=g2m.horiz,vert=g2m.type.height)
     conv.g2modules.append(am)
-    am.name = 'AM'
-    am.vert = g2m.type.height
-    am.horiz = g2m.horiz
     conv.height = am.vert + am.type.height
     conv.g2area.connect(g2m.outputs.Out,am.inputs.In,g2cablecolors.red)
     aminput = am.inputs.Mod
@@ -45,7 +72,7 @@ class ConvOscA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     # handle special inputs
-    p1,p2 = dualpitchmod(nmm,g2m,self)
+    p1,p2 = handledualpitchmod(nmm,g2m,self)
     self.inputs[2:4] = [p1,p2]
 
 class ConvOscB(Convert):
@@ -65,7 +92,7 @@ class ConvOscB(Convert):
     #setv(g2m.params.FreqMode,nmm.modes[0]]
 
     # handle special inputs
-    p1,p2 = dualpitchmod(nmm,g2m,self)
+    p1,p2 = handledualpitchmod(nmm,g2m,self)
     self.inputs[1:3] = [p1, p2]
 
 class ConvOscC(Convert):
@@ -98,14 +125,44 @@ class ConvSpectralOsc(Convert):
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'ConvSpectialOsc not implemented'
+    raise 'ConvSpectralOsc not implemented'
 
 class ConvFormantOsc(Convert):
-  maing2module = 'OscShpA'
+  maing2module = 'OscC'
+  parammap = ['FreqCoarse','FreqFine','Kbt']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'ConvFormantOsc not implemented'
+    nmmp,g2mp = nmm.params, g2m.params
+    area = self.g2area
+
+    # handle special inputs
+    # NOTE: this must be done before adding the rest of the structure
+    #       as it should be placed right below the OscC.
+    p1,p2 = handledualpitchmod(nmm,g2m,self)
+    self.inputs[:2] = [p1,p2]
+
+    vert = self.height
+    modules =[]
+    for mod in ['Invert','RndClkA','ConstSwT']:
+      m = area.addmodule(g2name[mod],horiz=g2m.horiz,vert=vert)
+      modules.append(m)
+      vert += m.type.height
+    self.g2modules.extend(modules)
+    self.height = vert
+
+    # NOTE: not handling Timbre input (yet)
+    inv,rndclka,constswt = modules
+    area.connect(g2m.outputs.Out,inv.inputs.In2,g2cablecolors.red)
+    area.connect(g2m.outputs.Out,rndclka.inputs.Rst,g2cablecolors.red)
+    area.connect(inv.outputs.Out1,inv.inputs.In1,g2cablecolors.orange)
+    area.connect(inv.inputs.In1,rndclka.inputs.Clk,g2cablecolors.orange)
+    area.connect(constswt.outputs.Out,rndclka.inputs.Seed,g2cablecolors.blue)
+
+    setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(constswt.params.Lev,getv(nmm.params.Timbre))
+    
+    self.outputs = [rndclka.outputs.Out]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'

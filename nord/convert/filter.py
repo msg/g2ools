@@ -37,14 +37,11 @@ def fltdualpitchmod(nmm,g2m,conv):
   p1 = p2 = None
   if len(nmm.inputs.FreqMod1.cables) and len(nmm.inputs.FreqMod2.cables):
     g2area = conv.g2area
-    g2mm = g2area.addmodule(g2name['Mix2-1B'])
-    g2mm.name = 'FreqMod'
+    g2mm = g2area.addmodule(g2name['Mix2-1B'],name='FreqMod',
+      horiz=g2m.horiz,vert=g2m.type.height)
     conv.g2modules.append(g2mm)
-    g2mm.horiz = g2m.horiz
-    g2mm.vert = g2m.type.height
     conv.height = g2mm.vert + g2mm.type.height
-    color=g2cablecolors.red
-    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
+    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,g2cablecolors.red)
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
     setv(g2m.params.PitchMod,127)
     cpv(g2mm.params.Lev1,nmm.params.FreqMod1)

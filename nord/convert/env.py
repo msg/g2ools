@@ -3,10 +3,19 @@
 #
 from nord.g2.modules import fromname as g2name
 from convert import *
+from units import nm1tog2time
 
 # ***** NOTE *****
 # The times for A,D,S,R,H are all incorrect and need to be fixed.
 # ****************
+
+# updatetimes - parameters set from constructor, this changes the times
+#               based on the convertion tables in ./units.py.
+def updatetimes(g2mp,times):
+  for time in times:
+    midival = getv(getattr(g2mp,time))
+    newmidival = nm1tog2time(midival)
+    setv(getattr(g2mp,time),newmidival)
 
 class ConvADSR_Env(Convert):
   maing2module = 'EnvADSR'
@@ -19,6 +28,7 @@ class ConvADSR_Env(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
+    updatetimes(g2mp,['Attack','Decay','Release'])
     setv(g2mp.OutputType,[0,3][getv(nmmp.Invert)])
 
 class ConvAD_Env(Convert):
@@ -26,6 +36,13 @@ class ConvAD_Env(Convert):
   parammap = ['Attack',['Release','Decay'],['TG','Gate']]
   inputmap = ['Gate','In','AM']
   outputmap = ['Env','Out']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    # handle special parameters
+    updatetimes(g2mp,['Attack','Release'])
 
 class ConvMod_Env(Convert):
   maing2module = 'ModADSR'
@@ -40,7 +57,7 @@ class ConvMod_Env(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    # NOTE: fix Attack, Decay, Release time as they are different
+    updatetimes(g2mp,['Attack','Decay','Release'])
     setv(g2mp.OutputType,[0,3][getv(nmmp.Invert)])
 
 class ConvAHD_Env(Convert):
@@ -49,6 +66,13 @@ class ConvAHD_Env(Convert):
   inputmap = ['Trig','AttackMod','HoldMod','DecayMod','In','AM']
   outputmap = ['Env','Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    # handle special parameters
+    updatetimes(g2mp,times=['Attack','Hold','Decay'])
+
 class ConvMulti_Env(Convert):
   maing2module = 'EnvMulti'
   parammap = ['Level1','Level2','Level3','Level4',
@@ -56,6 +80,13 @@ class ConvMulti_Env(Convert):
               ['SustainMode','Sustain'],['OutputType','Curve']]
   inputmap = ['Gate','In','AM']
   outputmap = ['Env','Out']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    # handle special parameters
+    updatetimes(g2mp,times=['Time%d' % i for i in range(1,5)]+['NR'])
 
 class ConvEnvFollower(Convert):
   maing2module = 'EnvFollow'

@@ -75,33 +75,3 @@ class Convert:
     for g2mod in self.g2modules:
       g2mod.vert += g2m.vert
 
-# dualpitchmod -returns p1,p2,g2mm
-# handle pitch inputs and if necessary, create a Mix-21B for input
-# NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
-#       in that case, the Pitch input could be used (if no knob tied
-#       to the said PitchModX dial).
-def dualpitchmod(nmm,g2m,conv):
-  p1 = p2 = None
-  if len(nmm.inputs.Pitch1.cables) and len(nmm.inputs.Pitch2.cables):
-    g2area = conv.g2area
-    g2mm = g2area.addmodule(g2name['Mix2-1B'])
-    g2mm.name = 'PitchMod'
-    conv.g2modules.append(g2mm)
-    g2mm.horiz = g2m.horiz
-    g2mm.vert = g2m.type.height
-    conv.height = g2mm.vert + g2mm.type.height
-    color=g2cablecolors.red
-    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
-    p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
-    setv(g2m.params.PitchMod,127)
-    cpv(g2mm.params.Lev1,nmm.params.PitchMod1)
-    cpv(g2mm.params.Lev2,nmm.params.PitchMod2)
-  elif len(nmm.inputs.Pitch1.cables):
-    p1 = g2m.inputs.PitchVar
-    cpv(g2m.params.PitchMod,nmm.params.PitchMod1)
-  elif len(nmm.inputs.Pitch2.cables):
-    p2 = g2m.inputs.PitchVar
-    cpv(g2m.params.PitchMod,nmm.params.PitchMod2)
-
-  return p1, p2
-

@@ -29,13 +29,12 @@ class ConvGainControl(Convert):
 
     shift = getv(nmmp.Shift)
     if shift:
-      conv = self.g2area.addmodule(g2name['LevConv'])
-      setv(conv.params.OutputType,2) # Pos (I think)
-      conv.horiz = g2m.horiz
-      conv.vert = g2m.type.height
-      self.height = conv.vert + conv.type.height
+      conv = self.g2area.addmodule(g2name['LevConv'],
+        horiz=g2m.horiz,vert=g2m.type.height)
       self.g2modules.append(conv)
+      self.height = conv.vert + conv.type.height
       self.g2area.connect(conv.outputs.Out,g2m.inputs.Mod,g2cablecolors.blue)
+      setv(conv.params.OutputType,2) # Pos (I think)
       self.inputs[0] = conv.inputs.In
 
 class ConvX_Fade(Convert):
@@ -98,14 +97,12 @@ class Conv4_1Switch(Convert):
       if level == 0 or level == 127:
         continue
       if len(nmm.inputs[i-1].cables):
-        amp = self.g2area.addmodule(g2name['LevAmp'])
+        amp = self.g2area.addmodule(g2name['LevAmp'],horiz=g2m.horiz,vert=vert)
         self.g2modules.append(amp)
-        amp.horiz = g2m.horiz
-        amp.vert = vert
         vert += amp.type.height
-        setv(amp.params.Gain,getv(getattr(nmmp,'Level%d' % i)))
         self.g2area.connect(amp.outputs.Out,getattr(g2m.inputs,'In%d' % i),
            g2cablecolors.blue)
+        setv(amp.params.Gain,getv(getattr(nmmp,'Level%d' % i)))
         self.inputs[i-1] = amp.inputs.In
     self.height = vert
 
@@ -126,13 +123,11 @@ class Conv1_4Switch(Convert):
     level = getv(nmmp.Level)
     if level != 0 or level != 127:
       # add LevAmp module
-      amp = self.g2area.addmodule(g2name['LevAmp'])
+      amp = self.g2area.addmodule(g2name['LevAmp'],horiz=g2m.horiz,vert=vert)
       self.g2modules.append(amp)
-      amp.horiz = g2m.horiz
-      amp.vert = vert
       vert += amp.type.height
-      setv(amp.params.Gain,level)
       self.g2area.connect(amp.outputs.Out,g2m.inputs.In,g2cablecolors.blue)
+      setv(amp.params.Gain,level)
       self.inputs[0] = amp.inputs.In
 
 class ConvAmplifier(Convert):

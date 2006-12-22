@@ -59,11 +59,10 @@ class ConvKeyQuant(Convert):
   outputmap = ['Out']
 
 class ConvPartialGen(Convert):
-  maing2module = 'Name'
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule,self.g2module
-    raise 'PartialGen not implemented'
+  maing2module = 'PartQuant'
+  parammap = ['Range']
+  inputmap = ['In']
+  outputmap = ['Out']
 
 class ConvControlMixer(Convert):
   maing2module = 'Mix2-1B'

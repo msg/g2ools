@@ -23,11 +23,8 @@ class ConvKeyboardPatch(Convert):
     s=g2m
     vert = g2m.type.height
     for nm in ['Keyboard'] + [ 'DlyClock' ] * 3:
-      m = g2area.addmodule(g2name[nm])
-      m.name = ''
+      m = g2area.addmodule(g2name[nm],name='',horiz=nmm.horiz,vert=vert)
       self.g2modules.append(m)
-      m.horiz = nmm.horiz
-      m.vert = vert
       vert += m.type.height
     self.height = vert
 
@@ -116,10 +113,8 @@ class ConvKeyboardSplit(Convert):
                ['DlyClock','Note'],
                ['DlyClock','Vel'] ]
     for mod,nm in struct:
-      m = g2area.addmodule(g2name[mod])
+      m = g2area.addmodule(g2name[mod],name=nm,vert=vert,horiz=g2m.horiz)
       self.g2modules.append(m)
-      m.name = nm
-      m.vert = vert
       vert += m.type.height
     self.height = vert
 
