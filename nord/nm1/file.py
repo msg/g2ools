@@ -246,14 +246,12 @@ class KnobMapDump(Section):
       sect,index,param,knob = vals
       knobs[i].knob = knob
       if sect == 1:
-        area = self.patch.voice
+        knobs[i].param = self.patch.voice.findmodule(index).params[param]
       elif sect == 0:
-        area = self.patch.fx
+        knobs[i].param = self.patch.fx.findmodule(index).params[param]
       else:
-        # morph knob
-        knobs[i].param = [sect, param]
+        knobs[i].param = self.patch.morphs[param]
         continue
-      knobs[i].param = area.findmodule(index).params[param]
 
 class Ctrl:
   pass

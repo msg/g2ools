@@ -722,8 +722,10 @@ class KnobAssignments(Section):
         bit,param = getbits(bit,7,data)
         if area == 1:
           k.param = patch.voice.findmodule(index).params[param]
-        else:
+        elif area == 0:
           k.param = patch.fx.findmodule(index).params[param]
+        else:
+          k.param = patch.settings.morph[param]
         #print '  %s%d-%d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7)
 
   def format(self, patch):
