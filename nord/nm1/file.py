@@ -114,7 +114,7 @@ class CableDump(Section):
         line = ' '.join(line.split()[1:])
       sect = 1
     else:
-      sect = int(lines.pop(0))
+      sect = int(line)
     if sect:
       area = self.patch.voice
     else:
@@ -293,6 +293,7 @@ class Notes(Section):
 class Area:
   def __init__(self):
     self.modules = []
+    self.cables = []
 
   def findmodule(self, index):
     for m in self.modules:
