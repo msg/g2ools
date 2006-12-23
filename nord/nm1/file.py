@@ -108,7 +108,10 @@ class Cable:
 class CableDump(Section):
   def parse(self):
     lines = self.lines
-    if len(lines[0]) > 1:
+    line = lines.pop(0)
+    if len(line) > 1:
+      if len(line.split()) == 8:
+        line = ' '.join(line.split()[1:])
       sect = 1
     else:
       sect = int(lines.pop(0))
@@ -239,13 +242,18 @@ class KnobMapDump(Section):
   def parse(self):
     knobs = self.patch.knobs = [ Knob() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
-      sect,index,param,knob = map(int, self.lines[i].split())
-      if sect:
-        area = self.patch.voice
-      else:
-        area = self.patch.fx
-      knobs[i].param = area.findmodule(index).params[param]
+      vals = map(int, self.lines[i].split())
+      sect,index,param,knob = vals
       knobs[i].knob = knob
+      if sect == 1:
+        area = self.patch.voice
+      elif sect == 0:
+        area = self.patch.fx
+      else:
+        # morph knob
+        knobs[i].param = [sect, param]
+        continue
+      knobs[i].param = area.findmodule(index).params[param]
 
 class Ctrl:
   pass
