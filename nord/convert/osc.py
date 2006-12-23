@@ -21,6 +21,7 @@
 #
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
+from nord.nm1.colors import nm1cablecolors
 from convert import *
 
 # handledualpitchmod -returns p1,p2,g2mm
@@ -28,15 +29,16 @@ from convert import *
 # NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
 #       in that case, the Pitch input could be used (if no knob tied
 #       to the said PitchModX dial).
-def handledualpitchmod(nmm,g2m,conv):
+def handledualpitchmod(conv):
+  nmm, g2m = conv.nmmodule, conv.g2module
   p1 = p2 = None
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
     g2area = conv.g2area
     g2mm = g2area.addmodule(g2name['Mix2-1B'],
-        horiz=g2m.horiz,vert=g2m.type.height)
+        horiz=g2m.horiz,vert=conv.height)
     g2mm.name = 'PitchMod'
     conv.g2modules.append(g2mm)
-    conv.height = g2mm.vert + g2mm.type.height
+    conv.height += g2mm.type.height
     color=g2cablecolors.red
     g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
@@ -52,25 +54,46 @@ def handledualpitchmod(nmm,g2m,conv):
 
   return p1, p2
 
-def handleam(nmm, g2m, conv):
+def handleam(conv):
+  nmm, g2m = conv.nmmodule, conv.g2module
   aminput = None
   output = g2m.outputs.Out
   if len(nmm.inputs.Am.cables):
     am = conv.g2area.addmodule(g2name['LevMod'],name='AM',
-      horiz=g2m.horiz,vert=g2m.type.height)
+      horiz=g2m.horiz,vert=conv.height)
     conv.g2modules.append(am)
-    conv.height = am.vert + am.type.height
+    conv.height += am.type.height
     conv.g2area.connect(g2m.outputs.Out,am.inputs.In,g2cablecolors.red)
     aminput = am.inputs.Mod
     output = am.outputs.Out
   return aminput, output
 
+def handlemst(conv):
+  nmm, g2m = conv.nmmodule, conv.g2module
+  if len(nmm.outputs.Slv.cables):
+    # add a masterosc
+    master = conv.g2area.addmodule(g2name['OscMaster'],
+        horiz=g2m.horiz,vert=conv.height)
+    conv.g2modules.append(master)
+    conv.height += master.type.height
+    return master.outputs.Out
+  else:
+    return None
+
 class ConvMasterOsc(Convert):
   maing2module = 'OscMaster'
+  parammap = ['FreqCoarse','FreqFine','Kbt']
+  outputmap = ['Out']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'MasterOsc not implemented'
+
+    # handle special inputs
+    p1,p2 = handledualpitchmod(self)
+    self.inputs[:2] = [p1,p2]
+
+    for cable in nmm.outputs.Slv.cables:
+      cable.color = nm1cablecolors.blue
 
 class ConvOscA(Convert):
   maing2module = 'OscB'
@@ -87,11 +110,15 @@ class ConvOscA(Convert):
     # NOTE: since shape can be 0% - 100%, a LevConv could be used
     #       to get the actual waveform, if necessary.
     setv(g2mp.Shape,abs(getv(nmmp.PulseWidth)-64)*2)
+    if getv(nmmp.Kbt) == 0:
+      setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     # handle special inputs
-    p1,p2 = handledualpitchmod(nmm,g2m,self)
+    p1,p2 = handledualpitchmod(self)
     self.inputs[2:4] = [p1,p2]
+    slv = handlemst(self)
+    self.outputs[1] = slv
 
 class ConvOscB(Convert):
   maing2module = 'OscB'
@@ -105,17 +132,21 @@ class ConvOscB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special special parameters
-    # handle KBT later = nmm.params.FreqKbt)
+    if getv(nmmp.Kbt) == 0:
+      setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
     #setv(g2m.params.FreqMode,nmm.modes[0]]
 
     # handle special inputs
-    p1,p2 = handledualpitchmod(nmm,g2m,self)
+    p1,p2 = handledualpitchmod(self)
     self.inputs[1:3] = [p1, p2]
+    slv = handlemst(self)
+    self.outputs[1] = slv
+
 
 class ConvOscC(Convert):
   maing2module = 'OscC'
-  parammap = ['FreqCoarse', 'FreqFine',
+  parammap = ['FreqCoarse', 'FreqFine','Kbt',
               ['PitchMod','FreqMod'],['FmAmount','FmMod']]
   inputmap = [ 'FmMod','Pitch',None]
   outputmap = [ 'Out',None ]
@@ -134,7 +165,7 @@ class ConvOscC(Convert):
     #setv(g2mp.FreqMode,nmm.modes[0])
     
     # add AM if needed, handle special io
-    aminput, output = handleam(nmm,g2m,self)
+    aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
 
@@ -157,7 +188,7 @@ class ConvFormantOsc(Convert):
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
-    p1,p2 = handledualpitchmod(nmm,g2m,self)
+    p1,p2 = handledualpitchmod(self)
     self.inputs[:2] = [p1,p2]
 
     vert = self.height
@@ -179,8 +210,9 @@ class ConvFormantOsc(Convert):
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
-    
-    self.outputs = [rndclka.outputs.Out]
+
+    slv = handlemst(self)
+    self.outputs = [rndclka.outputs.Out,slv]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'
@@ -188,7 +220,7 @@ class ConvOscSlvA(Convert):
               ['FreqCoarse','DetuneCoarse'],
               ['FreqFine','DetuneFine'],
               ['FmAmount','FmMod'],]
-  inputmap = ['FmMod','Pitch',None]
+  inputmap = ['Pitch','FmMod','Pitch']
   outputmap = ['Out']
 
   def domodule(self):
@@ -197,11 +229,12 @@ class ConvOscSlvA(Convert):
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
+
     #setv(g2mp.FreqMode,nmm.modes[0])
 
     # handle special io
     # add AM if needed
-    aminput, output = handleam(nmm,g2m,self)
+    aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
 
@@ -219,7 +252,7 @@ class ConvOscSlvB(Convert):
   parammap = [['FreqCoarse','DetuneCoarse'],
               ['FreqFine','DetuneFine'],
               ['ShapeMod','PwMod'],]
-  inputmap = [None,'ShapeMod']
+  inputmap = ['Pitch','ShapeMod']
   outputmap = ['Out']
 
   def domodule(self):
@@ -241,7 +274,7 @@ class ConvOscSlvC(Convert):
   parammap = [['FreqCoarse','DetuneCoarse'],
               ['FreqFine','DetuneFine'],
               ['FmAmount','FmMod'],]
-  inputmap = [None,'FmMod',None] # no Mst, possible AM
+  inputmap = ['Pitch','FmMod',None] # no Mst, possible AM
   outputmap = ['Out']
 
   def domodule(self):
@@ -265,7 +298,7 @@ class ConvOscSlvE(ConvOscSlvC):
 
     # handle special io
     # add AM if needed
-    aminput, output = handleam(nmm,g2m,self)
+    aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
 
@@ -278,7 +311,7 @@ class ConvOscSineBank(Convert):
 
 class ConvOscSlvFM(ConvOscSlvC):
   waveform = 0 # sine
-  inputmap = [None,'FmMod','Sync'] # no Mst
+  inputmap = ['Pitch','FmMod','Sync'] # no Mst
  
 class ConvNoise(Convert):
   maing2module = 'Noise'
@@ -300,7 +333,7 @@ class ConvPercOsc(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     # add AM if needed
-    aminput, output = handleam(nmm,g2m,self)
+    aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[1] = aminput
 
