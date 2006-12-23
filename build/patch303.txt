@@ -115,7 +115,7 @@ height 6
 parameters
 0 "freq coarse" 0..127 "freqcoarse"
 1 "freq fine" 0..127 "freqfine"
-2 "freq kbt" 0..127 "freqkbt"
+2 "kbt" 0..127 "freqkbt"
 3 "Pulse width" 0..127 "pulsewidth"
 4 "waveform" 0..3 "waveform1"
 5 "pitch mod 1" 0..127 ""
@@ -147,7 +147,7 @@ height 6
 parameters
 0 "Freq coarse" 0..127 "freqcoarse"
 1 "Freq fine" 0..127 "freqfine"
-2 "Freq kbt" 0..127 "freqkbt"
+2 "kbt" 0..127 "freqkbt"
 3 "waveform" 0..3 "waveform1"
 4 "pitch mod 1" 0..127 ""
 5 "pitch mod 2" 0..127 ""
@@ -177,7 +177,7 @@ height 4
 parameters
 0 "freq coarse" 0..127 "freqcoarse"
 1 "freq fine" 0..127 "freqfine"
-2 "freq kbt" 0..1 "onoff"
+2 "kbt" 0..1 "onoff"
 3 "freq mod" 0..127 ""
 4 "fm mod" 0..127 ""
 5 "mute" 0..1 "onoff"
@@ -1975,7 +1975,7 @@ inputs
 2 "timbre" control
 outputs
 0 "out" audio
-1 "slave" slave
+1 "slv" slave
 custom
 0 "freq display units" 0..1 "freqdisplunits"
 ----------
@@ -1989,8 +1989,8 @@ zeropage 0.87500
 dynmem 0.50000
 height 3
 parameters
-0 "pitch" 0..127 "freqcoarse"
-1 "pitch fine" 0..127 "freqfine"
+0 "freq coarse" 0..127 "freqcoarse"
+1 "freq fine" 0..127 "freqfine"
 2 "kbt" 0..1 "onoff"
 3 "pitch mod 1" 0..127 ""
 4 "pitch mod 2" 0..127 ""
@@ -1998,7 +1998,7 @@ inputs
 0 "pitch mod 1" control
 1 "pitch mod 2" control
 outputs
-0 "slave" slave
+0 "slv" slave
 custom
 0 "freq display units" 0..1 "freqdisplunits"
 ----------

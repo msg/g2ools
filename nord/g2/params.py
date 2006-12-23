@@ -1,23 +1,4 @@
 #!/usr/bin/env python
-#
-# Copyright: Matt Gerassimoff 2007
-#
-# This file is part of g2ools.
-#
-# g2ools is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# g2ools is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Foobar; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
 
 from nord.types import Struct
 
@@ -217,8 +198,8 @@ params = [
   ParameterDef(name='LfoRate_3',
     low=0,
     high=127,
-    default=0,
-    definitions=['0 ~ 699s, 127 ~ 5.46s', '0 ~ 62.9s, 127 ~ 24.4 Hz', '0 ~ 0.26 Hz, 127 ~ 392 Hz', '0 ~ 24, 127 ~ 214'],
+    default=1,
+    definitions=['0 ~ 699s, 127 ~ 5.46s', '1 ~ 62.9s, 127 ~ 24.4 Hz', '2 ~ 0.26 Hz, 127 ~ 392 Hz', '3 ~ 24, 127 ~ 214'],
     comments='Sub, Lo, Hi, BPM =BPM is the same as for RateBpm). Determined by [LfoRange_3]'
   ),
   ParameterDef(name='PolyMono',
@@ -238,7 +219,7 @@ params = [
   ParameterDef(name='LfoRange_3',
     low=0,
     high=3,
-    default=0,
+    default=1,
     definitions=['0 ~ Rate Sub, 1 ~ Rate Lo, 2 ~ Rate Hi, 3 ~ BPM'],
     comments='Determines [LfoRate_3]'
   ),
@@ -252,8 +233,8 @@ params = [
   ParameterDef(name='LfoRate_4',
     low=0,
     high=127,
-    default=0,
-    definitions=['0 ~ 699s, 127 ~ 5.46s', '0 ~ 62.9s, 127 ~ 24.4 Hz', '0 ~ 0.26 Hz, 127 ~ 392 Hz', '0 ~ 24, 127 ~ 214', '0 ~ 64/1, 64 ~ 1/4D, 127 ~ 1/64T'],
+    default=1,
+    definitions=['0 ~ 699s, 127 ~ 5.46s', '1 ~ 62.9s, 127 ~ 24.4 Hz', '2 ~ 0.26 Hz, 127 ~ 392 Hz', '3 ~ 24, 127 ~ 214', '4 ~ 64/1, 64 ~ 1/4D, 127 ~ 1/64T'],
     comments='Sub, Lo, Hi, BPM, Clock =BPM is the same as for RateBpm). Determined by [LfoRange_4]'
   ),
   ParameterDef(name='LfoRange_4',
@@ -262,6 +243,13 @@ params = [
     default=0,
     definitions=['0 ~ Rate Sub, 1 ~ Rate Lo, 2 ~ Rate Hi, 3 ~ BPM, 4 ~ Clock'],
     comments='Determines [LfoRate_4]'
+  ),
+  ParameterDef(name='Kbt_1',
+    low=0,
+    high=4,
+    default=1,
+    definitions=['0 ~ Off, 1 ~ On'],
+    comments=''
   ),
   ParameterDef(name='Kbt_4',
     low=0,

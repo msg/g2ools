@@ -1,23 +1,4 @@
 #!/usr/bin/env python
-#
-# Copyright: Matt Gerassimoff 2007
-#
-# This file is part of g2ools.
-#
-# g2ools is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# g2ools is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Foobar; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
 
 from nord.types import *
 from nord.g2.colors import g2portcolors
@@ -119,7 +100,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
@@ -150,7 +131,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
@@ -181,7 +162,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -233,7 +214,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('Decay',        parammap.Level_100),
@@ -534,7 +515,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('FreqMode',     parammap.FreqMode_2),
       ParameterType('PitchMod',     parammap.Level_100),
     ],
@@ -1791,7 +1772,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('Active',       parammap.ActiveMonitor),
     ],
@@ -1815,7 +1796,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('Waveform',     parammap.OscA_Waveform),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -1954,7 +1935,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('Width',        parammap.Level_100),
@@ -2074,7 +2055,7 @@ modules = [
       ParameterType('L',            parammap.LevScaledB),
       ParameterType('BP',           parammap.FreqCoarse),
       ParameterType('R',            parammap.LevScaledB),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
     ],
     modes=[],
   ),
@@ -3105,7 +3086,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('FmAmount',     parammap.Level_100),
@@ -3136,7 +3117,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('SqrLevel',     parammap.Level_100),
@@ -3483,7 +3464,7 @@ modules = [
       OutputType('Out',          g2portcolors.red),
     ],
     params=[
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('Sync',         parammap.OffOn,
         labels=['Switch']
       ),
@@ -3587,7 +3568,7 @@ modules = [
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('PhaseMod',     parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),
@@ -3860,7 +3841,7 @@ modules = [
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
       ParameterType('FreqFine',     parammap.FreqFine),
       ParameterType('FreqMode',     parammap.FreqMode_3),
-      ParameterType('Kbt',          parammap.OffOn),
+      ParameterType('Kbt',          parammap.Kbt_1),
       ParameterType('PitchMod',     parammap.Level_100),
       ParameterType('Decay',        parammap.Level_100),
       ParameterType('Click',        parammap.Level_100),

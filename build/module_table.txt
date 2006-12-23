@@ -89,7 +89,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 4', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100',
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100',
     'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'OscBWaveform',
     'ActiveMonitor', 'FmLinTrk'])
     modetypes([])
@@ -109,7 +109,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges(['0 .. 7'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'ActiveMonitor', 'FmLinTrk'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100', 'FreqMode_3', 'Level_100', 'PW', 'Level_100', 'ActiveMonitor', 'FmLinTrk'])
     modetypes(['OscWaveform_3'])
   )
   module(
@@ -127,7 +127,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 127', '0 .. 1', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 5'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'Level_100', 'ActiveMonitor', 'FmLinTrk', 'Level_100'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'FreqMode_3', 'Level_100', 'ActiveMonitor', 'FmLinTrk', 'Level_100'])
     modetypes(['OscWaveform_2'])
   )
   module(
@@ -163,7 +163,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'ActiveMonitor'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -379,7 +379,7 @@ ModuleKnowledge(
     outputtypes(['blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 2', '0 .. 127'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_2', 'Level_100'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'FreqMode_2', 'Level_100'])
     modetypes([])
   )
   module(
@@ -1405,7 +1405,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 1'])
     moderanges(['0 .. 5'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'ActiveMonitor'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'FreqMode_3', 'ActiveMonitor'])
     modetypes(['OscWaveform_2'])
   )
   module(
@@ -1423,7 +1423,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 5', '0 .. 1', '0 .. 3'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'OscA_Waveform', 'ActiveMonitor', 'FreqMode_3'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100', 'OscA_Waveform', 'ActiveMonitor', 'FreqMode_3'])
     modetypes([])
   )
   module(
@@ -1531,7 +1531,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'ActiveMonitor'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -1621,7 +1621,7 @@ ModuleKnowledge(
     outputtypes(['blue', 'blue_red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['LevScaledB', 'FreqCoarse', 'LevScaledB', 'OffOn'])
+    paramtypes(['LevScaledB', 'FreqCoarse', 'LevScaledB', 'Kbt_1'])
     modetypes([])
   )
   module(
@@ -2287,7 +2287,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 5', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'FmLinTrk', 'PW', 'Level_100', 'OscShpA_Waveform', 'ActiveMonitor'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100', 'FreqMode_3', 'Level_100', 'FmLinTrk', 'PW', 'Level_100', 'OscShpA_Waveform', 'ActiveMonitor'])
     modetypes([])
   )
   module(
@@ -2305,7 +2305,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 3', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'Level_100', 'Phase', 'Level_100', 'ActiveMonitor', 'PW', 'Level_100', 'OffOn'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'Level_100', 'FreqMode_3', 'Level_100', 'Level_100', 'Level_100', 'Phase', 'Level_100', 'ActiveMonitor', 'PW', 'Level_100', 'OffOn'])
     modetypes([])
   )
   module(
@@ -2557,7 +2557,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 1', '0 .. 1', '0 .. 1', '0 .. 31', '0 .. 99', '0 .. 14', '0 .. 7', '0 .. 7', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 99', '0 .. 7', '0 .. 99', '0 .. 3', '0 .. 99', '0 .. 3', '0 .. 99', '0 .. 99', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['OffOn', 'OffOn', 'RatioFixed', 'OpFreqCoarse', 'OpFreqFine', 'OpFreqDetune', 'OpVel', 'OpRateScale', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpAmod', 'OpBrPpoint', 'OpDepthMode', 'OpDepth', 'OpDepthMode', 'OpDepth', 'OpLevel', 'ActiveMonitor', 'OffOn'])
+    paramtypes(['Kbt_1', 'OffOn', 'RatioFixed', 'OpFreqCoarse', 'OpFreqFine', 'OpFreqDetune', 'OpVel', 'OpRateScale', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpTime', 'OpLevel', 'OpAmod', 'OpBrPpoint', 'OpDepthMode', 'OpDepth', 'OpDepthMode', 'OpDepth', 'OpLevel', 'ActiveMonitor', 'OffOn'])
     modetypes([])
   )
   module(
@@ -2611,7 +2611,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1', '0 .. 3', '0 .. 127', '0 .. 1', '0 .. 127'])
     moderanges(['0 .. 1'])
-    paramtypes(['FreqCoarse', 'FreqFine', 'OffOn', 'FreqMode_3', 'Level_100', 'ActiveMonitor', 'Level_100'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'Kbt_1', 'FreqMode_3', 'Level_100', 'ActiveMonitor', 'Level_100'])
     modetypes(['OscWaveform_1'])
   )
   module(
@@ -2827,7 +2827,7 @@ ModuleKnowledge(
     outputtypes(['red'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 3', '0 .. 1', '0 .. 127', '0 .. 127', '0 .. 127', '0 .. 1', '0 .. 1'])
     moderanges([])
-    paramtypes(['FreqCoarse', 'FreqFine', 'FreqMode_3', 'OffOn', 'Level_100', 'Level_100', 'Level_100', 'OffOn', 'ActiveMonitor'])
+    paramtypes(['FreqCoarse', 'FreqFine', 'FreqMode_3', 'Kbt_1', 'Level_100', 'Level_100', 'Level_100', 'OffOn', 'ActiveMonitor'])
     modetypes([])
   )
   module(

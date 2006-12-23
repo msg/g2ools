@@ -1,23 +1,4 @@
 #!/usr/bin/env python
-#
-# Copyright: Matt Gerassimoff 2007
-#
-# This file is part of g2ools.
-#
-# g2ools is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# g2ools is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Foobar; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
 
 from nord.types import *
 from nord.nm1.colors import nm1portcolors
@@ -183,7 +164,7 @@ modules = [
           comment='freqfine'
         ),
       ),
-      ParameterType('FreqKbt',
+      ParameterType('Kbt',
         ParameterDef(  
           default=0,
           low=0,
@@ -290,7 +271,7 @@ modules = [
           comment='freqfine'
         ),
       ),
-      ParameterType('FreqKbt',
+      ParameterType('Kbt',
         ParameterDef(  
           default=0,
           low=0,
@@ -388,7 +369,7 @@ modules = [
           comment='freqfine'
         ),
       ),
-      ParameterType('FreqKbt',
+      ParameterType('Kbt',
         ParameterDef(  
           default=0,
           low=0,
@@ -4611,7 +4592,7 @@ modules = [
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slave',        nm1portcolors.slave),
+      OutputType('Slv',          nm1portcolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -4691,10 +4672,10 @@ modules = [
       InputType('PitchMod2',    nm1portcolors.control),
     ],
     outputs=[
-      OutputType('Slave',        nm1portcolors.slave),
+      OutputType('Slv',          nm1portcolors.slave),
     ],
     params=[
-      ParameterType('Pitch',
+      ParameterType('FreqCoarse',
         ParameterDef(  
           default=0,
           low=0,
@@ -4702,7 +4683,7 @@ modules = [
           comment='freqcoarse'
         ),
       ),
-      ParameterType('PitchFine',
+      ParameterType('FreqFine',
         ParameterDef(  
           default=0,
           low=0,
