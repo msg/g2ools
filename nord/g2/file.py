@@ -1112,7 +1112,7 @@ Info=BUILD 266\r
   # read - this is where the rubber meets the road.  it start here....
   def read(self, fname):
     self.fname = fname
-    bindata = open(fname).read()
+    bindata = open(fname,'rb').read()
     data = bindata[:]
     null = data.find('\0')
     if null < 0:
