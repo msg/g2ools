@@ -20,6 +20,7 @@
 #
 
 import sys
+from glob import glob
 sys.path.append('.')
 from nord.g2.file import Pch2File
 from nord.g2.modules import fromname as g2name
@@ -121,8 +122,11 @@ def convert(pch):
         #print source.index, dest.index
         #print source.module.type.shortnm, dest.module.type.shortnm
         #print source.module.type.shortnm, dest.module.type.shortnm
-        g2area.connect(g2source,g2dest,
-            source.nets[0].output.type.type)
+        if source.nets[0].output.type.type == nm1portcolors.slave:
+          color = g2cablecolors.purple
+        else:
+          color = source.nets[0].output.type.type
+        g2area.connect(g2source,g2dest,color)
 
     # now parse the entire netlist of the area and .uprate=1 all
     # modules with blue_red and yello_orange inputs connected to red outputs.
@@ -215,8 +219,9 @@ def convert(pch):
   
 prog = sys.argv.pop(0)
 while len(sys.argv):
-  fname = sys.argv.pop(0)
-  print '"%s"' % fname
-  # general algorithm for converter:
-  convert(PchFile(fname))
+  patchlist = glob(sys.argv.pop(0))
+  for fname in patchlist:
+    print '"%s"' % fname
+    # general algorithm for converter:
+    convert(PchFile(fname))
 
