@@ -23,9 +23,37 @@ import string, struct, sys
 from nord.net import updatenetlist
 from nord.module import Module
 from array import array
-from home import hexdump, bin
 import modules
 
+def out(x):
+  if x < 32 or x > 127:
+    return '.'
+  return chr(x)
+
+def hexdump(bytes,addr=0,size=1):
+  from array import array
+  '''hexdump(bytes,addr,size) -> return hex dump of size itmes using addr as address'''
+  s = []
+  if size == 4:
+    a = array('L', [])
+    fmt = '%08x'
+    l = 17
+  elif size == 2:
+    a = array('H', [])
+    fmt = '%04x'
+    l = 19
+  else:
+    a = array('B', [])
+    fmt = '%02x'
+    l = 23
+  a.fromstring(bytes)
+  for off in range(0,len(bytes),16):
+    hex = [fmt % i for i in a[off/size:(off+16)/size]]
+    s.append('%06x: %-*s  %-*s | %s' % (addr+off,
+      l, ' '.join(hex[:8/size]), l, ' '.join(hex[8/size:]),
+      ''.join([out(ord(byte)) for byte in bytes[off:off+16]])))
+  return '\n'.join(s)
+ 
 # calculate crc of 1 char
 def crc16(val, icrc):
   k = (((icrc>>8)^val)&0xff)<<8
