@@ -20,7 +20,7 @@
 #
 
 import string, struct, sys
-from nord.net import updatenetlist
+from nord.net import addnet
 from nord.module import Module
 from array import array
 import modules
@@ -372,7 +372,7 @@ class CableList(Section):
         c.source.cables.append(c)
         c.dest.cables.append(c)
 
-        updatenetlist(area.netlist, c.source, c.dest)
+        addnet(area.netlist, c.source, c.dest)
 
   def format(self, patch):
     data = array('B',[])
@@ -1063,7 +1063,7 @@ class Area:
     cable.dest = dest
     dest.cables.append(cable)
 
-    updatenetlist(self.netlist, cable.source, cable.dest)
+    addnet(self.netlist, cable.source, cable.dest)
 
   def disconnect(self, connection):
     raise 'disconnect: function not implemented'

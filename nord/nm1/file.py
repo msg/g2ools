@@ -20,7 +20,7 @@
 #
 
 import re, string, sys
-from nord.net import updatenetlist
+from nord.net import addnet
 from nord.module import Module
 import modules
 
@@ -150,8 +150,8 @@ class CableDump(Section):
         dest.cables = []
       dest.cables.append(c)
 
-      # update netlist with nodes
-      updatenetlist(area.netlist, source, dest)
+      # update netlist with source and dest
+      addnet(area.netlist, source, dest)
 
 class Parameter:
   pass

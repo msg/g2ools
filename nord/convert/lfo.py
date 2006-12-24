@@ -23,6 +23,15 @@ from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
 from convert import *
 
+def handlemst(conv):
+  pass
+  # if the mst connection used
+  #   if net.output.module is a Lfo
+  #     get the ratio from the slave lfo
+  #     set rate of the g2 module as the ratio of the masters Lfo's rate
+  #     disconnect slv cable
+  #   
+
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
   parammap = ['Rate','Range','RateMod',['PolyMono','Mono']]

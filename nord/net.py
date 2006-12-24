@@ -25,8 +25,8 @@ class Net:
     self.output = output
     self.inputs = inputs
 
-# updatenetlist - update the netlist based on source and dest
-def updatenetlist(netlist, source, dest):
+# addnet - update the netlist adding source and dest
+def addnet(netlist, source, dest):
   found = 0
   for net in netlist:
     if source == net.output or source in net.inputs or dest in net.inputs:
@@ -58,3 +58,9 @@ def updatenetlist(netlist, source, dest):
   if not net in dest.nets:
     dest.nets.append(net)
 
+# delnet - update the netlist removing source and dest
+def delnet(netlist, source, dest):
+  pass
+  # find net with both source and dest on it
+  # remove dest from net
+  #   
