@@ -117,9 +117,15 @@ class ConvLFOSlvE(ConvLFOSlvC):
 
 class ConvClkGen(Convert):
   maing2module = 'ClkGen'
-  parammap = [['Tempo','Rate'],['Active','On/Off']]
+  parammap = [['Tempo','Rate']]
   inputmap = ['Rst']
   outputmap = ['1/96','1/16',None,'Sync'] # n oSlv
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule,self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Active,1-getv(getattr(nmmp,'On/Off')))
 
 class ConvClkRndGen(Convert):
   maing2module = 'RndClkA'
