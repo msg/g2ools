@@ -34,7 +34,7 @@ class IOMember(Member):
     Member.__init__(self, module, type, index)
     self.rate = type.type
     self.cables = []
-    self.nets = []
+    self.net = None
 
 class Input(IOMember):
   direction = 0

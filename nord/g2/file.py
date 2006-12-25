@@ -1250,7 +1250,7 @@ Info=BUILD 266\r
 #     input.type
 #     input.rate
 #     input.cables[i]
-#     input.nets[i]
+#     input.net
 #   output = module.outputs[i] # same members as input
 #   param = module.params[i]
 #     param.module

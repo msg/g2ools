@@ -52,15 +52,14 @@ def addnet(netlist, source, dest):
     netlist.append(net)
 
   # update source and dest nets list
-  if not net in source.nets:
-    source.nets.append(net)
+  if not source.net:
+    source.net = net
 
-  if not net in dest.nets:
-    dest.nets.append(net)
+  if not dest.net:
+    dest.net = net
 
-# delnet - update the netlist removing source and dest
-def delnet(netlist, source, dest):
+# delnode - update the netlist removing the node srcdest
+def delnode(netlist, srcdest):
   pass
   # find net with both source and dest on it
   # remove dest from net
-  #   

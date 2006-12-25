@@ -398,9 +398,9 @@ if __name__ == '__main__':
 #   src = cable.source
 #     src.rate
 #     src.cables
-#     src.nets
+#     src.net
 #   dest = cable.dest # same as src
-#   net = src.nets[0]
+#   net = src.net
 #     net.output
 #     net.inputs[i]
 #   param = module.params[i]
