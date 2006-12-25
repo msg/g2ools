@@ -54,13 +54,21 @@ def convert(pch):
   pch2 = Pch2File('./nord/convert/initpatch.pch2')
   nmpatch = pch.patch
   g2patch = pch2.patch
-  cablecolors = {
+  nm2g2colors = {
     nm1cablecolors.red:    g2cablecolors.red,
     nm1cablecolors.blue:   g2cablecolors.blue,
     nm1cablecolors.yellow: g2cablecolors.yellow,
     nm1cablecolors.grey:   g2cablecolors.blue,
     nm1cablecolors.green:  g2cablecolors.green,
     nm1cablecolors.purple: g2cablecolors.purple,
+  }
+  port2cablecolors = {
+    g2portcolors.red:           g2cablecolors.red,
+    g2portcolors.blue:          g2cablecolors.blue,
+    g2portcolors.yellow:        g2cablecolors.yellow,
+    g2portcolors.orange:        g2cablecolors.orange,
+    g2portcolors.blue_red:      g2cablecolors.blue,
+    g2portcolors.yellow_orange: g2cablecolors.yellow,
   }
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
@@ -119,13 +127,10 @@ def convert(pch):
       else:
         print ' connected'
         g2dest = dest.conv.inputs[dest.index]
-        #print source.index, dest.index
-        #print source.module.type.shortnm, dest.module.type.shortnm
-        #print source.module.type.shortnm, dest.module.type.shortnm
-        if source.nets[0].output.type.type == nm1portcolors.slave:
+        if source.net.output.type.type == nm1portcolors.slave:
           color = g2cablecolors.purple
         else:
-          color = source.nets[0].output.type.type
+          color = source.net.output.type.type
         g2area.connect(g2source,g2dest,color)
 
     # now parse the entire netlist of the area and .uprate=1 all
@@ -138,16 +143,16 @@ def convert(pch):
       for module in g2area.modules:
         #print module.name, module.type.shortnm
         for input in module.inputs:
-          if len(input.nets) == 0:
+	  if not input.net:
             continue
           #print '',input.type.name, input.rate
           if (input.rate != g2portcolors.blue_red and
               input.rate != g2portcolors.yellow_orange):
             continue
-          if not input.nets[0].output:
+          if not input.net.output:
             continue
-          if input.nets[0].output.rate == g2portcolors.red:
-            #print module.name,input.type.name,input.nets[0].output.type.name
+          if input.net.output.rate == g2portcolors.red:
+            #print module.name,input.type.name,input.net.output.type.name
             modified = 1
             module.uprate = 1
             input.rate = g2portcolors.red
@@ -158,7 +163,7 @@ def convert(pch):
               if output.rate == g2portcolors.yellow_orange:
                 output.rate = g2portcolors.orange
             break
-          #elif input.nets[0].output.rate == g2portcolors.blue:
+          #elif input.net.output.rate == g2portcolors.blue:
           #  modified = 1
           #  module.uprate = 0
           #  input.rate = g2portcolors.red
@@ -171,6 +176,10 @@ def convert(pch):
           #  break
       if not modified:
         done = 1
+
+    print 'Cable recolorize:'
+    for cable in g2area.cables:
+      cable.color = port2cablecolors[cable.source.net.output.rate]
 
   # handle Knobs
   # TBD
@@ -218,10 +227,14 @@ def convert(pch):
   pch2.write(pch.fname+'2')
   
 prog = sys.argv.pop(0)
+failedpatches = []
 while len(sys.argv):
   patchlist = glob(sys.argv.pop(0))
   for fname in patchlist:
     print '"%s"' % fname
     # general algorithm for converter:
-    convert(PchFile(fname))
-
+    try:
+      convert(PchFile(fname))
+    except:
+      failedpatches.append(fname)
+print 'Failed patches:' % ','.join(failedpatches)
