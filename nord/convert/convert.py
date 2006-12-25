@@ -34,6 +34,14 @@ def setav(g2param,array):
 def cpv(g2param,nmparam):
   g2param.variations = nmparam.variations[:]
 
+# updatevals - parameters set from constructor, this changes the times
+#              based on the convertion tables in ./units.py.
+def updatevals(g2mp,times,nm1tab,g2tab):
+  for time in times:
+    midival = getv(getattr(g2mp,time))
+    newmidival = nm12g2val(midival,nm1tab,g2tab)
+    setv(getattr(g2mp,time),newmidival)
+
 class Convert:
   def __init__(self, nmarea, g2area, nmmodule):
     self.nmarea = nmarea
