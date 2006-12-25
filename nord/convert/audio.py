@@ -107,7 +107,7 @@ class ConvStereoChorus(Convert):
     setv(g2mp.Active,1-getv(nmmp.Bypass))
 
 class ConvPhaser(Convert):
-  maing2module = 'FltPhaser'
+  maing2module = 'FltPhase'
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
