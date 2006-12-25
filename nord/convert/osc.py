@@ -25,7 +25,7 @@ from nord.nm1.colors import nm1cablecolors
 from convert import *
 
 # handledualpitchmod -returns p1,p2,g2mm
-# handle pitch inputs and if necessary, create a Mix-21B for input
+# handle pitch inputs and if necessary, create a Mix2-1B for input
 # NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
 #       in that case, the Pitch input could be used (if no knob tied
 #       to the said PitchModX dial).
@@ -39,7 +39,7 @@ def handledualpitchmod(conv):
     g2mm.name = 'PitchMod'
     conv.g2modules.append(g2mm)
     conv.height += g2mm.type.height
-    color=g2cablecolors.red
+    color=g2cablecolors.blue
     g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
     setv(g2m.params.PitchMod,127)
@@ -228,6 +228,8 @@ class ConvOscSlvA(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
+    if len(nmm.inputs.Slv.cables):
+      setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     #setv(g2mp.FreqMode,nmm.modes[0])
@@ -260,6 +262,8 @@ class ConvOscSlvB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters 
+    if len(nmm.inputs.Mst.cables):
+      setv(g2mp.Kbt,0)
     setv(g2mp.Waveform,3) # square
     setv(g2mp.Active,1-getv(nmmp.Mute))
     #setv(g2mp.FreqMode,nmm.modes[0])
@@ -282,6 +286,8 @@ class ConvOscSlvC(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
+    if len(nmm.inputs.Mst.cables):
+      setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
     #setv(g2mp.FreqMode,nmm.modes[0])
     g2m.modes.Waveform.value = self.waveform
@@ -296,6 +302,8 @@ class ConvOscSlvE(ConvOscSlvC):
     ConvOscSlvC.domodule(self)
     nmm,g2m = self.nmmodule,self.g2module
 
+    if len(nmm.inputs.Mst.cables):
+      setv(g2mp.Kbt,0)
     # handle special io
     # add AM if needed
     aminput, output = handleam(self)
