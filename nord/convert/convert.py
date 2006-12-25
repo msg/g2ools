@@ -1,7 +1,7 @@
 #
 # convert.py - main convert object
 #
-# Copyright: Matt Gerassimoff 2007
+# Copyright (c) 2006,2007 Matt Gerassimoff
 #
 # This file is part of g2ools.
 #
