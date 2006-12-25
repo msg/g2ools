@@ -44,7 +44,7 @@ class ConvFilterD(Convert):
   maing2module = 'FltMulti'
   parammap = ['Freq',['PitchMod','FreqMod']]
   inputmap = ['PitchVar','In']
-  outputmap = ['LP','BP','HP']
+  outputmap = ['HP','BP','LP']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -59,7 +59,7 @@ def fltdualpitchmod(nmm,g2m,conv):
       horiz=g2m.horiz,vert=g2m.type.height)
     conv.g2modules.append(g2mm)
     conv.height = g2mm.vert + g2mm.type.height
-    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,g2cablecolors.red)
+    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,g2cablecolors.blue)
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
     setv(g2m.params.PitchMod,127)
     cpv(g2mm.params.Lev1,nmm.params.FreqMod1)
