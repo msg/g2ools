@@ -2089,18 +2089,18 @@ height 7
 parameters
 0 "rate" 0..127 "0 ~ 62.9 s, 127 ~ 24.4 hHz"
 1 "lfo" 0..1 "onoff"
-2 "center freq mod" 0..127 ""
-3 "center freq" 0..127 "0 ~ 100 Hz, 127 ~ 16 kHz"
+2 "freq mod" 0..127 ""
+3 "freq" 0..127 "0 ~ 100 Hz, 127 ~ 16 kHz"
 4 "spread mod" 0..127 ""
 5 "feedback" 0..127 ""
 6 "peaks" 0..5 "0 ~ 1 peak, 5 ~ 6 peaks"
 7 "spread" 0..127 ""
 8 "bypass" 0..1 "onoff"
 9 "depth" 0..127 ""
-10 "inlevel" 0..127 ""
+10 "level" 0..127 ""
 inputs
 0 "in" audio
-1 "center freq mod" control
+1 "freq mod" control
 2 "spread mod" control
 outputs
 0 "out" audio
