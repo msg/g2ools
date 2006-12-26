@@ -21,26 +21,33 @@
 #
 from nord.g2.modules import fromname as g2name
 from convert import *
+from units import *
 
-class ConvFilterA(Convert):
+class ConvFilter(Convert):
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    updatevals(g2m.params,['Freq'],nm1fltfreq,g2fltfreq)
+
+class ConvFilterA(ConvFilter):
   maing2module = 'FltLP'
   parammap = ['Freq']
   inputmap = ['In']
   outputmap = ['Out']
 
-class ConvFilterB(Convert):
+class ConvFilterB(ConvFilter):
   maing2module = 'FltHP'
   parammap = ['Freq']
   inputmap = ['In']
   outputmap = ['Out']
 
-class ConvFilterC(Convert):
+class ConvFilterC(ConvFilter):
   maing2module = 'FltMulti'
   parammap = ['Freq',['Res','Resonance'],['GC','GainControl']]
   inputmap = ['In']
   outputmap = ['LP','BP','HP']
 
-class ConvFilterD(Convert):
+class ConvFilterD(ConvFilter):
   maing2module = 'FltMulti'
   parammap = ['Freq',['PitchMod','FreqMod']]
   inputmap = ['PitchVar','In']
@@ -73,7 +80,7 @@ def fltdualpitchmod(nmm,g2m,conv):
 
   return p1, p2
 
-class ConvFilterE(Convert):
+class ConvFilterE(ConvFilter):
   maing2module = 'FltNord'
   parammap = ['FilterType','Slope','Freq',
               ['Res','Resonance'],['PitchMod','FreqMod1'],
@@ -82,6 +89,7 @@ class ConvFilterE(Convert):
   outputmap = ['Out']
 
   def domodule(self):
+    ConvFilter.domodule(self)
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
@@ -92,7 +100,7 @@ class ConvFilterE(Convert):
     self.inputs[0] = p1
     self.inputs[3] = p2
 
-class ConvFilterF(Convert):
+class ConvFilterF(ConvFilter):
   maing2module = 'FltClassic'
   parammap = ['Freq','Slope',['Res','Resonance'],
               ['PitchMod','FreqMod1']]
@@ -100,6 +108,7 @@ class ConvFilterF(Convert):
   outputmap = ['Out']
 
   def domodule(self):
+    ConvFilter.domodule(self)
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
@@ -109,7 +118,7 @@ class ConvFilterF(Convert):
     p1,p2 = fltdualpitchmod(nmm,g2m,self)
     self.inputs[0:2] = p1,p2
 
-class ConvVocalFilter(Convert):
+class ConvVocalFilter(ConvFilter):
   maing2module = 'FltVoice'
   parammap = ['Vowel1','Vowel2','Vowel3','Level','Vowel', 'VowelMod',
               'Freq','FreqMod', ['Res','Resonance']]
@@ -122,7 +131,7 @@ class ConvVocoder(Convert):
   inputmap = ['Ctrl','In']
   outputmap = ['Out']
 
-class ConvEqMid(Convert):
+class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
   parammap = ['Freq','Gain','BandWidth','Level']
   inputmap = ['In']
