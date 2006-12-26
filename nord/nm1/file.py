@@ -205,8 +205,6 @@ class MorphMap:
 
 class MorphMapDump(Section):
   def parse(self):
-    if not hasattr(self.patch, 'morphs'):
-      self.patch.morphs = [ Morph() for i in range(NMORPHS) ]
     morphs = self.patch.morphs
     knobs = map(int, self.lines[0].split())
     for i in range(NMORPHS):
@@ -306,6 +304,7 @@ class Patch:
     self.voice = Area()
     self.fx = Area()
     self.textpad = ''
+    self.morphs = [ Morph() for i in range(NMORPHS) ]
 
 class PchFile:
   def __init__(self, fname=None):
