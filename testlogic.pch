@@ -14,7 +14,11 @@ Version=Nord Modular patch 3.0
 8 59 1 6 
 9 89 1 9 
 10 69 1 12 
-11 36 1 15 
+11 36 1 18 
+12 77 1 15 
+13 36 1 20 
+14 36 1 22 
+15 36 1 24 
 [/ModuleDump]
 [ModuleDump]
 0 
@@ -30,13 +34,18 @@ Version=Nord Modular patch 3.0
 2 5 0 0 4 0 1 
 2 6 0 0 5 0 1 
 2 10 0 0 7 0 1 
+2 12 0 0 10 0 0 
 1 8 0 0 3 0 1 
 1 9 0 0 8 0 0 
 1 9 1 0 3 2 1 
 2 10 1 0 6 0 1 
+2 12 1 0 10 1 0 
 2 7 1 0 8 0 1 
 2 7 0 0 9 0 1 
 2 11 0 0 10 0 1 
+2 13 0 0 12 2 1 
+2 14 0 0 12 1 1 
+2 15 0 0 12 0 1 
 [/CableDump]
 [CableDump]
 0 
@@ -51,6 +60,9 @@ Version=Nord Modular patch 3.0
 8 59 1 77 
 10 69 1 0 
 11 36 1 64 
+13 36 1 64 
+14 36 1 64 
+15 36 1 64 
 [/ParameterDump]
 [ParameterDump]
 0 
@@ -74,6 +86,10 @@ Version=Nord Modular patch 3.0
 9 CompareAB1
 10 ClkDiv1
 11 PosEdgeDly2
+12 ClkDivFix1
+13 PosEdgeDly2
+14 PosEdgeDly2
+15 PosEdgeDly2
 [/NameDump]
 [NameDump]
 0 
