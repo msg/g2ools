@@ -29,6 +29,7 @@ from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1portcolors
 from nord.g2 import colors
 from nord.convert import typetable
+from nord.net import printnet
 
 def convert(pch):
   #   loop through each module
@@ -179,6 +180,10 @@ def convert(pch):
 
     print 'Cable recolorize:'
     for cable in g2area.cables:
+      #print '%s:%s -> %s:%s' % (
+      #    cable.source.module.name,cable.source.type.name,
+      #    cable.dest.module.name,cable.dest.type.name)
+      #printnet(cable.source.net)
       cable.color = port2cablecolors[cable.source.net.output.rate]
 
   # handle Knobs
