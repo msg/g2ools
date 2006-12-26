@@ -68,7 +68,7 @@ def handleam(conv):
     output = am.outputs.Out
   return aminput, output
 
-def handlemst(conv):
+def handleslv(conv):
   nmm, g2m = conv.nmmodule, conv.g2module
   if len(nmm.outputs.Slv.cables):
     # add a masterosc
@@ -116,9 +116,8 @@ class ConvOscA(Convert):
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
-    self.inputs[2:4] = [p1,p2]
-    slv = handlemst(self)
-    self.outputs[1] = slv
+    self.inputs[2:4] = p1,p2
+    self.outputs[1] = handleslv(self)
 
 class ConvOscB(Convert):
   maing2module = 'OscB'
@@ -139,10 +138,8 @@ class ConvOscB(Convert):
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
-    self.inputs[1:3] = [p1, p2]
-    slv = handlemst(self)
-    self.outputs[1] = slv
-
+    self.inputs[1:3] = p1, p2
+    self.outputs[1] = handleslv(self)
 
 class ConvOscC(Convert):
   maing2module = 'OscC'
@@ -154,7 +151,6 @@ class ConvOscC(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-
 
     # make OscC's waveform a sine
     g2m.modes.Waveform.value = 0
@@ -168,13 +164,65 @@ class ConvOscC(Convert):
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
+    self.outputs[1] = handleslv(self)
 
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
+  parammap = ['FreqCoarse','FreqFine','Kbt',['FmAmount','FmMod']]
+  inputmap = ['FM',None,None,None]
+  outputmap = [None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'ConvSpectralOsc not implemented'
+    nmmp,g2mp = nmm.params, g2m.params
+    area = self.g2area
+
+    # NOTE: this must be done before adding the rest of the structure
+    #       as it should be placed right below the OscC.
+    p1,p2 = handledualpitchmod(self)
+    self.inputs[1:3] = p1,p2
+
+    setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(g2mp.Waveform,[3,4][getv(nmmp.Partials)])
+    setv(g2mp.ShapeMod,127)
+
+    vert = self.height
+    if len(nmm.inputs.SpectralShapeMod.cables):
+      shape = area.addmodule(g2name['Mix1-1A'],horiz=g2m.horiz,vert=vert)
+      self.g2modules.append(shape)
+      vert += shape.type.height
+      setv(shape.params.Lev,getv(nmmp.SpectralShapeMod))
+      setv(shape.params.On,1)
+      area.connect(shape.outputs.Out,g2m.inputs.Shape,g2cablecolors.blue)
+      shapemod = shape.inputs.Chain
+      self.inputs[3] = shape.inputs.In
+    else:
+      shapemod = g2m.inputs.Shape
+    mods = []
+    for modnm in ['Constant','ShpStatic','LevMult','Mix2-1B']:
+      mod = area.addmodule(g2name[modnm],horiz=g2m.horiz,vert=vert)
+      vert += mod.type.height
+      self.g2modules.append(mod)
+      mods.append(mod)
+    self.height = vert
+    # setup parameters
+    const,shpstatic,levmult,mix=mods
+    setv(const.params.Level,getv(nmmp.SpectralShape))
+    setv(shpstatic.params.Mode,2)
+    setv(mix.params.Lev1,127)
+    setv(mix.params.Lev2,127)
+    # setup connections
+    area.connect(const.outputs.Out,shapemod,g2cablecolors.blue)
+    area.connect(const.outputs.Out,shpstatic.inputs.In,g2cablecolors.blue)
+    area.connect(shpstatic.outputs.Out,levmult.inputs.Mod,g2cablecolors.blue)
+    area.connect(g2m.outputs.Out,levmult.inputs.In,g2cablecolors.red)
+    area.connect(levmult.outputs.Out,mix.inputs.Chain,g2cablecolors.red)
+    area.connect(levmult.inputs.In,mix.inputs.In2,g2cablecolors.red)
+    area.connect(mix.inputs.In1,mix.inputs.In2,g2cablecolors.red)
+    self.outputs[0] = mix.outputs.Out
+
+    # place master osc (if needed)
+    self.outputs[1] = handleslv(self)
 
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'
@@ -189,7 +237,7 @@ class ConvFormantOsc(Convert):
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
     p1,p2 = handledualpitchmod(self)
-    self.inputs[:2] = [p1,p2]
+    self.inputs[:2] = p1,p2
 
     vert = self.height
     modules =[]
@@ -211,8 +259,7 @@ class ConvFormantOsc(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
 
-    slv = handlemst(self)
-    self.outputs = [rndclka.outputs.Out,slv]
+    self.outputs = [rndclka.outputs.Out,handleslv(self)]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'
@@ -220,7 +267,7 @@ class ConvOscSlvA(Convert):
               ['FreqCoarse','DetuneCoarse'],
               ['FreqFine','DetuneFine'],
               ['FmAmount','FmMod'],]
-  inputmap = ['Pitch','FmMod','Pitch']
+  inputmap = ['Pitch','FmMod','Pitch','Sync']
   outputmap = ['Out']
 
   def domodule(self):
@@ -228,7 +275,7 @@ class ConvOscSlvA(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    if len(nmm.inputs.Slv.cables):
+    if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
@@ -239,15 +286,6 @@ class ConvOscSlvA(Convert):
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
-
-    # need to search Mst input for Slv output
-    # this way the connection can be removed
-    # each Conv.. object should be responsible
-    # it's own connect.  I need to add code to
-    # remove cables within the NM1 patch.  It's
-    # easier to handle it here.  Plus I want thte
-    # converter to fail when there is an unknown
-    # connection.
 
 class ConvOscSlvB(Convert):
   maing2module = 'OscB'
@@ -302,8 +340,6 @@ class ConvOscSlvE(ConvOscSlvC):
     ConvOscSlvC.domodule(self)
     nmm,g2m = self.nmmodule,self.g2module
 
-    if len(nmm.inputs.Mst.cables):
-      setv(g2mp.Kbt,0)
     # handle special io
     # add AM if needed
     aminput, output = handleam(self)
@@ -311,11 +347,60 @@ class ConvOscSlvE(ConvOscSlvC):
     self.inputs[2] = aminput
 
 class ConvOscSineBank(Convert):
-  maing2module = 'NameBar'
+  maing2module = 'Mix8-1B'
+  outputmap = ['Out']
+  #           Mst  Mixin   Sync O1Am O2Am O3Am O4Am O5Am O6Am
+  inputmap = [None,'Chain',None,None,None,None,None,None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'ConvOscSineBank not implemented'
+    nmmp,g2mp = nmm.params, g2m.params
+    g2area = self.g2area
+    # if sync connected, use OscC, otherwise use OscD
+    if len(nmm.inputs.Sync.cables):
+      osctype = 'OscC'
+    else:
+      osctype = 'OscD'
+    vert = self.height
+    oscs = []
+    for i in range(1,7): # 6 Sine Osc
+      # if osc muted, don't addit
+      #if getv(getattr(nmmp,'Osc%dMute'%i)):
+      #  continue
+      osc = g2area.addmodule(g2name[osctype],horiz=g2m.horiz,vert=vert)
+      vert += osc.type.height
+      self.g2modules.append(osc)
+      oscs.append(osc)
+      if len(nmm.inputs.Mst.cables):
+        setv(osc.params.Kbt,0)
+      setv(osc.params.FreqCoarse,getv(getattr(nmmp,'Osc%dCoarse'%i)))
+      setv(osc.params.FreqFine,getv(getattr(nmmp,'Osc%dFine'%i)))
+      setv(getattr(g2mp,'Lev%d' % i),getv(getattr(nmmp,'Osc%dLevel'%i)))
+      if len(getattr(nmm.inputs,'Osc%dAm'%i).cables):
+        mod = g2area.addmodule(g2name['LevMod'],horiz=g2m.horiz,vert=vert)
+        vert += mod.type.height
+        self.g2modules.append(mod)
+        g2area.connect(osc.outputs.Out,mod.inputs.In,g2cablecolors.red)
+        g2area.connect(mod.outputs.Out,getattr(g2m.inputs,'In%d'%i),
+                       g2cablecolors.red)
+        self.inputs[2+i] = mod.inputs.Mod
+      else:
+        g2area.connect(osc.outputs.Out,getattr(g2m.inputs,'In%d'%i),
+                       g2cablecolors.red)
+    self.height = vert
+    if len(nmm.inputs.Sync.cables):
+      self.inputs[2] = oscs[0].inputs.Sync
+      if len(oscs) > 1:
+        for i in range(1,len(oscs)):
+          g2area.connect(oscs[i-1].inputs.Sync,
+                         oscs[i].inputs.Sync,g2cablecolors.red)
+    if len(nmm.inputs.Mst.cables):
+      print osc.name
+      self.inputs[0] = oscs[0].inputs.Pitch
+      if len(oscs) > 1:
+        for i in range(1,len(oscs)):
+          g2area.connect(oscs[i-1].inputs.Pitch,
+                         oscs[i].inputs.Pitch,g2cablecolors.blue)
 
 class ConvOscSlvFM(ConvOscSlvC):
   waveform = 0 # sine
