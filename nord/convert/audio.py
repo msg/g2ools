@@ -108,10 +108,25 @@ class ConvStereoChorus(Convert):
 
 class ConvPhaser(Convert):
   maing2module = 'FltPhase'
+  parammap = ['Freq',['PitchMod','FreqMod'],'Spread','SpreadMod',
+              ['FB','Feedback'],['NotchCount','Peaks'],'Level']
+  inputmap = ['In','PitchVar','Spr']
+  outputmap = ['Out']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'Phaser not implemented'
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
+    setv(g2mp.FBMod,getv(nmmp.Depth))
+    setv(g2mp.Type,3)
+    
+    lfo = self.g2area.addmodule(g2name['LfoC'],horiz=g2m.horiz,vert=self.height)
+    self.g2modules.append(lfo)
+    self.height += lfo.type.height
+    setv(lfo.params.Rate,getv(nmmp.Rate))
+    setv(lfo.params.Active,getv(nmmp.Lfo))
+    self.g2area.connect(lfo.outputs.Out,g2m.inputs.FB,g2cablecolors.blue)
 
 class ConvInvLevShift(Convert):
   maing2module = 'LevConv'
