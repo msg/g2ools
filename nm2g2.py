@@ -120,8 +120,8 @@ def convert(pch):
         g2source = source.conv.inputs[source.index]
       dest = cable.dest
       print '%s:%s:%d -> %s:%s:%d :' % (
-          source.module.type.shortnm,source.type.name, source.type.type,
-          dest.module.type.shortnm,dest.type.name, dest.type.type),
+          source.module.name,source.type.name, source.type.type,
+          dest.module.name,dest.type.name, dest.type.type),
       if dest.index >= len(dest.conv.inputs) or not g2source:
         print ' UNCONNECTED'
       else:
@@ -227,14 +227,25 @@ def convert(pch):
   pch2.write(pch.fname+'2')
   
 prog = sys.argv.pop(0)
+
+debug = 0
+if sys.argv[0][0] == '-':
+  sys.argv.pop(0)
+  debug = 1
+
 failedpatches = []
 while len(sys.argv):
   patchlist = glob(sys.argv.pop(0))
   for fname in patchlist:
     print '"%s"' % fname
     # general algorithm for converter:
-    try:
-      convert(PchFile(fname))
-    except:
-      failedpatches.append(fname)
-print 'Failed patches:' % ','.join(failedpatches)
+    if debug:
+      convert(PchFile(fname)) # allow exception thru if debugging
+    else:
+      try:
+        convert(PchFile(fname))
+      except Exception, e:
+        print '%r' % e
+        failedpatches.append(fname)
+if len(failedpatches):
+  print 'Failed patches: %s' % '\n '.join(failedpatches)
