@@ -57,7 +57,7 @@ class ConvKeyboardPatch(Convert):
 
     # build output array that maps nm1 outputs
     self.outputs = [d1.outputs.Out,
-                    s.outputs.PatchActive,
+                    s.outputs.VarActive,
                     d2.outputs.Out,
                     d3.outputs.Out]
 
