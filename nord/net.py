@@ -27,6 +27,26 @@ class Net:
 
 # addnet - update the netlist adding source and dest
 def addnet(netlist, source, dest):
+
+  if source.net and dest.net: # two separate nets need to be combined
+    if source.net.output and dest.net.output: # shouldn't happen
+      raise 'source and dest both have outputs'
+    source.net.inputs += dest.net.inputs
+    if dest.net.output:
+      source.net.output = dest.net.output
+    source.net.output.net = source.net
+    net = dest.net
+    for input in dest.net.inputs:
+      input.net = source.net
+    netlist.remove(net)
+    #print 'Combine:'
+    #print source.net, dest.net
+    #output = source.net.output
+    #inputs = source.net.inputs
+    #print '%s:%s' % (output.module.name,output.type.name),[
+    #  '%s:%s' % (input.module.name,input.type.name) for input in inputs]
+    return
+
   found = 0
   for net in netlist:
     if source == net.output or source in net.inputs or dest in net.inputs:
