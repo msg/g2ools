@@ -2251,7 +2251,7 @@ inputs
 3 "spectral shape mod" control
 outputs
 0 "out" audio
-1 "slave" slave
+1 "slv" slave
 custom
 0 "freq display units" 0..1 "freqdisplunits"
 ----------
