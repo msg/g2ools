@@ -5470,7 +5470,7 @@ modules = [
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slave',        nm1portcolors.slave),
+      OutputType('Slv',          nm1portcolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
