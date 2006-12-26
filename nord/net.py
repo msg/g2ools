@@ -83,3 +83,12 @@ def delnode(netlist, srcdest):
   pass
   # find net with both source and dest on it
   # remove dest from net
+
+def printnet(net):
+  if net.output:
+    out = '%s:%s' % (net.output.module.name,net.output.type.name)
+  else:
+    out = '<none>'
+  inp = ','.join([
+      '%s:%s' % (inp.module.name,inp.type.name) for inp in net.inputs])
+  print '%s -> %s' % (out, inp)
