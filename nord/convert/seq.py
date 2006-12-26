@@ -26,7 +26,7 @@ class ConvEventSeq(Convert):
   maing2module = 'SeqEvent'
   parammap = ['Length',['TG1','Gate1'],['TG2','Gate2']]
   inputmap = ['Clk','Rst']
-  outputmap = ['Trig1','Trig2',None,'Link'] # no Snc
+  outputmap = ['Trig1','Trig2','Link','Link']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -41,7 +41,7 @@ class ConvCtrlSeq(Convert):
   maing2module = 'SeqLev'
   parammap = ['Loop','Length',['BipUni','Uni']]
   inputmap = ['Clk','Rst']
-  outputmap = ['Val',None,'Link'] # no Snc
+  outputmap = ['Val','Link','Link']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -56,7 +56,7 @@ class ConvNoteSeqA(Convert):
   maing2module = 'SeqLev'
   parammap = ['Loop','Length','Loop']
   inputmap = ['Clk','Rst']
-  outputmap = ['Val',None,'Link','Trig'] # no Snc
+  outputmap = ['Val','Link','Link','Trig']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -75,7 +75,7 @@ class ConvNoteSeqB(Convert):
   maing2module = 'SeqNote'
   parammap = ['Loop','Length','Loop']
   inputmap = ['Clk','Rst']
-  outputmap = ['Note',None,'Link','Trig'] # no Snc
+  outputmap = ['Note','Link','Link','Trig']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
