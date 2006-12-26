@@ -21,6 +21,7 @@
 #
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
+from units import *
 
 def setv(g2param,val):
   g2param.variations = [ val for variation in range(9) ]
@@ -36,11 +37,11 @@ def cpv(g2param,nmparam):
 
 # updatevals - parameters set from constructor, this changes the times
 #              based on the convertion tables in ./units.py.
-def updatevals(g2mp,times,nm1tab,g2tab):
-  for time in times:
-    midival = getv(getattr(g2mp,time))
-    newmidival = nm12g2val(midival,nm1tab,g2tab)
-    setv(getattr(g2mp,time),newmidival)
+def updatevals(g2mp,params,nm1tab,g2tab):
+  for param in params:
+    midival = getv(getattr(g2mp,param))
+    newmidival = nm2g2val(midival,nm1tab,g2tab)
+    setv(getattr(g2mp,param),newmidival)
 
 class Convert:
   def __init__(self, nmarea, g2area, nmmodule):
