@@ -162,6 +162,7 @@ class ConvPatternGen(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # PatternA and PatternB receive same input
-    self.g2area.connect(g2m.inputs.A,g2m.inputs.B,g2cablecolors.blue) 
+    if len(getattr(nmm.inputs,'Pattern&Bank').cables):
+      self.g2area.connect(g2m.inputs.A,g2m.inputs.B,g2cablecolors.blue) 
     # deal with nmmp.LowDelta later
 
