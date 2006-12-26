@@ -4949,7 +4949,7 @@ modules = [
     height=7,
     inputs=[
       InputType('In',           nm1portcolors.audio),
-      InputType('CenterFreqMod',nm1portcolors.control),
+      InputType('FreqMod',      nm1portcolors.control),
       InputType('SpreadMod',    nm1portcolors.control),
     ],
     outputs=[
@@ -4972,7 +4972,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('CenterFreqMod',
+      ParameterType('FreqMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -4980,7 +4980,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('CenterFreq',
+      ParameterType('Freq',
         ParameterDef(  
           default=0,
           low=0,
@@ -5036,7 +5036,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Inlevel',
+      ParameterType('Level',
         ParameterDef(  
           default=0,
           low=0,
