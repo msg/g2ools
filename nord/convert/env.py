@@ -23,10 +23,6 @@ from nord.g2.modules import fromname as g2name
 from convert import *
 from units import *
 
-# ***** NOTE *****
-# The times for A,D,S,R,H are all incorrect and need to be fixed.
-# ****************
-
 class ConvADSR_Env(Convert):
   maing2module = 'EnvADSR'
   parammap = ['Attack','Decay','Sustain','Release',['Shape','AttackShape']]
@@ -96,7 +92,7 @@ class ConvMulti_Env(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    updatevals(g2mp,times=['Time%d' % i for i in range(1,5)]+['NR'],
+    updatevals(g2mp,['Time%d' % i for i in range(1,5)]+['NR'],
         nm1adsrtime, g2adsrtime)
 
 class ConvEnvFollower(Convert):
