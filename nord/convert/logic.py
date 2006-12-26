@@ -78,7 +78,7 @@ class ConvClkDiv(Convert):
   maing2module = 'ClkDiv'
   parammap = ['Divider']
   inputmap = ['Clk','Rst']
-  outputmap = ['Out']
+  outputmap = ['Out',None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -88,8 +88,28 @@ class ConvClkDiv(Convert):
 
 class ConvClkDivFix(Convert):
   maing2module = 'ClkDiv'
+  inputmap = ['Rst','Clk']
+  outputmap = ['Out',None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-    raise 'ClkDivFix not implemented'
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Divider,15)
+    g2m.modes.DivMode.value = 1
+
+    rst,midiclk = g2m.inputs.Rst, g2m.inputs.Clk
+    vert = self.height
+    for div in [11,7]:
+      clk = self.g2area.addmodule(g2name['ClkDiv'],horiz=g2m.horiz,vert=vert)
+      self.g2modules.append(clk)
+      vert += clk.type.height
+      clk.name = g2m.name
+      clk.modes.DivMode.value = 1
+      setv(clk.params.Divider,div)
+      self.g2area.connect(rst,clk.inputs.Rst,g2cablecolors.yellow)
+      self.g2area.connect(midiclk,clk.inputs.Clk,g2cablecolors.yellow)
+      rst,midiclk = clk.inputs.Rst,clk.inputs.Clk
+    self.height = vert
+    self.outputs[1:] = [ mod.outputs.Out for mod in self.g2modules ]
 
