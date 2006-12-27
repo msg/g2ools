@@ -451,3 +451,5 @@ class ConvDrumSynth(Convert):
     for i in range(len(nmm.params)):
       cpv(g2mp[i],nmmp[i])
 
+    # handle special parameters
+    setv(g2mp.Active,1-getv(nmmp.Mute))
