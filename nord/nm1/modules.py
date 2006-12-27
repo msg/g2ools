@@ -5082,7 +5082,7 @@ modules = [
           comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'
         ),
       ),
-      ParameterType('Mute',
+      ParameterType('Bypass',
         ParameterDef(  
           default=0,
           low=0,
@@ -5144,7 +5144,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('InLevel',
+      ParameterType('Level',
         ParameterDef(  
           default=0,
           low=0,
