@@ -21,6 +21,7 @@
 #
 from nord.g2.modules import fromname as g2name
 from convert import *
+from units import *
 
 class ConvConstant(Convert):
   maing2module = 'Constant'
@@ -35,19 +36,6 @@ class ConvSmooth(Convert):
 
 class ConvPortamentoA(Convert):
   maing2module = 'Glide'
-  parammap = ['Time']
-  inputmap = ['In','On']
-  outputmap = ['Out']
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
-    setv(g2mp.Glide,0)
-    
-class ConvPortamentoB(Convert):
-  maing2module = 'Glide'
-  parammap = ['Time']
   inputmap = ['In','On']
   outputmap = ['Out']
 
@@ -55,7 +43,15 @@ class ConvPortamentoB(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
+    porttime = [ .5*val for val in g2adsrtime]
+    nm1midival = getv(nmmp.Time)
+    g2midival = nm2g2val(nm1midival,nm1adsrtime,porttime)
+    setv(g2mp.Time,g2midival)
+
     setv(g2mp.Glide,0)
+    
+class ConvPortamentoB(ConvPortamentoA):
+  pass
 
 class ConvNoteScaler(Convert):
   maing2module = 'NoteScaler'
