@@ -80,7 +80,7 @@ def convert(pch):
     # do the modules
     for module in nmarea.modules:
       if module.type.type in typetable:
-        print '%s: %d(0x%02x)' % (module.type.shortnm,
+        print '%s: %d(0x%02x)' % (module.name,
            module.type.type,module.type.type)
         conv = typetable[module.type.type](nmarea,g2area,module)
         converters.append(conv)
@@ -111,6 +111,7 @@ def convert(pch):
           cb.reposition(None)
 
     # now do the cables
+    print 'Cables:'
     for cable in nmarea.cables:
       source = cable.source
       g2source = None
