@@ -39,9 +39,9 @@ class ConvKeyboardPatch(Convert):
     # all the KbdStatus signals.
     self.g2modules = []
     s=g2m
-    vert = g2m.type.height
+    vert = self.height
     for nm in ['Keyboard'] + [ 'DlyClock' ] * 3:
-      m = g2area.addmodule(g2name[nm],name='',horiz=nmm.horiz,vert=vert)
+      m = g2area.addmodule(g2name[nm],name='',horiz=g2m.horiz,vert=vert)
       self.g2modules.append(m)
       vert += m.type.height
     self.height = vert
