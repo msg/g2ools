@@ -65,6 +65,9 @@ g2adsrtime = getnumbers('g2adsrtime.txt')
 g2fltfreq = getnumbers('g2fltfreq.txt')
 nm1fltfreq = getnumbers('nm1fltfreq.txt')
 
+g2logictime = getnumbers('g2logictime.txt')
+nm1logictime = getnumbers('nm1logictime.txt')
+
 ratios = getnumbers('ratios.txt')
 
 f = open('../nord/convert/units.py','w')
@@ -91,13 +94,13 @@ s = '''#
 #
 
 def nm2g2val(nm1midival,nm1vals,g2vals):
-  nm1time = nm1adsrtime[nm1midival]
+  nm1val = nm1vals[nm1midival]
   g2min = 1000000 # nothing here will never be that big
   g2midival = 0
   for midival in range(128):
-    g2time = g2adsrtime[midival]
-    if abs(g2time-nm1time) < g2min:
-      g2min = abs(g2time-nm1time)
+    g2val = g2vals[midival]
+    if abs(g2val-nm1val) < g2min:
+      g2min = abs(g2val-nm1val)
       g2midival = midival
   return g2midival
 
@@ -113,10 +116,17 @@ nm1fltfreq = [%s
 g2fltfreq = [%s
 ]
 
+nm1logictime = [%s
+]
+
+g2logictime = [%s
+]
+
 ratios = [%s
 ]
 ''' % (formattimes(nm1adsrtime), formattimes(g2adsrtime),
        formatfreq(nm1fltfreq), formatfreq(g2fltfreq),
+       formatfreq(nm1logictime), formatfreq(g2logictime),
        formatarray([ '%.3f' % ratios[i] for i in range(len(ratios))]))
 
 print s
