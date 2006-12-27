@@ -53,10 +53,6 @@ class ConvFilterD(ConvFilter):
   inputmap = ['PitchVar','In']
   outputmap = ['HP','BP','LP']
 
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
 # copied from convert.py for osc.py (maybe it can be unified?)
 def fltdualpitchmod(nmm,g2m,conv):
   p1 = p2 = None
