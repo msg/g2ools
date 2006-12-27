@@ -90,7 +90,7 @@ class ConvMasterOsc(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
     self.inputs[:2] = [p1,p2]
@@ -116,7 +116,7 @@ class ConvOscA(Convert):
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
@@ -138,7 +138,7 @@ class ConvOscB(Convert):
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
@@ -162,7 +162,7 @@ class ConvOscC(Convert):
     # handle special parameters
     # handle KBT later = nmmp.FreqKbt)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     
     # add AM if needed, handle special io
     aminput, output = handleam(self)
@@ -188,7 +188,7 @@ class ConvSpectralOsc(Convert):
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.Waveform,[3,4][getv(nmmp.Partials)])
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     setv(g2mp.ShapeMod,127)
 
     vert = self.height
@@ -239,7 +239,7 @@ class ConvFormantOsc(Convert):
     nmmp,g2mp = nmm.params, g2m.params
     area = self.g2area
 
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
@@ -285,7 +285,7 @@ class ConvOscSlvA(Convert):
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[2,3,1][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
     # handle special io
     # add AM if needed
@@ -310,7 +310,7 @@ class ConvOscSlvB(Convert):
       setv(g2mp.Kbt,0)
     setv(g2mp.Waveform,3) # square
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[2,3,1][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
     # NOTE: since shape can be 0% - 100%, a LevConv could be used
     #       to get the actual waveform, if necessary.
@@ -333,7 +333,7 @@ class ConvOscSlvC(Convert):
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[2,3,1][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
 
 class ConvOscSlvD(ConvOscSlvC):
@@ -431,7 +431,7 @@ class ConvPercOsc(Convert):
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
+    setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # add AM if needed
     aminput, output = handleam(self)
