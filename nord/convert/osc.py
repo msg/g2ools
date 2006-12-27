@@ -74,6 +74,7 @@ def handleslv(conv):
     # add a masterosc
     master = conv.g2area.addmodule(g2name['OscMaster'],
         horiz=g2m.horiz,vert=conv.height)
+    setv(master.params.Freq,getv(g2m.params.Freq))
     conv.g2modules.append(master)
     conv.height += master.type.height
     return master.outputs.Out
@@ -87,7 +88,9 @@ class ConvMasterOsc(Convert):
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
     self.inputs[:2] = [p1,p2]
@@ -113,6 +116,7 @@ class ConvOscA(Convert):
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
@@ -134,7 +138,7 @@ class ConvOscB(Convert):
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    #setv(g2m.params.FreqMode,nmm.modes[0]]
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self)
@@ -158,7 +162,7 @@ class ConvOscC(Convert):
     # handle special parameters
     # handle KBT later = nmmp.FreqKbt)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    #setv(g2mp.FreqMode,nmm.modes[0])
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
     
     # add AM if needed, handle special io
     aminput, output = handleam(self)
@@ -184,6 +188,7 @@ class ConvSpectralOsc(Convert):
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.Waveform,[3,4][getv(nmmp.Partials)])
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
     setv(g2mp.ShapeMod,127)
 
     vert = self.height
@@ -207,6 +212,7 @@ class ConvSpectralOsc(Convert):
     self.height = vert
     # setup parameters
     const,shpstatic,levmult,mix=mods
+    setv(const.params.BipUni,1)
     setv(const.params.Level,getv(nmmp.SpectralShape))
     setv(shpstatic.params.Mode,2)
     setv(mix.params.Lev1,127)
@@ -233,6 +239,7 @@ class ConvFormantOsc(Convert):
     nmmp,g2mp = nmm.params, g2m.params
     area = self.g2area
 
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
@@ -278,8 +285,7 @@ class ConvOscSlvA(Convert):
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-
-    #setv(g2mp.FreqMode,nmm.modes[0])
+    setv(g2mp.FreqMode,[2,3,1][getv(nmm.modes[0])])
 
     # handle special io
     # add AM if needed
@@ -304,7 +310,7 @@ class ConvOscSlvB(Convert):
       setv(g2mp.Kbt,0)
     setv(g2mp.Waveform,3) # square
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    #setv(g2mp.FreqMode,nmm.modes[0])
+    setv(g2mp.FreqMode,[2,3,1][getv(nmm.modes[0])])
 
     # NOTE: since shape can be 0% - 100%, a LevConv could be used
     #       to get the actual waveform, if necessary.
@@ -327,7 +333,7 @@ class ConvOscSlvC(Convert):
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    #setv(g2mp.FreqMode,nmm.modes[0])
+    setv(g2mp.FreqMode,[2,3,1][getv(nmm.modes[0])])
     g2m.modes.Waveform.value = self.waveform
 
 class ConvOscSlvD(ConvOscSlvC):
@@ -375,6 +381,7 @@ class ConvOscSineBank(Convert):
         setv(osc.params.Kbt,0)
       setv(osc.params.FreqCoarse,getv(getattr(nmmp,'Osc%dCoarse'%i)))
       setv(osc.params.FreqFine,getv(getattr(nmmp,'Osc%dFine'%i)))
+      setv(osc.params.FreqMode,3) # all in partial mode
       setv(getattr(g2mp,'Lev%d' % i),getv(getattr(nmmp,'Osc%dLevel'%i)))
       if len(getattr(nmm.inputs,'Osc%dAm'%i).cables):
         mod = g2area.addmodule(g2name['LevMod'],horiz=g2m.horiz,vert=vert)
@@ -424,6 +431,7 @@ class ConvPercOsc(Convert):
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(g2mp.FreqMode,[1,0][getv(nmm.modes[0])])
 
     # add AM if needed
     aminput, output = handleam(self)
