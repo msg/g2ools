@@ -31,6 +31,22 @@ from nord.g2 import colors
 from nord.convert import typetable
 from nord.net import printnet
 
+nm2g2colors = {
+  nm1cablecolors.red:    g2cablecolors.red,
+  nm1cablecolors.blue:   g2cablecolors.blue,
+  nm1cablecolors.yellow: g2cablecolors.yellow,
+  nm1cablecolors.grey:   g2cablecolors.blue,
+  nm1cablecolors.green:  g2cablecolors.green,
+  nm1cablecolors.purple: g2cablecolors.purple,
+}
+port2cablecolors = {
+  g2portcolors.red:           g2cablecolors.red,
+  g2portcolors.blue:          g2cablecolors.blue,
+  g2portcolors.yellow:        g2cablecolors.yellow,
+  g2portcolors.orange:        g2cablecolors.orange,
+  g2portcolors.blue_red:      g2cablecolors.blue,
+  g2portcolors.yellow_orange: g2cablecolors.yellow,
+}
 def convert(pch):
   #   loop through each module
   #     determine and store separation from module above >= 0
@@ -55,22 +71,15 @@ def convert(pch):
   pch2 = Pch2File('./nord/convert/initpatch.pch2')
   nmpatch = pch.patch
   g2patch = pch2.patch
-  nm2g2colors = {
-    nm1cablecolors.red:    g2cablecolors.red,
-    nm1cablecolors.blue:   g2cablecolors.blue,
-    nm1cablecolors.yellow: g2cablecolors.yellow,
-    nm1cablecolors.grey:   g2cablecolors.blue,
-    nm1cablecolors.green:  g2cablecolors.green,
-    nm1cablecolors.purple: g2cablecolors.purple,
-  }
-  port2cablecolors = {
-    g2portcolors.red:           g2cablecolors.red,
-    g2portcolors.blue:          g2cablecolors.blue,
-    g2portcolors.yellow:        g2cablecolors.yellow,
-    g2portcolors.orange:        g2cablecolors.orange,
-    g2portcolors.blue_red:      g2cablecolors.blue,
-    g2portcolors.yellow_orange: g2cablecolors.yellow,
-  }
+  for color in ['red','blue','yellow','green','purple']:
+    setattr(g2patch.description,color,getattr(nmpatch.header,color))
+  if nmpatch.header.voices > 1:
+    g2patch.description.monopoly = 0
+    g2patch.description.voicecnt = nmpatch.header.voices
+  for variation in range(9):
+    g2patch.settings.variations[variation].glide = nmpatch.header.porta
+    g2patch.settings.variations[variation].glidetime = nmpatch.header.portatime
+    g2patch.settings.variations[variation].octaveshift = nmpatch.header.octshift
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
     g2area = getattr(g2patch,areanm)
