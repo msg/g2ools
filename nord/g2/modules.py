@@ -705,7 +705,7 @@ modules = [
       ParameterType('Range',        parammap.LogicRange),
     ],
     modes=[
-      ModeType('PulseMode',    parammap.PulseMode),
+      ModeType('Mode',         parammap.PulseMode),
     ],
   ),
   ModuleType(
@@ -782,7 +782,7 @@ modules = [
       ParameterType('Range',        parammap.LogicRange),
     ],
     modes=[
-      ModeType('DelayMode',    parammap.LogicDelayMode),
+      ModeType('Mode',         parammap.LogicDelayMode),
     ],
   ),
   ModuleType(
