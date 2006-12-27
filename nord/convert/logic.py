@@ -43,10 +43,7 @@ class ConvPosEdgeDly(Convert):
     else:
       g2picktime = [ 10*val for val in g2logictime ]
       range = 2
-    print nm1logictime
-    print g2picktime
     g2midival = nm2g2val(nm1midival, nm1logictime, g2picktime)
-    print nm1midival, time, g2midival, g2picktime[g2midival]
     setv(g2mp.Range,range)
     setv(g2mp.Time, g2midival)
     g2m.modes.Mode.value = self.mode
