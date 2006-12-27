@@ -21,31 +21,47 @@
 #
 from nord.g2.modules import fromname as g2name
 from convert import *
+from units import *
 
 class ConvPosEdgeDly(Convert):
   maing2module = 'Delay'
-  parammap = ['Time']
   inputmap = ['In']
   outputmap = ['Out']
-  delaymode = 0
+  mode = 0
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-
-    g2m.modes.DelayMode.value = self.delaymode
+    nm1midival = getv(nmmp.Time)
+    time = nm1logictime[nm1midival]
+    if time <= 1000.:
+      g2picktime = [ .1*val for val in g2logictime ]
+      range = 0
+    elif time <= 10000.:
+      g2picktime = g2logictime[:]
+      range = 1
+    else:
+      g2picktime = [ 10*val for val in g2logictime ]
+      range = 2
+    print nm1logictime
+    print g2picktime
+    g2midival = nm2g2val(nm1midival, nm1logictime, g2picktime)
+    print nm1midival, time, g2midival, g2picktime[g2midival]
+    setv(g2mp.Range,range)
+    setv(g2mp.Time, g2midival)
+    g2m.modes.Mode.value = self.mode
 
 class ConvNegEdgeDly(ConvPosEdgeDly):
-  delaymode = 1
+  mode = 1
 
-class ConvPulse(Convert):
+class ConvPulse(ConvPosEdgeDly):
   maing2module = 'Pulse'
-  parammap = ['Time']
   inputmap = ['In']
   outputmap = ['Out']
+  mode = 0
 
 class ConvLogicDelay(ConvPosEdgeDly):
-  delaymode = 2
+  mode = 2
 
 class ConvLogicInv(Convert):
   maing2module = 'Invert'
