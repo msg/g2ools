@@ -92,6 +92,7 @@ typetable = {
    45: filter.ConvVocalFilter,
   108: filter.ConvVocoder,
   103: filter.ConvEqMid,
+  104: filter.ConvEqShelving,
 
    19: mixer.Conv3Mixer,
    40: mixer.Conv8Mixer,

@@ -137,5 +137,18 @@ class ConvEqMid(ConvFilter):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
-    setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
+
+class ConvEqShelving(ConvFilter):
+  maing2module = 'EqPeak'
+  parammap = ['Freq','Gain','Level']
+  inputmap = ['In']
+  outputmap = ['Out']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    
+    setv(g2mp.BandWidth,0)
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
 
