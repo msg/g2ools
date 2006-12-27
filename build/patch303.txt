@@ -2119,7 +2119,7 @@ parameters
 0 "freq" 0..127 "eqfreq"
 1 "gain" 0..127 "eqgain"
 2 "band width" 0..127 "0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct"
-3 "mute" 0..1 "onoff"
+3 "bypass" 0..1 "onoff"
 4 "level" 0..127 ""
 inputs
 0 "in" audio
@@ -2141,7 +2141,7 @@ parameters
 1 "gain" 0..127 "eqgain"
 2 "mode" 0..1 "0 ~ low, 1 ~ high"
 3 "bypass" 0..1 "onoff"
-4 "in level" 0..127 ""
+4 "level" 0..127 ""
 inputs
 0 "in" audio
 outputs
