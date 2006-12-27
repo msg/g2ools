@@ -94,6 +94,8 @@ class Convert:
     nmm,g2m = self.nmmodule,self.g2module
     if not convabove:
       g2m.vert = nmm.vert
+      for g2mod in self.g2modules:
+        g2mod.vert += g2m.vert
       return
 
     nma,g2a = convabove.nmmodule,convabove.g2module
