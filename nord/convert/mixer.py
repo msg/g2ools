@@ -111,7 +111,7 @@ class Conv4_1Switch(Convert):
     # add a LevAmp and reorient inputs
     for i in range(1,5):
       level = getv(getattr(nmmp,'Level%d' % i))
-      print '%d level=%d' % (i,level)
+      #print '%d level=%d' % (i,level)
       if level == 0 or level == 127:
         continue
       if len(nmm.inputs[i-1].cables):
@@ -154,3 +154,8 @@ class ConvAmplifier(Convert):
   inputmap = ['In']
   outputmap = ['Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    updatevals(g2mp,['Gain'],nm1levamp,g2levamp)
