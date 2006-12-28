@@ -74,7 +74,9 @@ def handleslv(conv):
     # add a masterosc
     master = conv.g2area.addmodule(g2name['OscMaster'],
         horiz=g2m.horiz,vert=conv.height)
-    setv(master.params.Freq,getv(g2m.params.Freq))
+    setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
+    setv(master.params.FreqFine,getv(g2m.params.FreqFine))
+    setv(master.params.FreqMode,getv(g2m.params.FreqMode))
     conv.g2modules.append(master)
     conv.height += master.type.height
     return master.outputs.Out
@@ -374,6 +376,7 @@ class ConvOscSineBank(Convert):
       #if getv(getattr(nmmp,'Osc%dMute'%i)):
       #  continue
       osc = g2area.addmodule(g2name[osctype],horiz=g2m.horiz,vert=vert)
+      osc.name = 'Osc%d' % i
       vert += osc.type.height
       self.g2modules.append(osc)
       oscs.append(osc)
@@ -385,6 +388,7 @@ class ConvOscSineBank(Convert):
       setv(getattr(g2mp,'Lev%d' % i),getv(getattr(nmmp,'Osc%dLevel'%i)))
       if len(getattr(nmm.inputs,'Osc%dAm'%i).cables):
         mod = g2area.addmodule(g2name['LevMod'],horiz=g2m.horiz,vert=vert)
+	mod.name = 'Am%d' % i
         vert += mod.type.height
         self.g2modules.append(mod)
         g2area.connect(osc.outputs.Out,mod.inputs.In,g2cablecolors.red)
