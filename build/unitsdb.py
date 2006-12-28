@@ -62,11 +62,14 @@ def getnumbers(fname):
 nm1adsrtime = getnumbers('nm1adsrtime.txt')
 g2adsrtime = getnumbers('g2adsrtime.txt')
 
-g2fltfreq = getnumbers('g2fltfreq.txt')
 nm1fltfreq = getnumbers('nm1fltfreq.txt')
+g2fltfreq = getnumbers('g2fltfreq.txt')
 
-g2logictime = getnumbers('g2logictime.txt')
 nm1logictime = getnumbers('nm1logictime.txt')
+g2logictime = getnumbers('g2logictime.txt')
+
+nm1levamp = getnumbers('nm1levamp.txt')
+g2levamp = getnumbers('g2levamp.txt')
 
 ratios = getnumbers('ratios.txt')
 
@@ -122,11 +125,18 @@ nm1logictime = [%s
 g2logictime = [%s
 ]
 
+nm1levamp = [%s
+]
+
+g2levamp = [%s
+]
+
 ratios = [%s
 ]
 ''' % (formattimes(nm1adsrtime), formattimes(g2adsrtime),
        formatfreq(nm1fltfreq), formatfreq(g2fltfreq),
        formatfreq(nm1logictime), formatfreq(g2logictime),
+       formatfreq(nm1levamp), formatfreq(g2levamp),
        formatarray([ '%.3f' % ratios[i] for i in range(len(ratios))]))
 
 print s
