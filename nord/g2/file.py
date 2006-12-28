@@ -396,17 +396,29 @@ class CableList(Section):
 
     return data.tostring()
 
-# holder for patch settings
-class Settings:
-  pass
-
 # holder object for morph settings
 class Morph:
   pass
 
-# holder object for patch variation settings
-class Variation:
-  pass
+# holder for patch settings
+class Settings:
+  def __init__(self):
+    self.patchvol    = [0]*NVARIATIONS
+    self.activemuted = [0]*NVARIATIONS
+    self.glide       = [0]*NVARIATIONS
+    self.glidetime   = [0]*NVARIATIONS
+    self.bend        = [0]*NVARIATIONS
+    self.semi        = [0]*NVARIATIONS
+    self.vibrato     = [0]*NVARIATIONS
+    self.cents       = [0]*NVARIATIONS
+    self.rate        = [0]*NVARIATIONS
+    self.arpeggiator = [0]*NVARIATIONS
+    self.arptime     = [0]*NVARIATIONS
+    self.arptype     = [0]*NVARIATIONS
+    self.octaves     = [0]*NVARIATIONS
+    self.octaveshift = [0]*NVARIATIONS
+    self.sustain     = [0]*NVARIATIONS
+    self.morphs = [ Morph() for morph in range(NMORPHS) ]
 
 # PatchSettings - section object for parse/format 
 class PatchSettings(Section):
@@ -417,17 +429,10 @@ class PatchSettings(Section):
     bit,sectioncnt  = getbits(bit,8,data) # always 7
     bit,nvariations = getbits(bit,8,data) # always 9
 
-    if not hasattr(settings,'morphs'):
-      settings.morphs = [ Morph() for morph in range(NMORPHS) ]
-
     for morph in range(NMORPHS):
       settings.morphs[morph].dials = [ 0 ] * NVARIATIONS
       settings.morphs[morph].modes = [ 0 ] * NVARIATIONS
       settings.morphs[morph].params = []
-
-    if not hasattr(settings,'variations'):
-      settings.variations = [ Variation() for i in range(NVARIATIONS) ]
-    variations = settings.variations
 
     bit,section  = getbits(bit,8,data) # 1 for morph settings
     bit,nentries = getbits(bit,7,data) # 16 parameters per variation
@@ -444,56 +449,55 @@ class PatchSettings(Section):
 
     for i in range(NVARIATIONS): # variation volume/active
       bit,variation = getbits(bit,8,data)
-      bit,variations[variation].patchvol    = getbits(bit,7,data)
-      bit,variations[variation].activemuted = getbits(bit,7,data)
+      bit,settings.patchvol[variation]    = getbits(bit,7,data)
+      bit,settings.activemuted[variation] = getbits(bit,7,data)
 
     bit,section  = getbits(bit,8,data) # 3 for glide/time settings
     bit,nentries = getbits(bit,7,data) # 2 parameters per variation
 
     for i in range(NVARIATIONS): # variation glide
       bit,variation = getbits(bit,8,data)
-      bit,variations[variation].glide     = getbits(bit,7,data)
-      bit,variations[variation].glidetime = getbits(bit,7,data)
+      bit,settings.glide[variation]     = getbits(bit,7,data)
+      bit,settings.glidetime[variation] = getbits(bit,7,data)
 
     bit,section  = getbits(bit,8,data) # 4 for bend/semi settings
     bit,nentries = getbits(bit,7,data) # 2 parameters per variation
 
     for i in range(NVARIATIONS): # variation bend
       bit,variation = getbits(bit,8,data)
-      bit,variations[variation].bend = getbits(bit,7,data)
-      bit,variations[variation].semi = getbits(bit,7,data)
+      bit,settings.bend[variation] = getbits(bit,7,data)
+      bit,settings.semi[variation] = getbits(bit,7,data)
 
     bit,section  = getbits(bit,8,data) # 5 for vibrato/cents/rate settings
     bit,nentries = getbits(bit,7,data) # 3 parameters per variation
 
     for i in range(NVARIATIONS): # variation vibrato
       bit,variation = getbits(bit,8,data)
-      bit,variations[variation].vibrato = getbits(bit,7,data)
-      bit,variations[variation].cents   = getbits(bit,7,data)
-      bit,variations[variation].rate    = getbits(bit,7,data)
+      bit,settings.vibrato[variation] = getbits(bit,7,data)
+      bit,settings.cents[variation]   = getbits(bit,7,data)
+      bit,settings.rate[variation]    = getbits(bit,7,data)
 
     bit,section  = getbits(bit,8,data) # 6 for arp/time/type/octaves settings
     bit,nentries = getbits(bit,7,data) # 4 parameters per variation
 
     for i in range(NVARIATIONS): # variation arpeggiator
       bit,variation = getbits(bit,8,data)
-      bit,variations[variation].arpeggiator = getbits(bit,7,data)
-      bit,variations[variation].arptime     = getbits(bit,7,data)
-      bit,variations[variation].arptype     = getbits(bit,7,data)
-      bit,variations[variation].octaves     = getbits(bit,7,data)
+      bit,settings.arpeggiator[variation] = getbits(bit,7,data)
+      bit,settings.arptime[variation]     = getbits(bit,7,data)
+      bit,settings.arptype[variation]     = getbits(bit,7,data)
+      bit,settings.octaves[variation]     = getbits(bit,7,data)
 
     bit,section  = getbits(bit,8,data) # 7 for shift/sustain settings
     bit,nentries = getbits(bit,7,data) # 2 parameters per variation
       
     for i in range(NVARIATIONS): # variation octave shift
       bit,variation = getbits(bit,8,data)
-      bit,variations[variation].octaveshift = getbits(bit,7,data)
-      bit,variations[variation].sustain     = getbits(bit,7,data)
+      bit,settings.octaveshift[variation] = getbits(bit,7,data)
+      bit,settings.sustain[variation]     = getbits(bit,7,data)
 
   def format(self, patch):
     data       = array('B',[])
     settings   = patch.settings
-    variations = settings.variations
 
     bit = setbits(0,2,data,self.area)
     bit = setbits(bit,8,data,7) # always 7
@@ -514,42 +518,42 @@ class PatchSettings(Section):
 
     for variation in range(NVARIATIONS):
       bit = setbits(bit,8,data,variation)
-      bit = setbits(bit,7,data,variations[variation].patchvol)
-      bit = setbits(bit,7,data,variations[variation].activemuted)
+      bit = setbits(bit,7,data,settings.patchvol[variation])
+      bit = setbits(bit,7,data,settings.activemuted[variation])
 
     bit = setbits(bit,8,data,3) # 3 for glide/time settings
     bit = setbits(bit,7,data,2) # 2 parameters per variation
 
     for variation in range(NVARIATIONS): # variation glide
       bit = setbits(bit,8,data,variation)
-      bit = setbits(bit,7,data,variations[variation].glide)
-      bit = setbits(bit,7,data,variations[variation].glidetime)
+      bit = setbits(bit,7,data,settings.glide[variation])
+      bit = setbits(bit,7,data,settings.glidetime[variation])
 
     bit = setbits(bit,8,data,4) # 4 for bend/semi settings
     bit = setbits(bit,7,data,2) # 2 parameters per variation
 
     for variation in range(NVARIATIONS): # variation bend
       bit = setbits(bit,8,data,variation)
-      bit = setbits(bit,7,data,variations[variation].bend)
-      bit = setbits(bit,7,data,variations[variation].semi)
+      bit = setbits(bit,7,data,settings.bend[variation])
+      bit = setbits(bit,7,data,settings.semi[variation])
 
     bit = setbits(bit,8,data,5) # 5 for vibrato/cents/rate settings
     bit = setbits(bit,7,data,3) # 3 parameters per variation
 
     for variation in range(NVARIATIONS): # variation vibrato
       bit = setbits(bit,8,data,variation)
-      bit = setbits(bit,7,data,variations[variation].vibrato)
-      bit = setbits(bit,7,data,variations[variation].cents)
-      bit = setbits(bit,7,data,variations[variation].rate)
+      bit = setbits(bit,7,data,settings.vibrato[variation])
+      bit = setbits(bit,7,data,settings.cents[variation])
+      bit = setbits(bit,7,data,settings.rate[variation])
 
     bit = setbits(bit,8,data,6) # 6 for arp/time/type/octaves settings
     bit = setbits(bit,7,data,4) # 4 parameters per variation
 
     for variation in range(NVARIATIONS): # variation arpeggiator
       bit = setbits(bit,8,data,variation)
-      bit = setbits(bit,7,data,variations[variation].arpeggiator)
-      bit = setbits(bit,7,data,variations[variation].arptime)
-      bit = setbits(bit,7,data,variations[variation].arptype)
+      bit = setbits(bit,7,data,settings.arpeggiator[variation].arpsettings)
+      bit = setbits(bit,7,data,settings.arptime[variation])
+      bit = setbits(bit,7,data,settings.arptype[variation])
       bit = setbits(bit,7,data,variations[variation].octaves)
 
     bit = setbits(bit,8,data,7) # 7 for shift/sustain settings
@@ -557,8 +561,8 @@ class PatchSettings(Section):
 
     for variation in range(NVARIATIONS): # variation octave shift
       bit = setbits(bit,8,data,variation)
-      bit = setbits(bit,7,data,variations[variation].octaveshift)
-      bit = setbits(bit,7,data,variations[variation].sustain)
+      bit = setbits(bit,7,data,settings.octaveshift[variation])
+      bit = setbits(bit,7,data,settings.sustain[variation])
 
     return data.tostring()
 
