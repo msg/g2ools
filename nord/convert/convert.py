@@ -62,7 +62,6 @@ class Convert:
     g2m = self.g2module = g2area.addmodule(g2name[self.maing2module])
     g2m.name = nmm.name
     self.horiz = g2m.horiz = nmm.horiz
-    #self.vert = g2m.vert = nmm.vert # calculated later
     self.height = g2m.type.height
 
     if hasattr(self,'parammap'):
@@ -73,6 +72,8 @@ class Convert:
         elif type(param) == type([]):
           cpv(getattr(g2m.params,param[0]),getattr(nmm.params,param[1]))
           self.params.append(getattr(g2m.params,param[0]))
+        else:
+          self.params.append(param) # None: placeholder for other parameters
 
     if hasattr(self,'inputmap'):
       for input in self.inputmap:
