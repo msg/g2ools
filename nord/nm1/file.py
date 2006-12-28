@@ -193,8 +193,9 @@ class CustomDump(Section):
       module = area.findmodule(index)
       if not module:
         raise NM1Error('CustomDump: invalid module index %s' % index)
+      modes = values.pop(0)
       for i in range(len(module.modes)):
-        module.modes[i] = values[i]
+        module.modes[i].value = values[i]
 
 class Morph:
   def __init__(self):
@@ -259,11 +260,12 @@ class CtrlMapDump(Section):
     ctrls = self.patch.ctrls = [ Ctrl() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
       sect,index,param,cc = map(int, self.lines[i].split())
-      if sect:
-        area = self.patch.voice
+      if sect == 1:
+        ctrls[i].param = self.patch.voice.findmodule(index).params[param]
+      elif sect == 0:
+        ctrls[i].param = self.patch.fx.findmodule(index).params[param]
       else:
-        area = self.patch.fx
-      ctrls[i].param = area.findmodule(index).params[param]
+        ctrls[i].param = self.patch.morphs[param]
       ctrls[i].cc = cc
 
 class NameDump(Section):
