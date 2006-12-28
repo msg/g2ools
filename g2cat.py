@@ -55,10 +55,10 @@ def printpatch(patch):
   print 'morphs:'
   print ' dial settings:'
   for i in range(len(settings.morphs)):
-    print ' ',settings.morphs[i].dials
+    print ' ',settings.morphs[i].dials.variations
   print ' modes:'
   for i in range(len(settings.morphs)):
-    print ' ',settings.morphs[i].modes
+    print ' ',settings.morphs[i].modes.variations
   print ' names:'
   print ' ',','.join(
       [ settings.morphs[i].label for i in range(len(settings.morphs))])
@@ -67,7 +67,7 @@ def printpatch(patch):
                 'vibrato','cents','rate',
                 'arpeggiator','arptime','arptype','octaves',
                 'octaveshift','sustain' ]:
-    print ' %-16s' % (attr+':'), getattr(settings,attr)
+    print ' %-16s' % (attr+':'), getattr(settings,attr).variations
   print 'modules:'
   for module in patch.voice.modules:
     print ' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d' % (

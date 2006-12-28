@@ -28,7 +28,7 @@ from nord.g2.colors import g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1portcolors
 from nord.g2 import colors
-from nord.convert import typetable
+from nord.convert import typetable,setv
 from nord.net import printnet
 
 nm2g2colors = {
@@ -76,10 +76,9 @@ def convert(pch):
   if nmpatch.header.voices > 1:
     g2patch.description.monopoly = 0
     g2patch.description.voicecnt = nmpatch.header.voices
-  for variation in range(9):
-    g2patch.settings.variations[variation].glide = nmpatch.header.porta
-    g2patch.settings.variations[variation].glidetime = nmpatch.header.portatime
-    g2patch.settings.variations[variation].octaveshift = nmpatch.header.octshift
+  setv(g2patch.settings.glide,nmpatch.header.porta)
+  setv(g2patch.settings.glidetime,nmpatch.header.portatime)
+  setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
     g2area = getattr(g2patch,areanm)
