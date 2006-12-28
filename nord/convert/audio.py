@@ -110,23 +110,41 @@ class ConvPhaser(Convert):
   maing2module = 'FltPhase'
   parammap = ['Freq',['PitchMod','FreqMod'],'Spread','SpreadMod',
               ['FB','Feedback'],['NotchCount','Peaks'],'Level']
-  inputmap = ['In','PitchVar','Spr']
+  inputmap = ['In',None,'Spr']
   outputmap = ['Out']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+    area = self.g2area
 
     setv(g2mp.Active,1-getv(nmmp.Bypass))
     setv(g2mp.FBMod,getv(nmmp.Depth))
     setv(g2mp.Type,3)
     
-    lfo = self.g2area.addmodule(g2name['LfoC'],horiz=g2m.horiz,vert=self.height)
+    vert = self.height
+    if len(nmm.inputs.FreqMod.cables):
+      # add mixer
+      mix = area.addmodule(g2name['Mix2-1B'],horiz=g2m.horiz,vert=vert)
+      self.g2modules.append(mix)
+      vert += mix.type.height
+      area.connect(mix.outputs.Out,g2m.inputs.PitchVar,g2cablecolors.blue)
+      modinp = mix.inputs.In1
+      self.inputs[1] = mix.inputs.In2
+      setv(g2mp.PitchMod,127)
+      setv(mix.params.Lev1,getv(nmmp.FreqMod))
+      depthparam = mix.params.Lev1
+    else:
+      modinp = g2m.inputs.PitchVar
+      depthparam = g2mp.PitchMod
+    lfo = area.addmodule(g2name['LfoC'],horiz=g2m.horiz,vert=vert)
     self.g2modules.append(lfo)
-    self.height += lfo.type.height
+    vert += lfo.type.height
+    self.height = vert
     setv(lfo.params.Rate,getv(nmmp.Rate))
     setv(lfo.params.Active,getv(nmmp.Lfo))
-    self.g2area.connect(lfo.outputs.Out,g2m.inputs.FB,g2cablecolors.blue)
+    area.connect(lfo.outputs.Out,modinp,g2cablecolors.blue)
+    setv(depthparam,getv(nmmp.Depth))
 
 class ConvInvLevShift(Convert):
   maing2module = 'LevConv'
