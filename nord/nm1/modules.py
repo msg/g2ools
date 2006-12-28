@@ -1234,13 +1234,13 @@ modules = [
     inputs=[
       InputType('In1',          nm1portcolors.audio),
       InputType('In2',          nm1portcolors.audio),
-      InputType('Modulation',   nm1portcolors.audio),
+      InputType('MixMod',       nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Modulation',
+      ParameterType('MixMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -1248,7 +1248,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Crossfade',
+      ParameterType('Mix',
         ParameterDef(  
           default=0,
           low=0,
@@ -2091,7 +2091,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('Col',
+      ParameterType('Color',
         ParameterDef(  
           default=0,
           low=0,
@@ -2453,7 +2453,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Resonance',
+      ParameterType('Res',
         ParameterDef(  
           default=0,
           low=0,
@@ -2617,7 +2617,7 @@ modules = [
           comment='freqkbt'
         ),
       ),
-      ParameterType('Resonance',
+      ParameterType('Res',
         ParameterDef(  
           default=0,
           low=0,
@@ -2666,7 +2666,7 @@ modules = [
           comment='filterfreq'
         ),
       ),
-      ParameterType('Resonance',
+      ParameterType('Res',
         ParameterDef(  
           default=0,
           low=0,
@@ -2748,7 +2748,7 @@ modules = [
           comment='freqkbt'
         ),
       ),
-      ParameterType('ResonanceMod',
+      ParameterType('ResMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -2756,7 +2756,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Resonance',
+      ParameterType('Res',
         ParameterDef(  
           default=0,
           low=0,
@@ -3549,7 +3549,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('On/Off',
+      ParameterType('On',
         ParameterDef(  
           default=0,
           low=0,
@@ -3622,7 +3622,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('In',
+      ParameterType('Sel',
         ParameterDef(  
           default=0,
           low=0,
@@ -3967,7 +3967,7 @@ modules = [
       OutputType('Out4',         nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Out',
+      ParameterType('Sel',
         ParameterDef(  
           default=0,
           low=0,
@@ -4409,7 +4409,7 @@ modules = [
           comment='freqkbt'
         ),
       ),
-      ParameterType('Resonance',
+      ParameterType('Res',
         ParameterDef(  
           default=0,
           low=0,
@@ -4513,7 +4513,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Pitch',
+      ParameterType('FreqCoarse',
         ParameterDef(  
           default=0,
           low=0,
@@ -4553,7 +4553,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('PitchFine',
+      ParameterType('FreqFine',
         ParameterDef(  
           default=0,
           low=0,
@@ -5765,7 +5765,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Multiplier',
+      ParameterType('Gain',
         ParameterDef(  
           default=0,
           low=0,
@@ -5795,7 +5795,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Offset',
+      ParameterType('Level',
         ParameterDef(  
           default=0,
           low=0,
@@ -5826,7 +5826,7 @@ modules = [
       OutputType('Out2',         nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Fade',
+      ParameterType('Mix',
         ParameterDef(  
           default=0,
           low=0,
@@ -5849,7 +5849,7 @@ modules = [
       OutputType('Out',          nm1portcolors.audio),
     ],
     params=[
-      ParameterType('Fade',
+      ParameterType('Mix',
         ParameterDef(  
           default=0,
           low=0,

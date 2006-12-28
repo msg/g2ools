@@ -431,12 +431,12 @@ zeropage 0.87500
 dynmem 0.34375
 height 3
 parameters
-0 "modulation" 0..127 ""
-1 "crossfade" 0..127 "symetric"
+0 "mix mod" 0..127 ""
+1 "mix" 0..127 "symetric"
 inputs
 0 "in1" audio
 1 "in2" audio
-2 "modulation" audio
+2 "mix mod" audio
 outputs
 0 "out" audio
 custom
@@ -772,7 +772,7 @@ dynmem 0.34375
 height 2
 parameters
 0 "mono" 0..1 "onoff"
-1 "col" 0..1 "onoff"
+1 "color" 0..1 "onoff"
 inputs
 0 "clk" logic
 outputs
@@ -965,7 +965,7 @@ parameters
 5 "vowel mod" 0..127 ""
 6 "freq" 0..127 "symetric"
 7 "freq mod" 0..127 ""
-8 "resonance" 0..127 ""
+8 "res" 0..127 ""
 inputs
 0 "in" audio
 1 "vowel mod" control
@@ -1052,7 +1052,7 @@ height 5
 parameters
 0 "freq" 0..127 "filterfreq"
 1 "kbt" 0..127 "freqkbt"
-2 "resonance" 0..127 ""
+2 "res" 0..127 ""
 3 "freq mod" 0..127 ""
 inputs
 0 "freq mod" control
@@ -1075,7 +1075,7 @@ dynmem 0.40625
 height 4
 parameters
 0 "freq" 0..127 "filterfreq"
-1 "resonance" 0..127 ""
+1 "res" 0..127 ""
 2 "gain control" 0..1 "onoff"
 inputs
 0 "in" audio
@@ -1101,8 +1101,8 @@ parameters
 2 "freq mod 1" 0..127 ""
 3 "freq" 0..127 "filterfreq"
 4 "kbt" 0..127 "freqkbt"
-5 "resonance mod" 0..127 ""
-6 "resonance" 0..127 ""
+5 "res mod" 0..127 ""
+6 "res" 0..127 ""
 7 "slope" 0..1 "filterslope2"
 8 "freq mod 2" 0..127 ""
 9 "bypass" 0..1 "onoff"
@@ -1535,7 +1535,7 @@ zeropage 0.87500
 dynmem 0.28125
 height 2
 parameters
-0 "on/off" 0..1 ""
+0 "on" 0..1 ""
 inputs
 0 "in" audio
 outputs
@@ -1591,7 +1591,7 @@ zeropage 0.87500
 dynmem 0.53125
 height 3
 parameters
-0 "in" 0..3 ""
+0 "sel" 0..3 ""
 1 "level 1" 0..127 ""
 2 "level 2" 0..127 ""
 3 "level 3" 0..127 ""
@@ -1770,7 +1770,7 @@ zeropage 3.50000
 dynmem 0.37500
 height 3
 parameters
-0 "out" 0..3 "0 ~ out1, 3 ~ out4"
+0 "sel" 0..3 "0 ~ out1, 3 ~ out4"
 1 "level" 0..127 ""
 2 "mute" 0..1 "onoff"
 inputs
@@ -1892,7 +1892,7 @@ height 6
 parameters
 0 "freq" 0..127 "filterfreq"
 1 "kbt" 0..127 "freqkbt"
-2 "resonance" 0..127 ""
+2 "res" 0..127 ""
 3 "freq mod 1" 0..127 ""
 4 "freq mod 2" 0..127 ""
 5 "slope" 0..2 "filtertype1"
@@ -1936,12 +1936,12 @@ zeropage 0.87500
 dynmem 0.59375
 height 4
 parameters
-0 "pitch" 0..127 "0 ~ 8.18 Hz, 127 ~ 12.54 kHz"
+0 "freq coarse" 0..127 "0 ~ 8.18 Hz, 127 ~ 12.54 kHz"
 1 "click" 0..127 ""
 2 "decay" 0..127 ""
 3 "punch" 0..1 "onoff"
 4 "pitch mod" 0..127 ""
-5 "pitch fine" 0..127 "freqfine"
+5 "freq fine" 0..127 "freqfine"
 6 "mute" 0..1 "onoff"
 inputs
 0 "trig" audio
@@ -2318,7 +2318,7 @@ zeropage 0.87500
 dynmem 0.34375
 height 2
 parameters
-0 "multiplier" 0..127 "unibi"
+0 "gain" 0..127 "unibi"
 1 "unipolar" 0..1 ""
 inputs
 0 "in" audio
@@ -2336,7 +2336,7 @@ zeropage 0.87500
 dynmem 0.34375
 height 2
 parameters
-0 "offset" 0..127 "unibi"
+0 "level" 0..127 "unibi"
 1 "unipolar" 0..1 ""
 inputs
 0 "in" audio
@@ -2354,7 +2354,7 @@ zeropage 1.75000
 dynmem 0.28125
 height 2
 parameters
-0 "fade" 0..127 "symetric"
+0 "mix" 0..127 "symetric"
 inputs
 0 "in" audio
 outputs
@@ -2372,7 +2372,7 @@ zeropage 0.87500
 dynmem 0.28125
 height 2
 parameters
-0 "fade" 0..127 "symetric"
+0 "mix" 0..127 "symetric"
 inputs
 0 "in 1" audio
 1 "in 2" audio
