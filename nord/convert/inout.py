@@ -28,38 +28,13 @@ class ConvKeyboard(Convert):
   outputmap = ['Note','Gate','Lin','Release']
 
 class ConvKeyboardPatch(Convert):
-  maing2module = 'Status'
+  maing2module = 'MonoKey'
+  outputmap = ['Pitch','Gate','Vel','Vel'] # just use on vel for off vel
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
-    g2area = self.g2area
-
-    # gotta do some work here
-    # basically use Status, Keyboard and Delay Clock modules to get
-    # all the KbdStatus signals.
-    self.g2modules = []
-    s=g2m
-    vert = self.height
-    for nm in ['Keyboard'] + [ 'DlyClock' ] * 3:
-      m = g2area.addmodule(g2name[nm],name='',horiz=g2m.horiz,vert=vert)
-      self.g2modules.append(m)
-      vert += m.type.height
-    self.height = vert
-
-    # internally connect the modules
-    k,d1,d2,d3 = self.g2modules
-    g2area.connect(k.outputs.Gate,d1.inputs.Clk,g2cablecolors.yellow)
-    g2area.connect(k.outputs.Note,d1.inputs.In,g2cablecolors.blue)
-    g2area.connect(d1.inputs.Clk,d2.inputs.Clk,g2cablecolors.yellow)
-    g2area.connect(k.outputs.Lin,d2.inputs.In,g2cablecolors.blue)
-    g2area.connect(d2.inputs.Clk,d3.inputs.Clk,g2cablecolors.yellow)
-    g2area.connect(k.outputs.Release,d3.inputs.In,g2cablecolors.blue)
-
-    # build output array that maps nm1 outputs
-    self.outputs = [d1.outputs.Out,
-                    s.outputs.VarActive,
-                    d2.outputs.Out,
-                    d3.outputs.Out]
+    nmmp,g2mp = nmm.params, g2m.params
+    setv(g2mp.Mode,0)
 
 class ConvMIDIGlobal(Convert):
   maing2module = 'ClkGen'
