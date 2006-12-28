@@ -113,7 +113,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('Dest',
+      ParameterType('Destination',
         ParameterDef(  
           default=0,
           low=0,

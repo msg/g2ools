@@ -96,7 +96,7 @@ dynmem 0.37500
 height 3
 parameters
 0 "level" 0..127 ""
-1 "dest" 0..5 "1destination"
+1 "destination" 0..5 "1destination"
 2 "mute" 0..1 "onoff"
 inputs
 0 "out" audio
