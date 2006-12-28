@@ -436,7 +436,7 @@ params = [
   ParameterDef(name='FltSlope_1',
     low=0,
     high=1,
-    default=0,
+    default=1,
     definitions=['0 ~ 6 dB/Oct, 1 ~ 12 dB/Oct'],
     comments=''
   ),
