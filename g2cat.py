@@ -67,7 +67,7 @@ def printpatch(patch):
                 'vibrato','cents','rate',
                 'arpeggiator','arptime','arptype','octaves',
                 'octaveshift','sustain' ]:
-    print ' %-16s' % (attr+':'), [ getattr(var,attr) for var in settings.variations ]
+    print ' %-16s' % (attr+':'), getattr(settings,attr)
   print 'modules:'
   for module in patch.voice.modules:
     print ' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d' % (
