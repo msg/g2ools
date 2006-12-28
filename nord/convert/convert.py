@@ -55,6 +55,7 @@ class Convert:
       input.conv = self 
     self.nmmodule.conv = self # to get back here when needed (cables)
     self.g2modules = []
+    self.params = []
     self.outputs = []
     self.inputs = []
 
@@ -68,10 +69,10 @@ class Convert:
       for param in self.parammap:
         if type(param) == type(''):
           cpv(getattr(g2m.params,param),getattr(nmm.params,param))
+          self.params.append(getattr(g2m.params,param))
         elif type(param) == type([]):
           cpv(getattr(g2m.params,param[0]),getattr(nmm.params,param[1]))
-        else:
-          raise 'Invalid param %r in parammap' % (param)
+          self.params.append(getattr(g2m.params,param[0]))
 
     if hasattr(self,'inputmap'):
       for input in self.inputmap:
