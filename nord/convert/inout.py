@@ -54,24 +54,28 @@ class ConvPolyAreaIn(Convert):
 
 class Conv1Output(Convert):
   maing2module = '2-Out'
+  parammap = [None,'Destination',['Active','Mute']]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    dest = getv(nmmp.Dest)
+    dest = getv(nmmp.Destination)
     inp = [g2m.inputs.InL,g2m.inputs.InR][dest%2]
     setv(g2mp.Destination,dest/2)
-
+    setv(g2mp.Active,1-getv(nmmp.Mute))
+    # maybe adjust patch level from nmm.params.Level
     self.inputs = [inp]
 
 class Conv4Output(Convert):
   maing2module = '4-Out'
+  parammap = [None]
   inputmap = ['In1','In2','In3','In4']
+  # maybe adjust patch level from nmm.params.Level
 
 class Conv2Output(Convert):
   maing2module = '2-Out'
-  parammap = ['Destination']
+  parammap = [None,'Destination',['Active','Mute']]
   inputmap = ['InL','InR']
 
   def domodule(self):
@@ -80,7 +84,6 @@ class Conv2Output(Convert):
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
-
     # maybe adjust patch level from nmm.params.Level
 
 class ConvNoteDetect(Convert):
@@ -90,6 +93,8 @@ class ConvNoteDetect(Convert):
 
 class ConvKeyboardSplit(Convert):
   maing2module = 'Name'
+  #          Lower,Upper
+  parammap = [None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -112,6 +117,10 @@ class ConvKeyboardSplit(Convert):
     self.height = vert
 
     u,l,lu,g,n,v = self.g2modules
+
+    setv(u.params.Level,getv(nmmp.Lower))
+    setv(l.params.C,getv(nmmp.Upper))
+
     g2area.connect(u.outputs.Out,lu.inputs.A,g2cablecolors.blue)
     g2area.connect(l.inputs.In,lu.inputs.B,g2cablecolors.blue)
     g2area.connect(l.outputs.Out,g.inputs.In1_1,g2cablecolors.yellow)
@@ -121,7 +130,7 @@ class ConvKeyboardSplit(Convert):
     g2area.connect(g.outputs.Out2,n.inputs.Clk,g2cablecolors.yellow)
     g2area.connect(n.inputs.Clk,v.inputs.Clk,g2cablecolors.yellow)
 
+    self.params = [l.params.C,u.params.Level]
     self.outputs = [n.outputs.Out,g.outputs.Out2,v.outputs.Out]
-
     self.inputs = [l.inputs.In,g.inputs.In2_1,v.inputs.In]
 

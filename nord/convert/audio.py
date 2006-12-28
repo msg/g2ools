@@ -62,7 +62,7 @@ class ConvQuantizer(Convert):
 
 class ConvDelay(Convert):
   maing2module = 'DelayDual'
-  parammap = [['Time1Mod','Modulation']]
+  parammap = [['Time1Mod','Modulation'],['Time1','Modulation']]
   inputmap = ['In','Time1']
   outputmap = ['Out2','Out1']
 
@@ -82,6 +82,7 @@ class ConvSampleNHold(Convert):
 
 class ConvDiode(Convert):
   maing2module = 'Rect'
+  parammap = ['Mode']
   inputmap = ['In']
   outputmap = ['Out']
 
@@ -96,7 +97,7 @@ class ConvDiode(Convert):
 
 class ConvStereoChorus(Convert):
   maing2module = 'StChorus'
-  parammap = ['Detune','Amount']
+  parammap = ['Detune','Amount',['Active','Bypass']]
   inputmap = ['In']
   outputmap = ['OutL','OutR']
 
@@ -108,8 +109,9 @@ class ConvStereoChorus(Convert):
 
 class ConvPhaser(Convert):
   maing2module = 'FltPhase'
-  parammap = ['Freq',['PitchMod','FreqMod'],'Spread','SpreadMod',
-              ['FB','Feedback'],['NotchCount','Peaks'],'Level']
+  parammap = [None,None,['PitchMod','FreqMod'],'Freq','SpreadMod',
+              ['FB','Feedback'],['NotchCount','Peaks'],'Spread','Level',
+              ['Active','Bypass'],None]
   inputmap = ['In',None,'Spr']
   outputmap = ['Out']
 
@@ -142,12 +144,16 @@ class ConvPhaser(Convert):
     vert += lfo.type.height
     self.height = vert
     setv(lfo.params.Rate,getv(nmmp.Rate))
+    self.params[0] = lfo.params.Rate
     setv(lfo.params.Active,getv(nmmp.Lfo))
+    self.params[1] = lfo.params.Active
     area.connect(lfo.outputs.Out,modinp,g2cablecolors.blue)
     setv(depthparam,getv(nmmp.Depth))
+    self.params[9] = depthparam
 
 class ConvInvLevShift(Convert):
   maing2module = 'LevConv'
+  parammap = [['OutputType','Mode'],None]
   inputmap = ['In']
   outputmap = ['Out']
 
@@ -162,6 +168,7 @@ class ConvInvLevShift(Convert):
 
 class ConvShaper(Convert):
   maing2module = 'ShpStatic'
+  parammap = ['Mode']
   inputmap = ['In']
   outputmap = ['Out']
 
@@ -176,7 +183,8 @@ class ConvShaper(Convert):
     
 class ConvCompressor(Convert):
   maing2module = 'Compressor'
-  parammap = ['Threshold','Ratio','Attack','Release','RefLevel']
+  parammap = ['Attack','Release','Threshold','Ratio','RefLevel',None,
+              ['SideChain','Act'],['SideChain','Mon'],['Active','Bypass']]
   inputmap = ['InL','InR','SideChain']
   outputmap = ['OutL','OutR']
 
@@ -184,12 +192,14 @@ class ConvCompressor(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
     if len(nmm.inputs.Side.cables):
       setv(g2mp.SideChain,1)
     
 class ConvDigitizer(Convert):
   maing2module = 'Digitizer'
-  parammap = ['Bits','Rate','RateMod']
+  parammap = ['Bits','Rate','RateMod',['Bits','QuantOff'],
+              ['Active','SamplingOff']]
   inputmap = ['In','Rate']
   outputmap = ['Out']
 
@@ -197,6 +207,7 @@ class ConvDigitizer(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.Bits,getv(nmmp.Bits)) # becuase it's also used for QuantOff
     quantoff = getv(nmmp.QuantOff)
     if quantoff:
       setv(g2mp.Bits,0)

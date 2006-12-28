@@ -29,7 +29,7 @@ from convert import *
 # NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
 #       in that case, the Pitch input could be used (if no knob tied
 #       to the said PitchModX dial).
-def handledualpitchmod(conv):
+def handledualpitchmod(conv,mod1param,mod2param):
   nmm, g2m = conv.nmmodule, conv.g2module
   p1 = p2 = None
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
@@ -45,12 +45,16 @@ def handledualpitchmod(conv):
     setv(g2m.params.PitchMod,127)
     cpv(g2mm.params.Lev1,nmm.params.PitchMod1)
     cpv(g2mm.params.Lev2,nmm.params.PitchMod2)
+    conv.params[mod1param] = g2mm.params.Lev1
+    conv.params[mod2param] = g2mm.params.Lev2
   elif len(nmm.inputs.PitchMod1.cables):
     p1 = g2m.inputs.PitchVar
     cpv(g2m.params.PitchMod,nmm.params.PitchMod1)
+    conv.params[mod1param] = g2m.params.PitchMod
   elif len(nmm.inputs.PitchMod2.cables):
     p2 = g2m.inputs.PitchVar
     cpv(g2m.params.PitchMod,nmm.params.PitchMod2)
+    conv.params[mod2param] = g2m.params.PitchMod
 
   return p1, p2
 
@@ -85,7 +89,7 @@ def handleslv(conv):
 
 class ConvMasterOsc(Convert):
   maing2module = 'OscMaster'
-  parammap = ['FreqCoarse','FreqFine','Kbt']
+  parammap = ['FreqCoarse','FreqFine','Kbt',None,None]
   outputmap = ['Out']
 
   def domodule(self):
@@ -93,8 +97,9 @@ class ConvMasterOsc(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
+
     # handle special inputs
-    p1,p2 = handledualpitchmod(self)
+    p1,p2 = handledualpitchmod(self,3,4)
     self.inputs[:2] = [p1,p2]
 
     for cable in nmm.outputs.Slv.cables:
@@ -102,8 +107,9 @@ class ConvMasterOsc(Convert):
 
 class ConvOscA(Convert):
   maing2module = 'OscB'
-  parammap = ['Waveform', 'FreqCoarse', 'FreqFine',
-              ['FmAmount','FmMod'],['ShapeMod','PwMod']]
+  parammap = ['FreqCoarse','FreqFine',None,['Shape','PulseWidth'],
+              'Waveform',None,None,
+              ['FmAmount','FmMod'],['ShapeMod','PwMod'],['Active','Mute']]
   inputmap = [ 'Sync','FmMod',None,None,'ShapeMod' ]
   outputmap = [ 'Out', None ]
 
@@ -117,18 +123,19 @@ class ConvOscA(Convert):
     setv(g2mp.Shape,abs(getv(nmmp.PulseWidth)-64)*2)
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
+    self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs
-    p1,p2 = handledualpitchmod(self)
+    p1,p2 = handledualpitchmod(self,5,6)
     self.inputs[2:4] = p1,p2
     self.outputs[1] = handleslv(self)
 
 class ConvOscB(Convert):
   maing2module = 'OscB'
-  parammap = ['Waveform', 'FreqCoarse', 'FreqFine',
-              ['FmAmount','FmMod'],['ShapeMod','PulseWidth']]
+  parammap = ['FreqCoarse','FreqFine',None,'Waveform',None,None,
+              ['FmAmount','FmMod'],['ShapeMod','PulseWidth'],['Active','Mute']]
   inputmap = [ 'FmMod',None,None,'ShapeMod' ]
   outputmap = [ 'Out', None ]
 
@@ -139,18 +146,19 @@ class ConvOscB(Convert):
     # handle special special parameters
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
+    self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs
-    p1,p2 = handledualpitchmod(self)
+    p1,p2 = handledualpitchmod(self,4,5)
     self.inputs[1:3] = p1, p2
     self.outputs[1] = handleslv(self)
 
 class ConvOscC(Convert):
   maing2module = 'OscC'
   parammap = ['FreqCoarse', 'FreqFine','Kbt',
-              ['PitchMod','FreqMod'],['FmAmount','FmMod']]
+              ['PitchMod','FreqMod'],['FmAmount','FmMod'],['Active','Mute']]
   inputmap = [ 'FmMod','Pitch',None]
   outputmap = [ 'Out',None ]
 
@@ -172,9 +180,24 @@ class ConvOscC(Convert):
     self.inputs[2] = aminput
     self.outputs[1] = handleslv(self)
 
+# FMAmod convertion table from SpectralOsc
+specfmamod = [
+  0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,
+  6,   6,   7,   7,   8,   8,   9,   9,  10,  11,  11,  12,  12,  13,  14,  14,
+ 15,  16,  16,  17,  18,  18,  19,  20,  21,  21,  22,  23,  23,  24,  25,  26,
+ 27,  27,  28,  29,  30,  31,  31,  32,  33,  34,  35,  36,  37,  37,  38,  39,
+ 40,  41,  42,  43,  44,  45,  46,  46,  47,  48,  49,  50,  51,  52,  53,  54,
+ 55,  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,
+ 71,  72,  73,  74,  75,  76,  77,  78,  78,  79,  80,  81,  82,  83,  84,  85,
+ 86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99, 100, 101,
+]
+
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
-  parammap = ['FreqCoarse','FreqFine','Kbt',['FmAmount','FmMod']]
+  #                                  SpShp,Part,PMd1,PMd2
+  parammap = ['FreqCoarse','FreqFine',None,None,None,None,
+  #                                ShpM
+              ['FmAmount','FmMod'],None,'Kbt',['Active','Mute']]
   inputmap = ['FM',None,None,None]
   outputmap = [None,None]
 
@@ -183,13 +206,15 @@ class ConvSpectralOsc(Convert):
     nmmp,g2mp = nmm.params, g2m.params
     area = self.g2area
 
+    setv(g2mp.FmAmount,specfmamod[getv(g2mp.FmAmount)])
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
-    p1,p2 = handledualpitchmod(self)
+    p1,p2 = handledualpitchmod(self,4,5)
     self.inputs[1:3] = p1,p2
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.Waveform,[3,4][getv(nmmp.Partials)])
+    self.params[3] = g2mp.Waveform
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     setv(g2mp.ShapeMod,127)
 
@@ -199,6 +224,7 @@ class ConvSpectralOsc(Convert):
       self.g2modules.append(shape)
       vert += shape.type.height
       setv(shape.params.Lev,getv(nmmp.SpectralShapeMod))
+      self.params[7] = shape.params.Lev
       setv(shape.params.On,1)
       area.connect(shape.outputs.Out,g2m.inputs.Shape,g2cablecolors.blue)
       shapemod = shape.inputs.Chain
@@ -216,6 +242,7 @@ class ConvSpectralOsc(Convert):
     const,shpstatic,levmult,mix=mods
     setv(const.params.BipUni,1)
     setv(const.params.Level,getv(nmmp.SpectralShape))
+    self.params[2] = const.params.Level
     setv(shpstatic.params.Mode,2)
     setv(mix.params.Lev1,127)
     setv(mix.params.Lev2,127)
@@ -234,7 +261,7 @@ class ConvSpectralOsc(Convert):
 
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'
-  parammap = ['FreqCoarse','FreqFine','Kbt']
+  parammap = ['FreqCoarse','FreqFine','Kbt',['Active','Mute'],None,None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
@@ -245,7 +272,7 @@ class ConvFormantOsc(Convert):
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
-    p1,p2 = handledualpitchmod(self)
+    p1,p2 = handledualpitchmod(self,5,6)
     self.inputs[:2] = p1,p2
 
     vert = self.height
@@ -267,15 +294,14 @@ class ConvFormantOsc(Convert):
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
+    self.params[4] = constswt.params.Lev
 
     self.outputs = [rndclka.outputs.Out,handleslv(self)]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'
-  parammap = ['Waveform',
-              ['FreqCoarse','DetuneCoarse'],
-              ['FreqFine','DetuneFine'],
-              ['FmAmount','FmMod'],]
+  parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
+              'Waveform',['FmAmount','FmMod'],['Active','Mute']]
   inputmap = ['Pitch','FmMod','Pitch','Sync']
   outputmap = ['Out']
 
@@ -297,9 +323,8 @@ class ConvOscSlvA(Convert):
 
 class ConvOscSlvB(Convert):
   maing2module = 'OscB'
-  parammap = [['FreqCoarse','DetuneCoarse'],
-              ['FreqFine','DetuneFine'],
-              ['ShapeMod','PwMod'],]
+  parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
+              ['Shape','PulseWidth'],['ShapeMod','PwMod'],['Active','Mute']]
   inputmap = ['Pitch','ShapeMod']
   outputmap = ['Out']
 
@@ -321,9 +346,8 @@ class ConvOscSlvB(Convert):
 class ConvOscSlvC(Convert):
   maing2module = 'OscC'
   waveform = 2 # saw
-  parammap = [['FreqCoarse','DetuneCoarse'],
-              ['FreqFine','DetuneFine'],
-              ['FmAmount','FmMod'],]
+  parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
+              ['FmAmount','FmMod'],['Active','Mute']]
   inputmap = ['Pitch','FmMod',None] # no Mst, possible AM
   outputmap = ['Out']
 
@@ -356,6 +380,7 @@ class ConvOscSlvE(ConvOscSlvC):
 
 class ConvOscSineBank(Convert):
   maing2module = 'Mix8-1B'
+  parammap = [ None ] * 24
   outputmap = ['Out']
   #           Mst  Mixin   Sync O1Am O2Am O3Am O4Am O5Am O6Am
   inputmap = [None,'Chain',None,None,None,None,None,None,None]
@@ -383,9 +408,15 @@ class ConvOscSineBank(Convert):
       if len(nmm.inputs.Mst.cables):
         setv(osc.params.Kbt,0)
       setv(osc.params.FreqCoarse,getv(getattr(nmmp,'Osc%dCoarse'%i)))
+      self.params[(i-1)*3] = osc.params.FreqCoarse
       setv(osc.params.FreqFine,getv(getattr(nmmp,'Osc%dFine'%i)))
-      setv(osc.params.FreqMode,3) # all in partial mode
-      setv(getattr(g2mp,'Lev%d' % i),getv(getattr(nmmp,'Osc%dLevel'%i)))
+      self.params[(i-1)*3+1] = osc.params.FreqFine
+      setv(osc.params.FreqMode,3) 
+      l = getattr(g2mp,'Lev%d' % i)
+      setv(l,getv(getattr(nmmp,'Osc%dLevel'%i)))
+      self.params[(i-1)*3+2] = l
+      setv(osc.params.Active,1-getv(getattr(nmmp,'Osc%dMute'%i)))
+      self.params[(i-1)+18] = osc.params.Active
       if len(getattr(nmm.inputs,'Osc%dAm'%i).cables):
         mod = g2area.addmodule(g2name['LevMod'],horiz=g2m.horiz,vert=vert)
 	mod.name = 'Am%d' % i
@@ -415,6 +446,8 @@ class ConvOscSineBank(Convert):
 
 class ConvOscSlvFM(ConvOscSlvC):
   waveform = 0 # sine
+  parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
+              None,['FmAmount','FmMod'],['Active','Mute']]
   inputmap = ['Pitch','FmMod','Sync'] # no Mst
  
 class ConvNoise(Convert):
@@ -424,8 +457,8 @@ class ConvNoise(Convert):
 
 class ConvPercOsc(Convert):
   maing2module = 'OscPerc'
-  parammap = [['FreqCoarse','Pitch'],['FreqFine','PitchFine'],
-              'Click','Decay','Punch','PitchMod']
+  parammap = ['FreqCoarse','Click','Decay','Punch','PitchMod','FreqFine',
+              ['Active','Mute']]
   inputmap = ['Trig',None,'PitchVar']
   outputmap = ['Out']
 
@@ -444,6 +477,7 @@ class ConvPercOsc(Convert):
 
 class ConvDrumSynth(Convert):
   maing2module = 'DrumSynth'
+  parammap = [None]*16
   inputmap = ['Trig','Vel','Pitch']
   outputmap = ['Out']
 
@@ -454,6 +488,7 @@ class ConvDrumSynth(Convert):
     # parameters are exactly the same
     for i in range(len(nmm.params)):
       cpv(g2mp[i],nmmp[i])
+      self.params[i] = g2mp[i]
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))

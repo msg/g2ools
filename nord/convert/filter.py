@@ -43,18 +43,18 @@ class ConvFilterB(ConvFilter):
 
 class ConvFilterC(ConvFilter):
   maing2module = 'FltMulti'
-  parammap = ['Freq',['Res','Resonance'],['GC','GainControl']]
+  parammap = ['Freq','Res',['GC','GainControl']]
   inputmap = ['In']
   outputmap = ['LP','BP','HP']
 
 class ConvFilterD(ConvFilter):
   maing2module = 'FltMulti'
-  parammap = ['Freq',['PitchMod','FreqMod']]
+  parammap = ['Freq',None,'Res',['PitchMod','FreqMod']]
   inputmap = ['PitchVar','In']
   outputmap = ['HP','BP','LP']
 
 # copied from convert.py for osc.py (maybe it can be unified?)
-def fltdualpitchmod(nmm,g2m,conv):
+def fltdualpitchmod(nmm,g2m,conv,mod1,mod2):
   p1 = p2 = None
   if len(nmm.inputs.FreqMod1.cables) and len(nmm.inputs.FreqMod2.cables):
     g2area = conv.g2area
@@ -66,21 +66,25 @@ def fltdualpitchmod(nmm,g2m,conv):
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
     setv(g2m.params.PitchMod,127)
     cpv(g2mm.params.Lev1,nmm.params.FreqMod1)
+    conv.params[mod1] = g2mm.params.Lev1
     cpv(g2mm.params.Lev2,nmm.params.FreqMod2)
+    conv.params[mod2] = g2mm.params.Lev2
   elif len(nmm.inputs.FreqMod1.cables):
     p1 = g2m.inputs.PitchVar
     cpv(g2m.params.PitchMod,nmm.params.FreqMod1)
+    conv.params[mod1] = g2m.params.PitchMod
   elif len(nmm.inputs.FreqMod2.cables):
     p2 = g2m.inputs.PitchVar
     cpv(g2m.params.PitchMod,nmm.params.FreqMod2)
+    conv.params[mod2] = g2m.params.PitchMod
 
   return p1, p2
 
 class ConvFilterE(ConvFilter):
   maing2module = 'FltNord'
-  parammap = ['FilterType','Slope','Freq',
-              ['Res','Resonance'],['PitchMod','FreqMod1'],
-              ['GC','GainControl'],['ResMod','ResonanceMod']]
+  parammap = ['FilterType',['GC','GainControl'],None,
+              'Freq',None,'ResMod','Res',
+              'Slope',None,['Active','Bypass']]
   inputmap = ['PitchVar','Res','In',None]
   outputmap = ['Out']
 
@@ -91,15 +95,16 @@ class ConvFilterE(ConvFilter):
 
     # deal with KBT later
 
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
     # handle special inputs
-    p1,p2 = fltdualpitchmod(nmm,g2m,self)
+    p1,p2 = fltdualpitchmod(nmm,g2m,self,2,8)
     self.inputs[0] = p1
     self.inputs[3] = p2
 
 class ConvFilterF(ConvFilter):
   maing2module = 'FltClassic'
-  parammap = ['Freq','Slope',['Res','Resonance'],
-              ['PitchMod','FreqMod1']]
+  parammap = ['Freq',None,'Res',None,None,
+              'Slope',['Active','Bypass']]
   inputmap = ['PitchVar',None,'In',None]
   outputmap = ['Out']
 
@@ -110,14 +115,15 @@ class ConvFilterF(ConvFilter):
 
     # deal with KBT later
 
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
     # handle special inputs
-    p1,p2 = fltdualpitchmod(nmm,g2m,self)
+    p1,p2 = fltdualpitchmod(nmm,g2m,self,3,4)
     self.inputs[0:2] = p1,p2
 
 class ConvVocalFilter(ConvFilter):
   maing2module = 'FltVoice'
-  parammap = ['Vowel1','Vowel2','Vowel3','Level','Vowel', 'VowelMod',
-              'Freq','FreqMod', ['Res','Resonance']]
+  parammap = ['Vowel1','Vowel2','Vowel3','Level','Vowel','VowelMod',
+              'Freq','FreqMod', 'Res']
   inputmap = ['In','VowelMod','FreqMod']
   outputmap = ['Out']
 
@@ -129,7 +135,7 @@ class ConvVocoder(Convert):
 
 class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
-  parammap = ['Freq','Gain','BandWidth','Level']
+  parammap = ['Freq','Gain','BandWidth',['Active','Bypass'],'Level']
   inputmap = ['In']
   outputmap = ['Out']
 
@@ -141,7 +147,7 @@ class ConvEqMid(ConvFilter):
 
 class ConvEqShelving(ConvFilter):
   maing2module = 'EqPeak'
-  parammap = ['Freq','Gain','Level']
+  parammap = ['Freq','Gain',None,['Active','Bypass'],'Level']
   inputmap = ['In']
   outputmap = ['Out']
 

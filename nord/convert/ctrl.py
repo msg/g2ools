@@ -36,6 +36,7 @@ class ConvSmooth(Convert):
 
 class ConvPortamentoA(Convert):
   maing2module = 'Glide'
+  parammap = ['Time']
   inputmap = ['In','On']
   outputmap = ['Out']
 
@@ -87,7 +88,7 @@ class ConvControlMixer(Convert):
 
 class ConvNoteVelScal(Convert):
   maing2module = 'LevScaler'
-  parammap = [['L','LeftGain'],['BP','Breakpoint'],['R','RightGain']]
+  parammap = [None,['L','LeftGain'],['BP','Breakpoint'],['R','RightGain']]
   inputmap = [None,'Note'] # no Vel
   outputmap = ['Out']
 

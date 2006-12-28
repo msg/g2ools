@@ -38,6 +38,7 @@ class Conv8Mixer(Convert):
 
 class ConvGainControl(Convert):
   maing2module = 'LevMult'
+  parammap = [None]
   inputmap = ['Mod','In']
   outputmap = ['Out']
 
@@ -53,11 +54,12 @@ class ConvGainControl(Convert):
       self.height = conv.vert + conv.type.height
       self.g2area.connect(conv.outputs.Out,g2m.inputs.Mod,g2cablecolors.blue)
       setv(conv.params.OutputType,2) # Pos (I think)
+      self.params[0] = conv.params.OutputType
       self.inputs[0] = conv.inputs.In
 
 class ConvX_Fade(Convert):
   maing2module = 'X-Fade'
-  parammap = [['Mix','Crossfade'],['MixMod','Modulation']]
+  parammap = ['MixMod','Mix']
   inputmap = ['In1','In2','Mod']
   outputmap = ['Out']
 
@@ -69,37 +71,37 @@ class ConvPan(Convert):
 
 class Conv1to2Fade(Convert):
   maing2module = 'Fade1-2'
-  parammap = [['Mix','Fade']]
+  parammap = ['Mix']
   inputmap = ['In']
   outputmap = ['Out1','Out2']
 
 class Conv2to1Fade(Convert):
   maing2module = 'Fade2-1'
-  parammap = [['Mix','Fade']]
+  parammap = ['Mix']
   inputmap = ['In1','In2']
   outputmap = ['Out']
 
 class ConvLevMult(Convert):
   maing2module = 'LevAmp'
-  parammap = [['Gain','Multiplier']]
+  parammap = ['Gain',None]
   inputmap = ['In']
   outputmap = ['Out']
 
 class ConvLevAdd(Convert):
   maing2module = 'LevAdd'
-  parammap = [['Level','Offset']]
+  parammap = ['Level',['BipUni','Unipolar']]
   inputmap = ['In']
   outputmap = ['Out']
 
 class ConvOnOff(Convert):
   maing2module = 'SwOnOffT'
-  parammap = [['On','On/Off']]
+  parammap = ['On']
   inputmap = ['In']
   outputmap = ['Out']
 
 class Conv4_1Switch(Convert):
   maing2module = 'Sw4-1'
-  parammap = [['Sel','In']]
+  parammap = ['Sel',None,None,None,None]
   inputmap = ['In1','In2','In3','In4']
   outputmap = ['Out']
 
@@ -121,12 +123,13 @@ class Conv4_1Switch(Convert):
         self.g2area.connect(amp.outputs.Out,getattr(g2m.inputs,'In%d' % i),
            g2cablecolors.blue)
         setv(amp.params.Gain,getv(getattr(nmmp,'Level%d' % i)))
+        self.params[i] = amp.params.Gain
         self.inputs[i-1] = amp.inputs.In
     self.height = vert
 
 class Conv1_4Switch(Convert):
   maing2module = 'Sw1-4'
-  parammap = [['Sel','Out']]
+  parammap = ['Sel',None,None]
   inputmap = ['In']
   outputmap = ['Out1','Out2','Out3','Out4']
 
@@ -146,6 +149,7 @@ class Conv1_4Switch(Convert):
       vert += amp.type.height
       self.g2area.connect(amp.outputs.Out,g2m.inputs.In,g2cablecolors.blue)
       setv(amp.params.Gain,level)
+      self.params[1] = amp.params.Gain
       self.inputs[0] = amp.inputs.In
 
 class ConvAmplifier(Convert):

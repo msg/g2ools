@@ -25,6 +25,7 @@ from units import *
 
 class ConvPosEdgeDly(Convert):
   maing2module = 'Delay'
+  parammap = ['Time']
   inputmap = ['In']
   outputmap = ['Out']
   mode = 0
@@ -67,6 +68,7 @@ class ConvLogicInv(Convert):
 
 class ConvLogicProc(Convert):
   maing2module = 'Gate'
+  parammap = [None]
   inputmap = ['In2_1','In2_2']
   outputmap = ['Out2']
 

@@ -25,7 +25,7 @@ from units import *
 
 class ConvADSR_Env(Convert):
   maing2module = 'EnvADSR'
-  parammap = ['Attack','Decay','Sustain','Release',['Shape','AttackShape']]
+  parammap = [['Shape','AttackShape'],'Attack','Decay','Sustain','Release',None]
   inputmap = ['In','Gate',None,'AM'] # No Retrig
   outputmap = ['Env','Out']
               
@@ -53,7 +53,7 @@ class ConvAD_Env(Convert):
 class ConvMod_Env(Convert):
   maing2module = 'ModADSR'
   parammap = ['Attack','Decay','Sustain','Release',
-              'AttackMod','DecayMod','SustainMod','ReleaseMod']
+              'AttackMod','DecayMod','SustainMod','ReleaseMod',None]
   inputmap = ['Gate',None,'AttackMod','DecayMod','SustainMod','ReleaseMod',
               'In','AM']
   outputmap = ['Env','Out']

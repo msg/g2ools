@@ -34,7 +34,8 @@ def handlemst(conv):
 
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
-  parammap = ['Rate','Range','RateMod',['PolyMono','Mono']]
+  parammap = ['Rate','Range','Waveform','RateMod',['PolyMono','Mono'],
+              None,'Phase',['Active','Mute']]
   inputmap = ['Rate','Rst']
   outputmap = [None,'Out'] # no Slv
 
@@ -44,14 +45,12 @@ class ConvLFOA(Convert):
 
     # handle special parameters
     setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
-    # deal with RateKbt later
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
 class ConvLFOB(Convert):
   maing2module = 'LfoShpA'
   parammap = ['Rate','Range','Phase','RateMod',['PolyMono','Mono'],
-              ['Shape','Pw'],
-              ['PhaseMod','PwMod']]
+              None,['PhaseMod','PwMod'],['Shape','Pw']]
   inputmap = ['Rate','Rst','ShapeMod']
   outputmap = ['Out',None] # no Slv
 
@@ -60,12 +59,12 @@ class ConvLFOB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Waveform,5)
-    # deal with RateKbt later
     cpv(g2mp.PhaseMod,nmmp.PwMod)
 
 class ConvLFOC(Convert):
   maing2module = 'LfoA'
-  parammap = ['Rate','Range','RateMod']
+  parammap = ['Rate','Range','Waveform','RateMod',['PolyMono','Mono'],
+              ['Active','Mute']]
   inputmap = ['RateVar']
   outputmap = ['Out',None] # no Slv
 
@@ -74,10 +73,11 @@ class ConvLFOC(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
+    setv(g2mp.Active,1-getv(nmmp.Mute))
 
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
-  parammap = ['Rate','Phase',['PolyMono','Mono']]
+  parammap = ['Rate','Phase','Waveform',['PolyMono','Mono'],['Active','Mute']]
   inputmap = [None,'Rst'] # no Mst
   outputmap = ['Out']
 
@@ -117,7 +117,7 @@ class ConvLFOSlvE(ConvLFOSlvC):
 
 class ConvClkGen(Convert):
   maing2module = 'ClkGen'
-  parammap = [['Tempo','Rate']]
+  parammap = [['Tempo','Rate'],['Active','On/Off']]
   inputmap = ['Rst']
   outputmap = ['1/96','1/16',None,'Sync'] # no Slv
 
@@ -129,7 +129,7 @@ class ConvClkGen(Convert):
 
 class ConvClkRndGen(Convert):
   maing2module = 'RndClkA'
-  parammap = [['PolyMono','Mono']]
+  parammap = [['PolyMono','Mono'],['StepProb','Color']]
   inputmap = ['Clk']
   outputmap = ['Out']
 
@@ -152,8 +152,9 @@ class ConvRndPulseGen(Convert):
 
 class ConvPatternGen(Convert):
   maing2module = 'RndPattern'
-  parammap = [['PatternA','Pattern'],['PatternB','Pattern'],
-              ['LoopCount','Step']]
+  parammap = [['PatternA','Pattern'],['PatternB','Bank'],
+              ['StepProb','LowDelta'],['LoopCount','Step'],
+              None]
   inputmap = ['Clk','Rst','A']
   outputmap = ['Out']
 
@@ -164,5 +165,5 @@ class ConvPatternGen(Convert):
     # PatternA and PatternB receive same input
     if len(getattr(nmm.inputs,'Pattern&Bank').cables):
       self.g2area.connect(g2m.inputs.A,g2m.inputs.B,g2cablecolors.blue) 
-    # deal with nmmp.LowDelta later
+    setv(g2mp.StepProb,127-64*getv(nmmp.LowDelta))
 

@@ -24,7 +24,7 @@ from convert import *
 
 class ConvEventSeq(Convert):
   maing2module = 'SeqEvent'
-  parammap = ['Length',['TG1','Gate1'],['TG2','Gate2']]
+  parammap = ['Length','Loop',['TG1','Gate1'],['TG2','Gate2']]+[None]*32
   inputmap = ['Clk','Rst']
   outputmap = ['Trig1','Trig2','Link','Link']
 
@@ -35,11 +35,13 @@ class ConvEventSeq(Convert):
     for j in range(2):
       for i in range(16):
         s = 'Seq%dStep%d' % (j+1,i+1)
-        setv(getattr(g2mp,s),getv(getattr(nmmp,s)))
+        step = getattr(g2mp,s)
+        setv(step,getv(getattr(nmmp,s)))
+        self.params[4+j*16+i] = step
 
 class ConvCtrlSeq(Convert):
   maing2module = 'SeqLev'
-  parammap = ['Loop','Length',['BipUni','Uni']]
+  parammap = [None]*16 + ['Length',['BipUni','Uni'],'Loop']
   inputmap = ['Clk','Rst']
   outputmap = ['Val','Link','Link']
 
@@ -49,12 +51,14 @@ class ConvCtrlSeq(Convert):
 
     for i in range(16):
       s = 'Seq1Step%d' % (i+1)
+      step = getattr(g2mp,s)
       t = 'Ctrl%d' % (i+1)
-      setv(getattr(g2mp,s),getv(getattr(nmmp,t)))
+      setv(step,getv(getattr(nmmp,t)))
+      self.params[i] = step
 
 class ConvNoteSeqA(Convert):
   maing2module = 'SeqLev'
-  parammap = ['Loop','Length','Loop']
+  parammap = [None]*16 + ['Length',None,None,None,'Loop']
   inputmap = ['Clk','Rst']
   outputmap = ['Val','Link','Link','Trig']
 
@@ -65,7 +69,9 @@ class ConvNoteSeqA(Convert):
     for i in range(16):
       s = 'Seq1Step%d' % (i+1)
       t = 'Note%d' % (i+1)
-      setv(getattr(g2mp,s),getv(getattr(nmmp,t)))
+      step = getattr(g2mp,s)
+      setv(step,getv(getattr(nmmp,t)))
+      self.params[i] = step
       # setup trigger as GClk
       s = 'Seq2Step%d' % (i+1)
       setv(getattr(g2mp,s),1)
@@ -73,7 +79,7 @@ class ConvNoteSeqA(Convert):
 
 class ConvNoteSeqB(Convert):
   maing2module = 'SeqNote'
-  parammap = ['Loop','Length','Loop']
+  parammap = [None]*16 + ['Length',None,None,None,'Loop']
   inputmap = ['Clk','Rst']
   outputmap = ['Note','Link','Link','Trig']
 
@@ -84,7 +90,9 @@ class ConvNoteSeqB(Convert):
     for i in range(16):
       s = 'Seq1Step%d' % (i+1)
       t = 'Note%d' % (i+1)
-      setv(getattr(g2mp,s),getv(getattr(nmmp,t)))
+      step = getattr(g2mp,s)
+      setv(step,getv(getattr(nmmp,t)))
+      self.params[i] = step
       # setup trigger as GClk
       s = 'Seq2Step%d' % (i+1)
       setv(getattr(g2mp,s),1)
