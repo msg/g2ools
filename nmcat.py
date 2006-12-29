@@ -40,8 +40,9 @@ def printpatch(patch):
             param, module.params[param].variations[0])
 
       for mode in range(len(mtype.modes)):
+        print mode, module.modes[mode].value
         print '   >%s(%d): %d' % (mtype.modes[mode].name,
-            mode, module.modes[mode])
+            mode, module.modes[mode].value)
 
     print ' cables:'
     for cable in area.cables:
@@ -51,21 +52,21 @@ def printpatch(patch):
       #c = cable
       #print c.color,c.dest.index,c.dest.conn,c.dest.type,c.source.index,c.source.conn,c.source.type
       print '  %s.%s - %s.%s: c=%d' % (
-          stype.shortnm, source.type.name, dtype.shortnm, dest.type.name, cable.color)
+          smod.name, source.type.name, dmod.name, dest.type.name, cable.color)
           
     print ' nets:'
     for net in area.netlist:
       source = net.output
       if source:
         smod = area.findmodule(source.module.index)
-        s = '%s.%s' % (smod.type.shortnm, source.type.name)
+        s = '%s.%s' % (smod.name, source.type.name)
       else:
         s = 'nosrc'
       t = []
       for dest in net.inputs:
         dmod = area.findmodule(dest.module.index)
         dtype = dmod.type
-        t.append('%s.%s' % (dmod.type.shortnm, dest.type.name))
+        t.append('%s.%s' % (dmod.name, dest.type.name))
       print '  %s -> %s' % (s, ','.join(t))
         
   print 'knobs:'
