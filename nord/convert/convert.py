@@ -106,3 +106,11 @@ class Convert:
     for g2mod in self.g2modules:
       g2mod.vert += g2m.vert
 
+  def insertcolumn(self, column):
+    # readjust horiz>=column for all modules in both g2area, nmarea
+    for nmmod in nmarea.modules:
+      if nmmod.horiz >= column:
+        nmmod.horiz += 1
+    for g2mod in g2area.modules:
+      if g2mod.horiz >= column:
+        g2mod.horiz += 1
