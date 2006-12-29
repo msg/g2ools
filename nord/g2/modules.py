@@ -3077,7 +3077,7 @@ modules = [
       InputType('Pitch',        g2portcolors.blue_red),
       InputType('PitchVar',     g2portcolors.blue_red),
       InputType('Sync',         g2portcolors.red),
-      InputType('FM',           g2portcolors.red),
+      InputType('FmMod',        g2portcolors.red),
       InputType('Shape',        g2portcolors.red),
     ],
     outputs=[
