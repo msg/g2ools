@@ -118,8 +118,8 @@ class ConvKeyboardSplit(Convert):
 
     u,l,lu,g,n,v = self.g2modules
 
-    setv(u.params.Level,getv(nmmp.Lower))
-    setv(l.params.C,getv(nmmp.Upper))
+    setv(u.params.Level,getv(nmmp.Upper))
+    setv(l.params.C,getv(nmmp.Lower))
 
     g2area.connect(u.outputs.Out,lu.inputs.A,g2cablecolors.blue)
     g2area.connect(l.inputs.In,lu.inputs.B,g2cablecolors.blue)
