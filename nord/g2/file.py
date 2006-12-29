@@ -403,10 +403,11 @@ class Parameter:
 
 # holder object for morph settings
 class Morph:
-  def __init__(self):
+  def __init__(self,index):
     self.dials = Parameter()
     self.modes = Parameter(1)
     self.params = []
+    self.index = index
 
 # holder for patch settings
 class Settings:
@@ -426,7 +427,7 @@ class Settings:
     self.octaves     = Parameter()
     self.octaveshift = Parameter()
     self.sustain     = Parameter()
-    self.morphs = [ Morph() for morph in range(NMORPHS) ]
+    self.morphs = [ Morph(morph) for morph in range(NMORPHS) ]
 
 # PatchSettings - section object for parse/format 
 class PatchSettings(Section):
@@ -667,7 +668,7 @@ class MorphParameters(Section):
           mparam.param = patch.voice.findmodule(index).params[param]
         else:
           mparam.param = patch.fx.findmodule(index).params[param]
-        morphs[param.morph].params[variation].append(mparam)
+        morphs[mparam.morph].params[variation].append(mparam)
 
       bit,reserved = getbits(bit,4,data) # always 0
 
@@ -723,13 +724,14 @@ class KnobAssignments(Section):
         bit,index = getbits(bit,8,data)
         bit,k.isled = getbits(bit,2,data)
         bit,param = getbits(bit,7,data)
-        if area == 1:
-          k.param = patch.voice.findmodule(index).params[param]
-        elif area == 0:
+        if area == 0:
           k.param = patch.fx.findmodule(index).params[param]
-        else:
-          k.param = patch.settings.morph[param]
-        #print '  %s%d-%d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7)
+        elif area == 1:
+          k.param = patch.voice.findmodule(index).params[param]
+        elif area == 2:
+          #print area,index,k.isled,param
+          k.param = patch.settings.morphs[param]
+        #print '  %s%d-%d: %d %d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7, index,param)
 
   def format(self, patch):
     data  = array('B',[])
@@ -740,10 +742,15 @@ class KnobAssignments(Section):
       k = patch.knobs[i]
       bit = setbits(bit,1,data,k.assigned)
       if k.assigned:
-        bit = setbits(bit,2,data,k.param.module.area.index)
-        bit = setbits(bit,8,data,k.param.module.index)
+        if hasattr(k.param,'module'):
+          mod = k.param.module
+          area,index,param=mod.area.index,mod.index,k.param.index
+        else:
+          area,index,param=2,1,k.param.index
+        bit = setbits(bit,2,data,area)
+        bit = setbits(bit,8,data,index)
         bit = setbits(bit,2,data,k.isled)
-        bit = setbits(bit,7,data,k.param.index)
+        bit = setbits(bit,7,data,param)
 
     return data.tostring()
 
@@ -760,15 +767,15 @@ class MIDIControllerAssignments(Section):
     for i in range(assignmentcnt):
       m = patch.midiassignments[i]
       bit,m.midicc = getbits(bit,7,data)
-      bit,m.type = getbits(bit,2,data) # 1:User, 2:System
+      bit,m.type = getbits(bit,2,data) # 0:FX, 1:Voice, 2:System/Morph
       bit,index = getbits(bit,8,data)
       bit,param = getbits(bit,7,data)
       if m.type == 0:
         m.param = patch.fx.findmodule(index).params[param]
       elif m.type == 1:
         m.param = patch.voice.findmodule(index).params[param]
-      else:
-        m.param = index, param
+      elif m.type == 2:
+        m.param = patch.settings.morphs[index]
 
   def format(self, patch):
     data  = array('B',[])
@@ -782,7 +789,7 @@ class MIDIControllerAssignments(Section):
       if m.type < 2:
         index,param = m.param.module.index,m.param.index
       else:
-        index,param = m.param
+        index,param = m.param.index,0
       bit = setbits(bit,8,data,index)
       bit = setbits(bit,7,data,param)
 
@@ -1076,6 +1083,7 @@ class Patch:
   def __init__(self):
     self.fx = Area(0)
     self.voice = Area(1)
+    self.midiassignments = []
     
 
 # Pch2File - main reading/writing object for .pch2 files
