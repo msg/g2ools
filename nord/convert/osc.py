@@ -58,6 +58,60 @@ def handledualpitchmod(conv,mod1param,mod2param):
 
   return p1, p2
 
+# FMAmod convertion table calculated by 3phase from SpectralOsc
+fmmod = [
+ [  0,  0,  0],  [  1,  0, 55],  [  1, 49,  0],  [  1, 76,  0],
+ [  2,  0, 87],  [  2,  0, 77],  [  2,  0, 58],  [  2, 37,  0],
+ [  2, 71,  0],  [  3,  0, 64],  [  3,  0, 17],  [  3, 62,  0],
+ [  4,  0, 55],  [  4, 37,  0],  [  5,  0, 61],  [  5, 20,  0],
+ [  6,  0, 60],  [  6,  0,  0],  [  7,  0, 57],  [  7, 29,  0],
+ [  8,  0, 52],  [  8, 41,  0],  [  9,  0, 44],  [  9, 50,  0],
+ [ 10,  0, 25],  [ 11,  0, 52],  [ 11, 38,  0],  [ 12,  0,  0],
+ [ 12, 51,  0],  [ 13, 24,  0],  [ 14,  0, 44],  [ 14, 47,  0],
+ [ 15, 16,  0],  [ 16,  0, 43],  [ 16, 47, 16],  [ 17, 22,  7],
+ [ 18,  7,  7],  [ 18, 49, 16],  [ 19, 32,  4],  [ 20,  7, 32],
+ [ 21, 11, 46],  [ 21, 41,  7],  [ 22, 19,  7],  [ 23, 10, 36],
+ [ 23, 49, 10],  [ 24, 39,  3],  [ 25, 21,  0],  [ 26, 10, 32],
+ [ 27, 11, 42],  [ 27, 42,  0],  [ 28, 33, 11],  [ 29,  0,  6],
+ [ 30,  0, 31],  [ 31, 11, 31],  [ 31, 43, 13],  [ 32, 36, 11],
+ [ 33, 25,  0],  [ 34,  0, 16],  [ 35,  6, 30],  [ 36, 13, 37],
+ [ 37, 12, 41],  [ 37, 39, 41],  [ 38, 34,  7],  [ 39, 28,  7],
+ [ 40, 17,  0],  [ 41,  2, 17],  [ 42,  4, 26],  [ 43,  7, 31],
+ [ 44,  2, 34],  [ 45,  9, 37],  [ 46,  9, 39],  [ 46, 37,  7],
+ [ 47, 36, 17],  [ 48, 32, 17],  [ 49, 32, 19],  [ 50, 26,  6],
+ [ 51, 22,  2],  [ 52, 18,  4],  [ 53, 11,  3],  [ 54,  0,  9],
+ [ 55,  2, 16],  [ 56,  5, 20],  [ 57,  5, 22],  [ 58,  6, 24],
+ [ 59,  4, 25],  [ 60,  3, 26],  [ 61,  4, 27],  [ 62,  7, 28],
+ [ 63,  0, 28],  [ 64,  6, 29],  [ 65,  0, 29],  [ 66,  0, 30],
+ [ 67,  5, 30],  [ 68,  1, 30],  [ 69, 10, 31],  [ 70, 10, 31],
+ [ 71,  6, 31],  [ 72,  4, 31],  [ 73,  1, 31],  [ 74, 11, 32],
+ [ 75,  9, 32],  [ 76,  9, 32],  [ 77,  6, 32],  [ 78,  3, 32],
+ [ 78, 33,  7],  [ 79, 33, 11],  [ 80, 33, 14],  [ 81, 31,  3],
+ [ 82, 31,  9],  [ 83, 30,  7],  [ 84, 29,  4],  [ 85, 28,  1],
+ [ 86, 28, 10],  [ 87, 27,  9],  [ 88, 25,  3],  [ 89, 24,  5],
+ [ 90, 22,  2],  [ 91, 20,  0],  [ 92, 19,  0],  [ 93, 15,  3],
+ [ 94, 10,  3],  [ 95,  0,  6],  [ 96,  5, 15],  [ 97,  2, 18],
+ [ 98,  4, 21],  [ 99,  4, 24],  [100,  4, 26],  [101,  9, 28], 
+]
+def handlefm(conv):
+  nmm, g2m = conv.nmmodule, conv.g2module
+  area = conv.g2area
+  fma = getv(g2m.params.FmAmount) # setup from Conv..() constructor
+  setv(g2m.params.FmAmount,fmmod[fma][0])
+  if len(nmm.inputs.FmMod.cables):
+    vert = conv.height
+    mix21b = area.addmodule(g2name['Mix2-1B'],horiz=g2m.horiz,vert=vert)
+    conv.g2modules.append(mix21b)
+    conv.height += mix21b.type.height
+    area.connect(mix21b.outputs.Out,g2m.inputs.FmMod,g2cablecolors.blue)
+    area.connect(mix21b.inputs.Chain,mix21b.inputs.In1,g2cablecolors.blue)
+    area.connect(mix21b.inputs.In1,mix21b.inputs.In2,g2cablecolors.blue)
+    setv(mix21b.params.Lev1,fmmod[fma][1])
+    setv(mix21b.params.Inv2,1)
+    setv(mix21b.params.Lev2,fmmod[fma][2])
+    return mix21b.inputs.Chain
+  return g2m.inputs.FmMod # won't be used anyways
+
 def handleam(conv):
   nmm, g2m = conv.nmmodule, conv.g2module
   aminput = None
@@ -130,6 +184,7 @@ class ConvOscA(Convert):
     # handle special inputs
     p1,p2 = handledualpitchmod(self,5,6)
     self.inputs[2:4] = p1,p2
+    self.inputs[1] = handlefm(self)
     self.outputs[1] = handleslv(self)
 
 class ConvOscB(Convert):
@@ -153,6 +208,7 @@ class ConvOscB(Convert):
     # handle special inputs
     p1,p2 = handledualpitchmod(self,4,5)
     self.inputs[1:3] = p1, p2
+    self.inputs[0] = handlefm(self)
     self.outputs[1] = handleslv(self)
 
 class ConvOscC(Convert):
@@ -174,23 +230,12 @@ class ConvOscC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     
+    self.inputs[0] = handlefm(self)
     # add AM if needed, handle special io
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
     self.outputs[1] = handleslv(self)
-
-# FMAmod convertion table from SpectralOsc
-specfmamod = [
-  0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,
-  6,   6,   7,   7,   8,   8,   9,   9,  10,  11,  11,  12,  12,  13,  14,  14,
- 15,  16,  16,  17,  18,  18,  19,  20,  21,  21,  22,  23,  23,  24,  25,  26,
- 27,  27,  28,  29,  30,  31,  31,  32,  33,  34,  35,  36,  37,  37,  38,  39,
- 40,  41,  42,  43,  44,  45,  46,  46,  47,  48,  49,  50,  51,  52,  53,  54,
- 55,  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,
- 71,  72,  73,  74,  75,  76,  77,  78,  78,  79,  80,  81,  82,  83,  84,  85,
- 86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99, 100, 101,
-]
 
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
@@ -198,7 +243,7 @@ class ConvSpectralOsc(Convert):
   parammap = ['FreqCoarse','FreqFine',None,None,None,None,
   #                                ShpM
               ['FmAmount','FmMod'],None,'Kbt',['Active','Mute']]
-  inputmap = ['FM',None,None,None]
+  inputmap = ['FmMod',None,None,None]
   outputmap = [None,None]
 
   def domodule(self):
@@ -206,11 +251,12 @@ class ConvSpectralOsc(Convert):
     nmmp,g2mp = nmm.params, g2m.params
     area = self.g2area
 
-    setv(g2mp.FmAmount,specfmamod[getv(g2mp.FmAmount)])
+
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
     p1,p2 = handledualpitchmod(self,4,5)
     self.inputs[1:3] = p1,p2
+    self.inputs[0] = handlefm(self)
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.Waveform,[3,4][getv(nmmp.Partials)])
@@ -315,6 +361,7 @@ class ConvOscSlvA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
+    self.inputs[1] = handlefm(self)
     # handle special io
     # add AM if needed
     aminput, output = handleam(self)
@@ -361,6 +408,7 @@ class ConvOscSlvC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
+    self.inputs[1] = handlefm(self)
 
 class ConvOscSlvD(ConvOscSlvC):
   waveform = 1 # tri
