@@ -112,6 +112,7 @@ class CableDump(Section):
     if len(line) > 1:
       if len(line.split()) == 8:
         line = ' '.join(line.split()[1:])
+        lines.insert(0,line)
       sect = 1
     else:
       sect = int(line)
@@ -198,8 +199,9 @@ class CustomDump(Section):
         module.modes[i].value = values[i]
 
 class Morph:
-  def __init__(self):
+  def __init__(self,morph):
     self.maps = []
+    self.morph = morph
 
 class MorphMap:
   pass
@@ -228,8 +230,6 @@ class MorphMapDump(Section):
 class KeyboardAssignment(Section):
   def parse(self):
     keyassign = map(int, self.lines[0].split())
-    if not hasattr(self.patch, 'morphs'):
-      morphs = self.patch.morphs = [ Morph() for i in range(NMORPHS) ]
     morphs = self.patch.morphs
     for i in range(NMORPHS):
       morphs[i].keyassign = keyassign[i]
@@ -259,14 +259,14 @@ class CtrlMapDump(Section):
   def parse(self):
     ctrls = self.patch.ctrls = [ Ctrl() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
-      sect,index,param,cc = map(int, self.lines[i].split())
+      sect,index,param,midicc = map(int, self.lines[i].split())
       if sect == 1:
         ctrls[i].param = self.patch.voice.findmodule(index).params[param]
       elif sect == 0:
         ctrls[i].param = self.patch.fx.findmodule(index).params[param]
       else:
         ctrls[i].param = self.patch.morphs[param]
-      ctrls[i].cc = cc
+      ctrls[i].midicc = midicc
 
 class NameDump(Section):
   def parse(self):
@@ -294,6 +294,7 @@ class Area:
   def __init__(self):
     self.modules = []
     self.cables = []
+    self.netlist = []
 
   def findmodule(self, index):
     for m in self.modules:
@@ -306,7 +307,9 @@ class Patch:
     self.voice = Area()
     self.fx = Area()
     self.textpad = ''
-    self.morphs = [ Morph() for i in range(NMORPHS) ]
+    self.morphs = [ Morph(i+1) for i in range(NMORPHS) ]
+    self.knobs = []
+    self.ctrls = []
 
 class PchFile:
   def __init__(self, fname=None):
