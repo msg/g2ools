@@ -2279,7 +2279,7 @@ ModuleKnowledge(
     shortnm('OscShpA')
     longnm('Osc Shape A')
     height(5)
-    inputs(['Pitch', 'PitchVar', 'Sync', 'FM', 'Shape'])
+    inputs(['Pitch', 'PitchVar', 'Sync', 'FmMod', 'Shape'])
     outputs(['Out'])
     params(['FreqCoarse', 'FreqFine', 'Kbt', 'PitchMod', 'FreqMode', 'FmAmount', 'FmMode', 'Shape', 'ShapeMod', 'Waveform', 'Active'])
     modes([])
