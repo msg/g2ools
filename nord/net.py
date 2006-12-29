@@ -35,10 +35,10 @@ def addnet(netlist, source, dest):
     if dest.net.output:
       source.net.output = dest.net.output
     source.net.output.net = source.net
-    net = dest.net
+    oldnet = dest.net
     for input in dest.net.inputs:
       input.net = source.net
-    netlist.remove(net)
+    netlist.remove(oldnet)
     #print 'Combine:'
     #print source.net, dest.net
     #output = source.net.output
