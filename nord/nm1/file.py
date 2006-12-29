@@ -199,9 +199,11 @@ class CustomDump(Section):
         module.modes[i].value = values[i]
 
 class Morph:
-  def __init__(self,morph):
+  def __init__(self,index):
     self.maps = []
-    self.morph = morph
+    self.index = index
+    self.keyassign = 0
+    self.knob = 0
 
 class MorphMap:
   pass
@@ -250,7 +252,6 @@ class KnobMapDump(Section):
         knobs[i].param = self.patch.fx.findmodule(index).params[param]
       else:
         knobs[i].param = self.patch.morphs[param]
-        continue
 
 class Ctrl:
   pass
