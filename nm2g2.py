@@ -195,11 +195,37 @@ def convert(pch):
       #printnet(cable.source.net)
       cable.color = port2cablecolors[cable.source.net.output.rate]
 
-  # handle Knobs
+  # handle Morphs
   # TBD
+
+  # handle Knobs
+  for knob in nmpatch.knobs:
+    if hasattr(knob.param,'module'): # module parameter
+      if knob.knob < 18: # 19=pedal,20=afttch,22=on/off
+        # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
+        knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
+        g2knob = knobmap[knob.knob]
+        index = knob.param.index
+        conv = knob.param.module.conv
+        if conv.params[index]:
+          g2patch.knobs[g2knob].param = conv.params[index]
+          g2patch.knobs[g2knob].assigned = 1
+          g2patch.knobs[g2knob].isled = 0
+          print 'Knob%d: %s:%s -> %s' % (knob.knob,
+              knob.param.module.name,knob.param.type.name,
+              conv.params[index])
+    else: # morph
+      print 'Knob%d: Morph%d' % (knob.knob,knob.param.morph)
   
   # handle Midi CCs
-  # TBD
+  from nord.g2.file import MIDIAssignment
+  for ctrl in nmpatch.ctrls:
+    if hasattr(ctrl.param,'module'): # module parameter
+      m = MIDIAssignment()
+      m.midicc = ctrl.midicc
+      m.param = ctrl.param.module.conv.params[ctrl.param.index]
+      m.type = m.param.module.area.index
+      g2patch.midiassignments.append(m)
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
@@ -262,4 +288,4 @@ while len(sys.argv):
         print '%r' % e
         failedpatches.append(fname)
 if len(failedpatches):
-  print 'Failed patches: %s' % '\n '.join(failedpatches)
+  print 'Failed patches: \n%s' % '\n '.join(failedpatches)
