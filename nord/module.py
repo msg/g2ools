@@ -65,6 +65,7 @@ class Module:
     self.type = type
     self.area = area
     self.__dict__.update(kw)
+    self.name = ''
     entries = [ ['inputs', Input ], ['outputs', Output ],
                 ['params', Param ], ['modes', Mode ] ]
     for nm,cls in entries:
