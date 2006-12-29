@@ -218,14 +218,22 @@ def convert(pch):
       print 'Knob%d: Morph%d' % (knob.knob,knob.param.morph)
   
   # handle Midi CCs
+  reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97,121,123 ]
   from nord.g2.file import MIDIAssignment
   for ctrl in nmpatch.ctrls:
+    if ctrl.midicc in reservedmidiccs:
+      continue
+    m = MIDIAssignment()
+    m.midicc = ctrl.midicc
     if hasattr(ctrl.param,'module'): # module parameter
-      m = MIDIAssignment()
-      m.midicc = ctrl.midicc
       m.param = ctrl.param.module.conv.params[ctrl.param.index]
       m.type = m.param.module.area.index
       g2patch.midiassignments.append(m)
+    # NOTE: remove line above if uncommenting: g2patch.midiassignments.append(m)
+    #else:
+    #  m.param = g2patch.morphs[newindex]
+    #  m.type = 2 # system
+    #g2patch.midiassignments.append(m)
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
