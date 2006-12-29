@@ -40,7 +40,6 @@ def printpatch(patch):
             param, module.params[param].variations[0])
 
       for mode in range(len(mtype.modes)):
-        print mode, module.modes[mode].value
         print '   >%s(%d): %d' % (mtype.modes[mode].name,
             mode, module.modes[mode].value)
 
@@ -71,8 +70,26 @@ def printpatch(patch):
         
   print 'knobs:'
   for knob in patch.knobs:
-    print ' %02d: %s:%s' % (knob.knob,knob.param.module.name,knob.param.type.name)
+    if hasattr(knob.param,'module'):
+      print ' %02d: %s:%s' % (knob.knob,knob.param.module.name,knob.param.type.name)
+    else:
+      print ' %02d: morph %d' % (knob.knob,knob.param.index)
 
+  print 'ctrls:'
+  for ctrl in patch.ctrls:
+    if hasattr(ctrl.param,'module'):
+      print ' %02d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,ctrl.param.type.name)
+    else:
+      print ' %02d: morph %d' % (ctrl.midicc,ctrl.param.index)
+    
+  print 'morphs:'
+  for morph in patch.morphs:
+    print ' %d: %d %s' % (morph.index, morph.knob,
+        ['none','vel','note'][morph.keyassign])
+    for map in morph.maps:
+      print '  %s:%s range %d' % (map.param.module.name,map.param.type.name,
+          map.range)
+    
 prog = sys.argv.pop(0)
 while len(sys.argv):
   fname = sys.argv.pop(0)
