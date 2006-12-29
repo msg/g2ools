@@ -37,17 +37,19 @@ def printpatch(patch):
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
     if knob.assigned:
-      print ' %s%d:%d %s:"%s":%s isled=0x%02x' % (
-          'ABCDE'[i/24],(i/8)%3,i&7,
-          ['fx','voice'][knob.param.module.area.index],
-          knob.param.module.name, knob.param.type.name,
-          knob.isled)
+      if hasattr(knob.param,'module'):
+        print ' %s%d:%d %s:"%s":%s isled=0x%02x' % (
+            'ABCDE'[i/24],(i/8)%3,i&7,
+            ['fx','voice'][knob.param.module.area.index],
+            knob.param.module.name, knob.param.type.name,
+            knob.isled)
   print 'MIDIAssignments:'
   for midiassignment in patch.midiassignments:
+    param = midiassignment.param.index
     if midiassignment.type == 2:
-      index,param = midiassignment.param
+      index = 1
     else:
-      index,param = midiassignment.param.module.index,midiassignment.param.index
+      index = midiassignment.param.module.index
     print ' type=%s midicc=%d index=%d param=%d' % (
         {0:'fx',1:'voice',2:'system'}[midiassignment.type], midiassignment.midicc,
         index,param)
