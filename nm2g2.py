@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import sys
+import getopt, sys
 from glob import glob
 sys.path.append('.')
 from nord.g2.file import Pch2File
@@ -47,7 +47,8 @@ port2cablecolors = {
   g2portcolors.blue_red:      g2cablecolors.blue,
   g2portcolors.yellow_orange: g2cablecolors.yellow,
 }
-def convert(pch):
+
+def convert(pch,config):
   #   loop through each module
   #     determine and store separation from module above >= 0
   #     if mod in convertion table
@@ -79,6 +80,7 @@ def convert(pch):
   setv(g2patch.settings.glide,nmpatch.header.porta)
   setv(g2patch.settings.glidetime,nmpatch.header.portatime)
   setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
+
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
     g2area = getattr(g2patch,areanm)
@@ -90,7 +92,7 @@ def convert(pch):
       if module.type.type in typetable:
         print '%s: %d(0x%02x)' % (module.name,
            module.type.type,module.type.type)
-        conv = typetable[module.type.type](nmarea,g2area,module)
+        conv = typetable[module.type.type](nmarea,g2area,module,config)
         converters.append(conv)
         conv.domodule()
         #g2module = conv.g2module
@@ -189,16 +191,19 @@ def convert(pch):
 
     print 'Cable recolorize:'
     for cable in g2area.cables:
-      #print '%s:%s -> %s:%s' % (
+      #print '%s:%s -> %s:%s %d' % (
       #    cable.source.module.name,cable.source.type.name,
-      #    cable.dest.module.name,cable.dest.type.name)
-      #printnet(cable.source.net)
+      #    cable.dest.module.name,cable.dest.type.name,
+      #    cable.source.net.output.rate),
       cable.color = port2cablecolors[cable.source.net.output.rate]
+      #print cable.color, cable.source.net.output.module.type.shortnm
+      #printnet(cable.source.net)
 
   # handle Morphs
   # TBD
 
   # handle Knobs
+  print 'Knobs:'
   for knob in nmpatch.knobs:
     if hasattr(knob.param,'module'): # module parameter
       if knob.knob < 18: # 19=pedal,20=afttch,22=on/off
@@ -215,9 +220,10 @@ def convert(pch):
               knob.param.module.name,knob.param.type.name,
               conv.params[index])
     else: # morph
-      print 'Knob%d: Morph%d' % (knob.knob,knob.param.morph)
+      print ' Knob%d: Morph%d' % (knob.knob,knob.param.index)
   
   # handle Midi CCs
+  print 'MIDI CCs:'
   reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97,121,123 ]
   from nord.g2.file import MIDIAssignment
   for ctrl in nmpatch.ctrls:
@@ -274,26 +280,52 @@ def convert(pch):
   print 'Writing patch "%s2"' % (pch.fname)
   pch2.write(pch.fname+'2')
   
-prog = sys.argv.pop(0)
 
-debug = 0
-if sys.argv[0][0] == '-':
-  sys.argv.pop(0)
-  debug = 1
+class Config:
+  def __init__(self, **kw):
+    self.__dict__ = kw
 
-failedpatches = []
-while len(sys.argv):
-  patchlist = glob(sys.argv.pop(0))
-  for fname in patchlist:
-    print '"%s"' % fname
-    # general algorithm for converter:
-    if debug:
-      convert(PchFile(fname)) # allow exception thru if debugging
-    else:
-      try:
-        convert(PchFile(fname))
-      except Exception, e:
-        print '%r' % e
-        failedpatches.append(fname)
-if len(failedpatches):
-  print 'Failed patches: \n%s' % '\n '.join(failedpatches)
+def usage(prog):
+  print 'usage: %s <flags> <.pch files>'
+  print '\t<flags>'
+  print '\t-h --help\tPrint this message'
+  print '\t-d --debug\tDebug program'
+  print '\t-l --low\tLower resource usage'
+  
+def main():
+  prog = sys.argv.pop(0)
+  try:
+    opts, args = getopt.getopt(sys.argv,'hdl', ['help','debug','low'])
+  except getopt.GetoptError:
+    usage(prog)
+    sys.exit(2)
+
+  config = Config(debug=None,lowresource=None)
+  for o, a in opts:
+    if o in ('-h','--help'):
+      usage(prog)
+    if o in ('-d','--debug'):
+      config.debug = True
+    if o in ('-l','--low'):
+      config.lowresource = True
+
+  failedpatches = []
+  while len(args):
+    patchlist = glob(args.pop(0))
+    for fname in patchlist:
+      print '"%s"' % fname
+      # general algorithm for converter:
+      if config.debug:
+        convert(PchFile(fname),config) # allow exception thru if debugging
+      else:
+        try:
+          convert(PchFile(fname),config)
+        except Exception, e:
+          print '%r' % e
+          failedpatches.append(fname)
+
+  if len(failedpatches):
+    print 'Failed patches: \n%s' % '\n '.join(failedpatches)
+
+if __name__ == '__main__':
+  main()
