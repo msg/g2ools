@@ -28,13 +28,24 @@ class Net:
 # addnet - update the netlist adding source and dest
 def addnet(netlist, source, dest):
 
+  if source.net and dest.net and source.net == dest.net:
+    print 'Connecting already create net'
+    print source.net, dest.net
+    print '  %d:%s -> %d:%s' % (source.module.index,source.type.name,
+        dest.module.index,dest.type.name),
+    #print 'source net:'
+    #printnet(source.net)
+    #print 'dest net:'
+    #printnet(dest.net)
+    return
+
   if source.net and dest.net: # two separate nets need to be combined
     if source.net.output and dest.net.output: # shouldn't happen
       raise 'source and dest both have outputs'
     source.net.inputs += dest.net.inputs
     if dest.net.output:
       source.net.output = dest.net.output
-    source.net.output.net = source.net
+      source.net.output.net = source.net
     oldnet = dest.net
     for input in dest.net.inputs:
       input.net = source.net
@@ -45,7 +56,7 @@ def addnet(netlist, source, dest):
     #inputs = source.net.inputs
     #print '%s:%s' % (output.module.name,output.type.name),[
     #  '%s:%s' % (input.module.name,input.type.name) for input in inputs]
-    return
+    ##return
 
   found = 0
   for net in netlist:
@@ -53,15 +64,17 @@ def addnet(netlist, source, dest):
       found = 1
       if not dest in net.inputs: # just in case two connections are made
         net.inputs.append(dest)
+
       if source.direction:
-        if net.output and not source is net.output:
+        if net.output and source != net.output:
           raise \
-            'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
-            source.module.name, source.type.name,
-            net.output.module.name, net.output.type.name)
+            'Two outputs connected to net: source=%s:%s net.source=%d:%s' % (
+            source.module.index, source.type.name,
+            net.output.module.index, net.output.type.name)
         net.output = source
       elif not source in net.inputs: # just in case two connections are made
         net.inputs.append(source)
+      break
 
   # add new net if one not found
   if found == 0:
@@ -92,3 +105,4 @@ def printnet(net):
   inp = ','.join([
       '%s:%s' % (inp.module.name,inp.type.name) for inp in net.inputs])
   print '%s -> %s' % (out, inp)
+
