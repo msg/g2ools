@@ -1,0 +1,93 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 600 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 1 0 0 
+2 97 0 2 
+3 7 0 5 
+4 8 0 11 
+5 9 0 17 
+6 96 1 0 
+7 95 1 4 
+8 58 1 8 
+9 97 2 0 
+10 7 2 3 
+11 8 2 9 
+13 96 2 15 
+[/ModuleDump]
+[ModuleDump]
+0 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+1 2 0 0 1 0 1 
+1 3 2 0 2 0 0 
+1 4 1 0 3 2 0 
+1 5 1 0 4 1 0 
+1 6 0 0 1 0 1 
+1 7 2 0 6 0 0 
+1 8 2 0 7 2 0 
+1 9 1 0 1 0 1 
+1 10 3 0 9 1 0 
+1 11 2 0 10 3 0 
+1 13 1 0 11 2 0 
+[/CableDump]
+[CableDump]
+0 
+[/CableDump]
+[ParameterDump]
+1 
+2 97 5 64 64 1 127 0 
+3 7 10 64 64 64 64 0 127 0 0 0 0 
+4 8 9 64 64 64 0 127 0 0 0 0 
+5 9 6 64 64 1 127 0 0 
+6 96 7 64 64 1 0 0 127 0 
+7 95 7 64 64 64 0 127 64 0 
+8 58 16 0 0 25 25 25 25 25 25 25 25 0 25 25 25 25 0 
+9 97 5 64 64 1 0 127 
+10 7 10 64 64 64 64 0 0 127 0 0 0 
+11 8 9 64 64 64 0 0 127 0 0 0 
+13 96 7 64 64 1 0 0 0 127 
+[/ParameterDump]
+[ParameterDump]
+0 
+[/ParameterDump]
+[CustomDump]
+1 
+2 1 0 
+3 1 0 
+4 1 0 
+5 1 0 
+6 1 0 
+7 1 0 
+9 1 0 
+10 1 0 
+11 1 0 
+13 1 0 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 Keyboard1
+2 MasterOsc1
+3 OscA1
+4 OscB1
+5 OscC1
+6 FormantOsc1
+7 PercOsc1
+8 DrumSynth1
+9 MasterOsc2
+10 OscA2
+11 OscB2
+13 FormantOsc2
+[/NameDump]
+[NameDump]
+0 
+[/NameDump]

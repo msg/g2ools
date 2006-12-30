@@ -1,0 +1,55 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 600 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 97 0 0 
+[/ModuleDump]
+[ModuleDump]
+0 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+[/CableDump]
+[CableDump]
+0 
+[/CableDump]
+[ParameterDump]
+1 
+1 97 5 65 64 1 0 0 
+[/ParameterDump]
+[ParameterDump]
+0 
+[/ParameterDump]
+[MorphMapDump]
+17 0 0 0 
+1 1 0 0 0 1 1 1 0 63 
+[/MorphMapDump]
+[KeyboardAssignment]
+0 0 0 2 
+[/KeyboardAssignment]
+[KnobMapDump]
+2 1 2 20 
+[/KnobMapDump]
+[CtrlMapDump]
+2 1 0 1 
+2 1 1 7 
+[/CtrlMapDump]
+[CustomDump]
+1 
+1 1 0 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 MasterOsc1
+[/NameDump]
+[NameDump]
+0 
+[/NameDump]
