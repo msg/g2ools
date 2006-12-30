@@ -43,7 +43,7 @@ def printpatch(patch):
             ['fx','voice'][knob.param.module.area.index],
             knob.param.module.name, knob.param.type.name,
             knob.isled)
-  print 'MIDIAssignments:'
+  print 'midicc:'
   for midiassignment in patch.midiassignments:
     param = midiassignment.param.index
     if midiassignment.type == 2:
@@ -64,6 +64,16 @@ def printpatch(patch):
   print ' names:'
   print ' ',','.join(
       [ settings.morphs[i].label for i in range(len(settings.morphs))])
+  print ' parameters:'
+  for i in range(len(settings.morphs)):
+    morph = settings.morphs[i]
+    print '  morph %d:' % i
+    for j in range(len(morph.maps)):
+      print '   varation %d:' % j
+      for k in range(len(morph.maps[j])):
+        map = morph.maps[j][k]
+        print '    %s:%s range=%d' % (map.param.module.name,map.param.type.name,
+            map.range)
   print 'variations:'
   for attr in [ 'activemuted','patchvol','glide','glidetime','bend', 'semi',
                 'vibrato','cents','rate',
