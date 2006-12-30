@@ -26,12 +26,13 @@ def handleslv(conv,kbt):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  net = nmm.outputs.Slv.net
-  for cable in net.output.cables:
-    cable.color = nm1cablecolors.blue
-  for input in net.inputs:
-    for cable in input.cables:
+  if len(nmm.outputs.Slv.cables):
+    net = nmm.outputs.Slv.net
+    for cable in net.output.cables:
       cable.color = nm1cablecolors.blue
+    for input in net.inputs:
+      for cable in input.cables:
+        cable.color = nm1cablecolors.blue
 
   mst,ratemod=None,g2m.inputs.Rate
   if len(nmm.outputs.Slv.cables):
