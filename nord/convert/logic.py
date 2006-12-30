@@ -19,7 +19,6 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
 from convert import *
 from units import *
 
@@ -114,17 +113,13 @@ class ConvClkDivFix(Convert):
     g2m.modes.DivMode.value = 1
 
     rst,midiclk = g2m.inputs.Rst, g2m.inputs.Clk
-    vert = self.height
     for div in [11,7]:
-      clk = self.g2area.addmodule(g2name['ClkDiv'],horiz=g2m.horiz,vert=vert)
-      self.g2modules.append(clk)
-      vert += clk.type.height
+      clk = self.addmodule('ClkDiv')
       clk.name = g2m.name
       clk.modes.DivMode.value = 1
       setv(clk.params.Divider,div)
-      self.g2area.connect(rst,clk.inputs.Rst,g2cablecolors.yellow)
-      self.g2area.connect(midiclk,clk.inputs.Clk,g2cablecolors.yellow)
+      self.connect(rst,clk.inputs.Rst)
+      self.connect(midiclk,clk.inputs.Clk)
       rst,midiclk = clk.inputs.Rst,clk.inputs.Clk
-    self.height = vert
     self.outputs[1:] = [ mod.outputs.Out for mod in self.g2modules ]
 

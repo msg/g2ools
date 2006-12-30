@@ -19,7 +19,6 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
 from convert import *
 from units import *
 

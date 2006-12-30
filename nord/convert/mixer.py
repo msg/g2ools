@@ -19,8 +19,6 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
-from nord.g2.colors import g2cablecolors
 from convert import *
 
 class Conv3Mixer(Convert):
@@ -48,11 +46,8 @@ class ConvGainControl(Convert):
 
     shift = getv(nmmp.Shift)
     if shift:
-      conv = self.g2area.addmodule(g2name['LevConv'],
-        horiz=g2m.horiz,vert=g2m.type.height)
-      self.g2modules.append(conv)
-      self.height = conv.vert + conv.type.height
-      self.g2area.connect(conv.outputs.Out,g2m.inputs.Mod,g2cablecolors.blue)
+      conv = self.addmodule('LevConv')
+      self.connect(conv.outputs.Out,g2m.inputs.Mod)
       setv(conv.params.OutputType,2) # Pos (I think)
       self.params[0] = conv.params.OutputType
       self.inputs[0] = conv.inputs.In
@@ -109,7 +104,6 @@ class Conv4_1Switch(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    vert = g2m.type.height
     # add a LevAmp and reorient inputs
     for i in range(1,5):
       level = getv(getattr(nmmp,'Level%d' % i))
@@ -117,15 +111,11 @@ class Conv4_1Switch(Convert):
       if level == 0 or level == 127:
         continue
       if len(nmm.inputs[i-1].cables):
-        amp = self.g2area.addmodule(g2name['LevAmp'],horiz=g2m.horiz,vert=vert)
-        self.g2modules.append(amp)
-        vert += amp.type.height
-        self.g2area.connect(amp.outputs.Out,getattr(g2m.inputs,'In%d' % i),
-           g2cablecolors.blue)
+        amp = self.addmodule('LevAmp')
+        self.connect(amp.outputs.Out,getattr(g2m.inputs,'In%d' % i))
         setv(amp.params.Gain,getv(getattr(nmmp,'Level%d' % i)))
         self.params[i] = amp.params.Gain
         self.inputs[i-1] = amp.inputs.In
-    self.height = vert
 
 class Conv1_4Switch(Convert):
   maing2module = 'Sw1-4'
@@ -140,14 +130,11 @@ class Conv1_4Switch(Convert):
     # note going to handle this as it's probably never used
     #setv(g2mp.Active,1-getv(nmmp.Mute))
 
-    vert = g2m.type.height
     level = getv(nmmp.Level)
     if level != 0 or level != 127:
       # add LevAmp module
-      amp = self.g2area.addmodule(g2name['LevAmp'],horiz=g2m.horiz,vert=vert)
-      self.g2modules.append(amp)
-      vert += amp.type.height
-      self.g2area.connect(amp.outputs.Out,g2m.inputs.In,g2cablecolors.blue)
+      amp = self.addmodule('LevAmp')
+      self.connect(amp.outputs.Out,g2m.inputs.In)
       setv(amp.params.Gain,level)
       self.params[1] = amp.params.Gain
       self.inputs[0] = amp.inputs.In

@@ -19,8 +19,6 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
-from nord.g2.colors import g2cablecolors
 from convert import *
 
 class ConvKeyboard(Convert):
@@ -99,11 +97,9 @@ class ConvKeyboardSplit(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    g2area = self.g2area
     g2m.name = 'KbdSplit'
 
     # now lets create the structure
-    vert = g2m.type.height
     struct = [ ['Constant','Upper'],
                ['CompLev','Lower'],
                ['CompSig','<=Upper'],
@@ -111,24 +107,21 @@ class ConvKeyboardSplit(Convert):
                ['DlyClock','Note'],
                ['DlyClock','Vel'] ]
     for mod,nm in struct:
-      m = g2area.addmodule(g2name[mod],name=nm,vert=vert,horiz=g2m.horiz)
-      self.g2modules.append(m)
-      vert += m.type.height
-    self.height = vert
+      m = self.addmodule(mod,name=nm)
 
     u,l,lu,g,n,v = self.g2modules
 
     setv(u.params.Level,getv(nmmp.Upper))
     setv(l.params.C,getv(nmmp.Lower))
 
-    g2area.connect(u.outputs.Out,lu.inputs.A,g2cablecolors.blue)
-    g2area.connect(l.inputs.In,lu.inputs.B,g2cablecolors.blue)
-    g2area.connect(l.outputs.Out,g.inputs.In1_1,g2cablecolors.yellow)
-    g2area.connect(lu.inputs.B,n.inputs.In,g2cablecolors.blue)
-    g2area.connect(lu.outputs.Out,g.inputs.In1_2,g2cablecolors.yellow)
-    g2area.connect(g.outputs.Out1,g.inputs.In2_2,g2cablecolors.yellow)
-    g2area.connect(g.outputs.Out2,n.inputs.Clk,g2cablecolors.yellow)
-    g2area.connect(n.inputs.Clk,v.inputs.Clk,g2cablecolors.yellow)
+    self.connect(u.outputs.Out,lu.inputs.A)
+    self.connect(l.inputs.In,lu.inputs.B)
+    self.connect(l.outputs.Out,g.inputs.In1_1)
+    self.connect(lu.inputs.B,n.inputs.In)
+    self.connect(lu.outputs.Out,g.inputs.In1_2)
+    self.connect(g.outputs.Out1,g.inputs.In2_2)
+    self.connect(g.outputs.Out2,n.inputs.Clk)
+    self.connect(n.inputs.Clk,v.inputs.Clk)
 
     self.params = [l.params.C,u.params.Level]
     self.outputs = [n.outputs.Out,g.outputs.Out2,v.outputs.Out]

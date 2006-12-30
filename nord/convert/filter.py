@@ -19,7 +19,6 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
 from convert import *
 from units import *
 
@@ -57,25 +56,21 @@ class ConvFilterD(ConvFilter):
 def fltdualpitchmod(nmm,g2m,conv,mod1,mod2):
   p1 = p2 = None
   if len(nmm.inputs.FreqMod1.cables) and len(nmm.inputs.FreqMod2.cables):
-    g2area = conv.g2area
-    g2mm = g2area.addmodule(g2name['Mix2-1B'],name='FreqMod',
-      horiz=g2m.horiz,vert=g2m.type.height)
-    conv.g2modules.append(g2mm)
-    conv.height = g2mm.vert + g2mm.type.height
-    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,g2cablecolors.blue)
+    g2mm = conv.addmodule('Mix2-1B',name='FreqMod')
+    conv.connect(g2mm.outputs.Out,g2m.inputs.PitchVar)
     p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
     setv(g2m.params.PitchMod,127)
-    cpv(g2mm.params.Lev1,nmm.params.FreqMod1)
+    setv(g2mm.params.Lev1,getv(nmm.params.FreqMod1))
     conv.params[mod1] = g2mm.params.Lev1
-    cpv(g2mm.params.Lev2,nmm.params.FreqMod2)
+    setv(g2mm.params.Lev2,getv(nmm.params.FreqMod2))
     conv.params[mod2] = g2mm.params.Lev2
   elif len(nmm.inputs.FreqMod1.cables):
     p1 = g2m.inputs.PitchVar
-    cpv(g2m.params.PitchMod,nmm.params.FreqMod1)
+    setv(g2m.params.PitchMod,getv(nmm.params.FreqMod1))
     conv.params[mod1] = g2m.params.PitchMod
   elif len(nmm.inputs.FreqMod2.cables):
     p2 = g2m.inputs.PitchVar
-    cpv(g2m.params.PitchMod,nmm.params.FreqMod2)
+    setv(g2m.params.PitchMod,getv(nmm.params.FreqMod2))
     conv.params[mod2] = g2m.params.PitchMod
 
   return p1, p2
@@ -135,7 +130,7 @@ class ConvVocoder(Convert):
 
 class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
-  parammap = ['Freq','Gain','BandWidth',['Active','Bypass'],'Level']
+  parammap = ['Freq','Gain','Bandwidth',['Active','Bypass'],'Level']
   inputmap = ['In']
   outputmap = ['Out']
 
@@ -155,6 +150,6 @@ class ConvEqShelving(ConvFilter):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
-    setv(g2mp.BandWidth,0)
+    setv(g2mp.Bandwidth,0)
     setv(g2mp.Active,1-getv(nmmp.Bypass))
 

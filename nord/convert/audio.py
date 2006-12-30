@@ -19,7 +19,6 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
 from convert import *
 
 class ConvClip(Convert):
@@ -41,6 +40,15 @@ class ConvOverdrive(Convert):
     # set up special parameters
     setv(g2mp.Type,1)
     setv(g2mp.Shape,1)
+
+    clip = self.addmodule('Clip',name='OverdriveClip')
+    self.connect(g2m.outputs.Out,clip.inputs.In)
+    setv(clip.params.ClipLev,35)
+    levamp = self.addmodule('LevAmp',name='OverdriveAmp')
+    self.connect(clip.outputs.Out,levamp.inputs.In)
+    setv(levamp.params.Type,1)
+    setv(levamp.params.Gain,85)
+    self.outputs[0] = levamp.outputs.Out
 
 class ConvWaveWrap(Convert):
   maing2module = 'WaveWrap'
@@ -118,19 +126,15 @@ class ConvPhaser(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    area = self.g2area
 
     setv(g2mp.Active,1-getv(nmmp.Bypass))
     setv(g2mp.FBMod,getv(nmmp.Depth))
     setv(g2mp.Type,3)
     
-    vert = self.height
     if len(nmm.inputs.FreqMod.cables):
       # add mixer
-      mix = area.addmodule(g2name['Mix2-1B'],horiz=g2m.horiz,vert=vert)
-      self.g2modules.append(mix)
-      vert += mix.type.height
-      area.connect(mix.outputs.Out,g2m.inputs.PitchVar,g2cablecolors.blue)
+      mix = self.addmodule('Mix2-1B',name='FreqMod')
+      self.connect(mix.outputs.Out,g2m.inputs.PitchVar)
       modinp = mix.inputs.In1
       self.inputs[1] = mix.inputs.In2
       setv(g2mp.PitchMod,127)
@@ -139,15 +143,12 @@ class ConvPhaser(Convert):
     else:
       modinp = g2m.inputs.PitchVar
       depthparam = g2mp.PitchMod
-    lfo = area.addmodule(g2name['LfoC'],horiz=g2m.horiz,vert=vert)
-    self.g2modules.append(lfo)
-    vert += lfo.type.height
-    self.height = vert
+    lfo = self.addmodule('LfoC')
     setv(lfo.params.Rate,getv(nmmp.Rate))
     self.params[0] = lfo.params.Rate
     setv(lfo.params.Active,getv(nmmp.Lfo))
     self.params[1] = lfo.params.Active
-    area.connect(lfo.outputs.Out,modinp,g2cablecolors.blue)
+    self.connect(lfo.outputs.Out,modinp)
     setv(depthparam,getv(nmmp.Depth))
     self.params[9] = depthparam
 
