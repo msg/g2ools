@@ -5074,7 +5074,7 @@ modules = [
           comment='eqgain'
         ),
       ),
-      ParameterType('BandWidth',
+      ParameterType('Bandwidth',
         ParameterDef(  
           default=0,
           low=0,
