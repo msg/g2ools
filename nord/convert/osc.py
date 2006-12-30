@@ -286,7 +286,6 @@ class ConvOscA(Convert):
     # handle special parameters
     # invert output if waveform is Saw or Square
     waveform = getv(nmmp.Waveform)
-    print 'waveform=',waveform
     if waveform == 2 or waveform == 3:
       levconv = addlevconv(self)
       self.outputs[0] = levconv.outputs.Out
