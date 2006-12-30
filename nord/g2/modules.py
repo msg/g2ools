@@ -1893,7 +1893,7 @@ modules = [
     params=[
       ParameterType('Freq',         parammap.Freq_3),
       ParameterType('Gain',         parammap.EqdB),
-      ParameterType('BandWidth',    parammap.EqPeakBandwidth),
+      ParameterType('Bandwidth',    parammap.EqPeakBandwidth),
       ParameterType('Active',       parammap.ActiveMonitor),
       ParameterType('Level',        parammap.Level_100),
     ],

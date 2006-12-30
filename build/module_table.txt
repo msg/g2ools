@@ -1489,7 +1489,7 @@ ModuleKnowledge(
     height(4)
     inputs(['In'])
     outputs(['Out'])
-    params(['Freq', 'Gain', 'BandWidth', 'Active', 'Level'])
+    params(['Freq', 'Gain', 'Bandwidth', 'Active', 'Level'])
     modes([])
     inputtypes(['red'])
     outputtypes(['red'])

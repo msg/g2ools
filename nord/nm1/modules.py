@@ -141,7 +141,7 @@ modules = [
       InputType('FmMod',        nm1portcolors.audio),
       InputType('PitchMod1',    nm1portcolors.audio),
       InputType('PitchMod2',    nm1portcolors.audio),
-      InputType('PulseWidthMod',nm1portcolors.audio),
+      InputType('PwMod',        nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
@@ -419,7 +419,7 @@ modules = [
     height=3,
     inputs=[
       InputType('Mst',          nm1portcolors.slave),
-      InputType('Pwmod',        nm1portcolors.audio),
+      InputType('PwMod',        nm1portcolors.audio),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
