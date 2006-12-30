@@ -44,10 +44,11 @@ def updatevals(g2mp,params,nm1tab,g2tab):
     setv(getattr(g2mp,param),newmidival)
 
 class Convert:
-  def __init__(self, nmarea, g2area, nmmodule):
+  def __init__(self, nmarea, g2area, nmmodule, config):
     self.nmarea = nmarea
     self.g2area = g2area
     nmm = self.nmmodule = nmmodule
+    self.config = config
     # use for cabling
     for output in nmmodule.outputs:
       output.conv = self 
@@ -67,10 +68,10 @@ class Convert:
     if hasattr(self,'parammap'):
       for param in self.parammap:
         if type(param) == type(''):
-          cpv(getattr(g2m.params,param),getattr(nmm.params,param))
+          setv(getattr(g2m.params,param),getv(getattr(nmm.params,param)))
           self.params.append(getattr(g2m.params,param))
         elif type(param) == type([]):
-          cpv(getattr(g2m.params,param[0]),getattr(nmm.params,param[1]))
+          setv(getattr(g2m.params,param[0]),getv(getattr(nmm.params,param[1])))
           self.params.append(getattr(g2m.params,param[0]))
         else:
           self.params.append(param) # None: placeholder for other parameters
@@ -86,6 +87,17 @@ class Convert:
         if output:
           output = getattr(g2m.outputs,output)
         self.outputs.append(output)
+
+  def addmodule(self, shortnm, **kw):
+    mod = self.g2area.addmodule(g2name[shortnm], **kw)
+    mod.horiz = self.g2module.horiz
+    mod.vert = self.height
+    self.height += mod.type.height
+    self.g2modules.append(mod)
+    return mod
+  
+  def connect(self, source, dest):
+    self.g2area.connect(source,dest,g2cablecolors.blue) # change color later
 
   # domodule - process module, setup paramaters, inputs, outputs
   def domodule(self):
@@ -106,8 +118,12 @@ class Convert:
     for g2mod in self.g2modules:
       g2mod.vert += g2m.vert
 
+  # return True of no modules in column from rowstart to rowend
+  def emptyspace(self, column, rowstart, rowend):
+    pass
+    
+  # readjust horiz>=column for all modules in both g2area, nmarea
   def insertcolumn(self, column):
-    # readjust horiz>=column for all modules in both g2area, nmarea
     for nmmod in nmarea.modules:
       if nmmod.horiz >= column:
         nmmod.horiz += 1
