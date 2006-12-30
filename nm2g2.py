@@ -294,7 +294,7 @@ class Config:
     self.__dict__ = kw
 
 def usage(prog):
-  print 'usage: %s <flags> <.pch files>'
+  print 'usage: nm2g2 <flags> <.pch files>'
   print '\t<flags>'
   print '\t-h --help\tPrint this message'
   print '\t-d --debug\tDebug program'
