@@ -86,6 +86,14 @@ def convert(pch,config):
     g2area = getattr(g2patch,areanm)
     print 'Area %s:' % areanm
 
+    # sort by mst/slv connections
+    modules = []
+    for module in nmarea.modules:
+      if hasattr(module.outputs,'Slv'):
+        modules.insert(0,module)
+      else:
+        modules.append(module)
+    nmarea.modules = modules
     converters = []
     # do the modules
     for module in nmarea.modules:
