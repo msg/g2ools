@@ -67,14 +67,16 @@ def handlemst(conv):
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
     mstlfo = nmm.inputs.Mst.net.output.module.conv.g2module
+    range = 3
     if hasattr(mstlfo.params,'Rate'):
       setv(g2mp.Rate,getv(mstlfo.params.Rate))
+      range = 1
     if hasattr(mstlfo.params,'PolyMono'):
       setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
     if hasattr(mstlfo.params,'Range'):
       setv(g2mp.Range,getv(mstlfo.params.Range))
     else:
-      setv(g2mp.Range,3)
+      setv(g2mp.Range,range)
     return mix21b.inputs.Chain
   return None
 
