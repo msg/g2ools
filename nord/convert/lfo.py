@@ -19,18 +19,54 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
-from nord.g2.colors import g2cablecolors
+from nord.nm1.colors import nm1cablecolors
 from convert import *
 
+def handleslv(conv,kbt):
+  nmm,g2m = conv.nmmodule,conv.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+
+  net = nmm.outputs.Slv.net
+  for cable in net.output.cables:
+    cable.color = nm1cablecolors.blue
+  for input in net.inputs:
+    for cable in input.cables:
+      cable.color = nm1cablecolors.blue
+
+  mst,ratemod=None,g2m.inputs.Rate
+  if len(nmm.outputs.Slv.cables):
+    mix21b = conv.addmodule('Mix2-1B',name='MasterRate')
+    conv.connect(mix21b.outputs.Out,g2m.inputs.Rate)
+    setv(mix21b.params.Lev1,127)
+    setv(mix21b.params.Lev2,127)
+    mst = mix21b.outputs.Out
+    if kbt:
+      keyboard = conv.addmodule('Keyboard',name='KBT')
+      conv.connect(keyboard.outputs.Note,mix21b.inputs.Chain)
+    if len(nmm.inputs.Rate.cables):
+      mix11a = conv.addmodule('Mix1-1A',name='Rate')
+      conv.connect(mix11a.outputs.Out,mix21b.inputs.In1)
+      setv(mix11a.params.Lev,getv(nmm.params.RateMod))
+      ratemod = mix11a.inputs.In
+  return ratemod,mst
+
 def handlemst(conv):
-  pass
-  # if the mst connection used
-  #   if net.output.module is a Lfo
-  #     get the ratio from the slave lfo
-  #     set rate of the g2 module as the ratio of the masters Lfo's rate
-  #     disconnect slv cable
-  #   
+  nmm,g2m = conv.nmmodule,conv.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+
+  if len(nmm.inputs.Mst.cables):
+    mix21b = conv.addmodule('Mix2-1B',name='SlaveRate')
+    conv.connect(mix21b.outputs.Out,g2m.inputs.Rate)
+    setv(mix21b.params.Lev1,127)
+    setv(mix21b.params.Lev2,127)
+    constswt = conv.addmodule('ConstSwT',name='RateFactor')
+    conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
+    mstlfo = nmm.inputs.Mst.net.output.module.conv.g2module
+    setv(g2mp.Rate,getv(mstlfo.params.Rate))
+    setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
+    setv(g2mp.Range,getv(mstlfo.params.Range))
+    return mix21b.inputs.Chain
+  return None
 
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
@@ -47,6 +83,13 @@ class ConvLFOA(Convert):
     setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
+    kbt = getv(nmmp.RateKbt)
+    if kbt == 64:
+      kbt = 1
+    else:
+      kbt = 0
+    self.inputs[0],self.outputs[0] = handleslv(self,kbt)
+
 class ConvLFOB(Convert):
   maing2module = 'LfoShpA'
   parammap = ['Rate','Range','Phase','RateMod',['PolyMono','Mono'],
@@ -59,7 +102,14 @@ class ConvLFOB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Waveform,5)
-    cpv(g2mp.PhaseMod,nmmp.PwMod)
+    setv(g2mp.PhaseMod,getv(nmmp.PwMod))
+
+    kbt = getv(nmmp.RateKbt)
+    if kbt == 64:
+      kbt = 1
+    else:
+      kbt = 0
+    self.inputs[0],self.outputs[1] = handleslv(self,kbt)
 
 class ConvLFOC(Convert):
   maing2module = 'LfoA'
@@ -74,6 +124,8 @@ class ConvLFOC(Convert):
 
     setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
+
+    self.inputs[0],self.outputs[1] = handleslv(self,0)
 
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
@@ -92,6 +144,8 @@ class ConvLFOSlvA(Convert):
       setv(g2mp.OutputType,1)
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
+    self.inputs[0] = handlemst(self)
+
 class ConvLFOSlvB(Convert):
   maing2module = 'LfoC'
   waveform = 2
@@ -105,6 +159,8 @@ class ConvLFOSlvB(Convert):
 
     # handle special parameters
     g2m.modes.Waveform.value = self.waveform
+
+    self.inputs[0] = handlemst(self)
 
 class ConvLFOSlvC(ConvLFOSlvB):
   waveform = 0
@@ -164,6 +220,6 @@ class ConvPatternGen(Convert):
 
     # PatternA and PatternB receive same input
     if len(getattr(nmm.inputs,'Pattern&Bank').cables):
-      self.g2area.connect(g2m.inputs.A,g2m.inputs.B,g2cablecolors.blue) 
+      self.connect(g2m.inputs.A,g2m.inputs.B) 
     setv(g2mp.StepProb,127-64*getv(nmmp.LowDelta))
 
