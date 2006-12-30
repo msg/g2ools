@@ -40,8 +40,12 @@ def addnet(netlist, source, dest):
     return
 
   if source.net and dest.net: # two separate nets need to be combined
-    if source.net.output and dest.net.output: # shouldn't happen
-      raise 'source and dest both have outputs'
+    if source.net.output and dest.net.output and (
+        source.net.output != dest.net.output): # shouldn't happen
+      raise \
+        'source and dest both have outputs: source=%s:%s dest.output=%s:%s' % (
+        source.module.type.shortnm, source.type.name,
+        dest.net.output.module.type.shortnm, dest.net.output.type.name)
     source.net.inputs += dest.net.inputs
     if dest.net.output:
       source.net.output = dest.net.output
