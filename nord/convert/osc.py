@@ -19,47 +19,43 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.g2.modules import fromname as g2name
-from nord.g2.colors import g2cablecolors
 from nord.nm1.colors import nm1cablecolors
 from convert import *
 
-# handledualpitchmod -returns p1,p2,g2mm
-# handle pitch inputs and if necessary, create a Mix2-1B for input
-# NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
-#       in that case, the Pitch input could be used (if no knob tied
-#       to the said PitchModX dial).
-def handledualpitchmod(conv,mod1param,mod2param):
-  nmm, g2m = conv.nmmodule, conv.g2module
-  p1 = p2 = None
-  if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
-    g2area = conv.g2area
-    g2mm = g2area.addmodule(g2name['Mix2-1B'],
-        horiz=g2m.horiz,vert=conv.height)
-    g2mm.name = 'PitchMod'
-    conv.g2modules.append(g2mm)
-    conv.height += g2mm.type.height
-    color=g2cablecolors.blue
-    g2area.connect(g2mm.outputs.Out,g2m.inputs.PitchVar,color)
-    p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
-    setv(g2m.params.PitchMod,127)
-    cpv(g2mm.params.Lev1,nmm.params.PitchMod1)
-    cpv(g2mm.params.Lev2,nmm.params.PitchMod2)
-    conv.params[mod1param] = g2mm.params.Lev1
-    conv.params[mod2param] = g2mm.params.Lev2
-  elif len(nmm.inputs.PitchMod1.cables):
-    p1 = g2m.inputs.PitchVar
-    cpv(g2m.params.PitchMod,nmm.params.PitchMod1)
-    conv.params[mod1param] = g2m.params.PitchMod
-  elif len(nmm.inputs.PitchMod2.cables):
-    p2 = g2m.inputs.PitchVar
-    cpv(g2m.params.PitchMod,nmm.params.PitchMod2)
-    conv.params[mod2param] = g2m.params.PitchMod
+def addlevconv(conv):
+  levconv = conv.addmodule('LevConv')
+  setv(levconv.params.OutputType,5)
+  conv.connect(conv.g2module.outputs.Out,levconv.inputs.In)
+  return levconv
 
-  return p1, p2
+def handlepw(conv,levconv,pw):
+  nmm,g2m = conv.nmmodule,conv.g2module
+  nmmp,g2mp = nmm.params,g2m.params
+  # add mix2-1b so input can be doubled/inverted
+  pwmod = None
+  if len(nmm.inputs.PwMod.cables):
+    clip = conv.addmodule('Clip',name='PWLimit')
+    mix21b = conv.addmodule('Mix2-1B',name='PWMod')
+    conv.connect(clip.outputs.Out,g2m.inputs.ShapeMod)
+    conv.connect(mix21b.outputs.Out,clip.inputs.In)
+    conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
+    setv(clip.params.ClipLev,1)
+    setv(mix21b.params.Lev1,127)
+    setv(mix21b.params.Lev2,127)
+    if pw < 64:
+      setv(mix21b.params.Inv1,1)
+      setv(mix21b.params.Inv2,1)
+    pwmod = mix21b.inputs.In1
+  if pw < 64:
+    pw = 64-pw
+    setv(levconv.params.OutputType,4) # Bip
+  else:
+    pw -= 64
+  setv(g2mp.Shape,pw*2)
+  return pwmod
 
-# FMAmod convertion table calculated by 3phase from SpectralOsc
-fmmod = [
+# FMAmod conversion table calculated by 3phase from SpectralOsc
+fmmod = [ # [fmmod,mix,inv]
  [  0,  0,  0],  [  1,  0, 55],  [  1, 49,  0],  [  1, 76,  0],
  [  2,  0, 87],  [  2,  0, 77],  [  2,  0, 58],  [  2, 37,  0],
  [  2, 71,  0],  [  3,  0, 64],  [  3,  0, 17],  [  3, 62,  0],
@@ -93,50 +89,161 @@ fmmod = [
  [ 94, 10,  3],  [ 95,  0,  6],  [ 96,  5, 15],  [ 97,  2, 18],
  [ 98,  4, 21],  [ 99,  4, 24],  [100,  4, 26],  [101,  9, 28], 
 ]
-def handlefm(conv):
+
+# PitchMod conversion table calculated by 3phase from SpectralOsc
+pitchmod = [ # [pitchmod,mix,inv]
+ [  0,  0,  0],  [  1, 41,  0],  [  2, 41,  0],  [  2, 41,  0],
+ [  2, 37,  0],  [  2, 48,  0],  [  2, 64,  0],  [  4,  0, 41],
+ [  4,  0, 41],  [  5,  0, 41],  [  6,  0, 67],  [  6,  0, 61],
+ [  6,  0,  0],  [  7,  0,  0],  [  7,  0,  0],  [  8,  0, 46],
+ [  9,  0, 47],  [ 10,  0, 48],  [ 10,  0, 25],  [ 11,  0, 59],
+ [ 12,  0, 46],  [ 12, 22,  0],  [ 13,  0, 37],  [ 13, 48,  0],
+ [ 14, 24,  0],  [ 15,  0, 13],  [ 16,  0, 44],  [ 17,  0, 50],
+ [ 17, 34,  0],  [ 18,  0, 12],  [ 19,  0, 46],  [ 19, 46, 11],
+ [ 20, 33,  0],  [ 21, 25,  5],  [ 22,  0, 27],  [ 23,  0, 39],
+ [ 24,  0, 41],  [ 25,  0, 48],  [ 25, 37,  0],  [ 26, 17,  0],
+ [ 27,  0,  0],  [ 28,  0, 24],  [ 29,  0, 34],  [ 30,  0, 37],
+ [ 31,  0, 38],  [ 32, 20, 44],  [ 33,  0, 43],  [ 34,  0, 42],
+ [ 34, 39,  0],  [ 35, 39,  0],  [ 37,  0, 45],  [ 37, 35, 11],
+ [ 38, 37,  9],  [ 40,  0, 43],  [ 41, 16, 43],  [ 42,  0, 43],
+ [ 42, 39,  0],  [ 43, 39,  2],  [ 44, 41,  5],  [ 46,  1, 35],
+ [ 47,  0, 32],  [ 48, 12, 29],  [ 49,  0, 22],  [ 50,  0, 15],
+ [ 51, 17,  1],  [ 52, 26,  7],  [ 53, 31,  9],  [ 54, 35,  6],
+ [ 56,  0, 34],  [ 57,  0, 29],  [ 58,  0, 22],  [ 59, 14,  0],
+ [ 60, 24,  3],  [ 61, 31,  0],  [ 62, 36,  5],  [ 64,  5, 29],
+ [ 65,  0, 19],  [ 66, 16,  0],  [ 68,  6, 39],  [ 69,  6, 35],
+ [ 70,  0, 28],  [ 71,  7, 21],  [ 72, 17,  0],  [ 73, 28,  4],
+ [ 75,  0, 32],  [ 76,  0, 25],  [ 77,  0, 10],  [ 78, 24, 10],
+ [ 79, 31,  6],  [ 81, 15, 30],  [ 82,  0, 17],  [ 83, 18,  0],
+ [ 84, 28,  0],  [ 86, 10, 30],  [ 87,  5, 21],  [ 88, 15,  0],
+ [ 89, 26,  0],  [ 91,  7, 30],  [ 92,  6, 22],  [ 93, 11,  2],
+ [ 94, 24,  0],  [ 96, 16, 32],  [ 97, 13, 25],  [ 98,  0,  4],
+ [ 99, 22,  0],  [100, 29,  4],  [102, 29, 25],  [103,  2, 13],
+ [104, 19,  1],  [105, 28, 11],  [107,  0, 26],  [108,  3, 18],
+ [109, 12,  0],  [110, 25, 11],  [111, 29,  5],  [113,  5, 23],
+ [114,  7, 14],  [115, 17,  2],  [116, 26, 12],  [118,  3, 27],
+ [119,  4, 22],  [120,  4, 13],  [122,  5, 34],  [123,  0, 31],
+ [124,  6, 28],  [125,  6, 24],  [126,  3, 18],  [127,  0, 18], 
+]
+
+# handledualpitchmod -> p1,p2
+# handle pitch inputs and if necessary, create a Mix2-1B for input
+# NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
+#       in that case, the Pitch input could be used (if no knob tied
+#       to the said PitchModX dial).
+pitchmodnum = 1
+def handledualpitchmod(conv,mod1param,mod2param):
+  global pitchmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
-  area = conv.g2area
+  p1 = p2 = None
+  if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
+    setv(g2m.params.PitchMod,127)
+    mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
+    adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
+    adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
+
+    conv.connect(mix21b.outputs.Out,g2m.inputs.PitchVar)
+    conv.connect(adj1.outputs.Out,mix21b.inputs.In1)
+    conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
+    conv.connect(adj1.inputs.In1,adj1.inputs.In2)
+    conv.connect(adj2.outputs.Out,mix21b.inputs.In2)
+    conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
+    conv.connect(adj2.inputs.In1,adj2.inputs.In2)
+
+    pmod1 = getv(nmm.params.PitchMod1)
+    setv(mix21b.params.Lev1,pitchmod[pmod1][0])
+    setv(adj1.params.Inv2, 1)
+    setv(adj1.params.Lev1, pitchmod[pmod1][1])
+    setv(adj1.params.Lev2, pitchmod[pmod1][2])
+
+    pmod2 = getv(nmm.params.PitchMod2)
+    setv(mix21b.params.Lev2,pitchmod[pmod2][0])
+    setv(adj2.params.Inv2, 1)
+    setv(adj2.params.Lev1, pitchmod[pmod2][1])
+    setv(adj2.params.Lev2, pitchmod[pmod2][2])
+
+    conv.params[mod1param] = mix21b.params.Lev1
+    conv.params[mod2param] = mix21b.params.Lev2
+    p1,p2 = adj1.inputs.Chain,adj2.inputs.Chain
+
+  elif len(nmm.inputs.PitchMod1.cables):
+    setv(g2m.params.PitchMod,127)
+    adj = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
+    conv.connect(adj.outputs.Out,g2m.inputs.PitchVar)
+    conv.connect(adj.inputs.Chain,adj.inputs.In1)
+    conv.connect(adj.inputs.In1,adj.inputs.In2)
+
+    pmod = getv(nmm.params.PitchMod1)
+    setv(g2m.params.PitchMod,pitchmod[pmod][0])
+    setv(adj.params.Inv2, 1)
+    setv(adj.params.Lev1,pitchmod[pmod][1])
+    setv(adj.params.Lev2,pitchmod[pmod][2])
+
+    conv.params[mod1param] = g2m.params.PitchMod
+    p1 = adj.inputs.Chain
+
+  elif len(nmm.inputs.PitchMod2.cables):
+    setv(g2m.params.PitchMod,127)
+    adj = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
+    conv.connect(adj.outputs.Out,g2m.inputs.PitchVar)
+    conv.connect(adj.inputs.Chain,adj.inputs.In1)
+    conv.connect(adj.inputs.In1,adj.inputs.In2)
+
+    pmod = getv(nmm.params.PitchMod2)
+    setv(g2m.params.PitchMod,pitchmod[pmod][0])
+    setv(adj.params.Inv2, 1)
+    setv(adj.params.Lev1,pitchmod[pmod][1])
+    setv(adj.params.Lev2,pitchmod[pmod][2])
+
+    conv.params[mod2param] = g2m.params.PitchMod
+    p2 = adj.inputs.Chain
+
+  pitchmodnum += 1
+  return p1, p2
+
+fmmodnum = 1
+def handlefm(conv):
+  global fmmodnum
+  nmm, g2m = conv.nmmodule, conv.g2module
   fma = getv(g2m.params.FmAmount) # setup from Conv..() constructor
   setv(g2m.params.FmAmount,fmmod[fma][0])
   if len(nmm.inputs.FmMod.cables):
-    vert = conv.height
-    mix21b = area.addmodule(g2name['Mix2-1B'],horiz=g2m.horiz,vert=vert)
-    conv.g2modules.append(mix21b)
-    conv.height += mix21b.type.height
-    area.connect(mix21b.outputs.Out,g2m.inputs.FmMod,g2cablecolors.blue)
-    area.connect(mix21b.inputs.Chain,mix21b.inputs.In1,g2cablecolors.blue)
-    area.connect(mix21b.inputs.In1,mix21b.inputs.In2,g2cablecolors.blue)
+    mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
+    fmmodnum += 1
+    conv.connect(mix21b.outputs.Out,g2m.inputs.FmMod)
+    conv.connect(mix21b.inputs.Chain,mix21b.inputs.In1)
+    conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
     setv(mix21b.params.Lev1,fmmod[fma][1])
     setv(mix21b.params.Inv2,1)
     setv(mix21b.params.Lev2,fmmod[fma][2])
     return mix21b.inputs.Chain
   return g2m.inputs.FmMod # won't be used anyways
 
+ammodnum = 1
 def handleam(conv):
+  global ammodnum
   nmm, g2m = conv.nmmodule, conv.g2module
   aminput = None
   output = g2m.outputs.Out
   if len(nmm.inputs.Am.cables):
-    am = conv.g2area.addmodule(g2name['LevMod'],name='AM',
-      horiz=g2m.horiz,vert=conv.height)
-    conv.g2modules.append(am)
-    conv.height += am.type.height
-    conv.g2area.connect(g2m.outputs.Out,am.inputs.In,g2cablecolors.red)
+    am = conv.addmodule('LevMod',name='AM%d' % ammodnum)
+    ammodnum += 1
+    conv.connect(g2m.outputs.Out,am.inputs.In)
     aminput = am.inputs.Mod
     output = am.outputs.Out
   return aminput, output
 
+slvoutnum=1
 def handleslv(conv):
+  global slvoutnum
   nmm, g2m = conv.nmmodule, conv.g2module
   if len(nmm.outputs.Slv.cables):
     # add a masterosc
-    master = conv.g2area.addmodule(g2name['OscMaster'],
-        horiz=g2m.horiz,vert=conv.height)
+    master = conv.addmodule('OscMaster',name='SlvOut%d' % slvoutnum)
+    slvoutnum += 1
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
     setv(master.params.FreqFine,getv(g2m.params.FreqFine))
     setv(master.params.FreqMode,getv(g2m.params.FreqMode))
-    conv.g2modules.append(master)
-    conv.height += master.type.height
     return master.outputs.Out
   else:
     return None
@@ -156,8 +263,13 @@ class ConvMasterOsc(Convert):
     p1,p2 = handledualpitchmod(self,3,4)
     self.inputs[:2] = [p1,p2]
 
-    for cable in nmm.outputs.Slv.cables:
-      cable.color = nm1cablecolors.blue
+    if len(nmm.outputs.Slv.cables):
+      net = nmm.outputs.Slv.net
+      for cable in net.output.cables:
+        cable.color = nm1cablecolors.blue
+      for input in net.inputs:
+        for cable in input.cables:
+            cable.color = nm1cablecolors.blue
 
 class ConvOscA(Convert):
   maing2module = 'OscB'
@@ -172,9 +284,15 @@ class ConvOscA(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    # NOTE: since shape can be 0% - 100%, a LevConv could be used
-    #       to get the actual waveform, if necessary.
-    setv(g2mp.Shape,abs(getv(nmmp.PulseWidth)-64)*2)
+    # invert output if waveform is Saw or Square
+    waveform = getv(nmmp.Waveform)
+    print 'waveform=',waveform
+    if waveform == 2 or waveform == 3:
+      levconv = addlevconv(self)
+      self.outputs[0] = levconv.outputs.Out
+    if waveform == 3:
+      self.inputs[4] = handlepw(self,levconv,getv(nmmp.PulseWidth))
+
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
     self.params[2] = g2mp.Kbt
@@ -184,6 +302,7 @@ class ConvOscA(Convert):
     # handle special inputs
     p1,p2 = handledualpitchmod(self,5,6)
     self.inputs[2:4] = p1,p2
+
     self.inputs[1] = handlefm(self)
     self.outputs[1] = handleslv(self)
 
@@ -204,6 +323,14 @@ class ConvOscB(Convert):
     self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
+
+    # invert output if waveform is Saw
+    waveform = getv(g2mp.Waveform)
+    if waveform == 2 or waveform == 3:
+      levconv = addlevconv(self)
+      self.outputs[0] = levconv.outputs.Out
+    if waveform == 3:
+      self.inputs[3] = handlepw(self,levconv,64)
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self,4,5)
@@ -249,8 +376,6 @@ class ConvSpectralOsc(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    area = self.g2area
-
 
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
@@ -264,26 +389,20 @@ class ConvSpectralOsc(Convert):
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     setv(g2mp.ShapeMod,127)
 
-    vert = self.height
     if len(nmm.inputs.SpectralShapeMod.cables):
-      shape = area.addmodule(g2name['Mix1-1A'],horiz=g2m.horiz,vert=vert)
-      self.g2modules.append(shape)
-      vert += shape.type.height
+      shape = self.addmodule('Mix1-1A',name='Shape')
       setv(shape.params.Lev,getv(nmmp.SpectralShapeMod))
       self.params[7] = shape.params.Lev
       setv(shape.params.On,1)
-      area.connect(shape.outputs.Out,g2m.inputs.Shape,g2cablecolors.blue)
+      self.connect(shape.outputs.Out,g2m.inputs.Shape)
       shapemod = shape.inputs.Chain
       self.inputs[3] = shape.inputs.In
     else:
       shapemod = g2m.inputs.Shape
     mods = []
     for modnm in ['Constant','ShpStatic','LevMult','Mix2-1B']:
-      mod = area.addmodule(g2name[modnm],horiz=g2m.horiz,vert=vert)
-      vert += mod.type.height
-      self.g2modules.append(mod)
+      mod = self.addmodule(modnm,name=modnm)
       mods.append(mod)
-    self.height = vert
     # setup parameters
     const,shpstatic,levmult,mix=mods
     setv(const.params.BipUni,1)
@@ -293,13 +412,13 @@ class ConvSpectralOsc(Convert):
     setv(mix.params.Lev1,127)
     setv(mix.params.Lev2,127)
     # setup connections
-    area.connect(const.outputs.Out,shapemod,g2cablecolors.blue)
-    area.connect(const.outputs.Out,shpstatic.inputs.In,g2cablecolors.blue)
-    area.connect(shpstatic.outputs.Out,levmult.inputs.Mod,g2cablecolors.blue)
-    area.connect(g2m.outputs.Out,levmult.inputs.In,g2cablecolors.red)
-    area.connect(levmult.outputs.Out,mix.inputs.Chain,g2cablecolors.red)
-    area.connect(levmult.inputs.In,mix.inputs.In2,g2cablecolors.red)
-    area.connect(mix.inputs.In1,mix.inputs.In2,g2cablecolors.red)
+    self.connect(const.outputs.Out,shapemod)
+    self.connect(const.outputs.Out,shpstatic.inputs.In)
+    self.connect(shpstatic.outputs.Out,levmult.inputs.Mod)
+    self.connect(g2m.outputs.Out,levmult.inputs.In)
+    self.connect(levmult.outputs.Out,mix.inputs.Chain)
+    self.connect(levmult.inputs.In,mix.inputs.In2)
+    self.connect(mix.inputs.In1,mix.inputs.In2)
     self.outputs[0] = mix.outputs.Out
 
     # place master osc (if needed)
@@ -308,41 +427,51 @@ class ConvSpectralOsc(Convert):
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'
   parammap = ['FreqCoarse','FreqFine','Kbt',['Active','Mute'],None,None,None]
+  inputmap = [None,None,None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    area = self.g2area
 
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
+    setv(g2mp.Active,1-getv(nmmp.Mute))
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
     p1,p2 = handledualpitchmod(self,5,6)
     self.inputs[:2] = p1,p2
 
-    vert = self.height
     modules =[]
-    for mod in ['Invert','RndClkA','ConstSwT']:
-      m = area.addmodule(g2name[mod],horiz=g2m.horiz,vert=vert)
-      modules.append(m)
-      vert += m.type.height
-    self.g2modules.extend(modules)
-    self.height = vert
+    for modnm in ['Invert','RndClkB','EqPeak','Mix4-1A',
+                  'ConstSwT','NoteQuant','LevAmp']:
+      mod = self.addmodule(modnm,name=modnm)
+      modules.append(mod)
 
-    # NOTE: not handling Timbre input (yet)
-    inv,rndclka,constswt = modules
-    area.connect(g2m.outputs.Out,inv.inputs.In2,g2cablecolors.red)
-    area.connect(g2m.outputs.Out,rndclka.inputs.Rst,g2cablecolors.red)
-    area.connect(inv.outputs.Out1,inv.inputs.In1,g2cablecolors.orange)
-    area.connect(inv.inputs.In1,rndclka.inputs.Clk,g2cablecolors.orange)
-    area.connect(constswt.outputs.Out,rndclka.inputs.Seed,g2cablecolors.blue)
+    inv,rndclkb,eqpeak,mix41a,constswt,notequant,levamp = modules
+    self.connect(g2m.outputs.Out,inv.inputs.In2)
+    self.connect(g2m.outputs.Out,rndclkb.inputs.Rst)
+    self.connect(inv.outputs.Out1,inv.inputs.In1)
+    self.connect(inv.inputs.In1,rndclkb.inputs.Clk)
+    self.connect(rndclkb.outputs.Out,eqpeak.inputs.In)
+    self.connect(mix41a.outputs.Out,rndclkb.inputs.Seed)
+    self.connect(constswt.outputs.Out,mix41a.inputs.In4)
+    self.connect(notequant.outputs.Out,mix41a.inputs.In3)
+    self.connect(levamp.outputs.Out,notequant.inputs.In)
 
-    setv(g2mp.Active,1-getv(nmmp.Mute))
+    rndclkb.modes.Character.value = 1
+    setv(rndclkb.params.StepProb,61)
+    setv(eqpeak.params.Freq,109)
+    setv(eqpeak.params.Gain,104)
+    setv(eqpeak.params.Bandwidth,2)
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
     self.params[4] = constswt.params.Lev
+    setv(notequant.params.Range,127)
+    setv(notequant.params.Notes,1)
+    setv(levamp.params.Type,1)
+    setv(levamp.params.Gain,20)
 
-    self.outputs = [rndclka.outputs.Out,handleslv(self)]
+    self.inputs[2] = levamp.inputs.In
+    self.outputs = [eqpeak.outputs.Out,handleslv(self)]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'
@@ -361,6 +490,9 @@ class ConvOscSlvA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
+    # invert output if waveform is Saw
+    if g2mp.Waveform == 2:
+      self.outputs[0] = addlevconv(self).outputs.Out
     self.inputs[1] = handlefm(self)
     # handle special io
     # add AM if needed
@@ -379,6 +511,7 @@ class ConvOscSlvB(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    self.inputs[1] = handlepw(self,addlevconv(self),64)
     # handle special parameters 
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
@@ -401,6 +534,10 @@ class ConvOscSlvC(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+
+    # invert output if waveform is Saw
+    if self.__class__.__name__ == 'ConvOscSlvC':
+      self.outputs[0] = addlevconv(self).outputs.Out
 
     # handle special parameters
     if len(nmm.inputs.Mst.cables):
@@ -436,22 +573,23 @@ class ConvOscSineBank(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    g2area = self.g2area
+    levamp = self.addmodule('LevAmp',name='LevAmp')
+    setv(levamp.params.Type,1)
+    setv(levamp.params.Gain,68)
+    self.connect(g2m.outputs.Out,levamp.inputs.In)
+    self.outputs[0] = levamp.outputs.Out
     # if sync connected, use OscC, otherwise use OscD
     if len(nmm.inputs.Sync.cables):
       osctype = 'OscC'
     else:
       osctype = 'OscD'
-    vert = self.height
     oscs = []
     for i in range(1,7): # 6 Sine Osc
       # if osc muted, don't addit
-      #if getv(getattr(nmmp,'Osc%dMute'%i)):
-      #  continue
-      osc = g2area.addmodule(g2name[osctype],horiz=g2m.horiz,vert=vert)
-      osc.name = 'Osc%d' % i
-      vert += osc.type.height
-      self.g2modules.append(osc)
+      if getv(getattr(nmmp,'Osc%dMute'%i)):
+        if len(getattr(nmm.inputs,'Osc%dAm'%i).cables) == 0:
+          continue
+      osc = self.addmodule(osctype,name='Osc%d' % i)
       oscs.append(osc)
       if len(nmm.inputs.Mst.cables):
         setv(osc.params.Kbt,0)
@@ -466,31 +604,23 @@ class ConvOscSineBank(Convert):
       setv(osc.params.Active,1-getv(getattr(nmmp,'Osc%dMute'%i)))
       self.params[(i-1)+18] = osc.params.Active
       if len(getattr(nmm.inputs,'Osc%dAm'%i).cables):
-        mod = g2area.addmodule(g2name['LevMod'],horiz=g2m.horiz,vert=vert)
-	mod.name = 'Am%d' % i
-        vert += mod.type.height
-        self.g2modules.append(mod)
-        g2area.connect(osc.outputs.Out,mod.inputs.In,g2cablecolors.red)
-        g2area.connect(mod.outputs.Out,getattr(g2m.inputs,'In%d'%i),
-                       g2cablecolors.red)
+        mod = self.addmodule('LevMult',name='Am%d' % i)
+        self.connect(osc.outputs.Out,mod.inputs.In)
+        self.connect(mod.outputs.Out,getattr(g2m.inputs,'In%d'%i))
         self.inputs[2+i] = mod.inputs.Mod
       else:
-        g2area.connect(osc.outputs.Out,getattr(g2m.inputs,'In%d'%i),
-                       g2cablecolors.red)
-    self.height = vert
+        self.connect(osc.outputs.Out,getattr(g2m.inputs,'In%d'%i))
     if len(nmm.inputs.Sync.cables):
       self.inputs[2] = oscs[0].inputs.Sync
       if len(oscs) > 1:
         for i in range(1,len(oscs)):
-          g2area.connect(oscs[i-1].inputs.Sync,
-                         oscs[i].inputs.Sync,g2cablecolors.red)
+          self.connect(oscs[i-1].inputs.Sync,oscs[i].inputs.Sync)
     if len(nmm.inputs.Mst.cables):
       print osc.name
       self.inputs[0] = oscs[0].inputs.Pitch
       if len(oscs) > 1:
         for i in range(1,len(oscs)):
-          g2area.connect(oscs[i-1].inputs.Pitch,
-                         oscs[i].inputs.Pitch,g2cablecolors.blue)
+          self.connect(oscs[i-1].inputs.Pitch,oscs[i].inputs.Pitch)
 
 class ConvOscSlvFM(ConvOscSlvC):
   waveform = 0 # sine
@@ -535,7 +665,7 @@ class ConvDrumSynth(Convert):
 
     # parameters are exactly the same
     for i in range(len(nmm.params)):
-      cpv(g2mp[i],nmmp[i])
+      setv(g2mp[i],getv(nmmp[i]))
       self.params[i] = g2mp[i]
 
     # handle special parameters
