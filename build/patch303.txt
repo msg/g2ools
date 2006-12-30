@@ -2118,7 +2118,7 @@ height 4
 parameters
 0 "freq" 0..127 "eqfreq"
 1 "gain" 0..127 "eqgain"
-2 "band width" 0..127 "0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct"
+2 "bandwidth" 0..127 "0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct"
 3 "bypass" 0..1 "onoff"
 4 "level" 0..127 ""
 inputs
