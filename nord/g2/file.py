@@ -400,14 +400,18 @@ class CableList(Section):
 class Parameter:
   def __init__(self,default=0):
     self.variations = [default]*NVARIATIONS
+    self.knob = None
+    self.mmap = None
+    self.midiassignment = None
 
 # holder object for morph settings
 class Morph:
   def __init__(self,index):
-    self.dials = Parameter()
+    self.dials = Parameter(0)
     self.modes = Parameter(1)
     self.params = []
     self.index = index
+    self.midiassignment = None
 
 # holder for patch settings
 class Settings:
@@ -636,7 +640,7 @@ class ModuleParameters(Section):
     return data.tostring()
 
 # holder object for patch morph parameters
-class MorphParameter:
+class MorphMap:
   pass
 
 # MorphParameters - section object for parse/format 
@@ -650,7 +654,7 @@ class MorphParameters(Section):
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
     morphs = patch.settings.morphs
     for morph in range(NMORPHS):
-      morphs[morph].params = [[] for variation in range(nvariations) ]
+      morphs[morph].maps = [[] for variation in range(nvariations) ]
 
     for i in range(nvariations):
       bit,variation = getbits(bit,4,data)
@@ -658,17 +662,19 @@ class MorphParameters(Section):
 
       bit, nmorphs = getbits(bit,8,data)
       for i in range(nmorphs):
-        mparam = MorphParameter()
-        bit,area         = getbits(bit,2,data)
-        bit,index        = getbits(bit,8,data)
-        bit,param        = getbits(bit,7,data)
-        bit,mparam.morph = getbits(bit,4,data)
-        bit,mparam.range = getbits(bit,8,data,1)
+        mmap = MorphMap()
+        bit,area       = getbits(bit,2,data)
+        bit,index      = getbits(bit,8,data)
+        bit,param      = getbits(bit,7,data)
+        bit,morph      = getbits(bit,4,data)
+        bit,mmap.range = getbits(bit,8,data,1)
         if area:
-          mparam.param = patch.voice.findmodule(index).params[param]
+          mmap.param = patch.voice.findmodule(index).params[param]
         else:
-          mparam.param = patch.fx.findmodule(index).params[param]
-        morphs[mparam.morph].params[variation].append(mparam)
+          mmap.param = patch.fx.findmodule(index).params[param]
+        mmap.param.mmap = mmap
+        mmap.morph = morphs[morph]
+        morphs[morph].maps[variation].append(mmap)
 
       bit,reserved = getbits(bit,4,data) # always 0
 
@@ -690,7 +696,7 @@ class MorphParameters(Section):
       # collect all params of this variation into 1 array
       mparams = []
       for morph in range(NMORPHS):
-        mparams.extend(morphs[morph].params[variation])
+        mparams.extend(morphs[morph].maps[variation])
 
       bit = setbits(bit,8,data,len(mparams))
       for i in range(len(mparams)):
@@ -732,6 +738,7 @@ class KnobAssignments(Section):
           #print area,index,k.isled,param
           k.param = patch.settings.morphs[param]
         #print '  %s%d-%d: %d %d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7, index,param)
+        k.param.knob = k
 
   def format(self, patch):
     data  = array('B',[])
@@ -776,6 +783,7 @@ class MIDIControllerAssignments(Section):
         m.param = patch.voice.findmodule(index).params[param]
       elif m.type == 2:
         m.param = patch.settings.morphs[index]
+      m.param.midiassignment = m
 
   def format(self, patch):
     data  = array('B',[])
