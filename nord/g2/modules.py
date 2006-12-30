@@ -1314,7 +1314,7 @@ modules = [
       OutputType('Sync',         g2portcolors.yellow),
     ],
     params=[
-      ParameterType('Tempo',        parammap.RateBpm),
+      ParameterType('Rate',         parammap.RateBpm),
       ParameterType('Active',       parammap.ActiveMonitor),
       ParameterType('Source',       parammap.InternalMaster),
       ParameterType('BeatSync',     parammap.ClkGenBeatSync),

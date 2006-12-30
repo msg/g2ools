@@ -34,21 +34,25 @@ def handleslv(conv,kbt):
       for cable in input.cables:
         cable.color = nm1cablecolors.blue
 
-  mst,ratemod=None,g2m.inputs.Rate
+  mst,ratemod=None,None
+  if hasattr(g2m.inputs,'Rate'):
+    ratemod = g2m.inputs.Rate
   if len(nmm.outputs.Slv.cables):
     mix21b = conv.addmodule('Mix2-1B',name='MasterRate')
-    conv.connect(mix21b.outputs.Out,g2m.inputs.Rate)
+    if hasattr(g2m.inputs,'Rate'):
+      conv.connect(mix21b.outputs.Out,g2m.inputs.Rate)
     setv(mix21b.params.Lev1,127)
     setv(mix21b.params.Lev2,127)
     mst = mix21b.outputs.Out
     if kbt:
       keyboard = conv.addmodule('Keyboard',name='KBT')
       conv.connect(keyboard.outputs.Note,mix21b.inputs.Chain)
-    if len(nmm.inputs.Rate.cables):
-      mix11a = conv.addmodule('Mix1-1A',name='Rate')
-      conv.connect(mix11a.outputs.Out,mix21b.inputs.In1)
-      setv(mix11a.params.Lev,getv(nmm.params.RateMod))
-      ratemod = mix11a.inputs.In
+    if hasattr(nmm.inputs,'Rate'):
+      if len(nmm.inputs.Rate.cables):
+        mix11a = conv.addmodule('Mix1-1A',name='Rate')
+        conv.connect(mix11a.outputs.Out,mix21b.inputs.In1)
+        setv(mix11a.params.Lev,getv(nmm.params.RateMod))
+        ratemod = mix11a.inputs.In
   return ratemod,mst
 
 def handlemst(conv):
@@ -63,9 +67,14 @@ def handlemst(conv):
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
     mstlfo = nmm.inputs.Mst.net.output.module.conv.g2module
-    setv(g2mp.Rate,getv(mstlfo.params.Rate))
-    setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
-    setv(g2mp.Range,getv(mstlfo.params.Range))
+    if hasattr(mstlfo.params,'Rate'):
+      setv(g2mp.Rate,getv(mstlfo.params.Rate))
+    if hasattr(mstlfo.params,'PolyMono'):
+      setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
+    if hasattr(mstlfo.params,'Range'):
+      setv(g2mp.Range,getv(mstlfo.params.Range))
+    else:
+      setv(g2mp.Range,3)
     return mix21b.inputs.Chain
   return None
 
@@ -174,15 +183,16 @@ class ConvLFOSlvE(ConvLFOSlvC):
 
 class ConvClkGen(Convert):
   maing2module = 'ClkGen'
-  parammap = [['Tempo','Rate'],['Active','On/Off']]
+  parammap = ['Rate',['Active','On/Off']]
   inputmap = ['Rst']
-  outputmap = ['1/96','1/16',None,'Sync'] # no Slv
+  outputmap = ['1/96','1/16',None,'Sync']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Active,getv(getattr(nmmp,'On/Off')))
+    self.outputs[2] = handleslv(self,0)[1]
 
 class ConvClkRndGen(Convert):
   maing2module = 'RndClkA'
@@ -193,8 +203,6 @@ class ConvClkRndGen(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-
-    # deal with nmmp.Color later
 
 class ConvRndStepGen(ConvLFOSlvB):
   waveform = 4

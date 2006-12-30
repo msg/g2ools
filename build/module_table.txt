@@ -1003,7 +1003,7 @@ ModuleKnowledge(
     height(4)
     inputs(['Rst'])
     outputs(['1/96', '1/16', 'ClkActive', 'Sync'])
-    params(['Tempo', 'Active', 'Source', 'BeatSync', 'Swing'])
+    params(['Rate', 'Active', 'Source', 'BeatSync', 'Swing'])
     modes([])
     inputtypes(['yellow'])
     outputtypes(['yellow', 'yellow', 'yellow', 'yellow'])
