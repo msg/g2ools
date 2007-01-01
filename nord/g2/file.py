@@ -1034,7 +1034,8 @@ class Performance:
 
 # holder object for patch voice and fx area data (modules, cables, etc..)
 class Area:
-  def __init__(self,index):
+  def __init__(self,patch,index):
+    self.patch = patch
     self.index = index
     self.modules = []
     self.cables = []
@@ -1089,8 +1090,8 @@ class Area:
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch:
   def __init__(self):
-    self.fx = Area(0)
-    self.voice = Area(1)
+    self.fx = Area(self,0)
+    self.voice = Area(self,1)
     self.midiassignments = []
     
 
