@@ -28,24 +28,33 @@ def addlevconv(conv):
   conv.connect(conv.g2module.outputs.Out,levconv.inputs.In)
   return levconv
 
-def handlepw(conv,levconv,pw):
+def handlepw(conv,levconv,pw,haspw):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params,g2m.params
   # add mix2-1b so input can be doubled/inverted
   pwmod = None
   if len(nmm.inputs.PwMod.cables):
     clip = conv.addmodule('Clip',name='PWLimit')
-    mix21b = conv.addmodule('Mix2-1B',name='PWMod')
+    mix11a = conv.addmodule('Mix1-1A',name='ShapeMod')
+    if haspw:
+      constswt = conv.addmodule('ConstSwT',name='Shape')
+    mix21b = conv.addmodule('Mix2-1B',name='ModIn')
     conv.connect(clip.outputs.Out,g2m.inputs.ShapeMod)
-    conv.connect(mix21b.outputs.Out,clip.inputs.In)
+    conv.connect(mix11a.outputs.Out,clip.inputs.In)
+    if haspw:
+      conv.connect(constswt.outputs.Out,mix11a.inputs.Chain)
+      conv.connect(mix21b.outputs.Out,mix11a.inputs.In)
+      setv(constswt.params.Lev,getv(nmmp.PulseWidth))
+    else:
+      conv.connect(mix21b.outputs.Out,mix11a.inputs.In)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
-    setv(clip.params.ClipLev,1)
+    setv(clip.params.ClipLev,2)
     setv(mix21b.params.Lev1,127)
     setv(mix21b.params.Lev2,127)
-    if pw < 64:
-      setv(mix21b.params.Inv1,1)
-      setv(mix21b.params.Inv2,1)
-    pwmod = mix21b.inputs.In1
+    setv(g2mp.Shape,0)
+    setv(g2mp.ShapeMod,127)
+    setv(mix11a.params.Lev,getv(nmmp.PwMod))
+    return mix21b.inputs.In1
   if pw < 64:
     pw = 64-pw
     setv(levconv.params.OutputType,4) # Bip
@@ -263,14 +272,6 @@ class ConvMasterOsc(Convert):
     p1,p2 = handledualpitchmod(self,3,4)
     self.inputs[:2] = [p1,p2]
 
-    if len(nmm.outputs.Slv.cables):
-      net = nmm.outputs.Slv.net
-      for cable in net.output.cables:
-        cable.color = nm1cablecolors.blue
-      for input in net.inputs:
-        for cable in input.cables:
-            cable.color = nm1cablecolors.blue
-
 class ConvOscA(Convert):
   maing2module = 'OscB'
   parammap = ['FreqCoarse','FreqFine',None,['Shape','PulseWidth'],
@@ -290,7 +291,7 @@ class ConvOscA(Convert):
       levconv = addlevconv(self)
       self.outputs[0] = levconv.outputs.Out
     if waveform == 3:
-      self.inputs[4] = handlepw(self,levconv,getv(nmmp.PulseWidth))
+      self.inputs[4] = handlepw(self,levconv,getv(nmmp.PulseWidth),1)
 
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
@@ -308,7 +309,7 @@ class ConvOscA(Convert):
 class ConvOscB(Convert):
   maing2module = 'OscB'
   parammap = ['FreqCoarse','FreqFine',None,'Waveform',None,None,
-              ['FmAmount','FmMod'],['ShapeMod','PulseWidth'],['Active','Mute']]
+              ['FmAmount','FmMod'],['ShapeMod','PwMod'],['Active','Mute']]
   inputmap = [ 'FmMod',None,None,'ShapeMod' ]
   outputmap = [ 'Out', None ]
 
@@ -329,7 +330,12 @@ class ConvOscB(Convert):
       levconv = addlevconv(self)
       self.outputs[0] = levconv.outputs.Out
     if waveform == 3:
-      self.inputs[3] = handlepw(self,levconv,64)
+      pwmod = handlepw(self,levconv,64,0)
+      notequant = self.addmodule('NoteQuant',name='BlueRate')
+      self.connect(notequant.outputs.Out,pwmod)
+      setv(notequant.params.Range,127)
+      setv(notequant.params.Notes,0)
+      self.inputs[3] = notequant.inputs.In
 
     # handle special inputs
     p1,p2 = handledualpitchmod(self,4,5)
@@ -361,7 +367,12 @@ class ConvOscC(Convert):
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
-    self.outputs[1] = handleslv(self)
+    output = handleslv(self)
+    if self.g2modules[-1].type.shortnm == 'OscMaster':
+      oscmaster = self.g2modules[-1]
+      self.outputs[1] = g2m.inputs.Pitch
+      self.connect(oscmaster.outputs.Out,g2m.inputs.Pitch)
+      self.inputs[1] = oscmaster.inputs.Pitch
 
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
@@ -510,7 +521,7 @@ class ConvOscSlvB(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    self.inputs[1] = handlepw(self,addlevconv(self),64)
+    self.inputs[1] = handlepw(self,addlevconv(self),64,1)
     # handle special parameters 
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
