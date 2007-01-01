@@ -68,14 +68,17 @@ class Conv1Output(Convert):
     inp = [g2m.inputs.InL,g2m.inputs.InR][dest%2]
     setv(g2mp.Destination,dest/2)
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    # maybe adjust patch level from nmm.params.Level
+    setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
     self.inputs = [inp]
 
 class Conv4Output(Convert):
   maing2module = '4-Out'
   parammap = [None]
   inputmap = ['In1','In2','In3','In4']
-  # maybe adjust patch level from nmm.params.Level
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
 
 class Conv2Output(Convert):
   maing2module = '2-Out'
@@ -88,7 +91,7 @@ class Conv2Output(Convert):
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    # maybe adjust patch level from nmm.params.Level
+    setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
 
 class ConvNoteDetect(Convert):
   maing2module = 'NoteDet'
