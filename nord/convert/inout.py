@@ -50,6 +50,12 @@ class ConvPolyAreaIn(Convert):
   parammap = [['Pad','+6Db']]
   outputmap = ['OutL','OutR']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Pad,1-getv(getattr(nmmp,'+6Db')))
+
 class Conv1Output(Convert):
   maing2module = '2-Out'
   parammap = [None,'Destination',['Active','Mute']]
