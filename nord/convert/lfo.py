@@ -26,14 +26,6 @@ def handleslv(conv,kbt):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  if len(nmm.outputs.Slv.cables):
-    net = nmm.outputs.Slv.net
-    for cable in net.output.cables:
-      cable.color = nm1cablecolors.blue
-    for input in net.inputs:
-      for cable in input.cables:
-        cable.color = nm1cablecolors.blue
-
   mst,ratemod=None,None
   if hasattr(g2m.inputs,'Rate'):
     ratemod = g2m.inputs.Rate
@@ -107,7 +99,7 @@ class ConvLFOB(Convert):
   parammap = ['Rate','Range','Phase','RateMod',['PolyMono','Mono'],
               None,['PhaseMod','PwMod'],['Shape','Pw']]
   inputmap = ['Rate','Rst','ShapeMod']
-  outputmap = ['Out',None] # no Slv
+  outputmap = ['Out',None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
@@ -128,7 +120,7 @@ class ConvLFOC(Convert):
   parammap = ['Rate','Range','Waveform','RateMod',['PolyMono','Mono'],
               ['Active','Mute']]
   inputmap = ['RateVar']
-  outputmap = ['Out',None] # no Slv
+  outputmap = ['Out',None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
