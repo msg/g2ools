@@ -202,6 +202,7 @@ class Morph:
   def __init__(self,index):
     self.maps = []
     self.index = index
+    self.dial = 0
     self.keyassign = 0
     self.knob = None
     self.ctrl = None
