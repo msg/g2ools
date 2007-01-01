@@ -311,7 +311,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('PulseWidth',
+      ParameterType('PwMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -4924,7 +4924,7 @@ modules = [
       OutputType('Vel',          nm1portcolors.control),
     ],
     params=[
-      ParameterType('Lower',
+      ParameterType('Upper',
         ParameterDef(  
           default=0,
           low=0,
@@ -4932,7 +4932,7 @@ modules = [
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Upper',
+      ParameterType('Lower',
         ParameterDef(  
           default=0,
           low=0,

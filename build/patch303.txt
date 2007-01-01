@@ -152,7 +152,7 @@ parameters
 4 "pitch mod 1" 0..127 ""
 5 "pitch mod 2" 0..127 ""
 6 "fm mod" 0..127 ""
-7 "pulse width" 0..127 "pulsewidth"
+7 "pw mod" 0..127 "pulsewidth"
 8 "mute" 0..1 "onoff"
 inputs
 0 "fm mod" audio
@@ -2065,8 +2065,8 @@ zeropage 3.00000
 dynmem 1.00000
 height 3
 parameters
-0 "lower" 0..127 "freqcoarse"
-1 "upper" 0..127 "freqcoarse"
+0 "upper" 0..127 "freqcoarse"
+1 "lower" 0..127 "freqcoarse"
 inputs
 0 "note" control
 1 "gate" logic
