@@ -368,7 +368,7 @@ class ConvOscC(Convert):
     self.outputs[0] = output
     self.inputs[2] = aminput
     output = handleslv(self)
-    if self.g2modules[-1].type.shortnm == 'OscMaster':
+    if len(self.g2modules) and self.g2modules[-1].type.shortnm == 'OscMaster':
       oscmaster = self.g2modules[-1]
       self.outputs[1] = g2m.inputs.Pitch
       self.connect(oscmaster.outputs.Out,g2m.inputs.Pitch)
