@@ -281,6 +281,7 @@ class ModuleList(Section):
       #       see the relationship but I have got a list of modules
       #       that require this to be set.  This will probably be handled
       #       without this property.
+      self.fixleds(m)
       bit = setbits(bit,1,data,m.leds)
       bit = setbits(bit,6,data,0) # m.reserved) # reserved
 
@@ -410,6 +411,7 @@ class Morph:
     self.dials = Parameter(0)
     self.modes = Parameter(1)
     self.params = []
+    self.maps = [[] for variation in range(NVARIATIONS) ]
     self.index = index
     self.midiassignment = None
 
@@ -653,8 +655,6 @@ class MorphParameters(Section):
     # variations seem to be 9 bytes with first nibble variation # from 0 ~ 8
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
     morphs = patch.settings.morphs
-    for morph in range(NMORPHS):
-      morphs[morph].maps = [[] for variation in range(nvariations) ]
 
     for i in range(nvariations):
       bit,variation = getbits(bit,4,data)
@@ -704,7 +704,7 @@ class MorphParameters(Section):
         bit = setbits(bit,2,data,mparam.param.module.area.index)
         bit = setbits(bit,8,data,mparam.param.module.index)
         bit = setbits(bit,7,data,mparam.param.index)
-        bit = setbits(bit,4,data,mparam.morph)
+        bit = setbits(bit,4,data,mparam.morph.index)
         bit = setbits(bit,8,data,mparam.range)
 
       bit += 4
@@ -762,17 +762,17 @@ class KnobAssignments(Section):
     return data.tostring()
 
 # holder object of patch midi assignments
-class MIDIAssignment:
+class Ctrl:
   pass
 
-# MIDIControllAssignments - section object for parse/format 
-class MIDIControllerAssignments(Section):
+# CtrlMap - section object for parse/format 
+class CtrlAssignments(Section):
   def parse(self, patch, data):
-    bit,assignmentcnt = getbits(0,7,data)
-    patch.midiassignments = [ MIDIAssignment() for i in range(assignmentcnt)]
+    bit,ctrlcnt = getbits(0,7,data)
+    patch.ctrls = [ Ctrl() for i in range(ctrlcnt)]
 
-    for i in range(assignmentcnt):
-      m = patch.midiassignments[i]
+    for i in range(ctrlcnt):
+      m = patch.ctrls[i]
       bit,m.midicc = getbits(bit,7,data)
       bit,m.type = getbits(bit,2,data) # 0:FX, 1:Voice, 2:System/Morph
       bit,index = getbits(bit,8,data)
@@ -783,15 +783,15 @@ class MIDIControllerAssignments(Section):
         m.param = patch.voice.findmodule(index).params[param]
       elif m.type == 2:
         m.param = patch.settings.morphs[index]
-      m.param.midiassignment = m
+      m.param.ctrl = m
 
   def format(self, patch):
     data  = array('B',[])
 
-    bit = setbits(0,7,data,len(patch.midiassignments))
+    bit = setbits(0,7,data,len(patch.ctrls))
 
-    for i in range(len(patch.midiassignments)):
-      m = patch.midiassignments[i]
+    for i in range(len(patch.ctrls)):
+      m = patch.ctrls[i]
       bit = setbits(bit,7,data,m.midicc)
       bit = setbits(bit,2,data,m.type)
       if m.type < 2:
@@ -1111,7 +1111,7 @@ class Pch2File:
     ModuleParameters(type=0x4d,area=0),
     MorphParameters(type=0x65),
     KnobAssignments(type=0x62),
-    MIDIControllerAssignments(type=0x60),
+    CtrlAssignments(type=0x60),
     MorphLabels(type=0x5b,area=2),
     ParameterLabels(type=0x5b,area=1),
     ParameterLabels(type=0x5b,area=0),
