@@ -203,7 +203,8 @@ class Morph:
     self.maps = []
     self.index = index
     self.keyassign = 0
-    self.knob = 0
+    self.knob = None
+    self.ctrl = None
 
 class MorphMap:
   pass
@@ -211,9 +212,9 @@ class MorphMap:
 class MorphMapDump(Section):
   def parse(self):
     morphs = self.patch.morphs
-    knobs = map(int, self.lines[0].split())
+    dials = map(int, self.lines[0].split())
     for i in range(NMORPHS):
-      morphs[i].knob = knobs[i]
+      morphs[i].dial = dials[i]
     values = []
     for line in self.lines[1:]:
       values.extend(map(int, line.split()))
@@ -252,6 +253,7 @@ class KnobMapDump(Section):
         knobs[i].param = self.patch.fx.findmodule(index).params[param]
       else:
         knobs[i].param = self.patch.morphs[param]
+      knobs[i].param.knob = knobs[i]
 
 class Ctrl:
   pass
@@ -268,6 +270,7 @@ class CtrlMapDump(Section):
       else:
         ctrls[i].param = self.patch.morphs[param]
       ctrls[i].midicc = midicc
+      ctrls[i].param.ctrl = ctrls[i]
 
 class NameDump(Section):
   def parse(self):
