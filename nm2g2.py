@@ -22,7 +22,7 @@
 import getopt, sys
 from glob import glob
 sys.path.append('.')
-from nord.g2.file import Pch2File
+from nord.g2.file import Pch2File, MorphMap
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
@@ -208,46 +208,113 @@ def convert(pch,config):
       #printnet(cable.source.net)
 
   # handle Morphs
-  # TBD
+  #  morphs[x].keyassign
+  #    0: None -> ignored
+  #    1: Velocity -> Vel (morph 1)
+  #    2: Note -> Keyb (morph 2)
+  #  morphs[x].ctrl.midicc
+  #    1: Wheel -> Wheel (morph 0)
+  #    7: Volume -> ?
+  #    4: Foot -> Ctrl.Pd (morph 5)
+  #  morphs[x].knob.knob
+  #    19: Pedal -> Sust Pd. (morph 4)
+  #    20: After Touch -> Aft. Tch. (morph 3)
+  #    22: On/Off -> P.Stick (morph 6) set to knob
+  #
+  #  Priority:
+  #    keyassign (highest)
+  #    ctrl
+  #    knob (lowest)
+  #    This means if keyassign is found it's will ignore the other two
+  #
+  # build a morphmap[x] that maps x to g2 morph
+  print 'Morphs:'
+  nmmorphs = nmpatch.morphs
+  g2morphs = g2patch.settings.morphs
+  unused = g2morphs[:]
+  morphmap = [None] * 4
+  for morph in range(len(nmmorphs)):
+    if nmmorphs[morph].keyassign:
+      m = g2morphs[nmmorphs[morph].keyassign]
+      unused.remove(m)
+      morphmap[morph] = m
+      continue
+    if nmmorphs[morph].ctrl:
+      # ignore Volume cannot be assigned anyways
+      if nmmorphs[morph].ctrl.midicc == 1:
+        morphmap[morph] = g2morphs[0]
+        unused.remove(g2morphs[0])
+        continue
+      elif nmmorphs[morph].ctrl.midicc == 4:
+        morphmap[morph] = g2morphs[5]
+        unused.remove(g2morphs[5])
+        continue
+    if nmmorphs[morph].knob:
+      knob = nmmorphs[morph].knob
+      if knob > 18:                  #  v: 0 unused
+        m = g2morphs[[4,3,0,6][knob.knob-19]]
+        morphmap[morph] = m
+        unused.remove(m)
+  # if morphmap[morph] empty assign unused morph and set it to knob
+  for morph in range(len(morphmap)):
+    if not morphmap[morph]:
+      morphmap[morph] = unused.pop(0)
+      setv(morphmap[morph].modes,0)
+  # set the knobs
+  for morph in range(len(morphmap)):
+    g2morph = morphmap[morph]
+    setv(g2morph.dials,nmmorphs[morph].dial)
+    for map in nmmorphs[morph].maps:
+      mmap = MorphMap()
+      mmap.range = map.range
+      mmap.param = map.param.module.conv.params[map.param.index]
+      mmap.morph = g2morph
+      morphmap[morph].maps[0].append(mmap)
+    for variation in range(1,9):
+      g2morph.maps[variation]=g2morph.maps[0][:]
+      
+  # add parameters to morphs
 
   # handle Knobs
   print 'Knobs:'
+  knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
   for knob in nmpatch.knobs:
+    if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
+      continue
+    g2knob = g2patch.knobs[knobmap[knob.knob]]
+    index = knob.param.index
     if hasattr(knob.param,'module'): # module parameter
-      if knob.knob < 18: # 19=pedal,20=afttch,22=on/off
         # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
-        knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
-        g2knob = knobmap[knob.knob]
-        index = knob.param.index
         conv = knob.param.module.conv
         if conv.params[index]:
-          g2patch.knobs[g2knob].param = conv.params[index]
-          g2patch.knobs[g2knob].assigned = 1
-          g2patch.knobs[g2knob].isled = 0
+          g2knob.param = conv.params[index]
+          g2knob.assigned = 1
+          g2knob.isled = 0
           print 'Knob%d: %s:%s -> %s' % (knob.knob,
               knob.param.module.name,knob.param.type.name,
               conv.params[index])
     else: # morph
-      print ' Knob%d: Morph%d' % (knob.knob,knob.param.index)
+      #print ' Knob%d: Morph%d' % (knob.knob,knob.param.index)
+      g2knob.param = morphmap[knob.param.index-1]
+      g2knob.assigned = 1
+      g2knob.isled = 0
   
   # handle Midi CCs
   print 'MIDI CCs:'
   reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97,121,123 ]
-  from nord.g2.file import MIDIAssignment
+  from nord.g2.file import Ctrl
   for ctrl in nmpatch.ctrls:
     if ctrl.midicc in reservedmidiccs:
       continue
-    m = MIDIAssignment()
+    m = Ctrl()
     m.midicc = ctrl.midicc
     if hasattr(ctrl.param,'module'): # module parameter
       m.param = ctrl.param.module.conv.params[ctrl.param.index]
       m.type = m.param.module.area.index
-      g2patch.midiassignments.append(m)
-    # NOTE: remove line above if uncommenting: g2patch.midiassignments.append(m)
-    #else:
-    #  m.param = g2patch.morphs[newindex]
-    #  m.type = 2 # system
-    #g2patch.midiassignments.append(m)
+    else:
+      m.param = morphmap[ctrl.param.index-1]
+      m.type = 2 # system
+    g2patch.ctrls.append(m)
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
