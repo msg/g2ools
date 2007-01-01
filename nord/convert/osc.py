@@ -22,13 +22,7 @@
 from nord.nm1.colors import nm1cablecolors
 from convert import *
 
-def addlevconv(conv):
-  levconv = conv.addmodule('LevConv')
-  setv(levconv.params.OutputType,5)
-  conv.connect(conv.g2module.outputs.Out,levconv.inputs.In)
-  return levconv
-
-def handlepw(conv,levconv,pw,haspw):
+def handlepw(conv,pw,haspw):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params,g2m.params
   # add mix2-1b so input can be doubled/inverted
@@ -57,7 +51,6 @@ def handlepw(conv,levconv,pw,haspw):
     return mix21b.inputs.In1
   if pw < 64:
     pw = 64-pw
-    setv(levconv.params.OutputType,4) # Bip
   else:
     pw -= 64
   setv(g2mp.Shape,pw*2)
@@ -285,13 +278,7 @@ class ConvOscA(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    # invert output if waveform is Saw or Square
-    waveform = getv(nmmp.Waveform)
-    if waveform == 2 or waveform == 3:
-      levconv = addlevconv(self)
-      self.outputs[0] = levconv.outputs.Out
-    if waveform == 3:
-      self.inputs[4] = handlepw(self,levconv,getv(nmmp.PulseWidth),1)
+    self.inputs[4] = handlepw(self,getv(nmmp.PulseWidth),1)
 
     if getv(nmmp.Kbt) == 0:
       setv(g2mp.Kbt,0)
@@ -325,12 +312,8 @@ class ConvOscB(Convert):
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # invert output if waveform is Saw
-    waveform = getv(g2mp.Waveform)
-    if waveform == 2 or waveform == 3:
-      levconv = addlevconv(self)
-      self.outputs[0] = levconv.outputs.Out
-    if waveform == 3:
-      pwmod = handlepw(self,levconv,64,0)
+    if getv(g2mp.Waveform) == 3:
+      pwmod = handlepw(self,64,0)
       notequant = self.addmodule('NoteQuant',name='BlueRate')
       self.connect(notequant.outputs.Out,pwmod)
       setv(notequant.params.Range,127)
@@ -500,9 +483,6 @@ class ConvOscSlvA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
-    # invert output if waveform is Saw
-    if g2mp.Waveform == 2:
-      self.outputs[0] = addlevconv(self).outputs.Out
     self.inputs[1] = handlefm(self)
     # handle special io
     # add AM if needed
@@ -521,7 +501,7 @@ class ConvOscSlvB(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    self.inputs[1] = handlepw(self,addlevconv(self),64,1)
+    self.inputs[1] = handlepw(self,64,1)
     # handle special parameters 
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
@@ -544,10 +524,6 @@ class ConvOscSlvC(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-
-    # invert output if waveform is Saw
-    if self.__class__.__name__ == 'ConvOscSlvC':
-      self.outputs[0] = addlevconv(self).outputs.Out
 
     # handle special parameters
     if len(nmm.inputs.Mst.cables):
