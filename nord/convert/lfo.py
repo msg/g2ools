@@ -58,6 +58,14 @@ def handlemst(conv):
     setv(mix21b.params.Lev2,127)
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
+    return mix21b.inputs.Chain
+  return None
+
+def postmst(conv):
+  nmm,g2m = conv.nmmodule,conv.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+
+  if len(nmm.inputs.Mst.cables):
     mstlfo = nmm.inputs.Mst.net.output.module.conv.g2module
     range = 3
     if hasattr(mstlfo.params,'Rate'):
@@ -69,8 +77,6 @@ def handlemst(conv):
       setv(g2mp.Range,getv(mstlfo.params.Range))
     else:
       setv(g2mp.Range,range)
-    return mix21b.inputs.Chain
-  return None
 
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
@@ -150,6 +156,9 @@ class ConvLFOSlvA(Convert):
 
     self.inputs[0] = handlemst(self)
 
+  def postmodule(self):
+    postmst(self)
+
 class ConvLFOSlvB(Convert):
   maing2module = 'LfoC'
   waveform = 2
@@ -165,6 +174,9 @@ class ConvLFOSlvB(Convert):
     g2m.modes.Waveform.value = self.waveform
 
     self.inputs[0] = handlemst(self)
+
+  def postmodule(self):
+    postmst(self)
 
 class ConvLFOSlvC(ConvLFOSlvB):
   waveform = 0

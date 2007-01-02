@@ -128,6 +128,10 @@ def convert(pch,config):
         else:
           cb.reposition(None)
 
+    # post module parse
+    for conv in converters:
+      conv.postmodule()
+
     # now do the cables
     print 'Cables:'
     for cable in nmarea.cables:
@@ -147,7 +151,10 @@ def convert(pch,config):
       else:
         print ' connected'
         g2dest = dest.conv.inputs[dest.index]
-        if source.net.output.type.type == nm1portcolors.slave:
+        if not source.net.output:
+          print ' No source connection'
+          color = g2cablecolors.white
+        elif source.net.output.type.type == nm1portcolors.slave:
           color = g2cablecolors.purple
         else:
           color = source.net.output.type.type
@@ -203,7 +210,8 @@ def convert(pch,config):
       #    cable.source.module.name,cable.source.type.name,
       #    cable.dest.module.name,cable.dest.type.name,
       #    cable.source.net.output.rate),
-      cable.color = port2cablecolors[cable.source.net.output.rate]
+      if cable.source.net.output:
+        cable.color = port2cablecolors[cable.source.net.output.rate]
       #print cable.color, cable.source.net.output.module.type.shortnm
       #printnet(cable.source.net)
 
@@ -260,16 +268,23 @@ def convert(pch,config):
     if not morphmap[morph]:
       morphmap[morph] = unused.pop(0)
       setv(morphmap[morph].modes,0)
-  # set the knobs
+
   for morph in range(len(morphmap)):
     g2morph = morphmap[morph]
     setv(g2morph.dials,nmmorphs[morph].dial)
+    print ' Morph%d: dial=%d' % (morph+1,nmmorphs[morph].dial)
     for map in nmmorphs[morph].maps:
+      print '  %s:%s range=%d' % (map.param.module.name,map.param.type.name,
+          map.range),
       mmap = MorphMap()
       mmap.range = map.range
       mmap.param = map.param.module.conv.params[map.param.index]
       mmap.morph = g2morph
-      morphmap[morph].maps[0].append(mmap)
+      if mmap.param:
+        morphmap[morph].maps[0].append(mmap)
+        print
+      else:
+        print '-- Parameter missing'
     for variation in range(1,9):
       g2morph.maps[variation]=g2morph.maps[0][:]
       
@@ -284,15 +299,14 @@ def convert(pch,config):
     g2knob = g2patch.knobs[knobmap[knob.knob]]
     index = knob.param.index
     if hasattr(knob.param,'module'): # module parameter
-        # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
-        conv = knob.param.module.conv
-        if conv.params[index]:
-          g2knob.param = conv.params[index]
-          g2knob.assigned = 1
-          g2knob.isled = 0
-          print 'Knob%d: %s:%s -> %s' % (knob.knob,
-              knob.param.module.name,knob.param.type.name,
-              conv.params[index])
+      # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
+      conv = knob.param.module.conv
+      print 'Knob%d: %s:%s -> %s' % (knob.knob,
+          knob.param.module.name,knob.param.type.name,conv.params[index])
+      if conv.params[index]:
+        g2knob.param = conv.params[index]
+        g2knob.assigned = 1
+        g2knob.isled = 0
     else: # morph
       #print ' Knob%d: Morph%d' % (knob.knob,knob.param.index)
       g2knob.param = morphmap[knob.param.index-1]
@@ -307,15 +321,20 @@ def convert(pch,config):
     if ctrl.midicc in reservedmidiccs:
       continue
     m = Ctrl()
-    print 'MidiCC: %d' % ctrl.midicc
     m.midicc = ctrl.midicc
     if hasattr(ctrl.param,'module'): # module parameter
+      print ' CC%d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,
+        ctrl.param.type.name),
       m.param = ctrl.param.module.conv.params[ctrl.param.index]
+      if not m.param:
+        print '-- Parameter missing'
+        continue
       m.type = m.param.module.area.index
     else:
       m.param = morphmap[ctrl.param.index-1]
       m.type = 2 # system
     g2patch.ctrls.append(m)
+    print
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
