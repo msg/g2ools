@@ -307,6 +307,7 @@ def convert(pch,config):
     if ctrl.midicc in reservedmidiccs:
       continue
     m = Ctrl()
+    print 'MidiCC: %d' % ctrl.midicc
     m.midicc = ctrl.midicc
     if hasattr(ctrl.param,'module'): # module parameter
       m.param = ctrl.param.module.conv.params[ctrl.param.index]
