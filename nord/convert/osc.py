@@ -267,11 +267,12 @@ class ConvOscB(Convert):
     # invert output if waveform is Saw
     if getv(g2mp.Waveform) == 3:
       pwmod = handlepw(self,64,0)
-      notequant = self.addmodule('NoteQuant',name='BlueRate')
-      self.connect(notequant.outputs.Out,pwmod)
-      setv(notequant.params.Range,127)
-      setv(notequant.params.Notes,0)
-      self.inputs[3] = notequant.inputs.In
+      if pwmod:
+        notequant = self.addmodule('NoteQuant',name='BlueRate')
+        self.connect(notequant.outputs.Out,pwmod)
+        setv(notequant.params.Range,127)
+        setv(notequant.params.Notes,0)
+        self.inputs[3] = notequant.inputs.In
 
     # handle special inputs
     self.outputs[1],inputmod = handleslv(self)
