@@ -206,7 +206,7 @@ class ConvRandomGen(ConvLFOSlvB):
 
 class ConvRndPulseGen(Convert):
   maing2module = 'RndTrig'
-  parampam = [['Prob','Density']]
+  parammap = [['StepProb','Density']]
   outputmap = ['Out']
 
 class ConvPatternGen(Convert):
