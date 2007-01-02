@@ -20,12 +20,20 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from convert import *
+from table import modtable
 
 class Conv3Mixer(Convert):
   maing2module = 'Mix4-1B'
   parammap = ['Lev1','Lev2','Lev3']
   inputmap = ['In1','In2','In3']
   outputmap = ['Out']
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
+    setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
+    setv(g2mp.Lev3,modtable[getv(g2mp.Lev2)][0])
 
 class Conv8Mixer(Convert):
   maing2module = 'Mix8-1B'
@@ -33,6 +41,19 @@ class Conv8Mixer(Convert):
               ['Pad','-6Db']]
   inputmap = ['In1','In2','In3','In4','In5','In6','In7','In8']
   outputmap = ['Out']
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
+    setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
+    setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
+    setv(g2mp.Lev4,modtable[getv(g2mp.Lev4)][0])
+    setv(g2mp.Lev5,modtable[getv(g2mp.Lev4)][0])
+    setv(g2mp.Lev5,modtable[getv(g2mp.Lev5)][0])
+    setv(g2mp.Lev6,modtable[getv(g2mp.Lev6)][0])
+    setv(g2mp.Lev7,modtable[getv(g2mp.Lev7)][0])
+    setv(g2mp.Lev8,modtable[getv(g2mp.Lev8)][0])
 
 class ConvGainControl(Convert):
   maing2module = 'LevMult'
