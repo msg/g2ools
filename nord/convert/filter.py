@@ -128,6 +128,17 @@ class ConvVocoder(Convert):
   inputmap = ['Ctrl','In']
   outputmap = ['Out']
 
+class ConvFilterBank(Convert):
+  maing2module = 'Eq3Band'
+  inputmap = ['In']
+  outputmap = ['Out']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    
+    setv(g2mp.Active,1-getv(nmmp.Bypass))
+
 class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
   parammap = ['Freq','Gain','Bandwidth',['Active','Bypass'],'Level']
