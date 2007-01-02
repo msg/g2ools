@@ -322,7 +322,7 @@ class ConvSpectralOsc(Convert):
 
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
-    self.outputs[1],inputmod = handleslv(self)[0]
+    self.outputs[1],inputmod = handleslv(self)
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1,p2
