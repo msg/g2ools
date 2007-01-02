@@ -21,6 +21,7 @@
 #
 from nord.nm1.colors import nm1cablecolors
 from convert import *
+from table import *
 
 def handlepw(conv,pw,haspw):
   nmm,g2m = conv.nmmodule,conv.g2module
@@ -56,95 +57,23 @@ def handlepw(conv,pw,haspw):
   setv(g2mp.Shape,pw*2)
   return pwmod
 
-# FMAmod conversion table calculated by 3phase from SpectralOsc
-fmmod = [ # [fmmod,mix,inv]
- [  0,  0,  0],  [  1,  0, 55],  [  1, 49,  0],  [  1, 76,  0],
- [  2,  0, 87],  [  2,  0, 77],  [  2,  0, 58],  [  2, 37,  0],
- [  2, 71,  0],  [  3,  0, 64],  [  3,  0, 17],  [  3, 62,  0],
- [  4,  0, 55],  [  4, 37,  0],  [  5,  0, 61],  [  5, 20,  0],
- [  6,  0, 60],  [  6,  0,  0],  [  7,  0, 57],  [  7, 29,  0],
- [  8,  0, 52],  [  8, 41,  0],  [  9,  0, 44],  [  9, 50,  0],
- [ 10,  0, 25],  [ 11,  0, 52],  [ 11, 38,  0],  [ 12,  0,  0],
- [ 12, 51,  0],  [ 13, 24,  0],  [ 14,  0, 44],  [ 14, 47,  0],
- [ 15, 16,  0],  [ 16,  0, 43],  [ 16, 47, 16],  [ 17, 22,  7],
- [ 18,  7,  7],  [ 18, 49, 16],  [ 19, 32,  4],  [ 20,  7, 32],
- [ 21, 11, 46],  [ 21, 41,  7],  [ 22, 19,  7],  [ 23, 10, 36],
- [ 23, 49, 10],  [ 24, 39,  3],  [ 25, 21,  0],  [ 26, 10, 32],
- [ 27, 11, 42],  [ 27, 42,  0],  [ 28, 33, 11],  [ 29,  0,  6],
- [ 30,  0, 31],  [ 31, 11, 31],  [ 31, 43, 13],  [ 32, 36, 11],
- [ 33, 25,  0],  [ 34,  0, 16],  [ 35,  6, 30],  [ 36, 13, 37],
- [ 37, 12, 41],  [ 37, 39, 41],  [ 38, 34,  7],  [ 39, 28,  7],
- [ 40, 17,  0],  [ 41,  2, 17],  [ 42,  4, 26],  [ 43,  7, 31],
- [ 44,  2, 34],  [ 45,  9, 37],  [ 46,  9, 39],  [ 46, 37,  7],
- [ 47, 36, 17],  [ 48, 32, 17],  [ 49, 32, 19],  [ 50, 26,  6],
- [ 51, 22,  2],  [ 52, 18,  4],  [ 53, 11,  3],  [ 54,  0,  9],
- [ 55,  2, 16],  [ 56,  5, 20],  [ 57,  5, 22],  [ 58,  6, 24],
- [ 59,  4, 25],  [ 60,  3, 26],  [ 61,  4, 27],  [ 62,  7, 28],
- [ 63,  0, 28],  [ 64,  6, 29],  [ 65,  0, 29],  [ 66,  0, 30],
- [ 67,  5, 30],  [ 68,  1, 30],  [ 69, 10, 31],  [ 70, 10, 31],
- [ 71,  6, 31],  [ 72,  4, 31],  [ 73,  1, 31],  [ 74, 11, 32],
- [ 75,  9, 32],  [ 76,  9, 32],  [ 77,  6, 32],  [ 78,  3, 32],
- [ 78, 33,  7],  [ 79, 33, 11],  [ 80, 33, 14],  [ 81, 31,  3],
- [ 82, 31,  9],  [ 83, 30,  7],  [ 84, 29,  4],  [ 85, 28,  1],
- [ 86, 28, 10],  [ 87, 27,  9],  [ 88, 25,  3],  [ 89, 24,  5],
- [ 90, 22,  2],  [ 91, 20,  0],  [ 92, 19,  0],  [ 93, 15,  3],
- [ 94, 10,  3],  [ 95,  0,  6],  [ 96,  5, 15],  [ 97,  2, 18],
- [ 98,  4, 21],  [ 99,  4, 24],  [100,  4, 26],  [101,  9, 28], 
-]
-
-# PitchMod conversion table calculated by 3phase from SpectralOsc
-pitchmod = [ # [pitchmod,mix,inv]
- [  0,  0,  0],  [  1, 41,  0],  [  2, 41,  0],  [  2, 41,  0],
- [  2, 37,  0],  [  2, 48,  0],  [  2, 64,  0],  [  4,  0, 41],
- [  4,  0, 41],  [  5,  0, 41],  [  6,  0, 67],  [  6,  0, 61],
- [  6,  0,  0],  [  7,  0,  0],  [  7,  0,  0],  [  8,  0, 46],
- [  9,  0, 47],  [ 10,  0, 48],  [ 10,  0, 25],  [ 11,  0, 59],
- [ 12,  0, 46],  [ 12, 22,  0],  [ 13,  0, 37],  [ 13, 48,  0],
- [ 14, 24,  0],  [ 15,  0, 13],  [ 16,  0, 44],  [ 17,  0, 50],
- [ 17, 34,  0],  [ 18,  0, 12],  [ 19,  0, 46],  [ 19, 46, 11],
- [ 20, 33,  0],  [ 21, 25,  5],  [ 22,  0, 27],  [ 23,  0, 39],
- [ 24,  0, 41],  [ 25,  0, 48],  [ 25, 37,  0],  [ 26, 17,  0],
- [ 27,  0,  0],  [ 28,  0, 24],  [ 29,  0, 34],  [ 30,  0, 37],
- [ 31,  0, 38],  [ 32, 20, 44],  [ 33,  0, 43],  [ 34,  0, 42],
- [ 34, 39,  0],  [ 35, 39,  0],  [ 37,  0, 45],  [ 37, 35, 11],
- [ 38, 37,  9],  [ 40,  0, 43],  [ 41, 16, 43],  [ 42,  0, 43],
- [ 42, 39,  0],  [ 43, 39,  2],  [ 44, 41,  5],  [ 46,  1, 35],
- [ 47,  0, 32],  [ 48, 12, 29],  [ 49,  0, 22],  [ 50,  0, 15],
- [ 51, 17,  1],  [ 52, 26,  7],  [ 53, 31,  9],  [ 54, 35,  6],
- [ 56,  0, 34],  [ 57,  0, 29],  [ 58,  0, 22],  [ 59, 14,  0],
- [ 60, 24,  3],  [ 61, 31,  0],  [ 62, 36,  5],  [ 64,  5, 29],
- [ 65,  0, 19],  [ 66, 16,  0],  [ 68,  6, 39],  [ 69,  6, 35],
- [ 70,  0, 28],  [ 71,  7, 21],  [ 72, 17,  0],  [ 73, 28,  4],
- [ 75,  0, 32],  [ 76,  0, 25],  [ 77,  0, 10],  [ 78, 24, 10],
- [ 79, 31,  6],  [ 81, 15, 30],  [ 82,  0, 17],  [ 83, 18,  0],
- [ 84, 28,  0],  [ 86, 10, 30],  [ 87,  5, 21],  [ 88, 15,  0],
- [ 89, 26,  0],  [ 91,  7, 30],  [ 92,  6, 22],  [ 93, 11,  2],
- [ 94, 24,  0],  [ 96, 16, 32],  [ 97, 13, 25],  [ 98,  0,  4],
- [ 99, 22,  0],  [100, 29,  4],  [102, 29, 25],  [103,  2, 13],
- [104, 19,  1],  [105, 28, 11],  [107,  0, 26],  [108,  3, 18],
- [109, 12,  0],  [110, 25, 11],  [111, 29,  5],  [113,  5, 23],
- [114,  7, 14],  [115, 17,  2],  [116, 26, 12],  [118,  3, 27],
- [119,  4, 22],  [120,  4, 13],  [122,  5, 34],  [123,  0, 31],
- [124,  6, 28],  [125,  6, 24],  [126,  3, 18],  [127,  0, 18], 
-]
-
 # handledualpitchmod -> p1,p2
 # handle pitch inputs and if necessary, create a Mix2-1B for input
 # NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
 #       in that case, the Pitch input could be used (if no knob tied
 #       to the said PitchModX dial).
 pitchmodnum = 1
-def handledualpitchmod(conv,mod1param,mod2param):
+def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   global pitchmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
   p1 = p2 = None
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
-    setv(g2m.params.PitchMod,127)
+    setv(modinputparam,127)
     mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
     adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
     adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
 
-    conv.connect(mix21b.outputs.Out,g2m.inputs.PitchVar)
+    conv.connect(mix21b.outputs.Out,modinput)
     conv.connect(adj1.outputs.Out,mix21b.inputs.In1)
     conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
     conv.connect(adj1.inputs.In1,adj1.inputs.In2)
@@ -153,51 +82,51 @@ def handledualpitchmod(conv,mod1param,mod2param):
     conv.connect(adj2.inputs.In1,adj2.inputs.In2)
 
     pmod1 = getv(nmm.params.PitchMod1)
-    setv(mix21b.params.Lev1,pitchmod[pmod1][0])
+    setv(mix21b.params.Lev1,modtable[pmod1][0])
     setv(adj1.params.Inv2, 1)
-    setv(adj1.params.Lev1, pitchmod[pmod1][1])
-    setv(adj1.params.Lev2, pitchmod[pmod1][2])
+    setv(adj1.params.Lev1, modtable[pmod1][1])
+    setv(adj1.params.Lev2, modtable[pmod1][2])
 
     pmod2 = getv(nmm.params.PitchMod2)
-    setv(mix21b.params.Lev2,pitchmod[pmod2][0])
+    setv(mix21b.params.Lev2,modtable[pmod2][0])
     setv(adj2.params.Inv2, 1)
-    setv(adj2.params.Lev1, pitchmod[pmod2][1])
-    setv(adj2.params.Lev2, pitchmod[pmod2][2])
+    setv(adj2.params.Lev1, modtable[pmod2][1])
+    setv(adj2.params.Lev2, modtable[pmod2][2])
 
     conv.params[mod1param] = mix21b.params.Lev1
     conv.params[mod2param] = mix21b.params.Lev2
     p1,p2 = adj1.inputs.Chain,adj2.inputs.Chain
 
   elif len(nmm.inputs.PitchMod1.cables):
-    setv(g2m.params.PitchMod,127)
+    setv(modinputparam,127)
     adj = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
     conv.connect(adj.outputs.Out,g2m.inputs.PitchVar)
     conv.connect(adj.inputs.Chain,adj.inputs.In1)
     conv.connect(adj.inputs.In1,adj.inputs.In2)
 
     pmod = getv(nmm.params.PitchMod1)
-    setv(g2m.params.PitchMod,pitchmod[pmod][0])
+    setv(modinputparam,modtable[pmod][0])
     setv(adj.params.Inv2, 1)
-    setv(adj.params.Lev1,pitchmod[pmod][1])
-    setv(adj.params.Lev2,pitchmod[pmod][2])
+    setv(adj.params.Lev1,modtable[pmod][1])
+    setv(adj.params.Lev2,modtable[pmod][2])
 
-    conv.params[mod1param] = g2m.params.PitchMod
+    conv.params[mod1param] = modinputparam
     p1 = adj.inputs.Chain
 
   elif len(nmm.inputs.PitchMod2.cables):
-    setv(g2m.params.PitchMod,127)
+    setv(modinputparam,127)
     adj = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
     conv.connect(adj.outputs.Out,g2m.inputs.PitchVar)
     conv.connect(adj.inputs.Chain,adj.inputs.In1)
     conv.connect(adj.inputs.In1,adj.inputs.In2)
 
     pmod = getv(nmm.params.PitchMod2)
-    setv(g2m.params.PitchMod,pitchmod[pmod][0])
+    setv(modinputparam,modtable[pmod][0])
     setv(adj.params.Inv2, 1)
-    setv(adj.params.Lev1,pitchmod[pmod][1])
-    setv(adj.params.Lev2,pitchmod[pmod][2])
+    setv(adj.params.Lev1,modtable[pmod][1])
+    setv(adj.params.Lev2,modtable[pmod][2])
 
-    conv.params[mod2param] = g2m.params.PitchMod
+    conv.params[mod2param] = modinputparam
     p2 = adj.inputs.Chain
 
   pitchmodnum += 1
@@ -243,12 +172,13 @@ def handleslv(conv):
     # add a masterosc
     master = conv.addmodule('OscMaster',name='SlvOut%d' % slvoutnum)
     slvoutnum += 1
+    conv.connect(master.outputs.Out,g2m.inputs.Pitch)
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
     setv(master.params.FreqFine,getv(g2m.params.FreqFine))
     setv(master.params.FreqMode,getv(g2m.params.FreqMode))
-    return master.outputs.Out
+    return g2m.inputs.Pitch,master
   else:
-    return None
+    return None,g2m
 
 class ConvMasterOsc(Convert):
   maing2module = 'OscMaster'
@@ -262,7 +192,7 @@ class ConvMasterOsc(Convert):
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs
-    p1,p2 = handledualpitchmod(self,3,4)
+    p1,p2 = handledualpitchmod(self,g2m.inputs.PitchVar,g2m.params.PitchMod,3,4)
     self.inputs[:2] = [p1,p2]
 
 class ConvOscA(Convert):
@@ -286,12 +216,13 @@ class ConvOscA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
-    # handle special inputs
-    p1,p2 = handledualpitchmod(self,5,6)
+    # handle special inputs/outputs
+    self.outputs[1],inputmod = handleslv(self)
+    p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
+        inputmod.params.PitchMod,5,6)
     self.inputs[2:4] = p1,p2
 
     self.inputs[1] = handlefm(self)
-    self.outputs[1] = handleslv(self)
 
 class ConvOscB(Convert):
   maing2module = 'OscB'
@@ -321,10 +252,11 @@ class ConvOscB(Convert):
       self.inputs[3] = notequant.inputs.In
 
     # handle special inputs
-    p1,p2 = handledualpitchmod(self,4,5)
+    self.outputs[1],inputmod = handleslv(self)
+    p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
+        inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1, p2
     self.inputs[0] = handlefm(self)
-    self.outputs[1] = handleslv(self)
 
 class ConvOscC(Convert):
   maing2module = 'OscC'
@@ -350,12 +282,8 @@ class ConvOscC(Convert):
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
-    output = handleslv(self)
-    if len(self.g2modules) and self.g2modules[-1].type.shortnm == 'OscMaster':
-      oscmaster = self.g2modules[-1]
-      self.outputs[1] = g2m.inputs.Pitch
-      self.connect(oscmaster.outputs.Out,g2m.inputs.Pitch)
-      self.inputs[1] = oscmaster.inputs.Pitch
+    self.outputs[1],inputmod = handleslv(self)
+    self.inputs[1] = inputmod.inputs.Pitch
 
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
@@ -372,7 +300,9 @@ class ConvSpectralOsc(Convert):
 
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
-    p1,p2 = handledualpitchmod(self,4,5)
+    self.outputs[1],inputmod = handleslv(self)[0]
+    p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
+        inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1,p2
     self.inputs[0] = handlefm(self)
 
@@ -414,8 +344,6 @@ class ConvSpectralOsc(Convert):
     self.connect(mix.inputs.In1,mix.inputs.In2)
     self.outputs[0] = mix.outputs.Out
 
-    # place master osc (if needed)
-    self.outputs[1] = handleslv(self)
 
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'
@@ -431,7 +359,7 @@ class ConvFormantOsc(Convert):
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
-    p1,p2 = handledualpitchmod(self,5,6)
+    p1,p2 = handledualpitchmod(self,g2m.inputs.PitchVar,g2m.params.PitchMod,5,6)
     self.inputs[:2] = p1,p2
 
     modules =[]
@@ -464,7 +392,7 @@ class ConvFormantOsc(Convert):
     setv(levamp.params.Gain,20)
 
     self.inputs[2] = levamp.inputs.In
-    self.outputs = [eqpeak.outputs.Out,handleslv(self)]
+    self.outputs = [eqpeak.outputs.Out,handleslv(self)[0]]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'
