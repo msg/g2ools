@@ -124,7 +124,7 @@ class ConvVocalFilter(ConvFilter):
 
 class ConvVocoder(Convert):
   maing2module = 'Vocoder'
-  parammap = ['Band%d' % i for i in range(1,17)]+['Emphasis','Monitor']
+  parammap = ['Band%d' % i for i in range(1,17)]+[None,'Emphasis','Monitor']
   inputmap = ['Ctrl','In']
   outputmap = ['Out']
 
