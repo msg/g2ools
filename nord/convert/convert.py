@@ -133,3 +133,11 @@ class Convert:
     for g2mod in g2area.modules:
       if g2mod.horiz >= column:
         g2mod.horiz += 1
+
+def handlekbt(conv):
+  nmm,g2m = self.nmmodule,self.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+
+  if not g2m.area.patch.keyboard:
+    g2m.area.patch.keyboard = conv.addmodule('Keyboard')
+  keyboard = g2m.area.patch.keyboard

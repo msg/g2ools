@@ -246,6 +246,12 @@ class ConvOscA(Convert):
 
     self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
 
+  def postmodule(self):
+    pass
+    #if not module.area.patch.keyboard:
+    #  keyboard = self.addmodule('Keyboard')
+    #  module.area.patch.keyboard = keyboard
+
 class ConvOscB(Convert):
   maing2module = 'OscB'
   parammap = ['FreqCoarse','FreqFine',None,'Waveform',None,None,
