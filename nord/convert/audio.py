@@ -194,8 +194,7 @@ class ConvCompressor(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Active,1-getv(nmmp.Bypass))
-    if len(nmm.inputs.Side.cables):
-      setv(g2mp.SideChain,1)
+    setv(g2mp.SideChain,getv(nmmp.Act))
     
 class ConvDigitizer(Convert):
   maing2module = 'Digitizer'
