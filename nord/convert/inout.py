@@ -24,6 +24,8 @@ from convert import *
 class ConvKeyboard(Convert):
   maing2module = 'Keyboard'
   outputmap = ['Note','Gate','Lin','Release']
+  def domodule(self):
+    self.g2module.area.patch.keyboard = self.g2module
 
 class ConvKeyboardPatch(Convert):
   maing2module = 'MonoKey'

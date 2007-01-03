@@ -232,14 +232,13 @@ class ConvOscA(Convert):
     # handle special parameters
     self.inputs[4] = handlepw(self,getv(nmmp.PulseWidth),1)
 
-    if getv(nmmp.Kbt) == 0:
-      setv(g2mp.Kbt,0)
     self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs/outputs
     self.outputs[1],inputmod = handleslv(self)
+    self.inputmod = inputmod
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,5,6)
     self.inputs[2:4] = p1,p2
@@ -247,10 +246,7 @@ class ConvOscA(Convert):
     self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
 
   def postmodule(self):
-    pass
-    #if not module.area.patch.keyboard:
-    #  keyboard = self.addmodule('Keyboard')
-    #  module.area.patch.keyboard = keyboard
+    handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
 
 class ConvOscB(Convert):
   maing2module = 'OscB'
@@ -264,8 +260,6 @@ class ConvOscB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special special parameters
-    if getv(nmmp.Kbt) == 0:
-      setv(g2mp.Kbt,0)
     self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
@@ -282,10 +276,15 @@ class ConvOscB(Convert):
 
     # handle special inputs
     self.outputs[1],inputmod = handleslv(self)
+    self.inputmod = inputmod
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1, p2
     self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
+
+  def postmodule(self):
+    handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
+
 
 class ConvOscC(Convert):
   maing2module = 'OscC'
@@ -399,7 +398,7 @@ class ConvFormantOsc(Convert):
 
     inv,rndclkb,eqpeak,mix41a,constswt,notequant,levamp = modules
     self.connect(g2m.outputs.Out,inv.inputs.In2)
-    self.connect(g2m.outputs.Out,rndclkb.inputs.Rst)
+    self.connect(inv.inputs.In2,rndclkb.inputs.Rst)
     self.connect(inv.outputs.Out1,inv.inputs.In1)
     self.connect(inv.inputs.In1,rndclkb.inputs.Clk)
     self.connect(rndclkb.outputs.Out,eqpeak.inputs.In)

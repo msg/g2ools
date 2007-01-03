@@ -21,6 +21,7 @@
 #
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
+from table import *
 from units import *
 
 def setv(g2param,val):
@@ -134,10 +135,24 @@ class Convert:
       if g2mod.horiz >= column:
         g2mod.horiz += 1
 
-def handlekbt(conv):
-  nmm,g2m = self.nmmodule,self.g2module
+def handlekbt(conv,input,kbt100):
+  nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  if not g2m.area.patch.keyboard:
-    g2m.area.patch.keyboard = conv.addmodule('Keyboard')
-  keyboard = g2m.area.patch.keyboard
+  kbt = getv(nmmp.Kbt)
+  if kbt == 0:
+    setv(nmmp.Kbt,kbt)
+  elif kbt == 64:
+    setv(nmmp.Kbt,kbt100)
+  else:
+    if not g2m.area.patch.keyboard:
+      g2m.area.patch.keyboard = conv.addmodule('Keyboard')
+    keyboard = g2m.area.patch.keyboard
+
+    mix21b = conv.addmodule('Mix2-1B',name='Kbt')
+    conv.connect(keyboard.outputs.Note,mix21b.inputs.In1)
+    conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
+    conv.connect(mix21b.outputs.Out,input)
+    setv(mix21b.params.Lev1,kbttable[kbt][0])
+    setv(mix21b.params.Lev2,kbttable[kbt][1])
+

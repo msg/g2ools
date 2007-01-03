@@ -22,7 +22,7 @@
 from nord.nm1.colors import nm1cablecolors
 from convert import *
 
-def handleslv(conv,kbt):
+def handleslv(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
@@ -36,9 +36,6 @@ def handleslv(conv,kbt):
     setv(mix21b.params.Lev1,127)
     setv(mix21b.params.Lev2,127)
     mst = mix21b.outputs.Out
-    if kbt:
-      keyboard = conv.addmodule('Keyboard',name='KBT')
-      conv.connect(keyboard.outputs.Note,mix21b.inputs.Chain)
     if hasattr(nmm.inputs,'Rate'):
       if len(nmm.inputs.Rate.cables):
         mix11a = conv.addmodule('Mix1-1A',name='Rate')
@@ -93,12 +90,7 @@ class ConvLFOA(Convert):
     setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
-    kbt = getv(nmmp.RateKbt)
-    if kbt == 64:
-      kbt = 1
-    else:
-      kbt = 0
-    self.inputs[0],self.outputs[0] = handleslv(self,kbt)
+    self.inputs[0],self.outputs[0] = handleslv(self)
 
 class ConvLFOB(Convert):
   maing2module = 'LfoShpA'
@@ -114,12 +106,7 @@ class ConvLFOB(Convert):
     setv(g2mp.Waveform,5)
     setv(g2mp.PhaseMod,getv(nmmp.PwMod))
 
-    kbt = getv(nmmp.RateKbt)
-    if kbt == 64:
-      kbt = 1
-    else:
-      kbt = 0
-    self.inputs[0],self.outputs[1] = handleslv(self,kbt)
+    self.inputs[0],self.outputs[1] = handleslv(self)
 
 class ConvLFOC(Convert):
   maing2module = 'LfoA'
@@ -135,7 +122,7 @@ class ConvLFOC(Convert):
     setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
-    self.inputs[0],self.outputs[1] = handleslv(self,0)
+    self.inputs[0],self.outputs[1] = handleslv(self)
 
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
@@ -198,7 +185,7 @@ class ConvClkGen(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Active,getv(getattr(nmmp,'On/Off')))
-    self.outputs[2] = handleslv(self,0)[1]
+    self.outputs[2] = handleslv(self)[1]
 
 class ConvClkRndGen(Convert):
   maing2module = 'RndClkA'
