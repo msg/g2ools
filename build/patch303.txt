@@ -581,7 +581,7 @@ parameters
 2 "waveform" 0..4 "lfoshape"
 3 "rate mod" 0..127 ""
 4 "mono" 0..1 "onoff"
-5 "rate kbt" 0..127 "freqkbt"
+5 "kbt" 0..127 "freqkbt"
 6 "phase" 0..127 "phase"
 7 "mute" 0..1 "onoff"
 inputs
@@ -607,7 +607,7 @@ parameters
 2 "phase" 0..127 "phase"
 3 "rate mod" 0..127 ""
 4 "mono" 0..1 "onoff"
-5 "rate kbt" 0..127 "freqkbt"
+5 "kbt" 0..127 "freqkbt"
 6 "PW mod" 0..127 ""
 7 "PW" 0..127 "pulsewidth"
 inputs

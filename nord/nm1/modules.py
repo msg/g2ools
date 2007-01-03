@@ -1623,7 +1623,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('RateKbt',
+      ParameterType('Kbt',
         ParameterDef(  
           default=0,
           low=0,
@@ -1704,7 +1704,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('RateKbt',
+      ParameterType('Kbt',
         ParameterDef(  
           default=0,
           low=0,
