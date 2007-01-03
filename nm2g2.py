@@ -103,6 +103,10 @@ def convert(pch,config):
         print 'No converter for module "%s" type %d(0x%02x)' % (
             module.type.shortnm, module.type.type, module.type.type)
 
+    # post module parse
+    for conv in converters:
+      conv.postmodule()
+
     # reposition modules
     locsorted = converters[:]
     def loccmp(a, b):
@@ -120,10 +124,6 @@ def convert(pch,config):
           cb.reposition(ca)
         else:
           cb.reposition(None)
-
-    # post module parse
-    for conv in converters:
-      conv.postmodule()
 
     # now do the cables
     print 'Cables:'
