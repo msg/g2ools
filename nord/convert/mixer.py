@@ -33,7 +33,7 @@ class Conv3Mixer(Convert):
 
     setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
-    setv(g2mp.Lev3,modtable[getv(g2mp.Lev2)][0])
+    setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
 
 class Conv8Mixer(Convert):
   maing2module = 'Mix8-1B'
@@ -69,7 +69,7 @@ class ConvGainControl(Convert):
     if shift:
       conv = self.addmodule('LevConv')
       self.connect(conv.outputs.Out,g2m.inputs.Mod)
-      setv(conv.params.OutputType,2) # Pos (I think)
+      setv(conv.params.OutputType,0) # Pos
       self.params[0] = conv.params.OutputType
       self.inputs[0] = conv.inputs.In
 
