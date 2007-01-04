@@ -39,6 +39,7 @@ def handleslv(conv):
     if hasattr(nmm.inputs,'Rate'):
       if len(nmm.inputs.Rate.cables):
         mix11a = conv.addmodule('Mix1-1A',name='Rate')
+        setv(mix11a.params.On,1)
         conv.connect(mix11a.outputs.Out,mix21b.inputs.In1)
         setv(mix11a.params.Lev,getv(nmm.params.RateMod))
         ratemod = mix11a.inputs.In
@@ -54,6 +55,7 @@ def handlemst(conv):
     setv(mix21b.params.Lev1,127)
     setv(mix21b.params.Lev2,127)
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
+    setv(constswt.params.On,1)
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
     return mix21b.inputs.Chain
   return None
@@ -185,6 +187,7 @@ class ConvClkGen(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Active,getv(getattr(nmmp,'On/Off')))
+    setv(g2mp.Source,1)  # Master
     self.outputs[2] = handleslv(self)[1]
 
 class ConvClkRndGen(Convert):

@@ -95,6 +95,7 @@ class ConvNoteVelScal(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     if len(nmm.inputs.Velocity.cables):
       mix11a = self.addmodule('Mix1-1A',name='Velocity')
+      setv(mix11a.params.On,1)
       self.connect(mix11a.outputs.Out,g2m.inputs.Note)
       setv(mix11a.params.Lev,getv(nmm.params.VelocitySensitivity))
       self.inputs = mix11a.inputs.In,mix11a.inputs.Chain
