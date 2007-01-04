@@ -31,8 +31,10 @@ def handlepw(conv,pw,haspw):
   if len(nmm.inputs.PwMod.cables):
     clip = conv.addmodule('Clip',name='PWLimit')
     mix11a = conv.addmodule('Mix1-1A',name='ShapeMod')
+    setv(mix11a.params.On,1)
     if haspw:
       constswt = conv.addmodule('ConstSwT',name='Shape')
+      setv(constswt.params.On,1)
     mix21b = conv.addmodule('Mix2-1B',name='ModIn')
     conv.connect(clip.outputs.Out,g2m.inputs.ShapeMod)
     conv.connect(mix11a.outputs.Out,clip.inputs.In)
@@ -137,7 +139,8 @@ def handlefm(conv,fminput,fmparam):
   global fmmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
   fma = getv(nmm.params.FmMod)
-  setv(fmparam,fmmod[fma][0])
+  if fmparam and fmmod:
+    setv(fmparam,fmmod[fma][0])
   if len(nmm.inputs.FmMod.cables):
     mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
     fmmodnum += 1
@@ -188,14 +191,19 @@ def handlemst(conv):
   if len(nmm.inputs.Mst.cables):
     if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
       mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
+      setv(mix11a.params.On,1)
       constswt = conv.addmodule('ConstSwT',name='Offset -64')
+      setv(constswt.params.On,1)
       conv.connect(mix11a.outputs.Out,g2m.inputs.FmMod)
+      conv.connect(constswt.outputs.Out,mix11a.inputs.Chain)
       setv(g2m.params.FmAmount,127)
       setv(mix11a.params.Lev,79)
-      setv(constswt.params.Lev,-64)
+      setv(constswt.params.Lev,0)
       mst = mix11a.inputs.In
+      fmmod, fmparam = None, None
       if len(nmm.inputs.FmMod.cables):
         fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
+        setv(fmodinput.params.On,1)
         conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
         fmparam = fmmodinput.params.Lev
         fmmod = fmmodinput.inputs.In
@@ -229,6 +237,7 @@ class ConvOscA(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.Shape,0)
     # handle special parameters
     self.inputs[4] = handlepw(self,getv(nmmp.PulseWidth),1)
 
@@ -264,7 +273,7 @@ class ConvOscB(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
-    # invert output if waveform is Saw
+    setv(g2mp.Shape,0)
     if getv(g2mp.Waveform) == 3:
       pwmod = handlepw(self,64,0)
       if pwmod:
@@ -284,7 +293,6 @@ class ConvOscB(Convert):
 
   def postmodule(self):
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
-
 
 class ConvOscC(Convert):
   maing2module = 'OscC'
@@ -342,6 +350,7 @@ class ConvSpectralOsc(Convert):
 
     if len(nmm.inputs.SpectralShapeMod.cables):
       shape = self.addmodule('Mix1-1A',name='Shape')
+      setv(shape.params.On,1)
       setv(shape.params.Lev,getv(nmmp.SpectralShapeMod))
       self.params[7] = shape.params.Lev
       setv(shape.params.On,1)
@@ -404,6 +413,7 @@ class ConvFormantOsc(Convert):
     self.connect(rndclkb.outputs.Out,eqpeak.inputs.In)
     self.connect(mix41a.outputs.Out,rndclkb.inputs.Seed)
     self.connect(constswt.outputs.Out,mix41a.inputs.In4)
+    setv(constswt.params.On,1)
     self.connect(notequant.outputs.Out,mix41a.inputs.In3)
     self.connect(levamp.outputs.Out,notequant.inputs.In)
 
@@ -459,6 +469,7 @@ class ConvOscSlvB(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.Shape,0)
     self.inputs[1] = handlepw(self,64,1)
     # handle special parameters 
     if len(nmm.inputs.Mst.cables):
@@ -467,6 +478,7 @@ class ConvOscSlvB(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
+    self.inputs[0],fmmod,fmparam = handlemst(self)
     # NOTE: since shape can be 0% - 100%, a LevConv could be used
     #       to get the actual waveform, if necessary.
     setv(g2m.params.Shape,abs(getv(nmm.params.PulseWidth)-64)*2)
@@ -489,7 +501,8 @@ class ConvOscSlvC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
-    self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
+    self.inputs[0],fmmod,fmparam = handlemst(self)
+    self.inputs[1] = handlefm(self,fmmod,fmparam)
 
 class ConvOscSlvD(ConvOscSlvC):
   waveform = 1 # tri
@@ -590,6 +603,7 @@ class ConvPercOsc(Convert):
 
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(g2mp.Kbt,0)
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # add AM if needed
