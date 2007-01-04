@@ -75,7 +75,7 @@ class ConvLogicProc(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    g2m.modes.GateMode1.value = [0,2,4][getv(nmmp.Mode)]
+    g2m.modes.GateMode2.value = [0,2,4][getv(nmmp.Mode)]
 
 class ConvCompareLev(Convert):
   maing2module = 'CompLev'
