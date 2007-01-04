@@ -32,6 +32,7 @@ def handlepw(conv,pw,haspw):
     clip = conv.addmodule('Clip',name='PWLimit')
     setv(clip.params.Shape,1) # Sym
     mix11a = conv.addmodule('Mix1-1A',name='ShapeMod')
+    setv(mix11a.params.ExpLin, 1) # Lin
     setv(mix11a.params.On,1)
     if haspw:
       constswt = conv.addmodule('ConstSwT',name='Shape')
@@ -47,7 +48,7 @@ def handlepw(conv,pw,haspw):
       conv.connect(mix21b.outputs.Out,mix11a.inputs.In)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
     setv(clip.params.ClipLev,2)
-    setv(mix21b.params.Lev1,127)
+    setv(mix21b.params.Lev1,126)
     setv(mix21b.params.Lev2,127)
     setv(g2mp.Shape,0)
     setv(g2mp.ShapeMod,127)
