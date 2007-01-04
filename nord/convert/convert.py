@@ -141,14 +141,15 @@ def handlekbt(conv,input,kbt100):
 
   kbt = getv(nmmp.Kbt)
   if kbt == 0:
-    setv(nmmp.Kbt,kbt)
+    setv(g2mp.Kbt,kbt)
   elif kbt == 64:
-    setv(nmmp.Kbt,kbt100)
+    setv(g2mp.Kbt,kbt100)
   else:
     if not g2m.area.patch.keyboard:
       g2m.area.patch.keyboard = conv.addmodule('Keyboard')
     keyboard = g2m.area.patch.keyboard
 
+    setv(g2mp.Kbt,0)
     mix21b = conv.addmodule('Mix2-1B',name='Kbt')
     conv.connect(keyboard.outputs.Note,mix21b.inputs.In1)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
