@@ -864,7 +864,7 @@ params = [
     low=0,
     high=3,
     default=1,
-    definitions=['0 ~ +6 dB, 1 ~ 0 dB, 2 ~ -6 dB,3 ~ -12 dB'],
+    definitions=['0 ~ -12 dB, 1 ~ -6 dB, 2 ~ 0 dB,3 ~ +6 dB'],
     comments=''
   ),
   ParameterDef(name='MidiCh_16',
