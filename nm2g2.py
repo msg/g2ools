@@ -24,7 +24,7 @@ from glob import glob
 sys.path.append('.')
 from nord.g2.file import Pch2File, MorphMap
 from nord.g2.modules import fromname as g2name
-from nord.g2.colors import g2cablecolors, g2portcolors
+from nord.g2.colors import g2modulecolors, g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1portcolors
 from nord.g2 import colors
@@ -106,6 +106,18 @@ def convert(pch,config):
     # post module parse
     for conv in converters:
       conv.postmodule()
+
+    modcolors = [
+        g2modulecolors.red1,g2modulecolors.yellow1,g2modulecolors.green1,
+        g2modulecolors.cyan1,g2modulecolors.blue1,g2modulecolors.magenta1]
+    # colorize multi-module convertions
+    curr = 0
+    for conv in converters:
+      if len(conv.g2modules):
+        conv.g2module.color = modcolors[curr]
+        for mod in conv.g2modules:
+          mod.color = modcolors[curr]
+        curr = (curr+1)%len(modcolors)
 
     # reposition modules
     locsorted = converters[:]
