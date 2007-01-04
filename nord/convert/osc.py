@@ -30,6 +30,7 @@ def handlepw(conv,pw,haspw):
   pwmod = None
   if len(nmm.inputs.PwMod.cables):
     clip = conv.addmodule('Clip',name='PWLimit')
+    setv(clip.params.Shape,1) # Sym
     mix11a = conv.addmodule('Mix1-1A',name='ShapeMod')
     setv(mix11a.params.On,1)
     if haspw:
