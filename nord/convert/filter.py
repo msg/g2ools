@@ -53,20 +53,21 @@ class ConvFilterD(ConvFilter):
   outputmap = ['HP','BP','LP']
 
   def postmodule(self):
-    handlekbt(self, self.g2module.inputs.Pitch,4) # 4=Kbt 100%
+    handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
 
 # copied from convert.py for osc.py (maybe it can be unified?)
 def fltdualpitchmod(nmm,g2m,conv,mod1,mod2):
   p1 = p2 = None
+  pitchmod = g2m.inputs.Pitch
   if len(nmm.inputs.FreqMod1.cables) and len(nmm.inputs.FreqMod2.cables):
-    g2mm = conv.addmodule('Mix2-1B',name='FreqMod')
-    conv.connect(g2mm.outputs.Out,g2m.inputs.PitchVar)
-    p1,p2 = g2mm.inputs.In1,g2mm.inputs.In2
-    setv(g2m.params.PitchMod,127)
-    setv(g2mm.params.Lev1,getv(nmm.params.FreqMod1))
-    conv.params[mod1] = g2mm.params.Lev1
-    setv(g2mm.params.Lev2,getv(nmm.params.FreqMod2))
-    conv.params[mod2] = g2mm.params.Lev2
+    mix21b = conv.addmodule('Mix2-1B',name='FreqMod')
+    conv.connect(mix21b.outputs.Out,g2m.inputs.Pitch)
+    p1,p2 = mix21b.inputs.In1,mix21b.inputs.In2
+    setv(mix21b.params.Lev1,getv(nmm.params.FreqMod1))
+    conv.params[mod1] = mix21b.params.Lev1
+    setv(mix21b.params.Lev2,getv(nmm.params.FreqMod2))
+    conv.params[mod2] = mix21b.params.Lev2
+    pitchmod = mix21b.inputs.Chain
   elif len(nmm.inputs.FreqMod1.cables):
     p1 = g2m.inputs.PitchVar
     setv(g2m.params.PitchMod,getv(nmm.params.FreqMod1))
@@ -76,7 +77,7 @@ def fltdualpitchmod(nmm,g2m,conv,mod1,mod2):
     setv(g2m.params.PitchMod,getv(nmm.params.FreqMod2))
     conv.params[mod2] = g2m.params.PitchMod
 
-  return p1, p2
+  return pitchmod, p1, p2
 
 class ConvFilterE(ConvFilter):
   maing2module = 'FltNord'
@@ -91,16 +92,14 @@ class ConvFilterE(ConvFilter):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    # deal with KBT later
-
     setv(g2mp.Active,1-getv(nmmp.Bypass))
     # handle special inputs
-    p1,p2 = fltdualpitchmod(nmm,g2m,self,2,8)
+    self.pitchmod,p1,p2 = fltdualpitchmod(nmm,g2m,self,2,8)
     self.inputs[0] = p1
     self.inputs[3] = p2
 
   def postmodule(self):
-    handlekbt(self, self.g2module.inputs.Pitch,4) # 4=Kbt 100%
+    handlekbt(self,self.pitchmod,4) # 4=Kbt 100%
 
 class ConvFilterF(ConvFilter):
   maing2module = 'FltClassic'
@@ -118,11 +117,11 @@ class ConvFilterF(ConvFilter):
 
     setv(g2mp.Active,1-getv(nmmp.Bypass))
     # handle special inputs
-    p1,p2 = fltdualpitchmod(nmm,g2m,self,3,4)
+    self.pitchmod,p1,p2 = fltdualpitchmod(nmm,g2m,self,3,4)
     self.inputs[0:2] = p1,p2
 
   def postmodule(self):
-    handlekbt(self, self.g2module.inputs.Pitch,4) # 4=Kbt 100%
+    handlekbt(self,self.pitchmod,4) # 4=Kbt 100%
 
 class ConvVocalFilter(ConvFilter):
   maing2module = 'FltVoice'
