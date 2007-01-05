@@ -19,6 +19,8 @@ Version=Nord Modular patch 3.0
 13 36 1 20 
 14 36 1 22 
 15 36 1 24 
+16 73 0 24 
+17 7 0 18 
 [/ModuleDump]
 [ModuleDump]
 0 
@@ -46,6 +48,8 @@ Version=Nord Modular patch 3.0
 2 13 0 0 12 2 1 
 2 14 0 0 12 1 1 
 2 15 0 0 12 0 1 
+0 16 1 0 17 0 1 
+0 16 0 0 16 1 0 
 [/CableDump]
 [CableDump]
 0 
@@ -63,12 +67,15 @@ Version=Nord Modular patch 3.0
 13 36 1 64 
 14 36 1 64 
 15 36 1 64 
+16 73 1 2 
+17 7 10 64 64 64 64 0 0 0 0 0 0 
 [/ParameterDump]
 [ParameterDump]
 0 
 [/ParameterDump]
 [CustomDump]
 1 
+17 1 0 
 [/CustomDump]
 [CustomDump]
 0 
@@ -90,6 +97,8 @@ Version=Nord Modular patch 3.0
 13 PosEdgeDly2
 14 PosEdgeDly2
 15 PosEdgeDly2
+16 LogicProc2
+17 OscA1
 [/NameDump]
 [NameDump]
 0 
