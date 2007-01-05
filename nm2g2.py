@@ -178,8 +178,11 @@ def convert(pch,config):
 	  if not input.net:
             continue
           #print '',input.type.name, input.rate
-          if (input.rate != g2portcolors.blue_red and
-              input.rate != g2portcolors.yellow_orange):
+          # try and make all logic run at control rate.
+          if input.rate == g2portcolors.yellow_orange:
+            input.rate = g2portcolors.yellow
+            continue
+          if input.rate != g2portcolors.blue_red:
             continue
           if not input.net.output:
             continue
