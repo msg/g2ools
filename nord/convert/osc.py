@@ -590,7 +590,7 @@ class ConvOscSineBank(Convert):
       self.params[(i-1)*3] = osc.params.FreqCoarse
       setv(osc.params.FreqFine,getv(getattr(nmmp,'Osc%dFine'%i)))
       self.params[(i-1)*3+1] = osc.params.FreqFine
-      setv(osc.params.FreqMode,3) 
+      setv(osc.params.FreqMode,2) 
       l = getattr(g2mp,'Lev%d' % i)
       setv(l,getv(getattr(nmmp,'Osc%dLevel'%i)))
       self.params[(i-1)*3+2] = l
