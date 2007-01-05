@@ -81,7 +81,7 @@ class ConvAHD_Env(Convert):
 class ConvMulti_Env(Convert):
   maing2module = 'EnvMulti'
   parammap = ['Level1','Level2','Level3','Level4',
-              'Time1','Time2','Time3','Time4',['NR','Time5'],
+              'Time1','Time2','Time3','Time4',None,
               ['SustainMode','Sustain'],['OutputType','Curve']]
   inputmap = ['Gate','In','AM']
   outputmap = ['Env','Out']
@@ -90,9 +90,20 @@ class ConvMulti_Env(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.OutputType,[3,2,1][getv(nmmp.Curve)])
     # handle special parameters
     updatevals(g2mp,['Time%d' % i for i in range(1,5)]+['NR'],
         nm1adsrtime, g2adsrtime)
+    # if L4 is sustain, deal with it.
+    if getv(nmmp.Sustain) == 4:
+      adsr = self.addmodule('EnvADSR')
+      setv(adsr.params.KB,1)
+      setv(adsr.params.Attack,0)
+      setv(adsr.params.Decay,0)
+      setv(adsr.params.Sustain,127)
+      updatevals(adsr.params,['Release'],nm1adsrtime,g2adsrtime)
+      self.connect(adsr.outputs.Env,g2m.inputs.AM)
+      self.inputs[2] = adsr.inputs.AM
 
 class ConvEnvFollower(Convert):
   maing2module = 'EnvFollow'
