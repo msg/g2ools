@@ -46,6 +46,9 @@ class Param(Member):
   def __init__(self, module, type, index):
     Member.__init__(self, module, type, index)
     self.variations = [ type.type.default for variation in range(9) ]
+    self.knob = None
+    self.ctrl = None
+    self.morph = None
 
 class Mode(Member):
   def __init__(self, module, type, index):
