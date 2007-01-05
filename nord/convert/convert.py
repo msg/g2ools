@@ -107,6 +107,9 @@ class Convert:
   def domodule(self):
     pass
 
+  def domorphrange(self,paramindex,morphrange):
+    return morphrange
+
   # reposition module based on nm1's separation from module above
   def reposition(self, convabove):
     nmm,g2m = self.nmmodule,self.g2module

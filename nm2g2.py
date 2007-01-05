@@ -292,8 +292,9 @@ def convert(pch,config):
       print '  %s:%s range=%d' % (map.param.module.name,map.param.type.name,
           map.range),
       mmap = MorphMap()
-      mmap.range = map.range
-      mmap.param = map.param.module.conv.params[map.param.index]
+      conv = map.param.module.conv
+      mmap.range = conv.domorphrange(map.param.index,map.range)
+      mmap.param = conv.params[map.param.index]
       mmap.morph = g2morph
       if mmap.param:
         morphmap[morph].maps[0].append(mmap)
