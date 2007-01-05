@@ -111,16 +111,17 @@ class Convert:
   def reposition(self, convabove):
     nmm,g2m = self.nmmodule,self.g2module
     if not convabove:
-      g2m.vert = nmm.vert
+      g2m.vert += nmm.vert
       for g2mod in self.g2modules:
-        g2mod.vert += g2m.vert
+        g2mod.vert += nmm.vert
       return
 
     nma,g2a = convabove.nmmodule,convabove.g2module
     sep = nmm.vert - nma.vert - nma.type.height
-    g2m.vert = g2a.vert + convabove.height + sep
+    vert = g2a.vert + convabove.height + sep
+    g2m.vert += vert
     for g2mod in self.g2modules:
-      g2mod.vert += g2m.vert
+      g2mod.vert += vert
 
   # return True of no modules in column from rowstart to rowend
   def emptyspace(self, column, rowstart, rowend):
