@@ -169,6 +169,35 @@ def handleam(conv):
     output = am.outputs.Out
   return aminput, output
 
+def handleoscmasterslv(conv,mst):
+  nmm, g2m = conv.nmmodule, conv.g2module
+
+  if mst.type.shortnm != 'OscMaster' or len(nmm.outputs.Slv.cables) == 0:
+    return None
+
+  onlyslave = 1
+  for inputs in nmm.outputs.Slv.net.inputs:
+    if inputs.rate != nm1portcolors.slave:
+      onlyslave = 0
+
+  if onlyslave:
+    return mst.outputs.Out
+
+  levscaler = conv.addmodule('LevScaler',name='GreyIn')
+  setv(levscaler.params.Kbt,0)
+  setv(levscaler.params.L,16)
+  setv(levscaler.params.BP,127)
+  setv(levscaler.params.R,112)
+  mix21b = conv.addmodule('Mix2-1B',name='To Blue')
+  setv(mix21b.params.Lev1,105)
+  setv(mix21b.params.Lev2,21)
+  conv.connect(mst.outputs.Out,levscaler.inputs.Note)
+  conv.connect(levscaler.outputs.Level,mix21b.inputs.In1)
+  conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
+
+  return mix21b.outputs.Out
+
+
 slvoutnum=1
 def handleslv(conv):
   global slvoutnum
@@ -181,7 +210,7 @@ def handleslv(conv):
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
     setv(master.params.FreqFine,getv(g2m.params.FreqFine))
     setv(master.params.FreqMode,getv(g2m.params.FreqMode))
-    return g2m.inputs.Pitch,master
+    return g2m.inputs.Pitch,handleoscmasterslv(conf,master)
   else:
     return None,g2m
 
@@ -203,7 +232,7 @@ def handlemst(conv):
       setv(constswt.params.Lev,0)
       mst = mix11a.inputs.In
       fmmod, fmparam = None, None
-      if len(nmm.inputs.FmMod.cables):
+      if hasattr(nmm.inputs,'FmMod') and len(nmm.inputs.FmMod.cables):
         fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
         setv(fmodinput.params.On,1)
         conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
@@ -226,6 +255,7 @@ class ConvMasterOsc(Convert):
     # handle special inputs
     p1,p2 = handledualpitchmod(self,g2m.inputs.PitchVar,g2m.params.PitchMod,3,4)
     self.inputs[:2] = [p1,p2]
+    self.outputs[0] = handleoscmasterslv(self,g2m)
 
 class ConvOscA(Convert):
   maing2module = 'OscB'
@@ -345,7 +375,7 @@ class ConvSpectralOsc(Convert):
     self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(g2mp.Waveform,[3,4][getv(nmmp.Partials)])
+    setv(g2mp.Waveform,[3,2][getv(nmmp.Partials)])
     self.params[3] = g2mp.Waveform
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     setv(g2mp.ShapeMod,127)
@@ -609,9 +639,29 @@ class ConvPercOsc(Convert):
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # add AM if needed
-    aminput, output = handleam(self)
-    self.outputs[0] = output
-    self.inputs[1] = aminput
+    if len(nmm.inputs.Am.cables):
+      sh = self.addmodule('S&H',name='Amp In')
+      levmult = self.addmodule('LevMult',name='Out')
+      self.connect(g2m.inputs.Trig,sh.inputs.Ctrl)
+      self.connect(g2m.outputs.Out,levmult.inputs.In)
+      self.connect(sh.outputs.Out,levmult.inputs.Mod)
+      self.inputs[1] = sh.inputs.In
+      self.outputs[0] = levmult.outputs.Out
+      
+    # add pitchmod if needed
+    if len(nmm.inputs.PitchMod.cables):
+      adj = self.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
+      self.connect(adj.outputs.Out,g2m.inputs.PitchVar)
+      self.connect(adj.inputs.Chain,adj.inputs.In1)
+      self.connect(adj.inputs.In1,adj.inputs.In2)
+
+      pmod = getv(nmm.params.PitchMod)
+      setv(g2mp.PitchMod,modtable[pmod][0])
+      setv(adj.params.Inv2, 1)
+      setv(adj.params.Lev1,modtable[pmod][1])
+      setv(adj.params.Lev2,modtable[pmod][2])
+
+      self.inputs[2] =  adj.inputs.Chain
 
 class ConvDrumSynth(Convert):
   maing2module = 'DrumSynth'
