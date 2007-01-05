@@ -210,7 +210,11 @@ def handleslv(conv):
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
     setv(master.params.FreqFine,getv(g2m.params.FreqFine))
     setv(master.params.FreqMode,getv(g2m.params.FreqMode))
-    return g2m.inputs.Pitch,handleoscmasterslv(conf,master)
+    out = handleoscmasterslv(conv,master)
+    if out:
+      return out,master
+    else:
+      return g2m.inputs.Pitch,master
   else:
     return None,g2m
 
