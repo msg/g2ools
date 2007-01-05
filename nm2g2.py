@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import getopt, sys
+import getopt, os, sys
 from glob import glob
 sys.path.append('.')
 from nord.g2.file import Pch2File, MorphMap
@@ -108,8 +108,8 @@ def convert(pch,config):
       conv.postmodule()
 
     modcolors = [
-        g2modulecolors.red1,g2modulecolors.yellow1,g2modulecolors.green1,
-        g2modulecolors.cyan1,g2modulecolors.blue1,g2modulecolors.magenta1]
+        g2modulecolors.red2,g2modulecolors.yellow2,g2modulecolors.green2,
+        g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1]
     # colorize multi-module convertions
     curr = 0
     for conv in converters:
@@ -221,14 +221,14 @@ def convert(pch,config):
       #printnet(cable.source.net)
 
   # handle Morphs
-  #  morphs[x].keyassign
-  #    0: None -> ignored
-  #    1: Velocity -> Vel (morph 1)
-  #    2: Note -> Keyb (morph 2)
   #  morphs[x].ctrl.midicc
   #    1: Wheel -> Wheel (morph 0)
   #    7: Volume -> ?
   #    4: Foot -> Ctrl.Pd (morph 5)
+  #  morphs[x].keyassign
+  #    0: None -> ignored
+  #    1: Velocity -> Vel (morph 1)
+  #    2: Note -> Keyb (morph 2)
   #  morphs[x].knob.knob
   #    19: Pedal -> Sust Pd. (morph 4)
   #    20: After Touch -> Aft. Tch. (morph 3)
@@ -247,12 +247,8 @@ def convert(pch,config):
   unused = g2morphs[:]
   morphmap = [None] * 4
   for morph in range(len(nmmorphs)):
-    if nmmorphs[morph].keyassign:
-      m = g2morphs[nmmorphs[morph].keyassign]
-      unused.remove(m)
-      morphmap[morph] = m
-      continue
     if nmmorphs[morph].ctrl:
+      print ' nm morph%d: midicc=%d' % (morph,nmmorphs[morph].ctrl.midicc)
       # ignore Volume cannot be assigned anyways
       if nmmorphs[morph].ctrl.midicc == 1:
         morphmap[morph] = g2morphs[0]
@@ -262,17 +258,28 @@ def convert(pch,config):
         morphmap[morph] = g2morphs[5]
         unused.remove(g2morphs[5])
         continue
+    if nmmorphs[morph].keyassign:
+      print ' nm morph%d: keyassign=%d' % (morph,nmmorphs[morph].keyassign)
+      m = g2morphs[nmmorphs[morph].keyassign]
+      unused.remove(m)
+      morphmap[morph] = m
+      continue
     if nmmorphs[morph].knob:
       knob = nmmorphs[morph].knob
-      if knob > 18:                  #  v: 0 unused
+      print ' nm morph%d: knob=%d' % (morph,knob.knob)
+      if knob.knob > 18:                  #  v: 0 unused
         m = g2morphs[[4,3,0,6][knob.knob-19]]
         morphmap[morph] = m
         unused.remove(m)
+
   # if morphmap[morph] empty assign unused morph and set it to knob
-  for morph in range(len(morphmap)):
+  for morph in range(len(morphmap)-1,-1,-1):
     if not morphmap[morph]:
-      morphmap[morph] = unused.pop(0)
+      morphmap[morph] = unused.pop()
       setv(morphmap[morph].modes,0)
+    else:
+      setv(morphmap[morph].modes,1)
+    print ' nm morph%d -> g2 morph%d' % (morph,morphmap[morph].index)
 
   for morph in range(len(morphmap)):
     g2morph = morphmap[morph]
@@ -369,6 +376,12 @@ def convert(pch,config):
       vert = v
 
   vert += 1
+  m = pch2.patch.voice.addmodule(g2name['Name'])
+  m.name = os.path.dirname(os.path.abspath(pch.fname))[-16:]
+  m.horiz = 0
+  m.vert = vert
+
+  vert += 2
   for i in range(len(lines)):
     line = lines[i]
     m = pch2.patch.voice.addmodule(g2name['Name'])
