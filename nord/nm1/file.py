@@ -227,6 +227,7 @@ class MorphMapDump(Section):
       else:
         area = self.patch.fx
       morphmap.param = area.findmodule(index).params[param]
+      morphmap.param.morph = morphs[morph]
       if not morph in range(4):
         raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
       morphs[morph].maps.append(morphmap)
