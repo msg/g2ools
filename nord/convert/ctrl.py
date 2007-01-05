@@ -104,7 +104,9 @@ class ConvNoteVelScal(Convert):
       for checknm in ['knob','ctrl','morph']:
         if getattr(param,checknm) != None:
           external = 1
-    if not external and (abs(l-24) > 8 or abs(r-24) > 8) and velsens == 0 :
+    less8db = (abs(l-24) > 8 or abs(r-24) > 8)
+    velinp = len(nmm.inputs.Velocity.cables) != 0
+    if not external and less8db and velinp and velsens == 0 :
       setv(g2mp.L,notescale[l][1])
       setv(g2mp.R,notescale[r][1])
       return
@@ -116,7 +118,7 @@ class ConvNoteVelScal(Convert):
     self.connect(g2m.outputs.Level,levmult1.inputs.Mod)
     self.connect(g2m.outputs.Out,levmult1.inputs.In)
 
-    if velsens == 0:
+    if not velinp and velsens == 0:
       self.outputs[0] = levmult1.outputs.Out
       return
 
