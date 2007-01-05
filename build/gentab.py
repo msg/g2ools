@@ -11,6 +11,7 @@ mix21b = getnumbers('mix2-1b.txt')    # val, mix %
 spectral = getnumbers('spectral.txt') # val, fmmod, fmmod %, mix %, inv %
 pitchmod = getnumbers('nm1pitch.txt') # val, pitchmod, pmod %, invpmod %
 kbt = getnumbers('kbt.txt')           # val, lev1, lev2
+notescale = getnumbers('notescale.txt') # nmval, 24db G2 val, 8db G2 val
 
 f=open('../nord/convert/table.py','w')
 f.write('''
@@ -72,4 +73,16 @@ for i in range(128):
   if i and i % 4 == 0:
     f.write('\n')
   f.write('  [%3d,%3d],' % (kbt[i][1],kbt[i][2]))
-f.write('\n]')
+f.write('''
+]
+
+notescale = [ # [24g2,8g2]
+''')
+for i in range(len(notescale)):
+  if i and i % 4 == 0:
+    f.write('\n')
+  f.write(' [%3d,%3d],' % (notescale[i][1],notescale[i][2]))
+f.write('''
+]
+''')
+
