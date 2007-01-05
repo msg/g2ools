@@ -91,6 +91,7 @@ class Conv2Output(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Lev,getv(nmmp.Level))
+    setv(g2mp.On,1)
     out2 = self.addmodule('2-Out')
     self.connect(g2m.outputs.OutL,out2.inputs.InL)
     self.connect(g2m.outputs.OutR,out2.inputs.InR)
