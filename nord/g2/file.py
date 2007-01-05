@@ -1009,7 +1009,7 @@ class ModuleNames(Section):
     bit = setbits(bit,8,data,len(area.modules)) # unknown, see if zero works
     for i in range(len(area.modules)):
       bit = setbits(bit,8,data,area.modules[i].index)
-      nm = area.modules[i].name
+      nm = area.modules[i].name[:16]
       #print '%d "%s"' % (area.modules[i].index, nm)
       if len(nm) < 16:
         nm += '\0'
