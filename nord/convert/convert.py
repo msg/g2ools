@@ -158,6 +158,7 @@ def handlekbt(conv,input,kbt100):
     conv.connect(keyboard.outputs.Note,mix21b.inputs.In1)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
     conv.connect(mix21b.outputs.Out,input)
+    setv(mix21b.params.ExpLin,1) # Lin
     setv(mix21b.params.Lev1,kbttable[kbt][0])
     setv(mix21b.params.Lev2,kbttable[kbt][1])
 

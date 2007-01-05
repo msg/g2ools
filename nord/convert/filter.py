@@ -61,6 +61,7 @@ def fltdualpitchmod(nmm,g2m,conv,mod1,mod2):
   pitchmod = g2m.inputs.Pitch
   if len(nmm.inputs.FreqMod1.cables) and len(nmm.inputs.FreqMod2.cables):
     mix21b = conv.addmodule('Mix2-1B',name='FreqMod')
+    setv(mix21b.params.ExpLin,1) # lin
     conv.connect(mix21b.outputs.Out,g2m.inputs.Pitch)
     p1,p2 = mix21b.inputs.In1,mix21b.inputs.In2
     setv(mix21b.params.Lev1,getv(nmm.params.FreqMod1))
