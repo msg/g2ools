@@ -117,7 +117,7 @@ class ConvOnOff(Convert):
 
 class Conv4_1Switch(Convert):
   maing2module = 'Sw4-1'
-  parammap = ['Sel',None,None,None,None]
+  parammap = ['Sel',None,None,None,None,None]
   inputmap = ['In1','In2','In3','In4']
   outputmap = ['Out']
 
