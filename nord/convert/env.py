@@ -82,7 +82,7 @@ class ConvMulti_Env(Convert):
   maing2module = 'EnvMulti'
   parammap = ['Level1','Level2','Level3','Level4',
               'Time1','Time2','Time3','Time4',None,
-              ['SustainMode','Sustain'],['OutputType','Curve']]
+              ['SustainMode','Sustain'],['Shape','Curve']]
   inputmap = ['Gate','In','AM']
   outputmap = ['Env','Out']
 
