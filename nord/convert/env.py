@@ -90,7 +90,8 @@ class ConvMulti_Env(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.OutputType,[3,2,1][getv(nmmp.Curve)])
+    print 'Curve=',getv(nmmp.Curve)
+    setv(g2mp.Shape,[3,2,1][getv(nmmp.Curve)])
     # handle special parameters
     updatevals(g2mp,['Time%d' % i for i in range(1,5)]+['NR'],
         nm1adsrtime, g2adsrtime)
