@@ -98,7 +98,7 @@ class Conv2Output(Convert):
     setv(out2.params.Destination,getv(nmmp.Destination))
     setv(out2.params.Active,1-getv(nmmp.Mute))
 
-    self.params = [out2.params.Destination,out2.params.Active,g2mp.Lev]
+    self.params = [g2mp.Lev,out2.params.Destination,out2.params.Active]
 
 class Conv4Output(Convert):
   maing2module = '4-Out'
