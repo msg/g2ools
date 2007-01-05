@@ -59,19 +59,45 @@ class ConvPolyAreaIn(Convert):
     setv(g2mp.Pad,[2,1][getv(getattr(nmmp,'+6Db'))])
 
 class Conv1Output(Convert):
-  maing2module = '2-Out'
-  parammap = [None,'Destination',['Active','Mute']]
+  maing2module = 'Mix1-1A'
+  parammap = [None,None,None] # Level,Destination,Mute
+  inputmap = ['In']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    setv(g2mp.On,1)
+    setv(g2mp.ExpLin,2)
+
+    setv(g2mp.Lev,getv(nmmp.Level))
+    out2 = self.addmodule('2-Out')
     dest = getv(nmmp.Destination)
-    inp = [g2m.inputs.InL,g2m.inputs.InR][dest%2]
-    setv(g2mp.Destination,dest/2)
-    setv(g2mp.Active,1-getv(nmmp.Mute))
-    setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
-    self.inputs = [inp]
+    setv(out2.params.Destination,dest/2)
+    setv(out2.params.Active,1-getv(nmmp.Mute))
+
+    inp = [out2.inputs.InL,out2.inputs.InR][dest%2]
+    self.connect(g2m.outputs.Out,inp)
+
+    self.params = [g2m.params.Lev,out2.params.Destination,out2.params.Active]
+
+class Conv2Output(Convert):
+  maing2module = 'Mix1-1S'
+  parammap = [None,None,None] # Level,Destination,Mute
+  inputmap = ['InL','InR']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Lev,getv(nmmp.Level))
+    out2 = self.addmodule('2-Out')
+    self.connect(g2m.outputs.OutL,out2.inputs.InL)
+    self.connect(g2m.outputs.OutR,out2.inputs.InR)
+    setv(out2.params.Destination,getv(nmmp.Destination))
+    setv(out2.params.Active,1-getv(nmmp.Mute))
+
+    self.params = [out2.params.Destination,out2.params.Active,g2mp.Lev]
 
 class Conv4Output(Convert):
   maing2module = '4-Out'
@@ -80,19 +106,6 @@ class Conv4Output(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
-
-class Conv2Output(Convert):
-  maing2module = '2-Out'
-  parammap = [None,'Destination',['Active','Mute']]
-  inputmap = ['InL','InR']
-
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
-    # handle special parameters
-    setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
 
 class ConvNoteDetect(Convert):
