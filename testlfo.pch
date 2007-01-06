@@ -20,6 +20,7 @@ Version=Nord Modular patch 3.0
 14 35 2 27 
 15 99 2 30 
 16 40 1 18 
+17 99 1 26 
 [/ModuleDump]
 [ModuleDump]
 0 
@@ -80,6 +81,7 @@ Version=Nord Modular patch 3.0
 14 35 1 64 
 15 99 5 0 0 0 15 0 
 16 40 9 100 100 100 100 100 100 100 100 0 
+17 99 5 0 0 1 15 0 
 [/ParameterDump]
 [ParameterDump]
 0 
@@ -114,6 +116,7 @@ Version=Nord Modular patch 3.0
 14 RndPulsGen1
 15 PatternGen1
 16 Mixer2
+17 PatternGen2
 [/NameDump]
 [NameDump]
 0 
