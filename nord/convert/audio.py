@@ -28,27 +28,54 @@ class ConvClip(Convert):
   outputmap = ['Out']
 
 class ConvOverdrive(Convert):
-  maing2module = 'Overdrive'
-  parammap = [['AmountMod','OverdriveMod'],['Amount','Overdrive']]
-  inputmap = ['In','Mod']
-  outputmap = ['Out']
+  maing2module = 'X-Fade'
+  parammap = [None,None]
+  inputmap = [None,'In2']
+  outputmap = [None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    # set up special parameters
-    setv(g2mp.Type,1)
-    setv(g2mp.Shape,1)
+    setv(g2mp.LogLin,1) # Lin
+    setv(g2mp.Mix,25)
+    setv(g2mp.MixMod,127)
 
-    clip = self.addmodule('Clip',name='OverdriveClip')
+    constswt = self.addmodule('ConstSwT')
+    setv(constswt.params.On,1)
+    constswt.params.On.labels = ['Drive']
+    setv(constswt.params.BipUni,1) # Uni
+    setv(constswt.params.Lev,getv(nmmp.Overdrive))
+    mix11a = self.addmodule('Mix1-1A')
+    setv(mix11a.params.On,1)
+    setv(mix11a.params.ExpLin,1) # Lin
+    mix11a.params.On.labels = ['Amount']
+    setv(mix11a.params.Lev,getv(nmmp.OverdriveMod))
+    shpstatic = self.addmodule('ShpStatic',name='ModIn')
+    setv(shpstatic.params.Mode,0)
+    clip = self.addmodule('Clip')
+    setv(clip.params.Shape,1) # Sym
+    setv(clip.params.ClipLev,0)
+    saturate = self.addmodule('Saturate')
+    setv(saturate.params.Curve,3) # 4
+    setv(saturate.params.AmountMod,127)
+    setv(saturate.params.Amount,0)
+    xfade = self.addmodule('X-Fade')
+    setv(xfade.params.LogLin,1) # Lin
+    setv(xfade.params.MixMod,127)
+
+    self.connect(g2m.inputs.In2,xfade.inputs.In1)
     self.connect(g2m.outputs.Out,clip.inputs.In)
-    setv(clip.params.ClipLev,35)
-    levamp = self.addmodule('LevAmp',name='OverdriveAmp')
-    self.connect(clip.outputs.Out,levamp.inputs.In)
-    setv(levamp.params.Type,1)
-    setv(levamp.params.Gain,85)
-    self.outputs[0] = levamp.outputs.Out
+    self.connect(constswt.outputs.Out,mix11a.inputs.Chain)
+    self.connect(mix11a.outputs.Out,shpstatic.inputs.In)
+    self.connect(shpstatic.outputs.Out,g2m.inputs.Mod)
+    self.connect(shpstatic.outputs.Out,saturate.inputs.Mod)
+    self.connect(clip.outputs.Out,saturate.inputs.In)
+    self.connect(shpstatic.inputs.In,xfade.inputs.Mod)
+    self.connect(saturate.outputs.Out,xfade.inputs.In2)
+
+    self.inputs = [mix11a.inputs.In,g2m.inputs.In2]
+    self.outputs = [xfade.outputs.Out]
 
 class ConvWaveWrap(Convert):
   maing2module = 'WaveWrap'
@@ -70,7 +97,7 @@ class ConvQuantizer(Convert):
 
 class ConvDelay(Convert):
   maing2module = 'DelayDual'
-  parammap = [['Time1Mod','Modulation'],['Time1','Modulation']]
+  parammap = [['Time1Mod','Modulation'],['Time1','Time']]
   inputmap = ['In','Time1']
   outputmap = ['Out2','Out1']
 
@@ -81,7 +108,8 @@ class ConvDelay(Convert):
     # just divide parameters by 2 to get in ball park
     setv(g2mp.Time2,64)
     # fixed delay
-    setv(g2mp.Time1,getv(nmmp.Modulation)/2)
+    setv(g2mp.Time1,getv(nmmp.Time)/2)
+
 
 class ConvSampleNHold(Convert):
   maing2module = 'S&H'
