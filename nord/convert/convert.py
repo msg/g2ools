@@ -139,26 +139,30 @@ class Convert:
       if g2mod.horiz >= column:
         g2mod.horiz += 1
 
-def handlekbt(conv,input,kbt100):
+def handlekbt(conv,input,kbt100,addalways=False):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
   kbt = getv(nmmp.Kbt)
+  if addalways:
+    pass
   if kbt == 0:
     setv(g2mp.Kbt,kbt)
+    return
   elif kbt == 64:
     setv(g2mp.Kbt,kbt100)
-  else:
-    if not g2m.area.patch.keyboard:
-      g2m.area.patch.keyboard = conv.addmodule('Keyboard')
-    keyboard = g2m.area.patch.keyboard
+    return
 
-    setv(g2mp.Kbt,0)
-    mix21b = conv.addmodule('Mix2-1B',name='Kbt')
-    conv.connect(keyboard.outputs.Note,mix21b.inputs.In1)
-    conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
-    conv.connect(mix21b.outputs.Out,input)
-    setv(mix21b.params.ExpLin,1) # Lin
-    setv(mix21b.params.Lev1,kbttable[kbt][0])
-    setv(mix21b.params.Lev2,kbttable[kbt][1])
+  if not g2m.area.patch.keyboard:
+    g2m.area.patch.keyboard = conv.addmodule('Keyboard')
+  keyboard = g2m.area.patch.keyboard
+
+  setv(g2mp.Kbt,0)
+  mix21b = conv.addmodule('Mix2-1B',name='Kbt')
+  conv.connect(keyboard.outputs.Note,mix21b.inputs.In1)
+  conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
+  conv.connect(mix21b.outputs.Out,input)
+  setv(mix21b.params.ExpLin,1) # Lin
+  setv(mix21b.params.Lev1,kbttable[kbt][0])
+  setv(mix21b.params.Lev2,kbttable[kbt][1])
 
