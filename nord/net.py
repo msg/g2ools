@@ -43,7 +43,7 @@ def addnet(netlist, source, dest):
     if source.net.output and dest.net.output and (
         source.net.output != dest.net.output): # shouldn't happen
       raise \
-        'source and dest both have outputs: source=%s:%s dest.output=%s:%s' % (
+        'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
         source.module.type.shortnm, source.type.name,
         dest.net.output.module.type.shortnm, dest.net.output.type.name)
     source.net.inputs += dest.net.inputs
