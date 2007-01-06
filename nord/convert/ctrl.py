@@ -51,7 +51,13 @@ class ConvPortamentoA(Convert):
     setv(g2mp.Glide,0)
     
 class ConvPortamentoB(ConvPortamentoA):
-  pass
+  def domodule(self):
+    ConvPortamentoA.domodule(self)
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    invert = self.addmodule('Invert')
+    self.connect(invert.outputs.Out1,g2m.inputs.On)
+    self.inputs[1] = invert.inputs.In1
 
 class ConvNoteScaler(Convert):
   maing2module = 'NoteScaler'
