@@ -418,7 +418,7 @@ def main():
     if o in ('-r','--recursive'):
       config.recursive = True
 
-  def doconvert(fname)
+  def doconvert(fname):
     # general algorithm for converter:
     if config.debug:
       convert(PchFile(fname),config) # allow exception thru if debugging
