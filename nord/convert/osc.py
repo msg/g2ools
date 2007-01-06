@@ -236,7 +236,7 @@ def handlemst(conv):
       constswt = conv.addmodule('ConstSwT',name='Offset -64')
       setv(constswt.params.On,1)
       conv.connect(mix11a.outputs.Out,g2m.inputs.FmMod)
-      conv.connect(constswt.outputs.Out,mix11a.inputs.Chain)
+      conv.connect(constswt.outputs.Out,g2m.inputs.Pitch)
       setv(g2m.params.FmAmount,127)
       setv(mix11a.params.Lev,79)
       setv(constswt.params.Lev,0)
