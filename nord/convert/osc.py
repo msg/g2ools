@@ -188,14 +188,20 @@ def handleoscmasterslv(conv,mst):
   setv(levscaler.params.L,16)
   setv(levscaler.params.BP,127)
   setv(levscaler.params.R,112)
-  mix21b = conv.addmodule('Mix2-1B',name='To Blue')
+  mix21b = conv.addmodule('Mix2-1B')
   setv(mix21b.params.Lev1,105)
   setv(mix21b.params.Lev2,21)
+  amp = conv.addmodule('LevAmp')
+  setv(amp.params.Gain,65)
+  greyout = conv.addmodule('LevAmp',name='GreyOut')
+  setv(greyout.params.Gain,127)
   conv.connect(mst.outputs.Out,levscaler.inputs.Note)
   conv.connect(levscaler.outputs.Level,mix21b.inputs.In1)
   conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
+  conv.connect(mix21b.outputs.Out,amp.inputs.In)
+  conv.connect(amp.outputs.Out,greyout.inputs.In)
 
-  return mix21b.outputs.Out
+  return greyout.outputs.Out
 
 
 slvoutnum=1
