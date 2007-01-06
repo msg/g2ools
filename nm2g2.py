@@ -355,20 +355,11 @@ def convert(pch,config):
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
 
-  message = '''
-  nm2g2 patch converter Copyright 2007 Matt Gerassimoff and Sven Roehrig 
-  '''
-  lines = []
-  words = message.split()
-  line = words.pop(0)
-  for word in words:
-    if len(line) + len(word) + 1> 16:
-      lines.append(line)
-      line = word
-    else:
-      line += ' ' + word
-  lines.append(line)
-  #print '\n'.join(lines)
+  lines = ['nm2g2 converter',
+           'by',
+           'Matt Gerassimoff',
+	   'models by',
+	   'Sven Roehrig']
 
   vert = 0
   for module in pch2.patch.voice.modules:
@@ -379,20 +370,18 @@ def convert(pch,config):
     if v > vert:
       vert = v
 
-  vert += 1
-  m = pch2.patch.voice.addmodule(g2name['Name'])
-  m.name = os.path.dirname(os.path.abspath(pch.fname))[-16:]
-  m.horiz = 0
-  m.vert = vert
+  def addnamebars(lines, horiz, vert):
+    for line in lines:
+      m = pch2.patch.voice.addmodule(g2name['Name'],name=line)
+      m.horiz = horiz
+      m.vert = vert
+      vert += 1
+    return vert
 
-  vert += 2
-  for i in range(len(lines)):
-    line = lines[i]
-    m = pch2.patch.voice.addmodule(g2name['Name'])
-    m.name = line
-    m.horiz = 0
-    m.vert = vert
-    vert += 1
+  path = os.path.dirname(os.path.abspath(pch.fname))[-16:]
+  vert = addnamebars([path],0,vert+2)
+  vert = addnamebars(lines,0,vert+1)
+  vert = addnamebars(['All rights','reserved'],0,vert+1)
 
   print 'Writing patch "%s2"' % (pch.fname)
   pch2.write(pch.fname+'2')
