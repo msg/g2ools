@@ -40,9 +40,10 @@ def handleslv(conv):
       if len(nmm.inputs.Rate.cables):
         mix11a = conv.addmodule('Mix1-1A',name='Rate')
         setv(mix11a.params.On,1)
-        conv.connect(mix11a.outputs.Out,mix21b.inputs.In1)
+        conv.connect(mix11a.outputs.Out,mix21b.inputs.In2)
         setv(mix11a.params.Lev,getv(nmm.params.RateMod))
         ratemod = mix11a.inputs.In
+        mst = mix21b.inputs.In2
   return ratemod,mst
 
 def handlemst(conv):
@@ -56,8 +57,9 @@ def handlemst(conv):
     setv(mix21b.params.Lev2,127)
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
     setv(constswt.params.On,1)
+    setv(constswt.params.Lev,getv(nmmp.Rate))
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
-    return mix21b.inputs.Chain
+    return mix21b.inputs.In2
   return None
 
 def postmst(conv):
