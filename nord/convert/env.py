@@ -22,10 +22,25 @@
 from convert import *
 from units import *
 
+def handleretrig(conv):
+  gatein,retrig = conv.g2module.inputs.Gate,None
+  if len(conv.nmmodule.inputs.Retrig.cables):
+    flipflop = conv.addmodule('FlipFlop')
+    gate = conv.addmodule('Gate')
+    gate.modes.GateMode2.value = 1
+    conv.connect(flipflop.outputs.Q,flipflop.inputs.Res)
+    conv.connect(flipflop.outputs.NotQ,gate.inputs.In1_1)
+    conv.connect(gate.outputs.Out1,conv.g2module.inputs.Gate)
+    conv.connect(gate.inputs.In2_1,gate.inputs.In2_2)
+    conv.connect(gate.outputs.Out2,flipflop.inputs.In)
+    gatein = gate.inputs.In1_2
+    retrig = flipflop.inputs.Clk
+  return gatein,retrig
+
 class ConvADSR_Env(Convert):
   maing2module = 'EnvADSR'
   parammap = [['Shape','AttackShape'],'Attack','Decay','Sustain','Release',None]
-  inputmap = ['In','Gate',None,'AM'] # No Retrig
+  inputmap = ['In','Gate',None,'AM']
   outputmap = ['Env','Out']
               
   def domodule(self):
@@ -35,6 +50,7 @@ class ConvADSR_Env(Convert):
     # handle special parameters
     updatevals(g2mp,['Attack','Decay','Release'],nm1adsrtime,g2adsrtime)
     setv(g2mp.OutputType,[0,3][getv(nmmp.Invert)])
+    self.inputs[1:3] = handleretrig(self)
 
 class ConvAD_Env(Convert):
   maing2module = 'EnvADR'
@@ -64,6 +80,7 @@ class ConvMod_Env(Convert):
     # handle special parameters
     updatevals(g2mp,['Attack','Decay','Release'],nm1adsrtime,g2adsrtime)
     setv(g2mp.OutputType,[0,3][getv(nmmp.Invert)])
+    self.inputs[:2] = handleretrig(self)
 
 class ConvAHD_Env(Convert):
   maing2module = 'ModAHD'
