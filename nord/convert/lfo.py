@@ -57,7 +57,7 @@ def handlemst(conv):
     setv(mix21b.params.Lev2,127)
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
     setv(constswt.params.On,1)
-    setv(constswt.params.Lev,getv(nmmp.Rate))
+    setv(constswt.params.Lev,modtable[getv(nmmp.Rate)][0])
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
     return mix21b.inputs.In2
   return None
