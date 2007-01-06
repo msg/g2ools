@@ -107,11 +107,16 @@ class ConvLevMult(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    const = self.addmodule('Constant')
-    self.connect(const.outputs.Out,g2m.inputs.Mod)
-    setv(const.params.BipUni,getv(nmmp.Unipolar))
-    setv(const.params.Level,getv(nmmp.Gain))
-    self.params = const.params.Level,const.params.BipUni
+    shpexp = self.addmodule('ShpExp')
+    setv(shpexp.params.Curve,2) # x4
+    setv(shpexp.params.Amount,127)
+    constswt = self.addmodule('ConstSwT')
+    setv(constswt.params.On,1)
+    setv(constswt.params.Lev,getv(nmmp.Gain))
+    setv(constswt.params.BipUni,getv(nmmp.Unipolar))
+    self.connect(shpexp.outputs.Out,g2m.inputs.Mod)
+    self.connect(constswt.outputs.Out,shpexp.inputs.In)
+    self.params = constswt.params.Lev,constswt.params.BipUni
 
 class ConvLevAdd(Convert):
   maing2module = 'LevAdd'
