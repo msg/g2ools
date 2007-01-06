@@ -98,10 +98,20 @@ class Conv2to1Fade(Convert):
   outputmap = ['Out']
 
 class ConvLevMult(Convert):
-  maing2module = 'LevAmp'
-  parammap = ['Gain',None]
+  maing2module = 'LevMult'
+  parammap = [None,None]
   inputmap = ['In']
   outputmap = ['Out']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    const = self.addmodule('Constant')
+    self.connect(const.outputs.Out,g2m.inputs.Mod)
+    setv(const.params.BipUni,getv(nmmp.Unipolar))
+    setv(const.params.Level,getv(nmmp.Gain))
+    self.params = const.params.Level,const.params.BipUni
 
 class ConvLevAdd(Convert):
   maing2module = 'LevAdd'
