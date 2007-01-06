@@ -1701,8 +1701,8 @@ modules = [
     page=PageType('Logic', 2),
     inputs=[
       InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Res',          g2portcolors.yellow_orange),
       InputType('In',           g2portcolors.yellow_orange),
+      InputType('Res',          g2portcolors.yellow_orange),
     ],
     outputs=[
       OutputType('NotQ',         g2portcolors.yellow_orange),

@@ -1343,7 +1343,7 @@ ModuleKnowledge(
     shortnm('FlipFlop')
     longnm('Flip Flop')
     height(2)
-    inputs(['Clk', 'Res', 'In'])
+    inputs(['Clk', 'In', 'Res'])
     outputs(['NotQ', 'Q'])
     params([])
     modes(['OperationMode'])
