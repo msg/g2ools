@@ -196,6 +196,39 @@ class ConvCompressor(Convert):
     setv(g2mp.Active,1-getv(nmmp.Bypass))
     setv(g2mp.SideChain,getv(nmmp.Act))
     
+class ConvExpander(Convert):
+  maing2module = 'Sw2-1'
+  parammap = [None]*9
+  inputmap = [None,None,'In1'] # L, R
+  outputmap = [None,None] # L, R
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Sel,getv(nmmp.Act))
+    self.params[6] = g2mp.Sel
+    envfollow = self.addmodule('EnvFollow')
+    setv(envfollow.params.Attack,getv(nmmp.Attack))
+    setv(envfollow.params.Release,getv(nmmp.Release))
+    self.params[:2] = envfollow.params.Attack,envfollow.params.Release
+    ratio = self.addmodule('ShpExp',name='Ratio/Thresh')
+    setv(ratio.params.Curve,2) # x4
+    setv(ratio.params.Amount,getv(nmmp.Ratio))
+    self.params[3] = ratio.params.Amount
+    left = self.addmodule('LevMult',name='Left')
+    right = self.addmodule('LevMult',name='Right')
+    # MISSING Gate,Hold,Mon, and Bypass  parameters
+
+    self.connect(g2m.inputs.In1,left.inputs.In)
+    self.connect(g2m.outputs.Out,envfollow.inputs.In)
+    self.connect(envfollow.outputs.Out,ratio.inputs.In)
+    self.connect(ratio.outputs.Out,left.inputs.Mod)
+    self.connect(left.inputs.Mod,right.inputs.Mod)
+
+    self.inputs[:] = left.inputs.In,right.inputs.In,g2m.inputs.In2
+    self.outputs = left.outputs.Out,right.outputs.Out
+
 class ConvDigitizer(Convert):
   maing2module = 'Digitizer'
   parammap = ['Bits','Rate','RateMod',['Bits','QuantOff'],

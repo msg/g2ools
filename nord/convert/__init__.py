@@ -121,6 +121,7 @@ typetable = {
    57: audio.ConvInvLevShift,
    83: audio.ConvShaper,
    21: audio.ConvCompressor,
+  105: audio.ConvExpander,
   118: audio.ConvDigitizer,
   117: audio.ConvRingMod,
 
