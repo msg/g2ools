@@ -5217,7 +5217,7 @@ modules = [
           comment='companderhold'
         ),
       ),
-      ParameterType('SidechainActivation',
+      ParameterType('Act',
         ParameterDef(  
           default=0,
           low=0,
@@ -5225,7 +5225,7 @@ modules = [
           comment='onoff'
         ),
       ),
-      ParameterType('SidechainMonitor',
+      ParameterType('Mon',
         ParameterDef(  
           default=0,
           low=0,

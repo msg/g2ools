@@ -2164,8 +2164,8 @@ parameters
 3 "ratio" 0..66 "companderratio"
 4 "gate" 0..72 "compandergate"
 5 "hold" 0..127 "companderhold"
-6 "sidechain activation" 0..1 "onoff"
-7 "sidechain monitor" 0..1 "onoff"
+6 "act" 0..1 "onoff"
+7 "mon" 0..1 "onoff"
 8 "bypass" 0..1 "onoff"
 inputs
 0 "in left" audio

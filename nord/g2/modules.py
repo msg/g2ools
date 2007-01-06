@@ -653,7 +653,7 @@ modules = [
     page=PageType('Shaper', 3),
     inputs=[
       InputType('In',           g2portcolors.blue_red),
-      InputType('ModIn',        g2portcolors.blue_red),
+      InputType('Mod',          g2portcolors.blue_red),
     ],
     outputs=[
       OutputType('Out',          g2portcolors.blue_red),
