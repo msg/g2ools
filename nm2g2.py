@@ -356,7 +356,7 @@ def convert(pch,config):
   pch2.patch.textpad = pch.patch.textpad
 
   message = '''
-  nm2g2 patch converter Copyright 2007 Matt Gerassimoff
+  nm2g2 patch converter Copyright 2007 Matt Gerassimoff and Sven Roehrig 
   '''
   lines = []
   words = message.split()
