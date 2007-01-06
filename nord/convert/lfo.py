@@ -228,5 +228,20 @@ class ConvPatternGen(Convert):
     # PatternA and PatternB receive same input
     if len(getattr(nmm.inputs,'Pattern&Bank').cables):
       self.connect(g2m.inputs.A,g2m.inputs.B) 
-    setv(g2mp.StepProb,127-64*getv(nmmp.LowDelta))
+    lowdelta = getv(nmmp.LowDelta)
+    if lowdelta:
+      notequant = self.addmodule('NoteQuant')
+      self.connect(g2m.outputs.Out,notequant.inputs.In)
+      setv(notequant.params.Range,77)
+      setv(notequant.params.Notes,1)
+      self.outputs[0] = notequant.outputs.Out
+      stepprob,add = 55,75
+      setv(g2mp.StepProb,55)
+    else:
+      stepprob,add = 127,74
+    setv(g2mp.StepProb,stepprob)
+    levadd = self.addmodule('LevAdd')
+    self.connect(self.outputs[0],levadd.inputs.In)
+    setv(levadd.params.Level,add)
+    self.outputs[0] = levadd.outputs.Out
 
