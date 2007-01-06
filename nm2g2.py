@@ -401,12 +401,13 @@ def usage(prog):
 def main():
   prog = sys.argv.pop(0)
   try:
-    opts, args = getopt.getopt(sys.argv,'hdl', ['help','debug','low'])
+    opts, args = getopt.getopt(sys.argv,'hdlr',
+        ['help','debug','low','recursive'])
   except getopt.GetoptError:
     usage(prog)
     sys.exit(2)
 
-  config = Config(debug=None,lowresource=None)
+  config = Config(debug=None,lowresource=None,recursive=None)
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
@@ -414,21 +415,29 @@ def main():
       config.debug = True
     if o in ('-l','--low'):
       config.lowresource = True
+    if o in ('-r','--recursive'):
+      config.recursive = True
+
+  def doconvert(fname)
+    # general algorithm for converter:
+    if config.debug:
+      convert(PchFile(fname),config) # allow exception thru if debugging
+    else:
+      try:
+        convert(PchFile(fname),config)
+      except Exception, e:
+        print '%r' % e
+        return fname
+    return ''
 
   failedpatches = []
   while len(args):
     patchlist = glob(args.pop(0))
     for fname in patchlist:
       print '"%s"' % fname
-      # general algorithm for converter:
-      if config.debug:
-        convert(PchFile(fname),config) # allow exception thru if debugging
-      else:
-        try:
-          convert(PchFile(fname),config)
-        except Exception, e:
-          print '%r' % e
-          failedpatches.append(fname)
+      failed = doconvert(fname)
+      if failed:
+        failedpatches.append(failed)
 
   if len(failedpatches):
     print 'Failed patches: \n%s' % '\n '.join(failedpatches)
