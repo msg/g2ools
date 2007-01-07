@@ -1282,8 +1282,8 @@ parameters
 0 "overdrive mod" 0..127 ""
 1 "overdrive" 0..127 ""
 inputs
-0 "overdrive mod" control
-1 "in" audio
+0 "in" audio
+1 "overdrive mod" control
 outputs
 0 "out" audio
 custom

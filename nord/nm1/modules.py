@@ -3181,8 +3181,8 @@ modules = [
     type=62,
     height=3,
     inputs=[
-      InputType('OverdriveMod', nm1portcolors.control),
       InputType('In',           nm1portcolors.audio),
+      InputType('OverdriveMod', nm1portcolors.control),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
