@@ -104,7 +104,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   elif len(nmm.inputs.PitchMod1.cables):
     setv(modinputparam,127)
     adj = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
-    conv.connect(adj.outputs.Out,g2m.inputs.PitchVar)
+    conv.connect(adj.outputs.Out,modinput)
     conv.connect(adj.inputs.Chain,adj.inputs.In1)
     conv.connect(adj.inputs.In1,adj.inputs.In2)
 
@@ -120,7 +120,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   elif len(nmm.inputs.PitchMod2.cables):
     setv(modinputparam,127)
     adj = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
-    conv.connect(adj.outputs.Out,g2m.inputs.PitchVar)
+    conv.connect(adj.outputs.Out,modinput)
     conv.connect(adj.inputs.Chain,adj.inputs.In1)
     conv.connect(adj.inputs.In1,adj.inputs.In2)
 
