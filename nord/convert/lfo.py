@@ -21,6 +21,7 @@
 #
 from nord.nm1.colors import nm1cablecolors
 from convert import *
+from table import *
 
 def handleslv(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
@@ -41,7 +42,7 @@ def handleslv(conv):
         mix11a = conv.addmodule('Mix1-1A',name='Rate')
         setv(mix11a.params.On,1)
         conv.connect(mix11a.outputs.Out,mix21b.inputs.In2)
-        setv(mix11a.params.Lev,getv(nmm.params.RateMod))
+        setv(mix11a.params.Lev,modtable[getv(nmm.params.RateMod)][0])
         ratemod = mix11a.inputs.In
         mst = mix21b.inputs.In2
   return ratemod,mst
@@ -57,7 +58,7 @@ def handlemst(conv):
     setv(mix21b.params.Lev2,127)
     constswt = conv.addmodule('ConstSwT',name='RateFactor')
     setv(constswt.params.On,1)
-    setv(constswt.params.Lev,modtable[getv(nmmp.Rate)][0])
+    setv(constswt.params.Lev,getv(nmmp.Rate))
     conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
     return mix21b.inputs.In2
   return None
@@ -142,7 +143,7 @@ class ConvLFOSlvA(Convert):
     waveform = getv(nmmp.Waveform)
     setv(g2mp.Waveform,[0,1,2,2,3][waveform])
     if waveform == 2:
-      setv(g2mp.OutputType,1)
+      setv(g2mp.OutputType,5) # BipInv
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.inputs[0] = handlemst(self)
@@ -171,6 +172,11 @@ class ConvLFOSlvB(Convert):
 
 class ConvLFOSlvC(ConvLFOSlvB):
   waveform = 0
+
+  #3phase thinks we may need this.  I'm leaving it as a comment for now.
+  #def domodule(self):
+  #  ConvLFOSlvB.domodule(self)
+  #  setv(self.g2module.params.OutputType,5) # BipInv
 
 class ConvLFOSlvD(ConvLFOSlvB):
   waveform = 3
