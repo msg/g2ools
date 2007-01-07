@@ -393,39 +393,39 @@ class ConvSpectralOsc(Convert):
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     setv(g2mp.ShapeMod,127)
 
-    if len(nmm.inputs.SpectralShapeMod.cables):
-      shape = self.addmodule('Mix1-1A',name='Shape')
-      setv(shape.params.On,1)
-      setv(shape.params.Lev,getv(nmmp.SpectralShapeMod))
-      self.params[7] = shape.params.Lev
-      setv(shape.params.On,1)
-      self.connect(shape.outputs.Out,g2m.inputs.Shape)
-      shapemod = shape.inputs.Chain
-      self.inputs[3] = shape.inputs.In
-    else:
-      shapemod = g2m.inputs.Shape
-    mods = []
-    for modnm in ['Constant','ShpStatic','LevMult','Mix2-1B']:
-      mod = self.addmodule(modnm,name=modnm)
-      mods.append(mod)
-    # setup parameters
-    const,shpstatic,levmult,mix=mods
-    setv(const.params.BipUni,1)
-    setv(const.params.Level,getv(nmmp.SpectralShape))
-    self.params[2] = const.params.Level
-    setv(shpstatic.params.Mode,2)
-    setv(mix.params.Lev1,127)
-    setv(mix.params.Lev2,127)
-    # setup connections
-    self.connect(const.outputs.Out,shapemod)
-    self.connect(const.outputs.Out,shpstatic.inputs.In)
-    self.connect(shpstatic.outputs.Out,levmult.inputs.Mod)
-    self.connect(g2m.outputs.Out,levmult.inputs.In)
-    self.connect(levmult.outputs.Out,mix.inputs.Chain)
-    self.connect(levmult.inputs.In,mix.inputs.In2)
-    self.connect(mix.inputs.In1,mix.inputs.In2)
-    self.outputs[0] = mix.outputs.Out
+    constswt = self.addmodule('ConstSwT',name='Shape')
+    setv(constswt.params.BipUni,1) # Uni
+    setv(constswt.params.On,1)
+    constswt.params.On.labels = ['Shape']
+    setv(constswt.params.Lev,getv(nmmp.Shape))
+    mix11a = self.addmodule('Mix1-1A',name='ShapeMod')
+    setv(mix11a.params.ExpLin,1) # Line
+    setv(mix11a.params.On,1)
+    mix11a.params.On.labels = ['Amount']
+    setv(mix11a.params.Lev,getv(nmmp.ShapeMod))
+    levmult = self.addmodule('LevMult')
+    levmult2 = self.addmodule('LevMult')
+    mix21a = self.addmodule('Mix2-1A',name='Out')
+    setv(mix21a.params.ExpLin,1) # Lin
+    setv(mix21a.params.On1,1)
+    mix21a.params.On1.labels = ['High']
+    setv(mix21a.params.Lev1,127)
+    setv(mix21a.params.On2,1)
+    mix21a.params.On2.labels = ['Low']
+    setv(mix21a.params.Lev2,98)
 
+    self.connect(g2m.outputs.Out,levmult2.inputs.In)
+    self.connect(constswt.outputs.Out,mix11a.inputs.Chain)
+    self.connect(mix11a.outputs.Out,g2m.inputs.ShapeMod)
+    self.connect(mix11a.outputs.Out,levmult.inputs.In)
+    self.connect(levmult.inputs.In,levmult.inputs.Mod)
+    self.connect(levmult.outputs.Out,levmult2.inputs.Mod)
+    self.connect(levmult2.inputs.In,mix21a.inputs.In2)
+    self.connect(levmult2.outputs.Out,mix21a.inputs.In1)
+    self.connect(mix21a.inputs.In1,mix21a.inputs.Chain)
+
+    self.inputs[3] = mix11a.inputs.In
+    self.outputs[0] = mix21a.outputs.Out
 
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'
