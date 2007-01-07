@@ -106,6 +106,7 @@ class ConvLFOA(Convert):
     else:
       # 180 phase
       setv(g2mp.Phase,(range(64,128)+range(64))[getv(nmmp.Phase)])
+    setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.kbt = g2m.params.Kbt
     self.inputs[0],self.outputs[0],chain = handleslv(self)
