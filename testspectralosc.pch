@@ -9,6 +9,7 @@ Version=Nord Modular patch 3.0
 3 2 0 2 
 4 4 0 11 
 5 11 0 14 
+6 107 1 5 
 [/ModuleDump]
 [ModuleDump]
 0 
@@ -34,6 +35,7 @@ Version=Nord Modular patch 3.0
 1 107 10 64 64 64 1 0 0 0 65 1 0 
 4 4 3 115 0 0 
 5 11 4 64 64 0 0 
+6 107 10 64 64 64 1 0 0 0 0 1 0 
 [/ParameterDump]
 [ParameterDump]
 0 
@@ -42,6 +44,7 @@ Version=Nord Modular patch 3.0
 1 
 1 1 0 
 5 1 0 
+6 1 0 
 [/CustomDump]
 [CustomDump]
 0 
@@ -53,6 +56,7 @@ Version=Nord Modular patch 3.0
 3 AudioIn1
 4 2 outputs1
 5 OscSlvC1
+6 SpectralOsc2
 [/NameDump]
 [NameDump]
 0 
