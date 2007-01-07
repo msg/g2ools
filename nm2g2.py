@@ -87,6 +87,18 @@ def convert(pch,config):
     g2area = getattr(g2patch,areanm)
     print 'Area %s:' % areanm
 
+    # if there is a Keyboard module, move it to the front of the list
+    # because various Mst/Slv connections rely on it.  This way
+    # they can add one if it doesn't.  It's only specified first so
+    # it can be created by the Mst/Slv connections if necessary.
+    keyboard = None
+    for module in nmarea.modules:
+      if module.type.shortnm == 'Keyboard':
+        keyboard = module
+    if keyboard:
+      nmarea.modules.remove(keyboard)
+      nmarea.modules.insert(0,keyboard)
+
     converters = []
     # do the modules
     for module in nmarea.modules:
