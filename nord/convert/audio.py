@@ -236,6 +236,7 @@ class ConvExpander(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    g2mp.Sel.labels = ['In','SideAct']
     setv(g2mp.Sel,getv(nmmp.Act))
     self.params[6] = g2mp.Sel
     envfollow = self.addmodule('EnvFollow')

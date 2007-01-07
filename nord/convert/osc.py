@@ -215,6 +215,8 @@ def handleslv(conv):
   if len(nmm.outputs.Slv.cables):
     # add a masterosc
     master = conv.addmodule('OscMaster',name='SlvOut%d' % slvoutnum)
+    setv(g2m.params.Kbt,0)
+    conv.kbt = master.params.Kbt
     slvoutnum += 1
     conv.connect(master.outputs.Out,g2m.inputs.Pitch)
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
@@ -226,6 +228,7 @@ def handleslv(conv):
     else:
       return g2m.inputs.Pitch,master
   else:
+    conv.kbt = g2m.params.Kbt
     return None,g2m
 
 mstinnum = 1

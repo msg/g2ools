@@ -53,6 +53,7 @@ class ConvFilterD(ConvFilter):
   outputmap = ['HP','BP','LP']
 
   def postmodule(self):
+    self.kbt = self.g2module.params.Kbt
     handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
 
 # copied from convert.py for osc.py (maybe it can be unified?)
@@ -99,6 +100,7 @@ class ConvFilterE(ConvFilter):
     self.inputs[3] = p2
 
   def postmodule(self):
+    self.kbt = self.g2module.params.Kbt
     handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
 
 class ConvFilterF(ConvFilter):
@@ -119,6 +121,7 @@ class ConvFilterF(ConvFilter):
     self.inputs[0:2] = p1,p2
 
   def postmodule(self):
+    self.kbt = self.g2module.params.Kbt
     handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
 
 class ConvVocalFilter(ConvFilter):
