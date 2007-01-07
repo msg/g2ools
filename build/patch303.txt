@@ -2236,19 +2236,19 @@ height 5
 parameters
 0 "freq coarse" 0..127 "freqcoarse"
 1 "freq fine" 0..127 "freqfine"
-2 "spectral shape" 0..127 ""
+2 "shape" 0..127 ""
 3 "partials" 0..1 "0 ~ odd, 1 ~ all"
 4 "pitch mod 1" 0..127 ""
 5 "pitch mod 2" 0..127 ""
 6 "fm mod" 0..127 ""
-7 "spectral shape mod" 0..127 ""
+7 "shape mod" 0..127 ""
 8 "kbt" 0..1 "onoff"
 9 "mute" 0..1 "onoff"
 inputs
 0 "fm mod" audio
 1 "pitch mod 1" control
 2 "pitch mod 2" control
-3 "spectral shape mod" control
+3 "shape mod" control
 outputs
 0 "out" audio
 1 "slv" slave

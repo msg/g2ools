@@ -3078,7 +3078,7 @@ modules = [
       InputType('PitchVar',     g2portcolors.blue_red),
       InputType('Sync',         g2portcolors.red),
       InputType('FmMod',        g2portcolors.red),
-      InputType('Shape',        g2portcolors.red),
+      InputType('ShapeMod',     g2portcolors.red),
     ],
     outputs=[
       OutputType('Out',          g2portcolors.red),
@@ -3782,7 +3782,7 @@ modules = [
     inputs=[
       InputType('In1',          g2portcolors.blue_red),
       InputType('In2',          g2portcolors.blue_red),
-      InputType('InChain',      g2portcolors.blue_red),
+      InputType('Chain',        g2portcolors.blue_red),
     ],
     outputs=[
       OutputType('Out',          g2portcolors.blue_red),

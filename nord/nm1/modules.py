@@ -5466,7 +5466,7 @@ modules = [
       InputType('FmMod',        nm1portcolors.audio),
       InputType('PitchMod1',    nm1portcolors.control),
       InputType('PitchMod2',    nm1portcolors.control),
-      InputType('SpectralShapeMod',nm1portcolors.control),
+      InputType('ShapeMod',     nm1portcolors.control),
     ],
     outputs=[
       OutputType('Out',          nm1portcolors.audio),
@@ -5489,7 +5489,7 @@ modules = [
           comment='freqfine'
         ),
       ),
-      ParameterType('SpectralShape',
+      ParameterType('Shape',
         ParameterDef(  
           default=0,
           low=0,
@@ -5529,7 +5529,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('SpectralShapeMod',
+      ParameterType('ShapeMod',
         ParameterDef(  
           default=0,
           low=0,
