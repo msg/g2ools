@@ -38,7 +38,7 @@ class ConvOverdrive(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.LogLin,1) # Lin
-    setv(g2mp.Mix,25)
+    setv(g2mp.Mix,51)
     setv(g2mp.MixMod,74)
 
     constswt = self.addmodule('ConstSwT')
@@ -55,15 +55,16 @@ class ConvOverdrive(Convert):
     setv(shpstatic.params.Mode,0)
     saturate = self.addmodule('Saturate')
     setv(saturate.params.Curve,2) # 3
-    setv(saturate.params.AmountMod,127)
+    setv(saturate.params.AmountMod,32)
     setv(saturate.params.Amount,0)
     clip = self.addmodule('Clip')
     setv(clip.params.Shape,1) # Sym
-    setv(clip.params.ClipLev,0)
+    setv(clip.params.ClipLev,34)
+    setv(clip.params.ClipLevMod,25)
     xfade = self.addmodule('X-Fade')
     setv(xfade.params.LogLin,1) # Lin
     setv(xfade.params.Mix,64)
-    setv(xfade.params.MixMod,127)
+    setv(xfade.params.MixMod,85)
 
     self.connect(g2m.inputs.In2,xfade.inputs.In1)
     self.connect(g2m.outputs.Out,saturate.inputs.In)
