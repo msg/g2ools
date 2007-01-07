@@ -295,8 +295,6 @@ class ConvOscA(Convert):
     self.inputs[2:4] = p1,p2
 
     self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
-
-  def postmodule(self):
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
 
 class ConvOscB(Convert):
@@ -332,8 +330,6 @@ class ConvOscB(Convert):
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1, p2
     self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
-
-  def postmodule(self):
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
 
 class ConvOscC(Convert):
