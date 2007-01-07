@@ -101,8 +101,11 @@ class ConvLFOA(Convert):
     # handle special parameters
     waveform = getv(nmmp.Waveform)
     setv(g2mp.Waveform,[0,1,2,2,3][waveform])
-    if waveform == 2:
+    if waveform != 3:
       setv(g2mp.OutputType,5) # BipInv
+    else:
+      # 180 phase
+      setv(g2mp.Phase,(range(64,128)+range(64))[getv(nmmp.Phase)])
 
     self.inputs[0],self.outputs[0],chain = handleslv(self)
     if chain:
@@ -122,6 +125,7 @@ class ConvLFOB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Waveform,5)
+    setv(g2mp.OutputType,5) # BipInv
     setv(g2mp.PhaseMod,getv(nmmp.PwMod))
 
     self.inputs[0],self.outputs[1],chain = handleslv(self)
@@ -141,7 +145,10 @@ class ConvLFOC(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.Waveform,[0,1,2,2,3][getv(nmmp.Waveform)])
+    waveform = getv(nmmp.Waveform)
+    setv(g2mp.Waveform,[0,1,2,2,3][waveform])
+    if waveform != 3:
+      setv(g2mp.OutputType,5) # BipInv
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.inputs[0],self.outputs[1],chain = handleslv(self)
@@ -159,8 +166,11 @@ class ConvLFOSlvA(Convert):
     # handle special parameters
     waveform = getv(nmmp.Waveform)
     setv(g2mp.Waveform,[0,1,2,2,3][waveform])
-    if waveform == 2:
+    if waveform != 3:
       setv(g2mp.OutputType,5) # BipInv
+    else:
+      # 180 phase
+      setv(g2mp.Phase,(range(64,128)+range(64))[getv(nmmp.Phase)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.inputs[0] = handlemst(self)
@@ -181,8 +191,7 @@ class ConvLFOSlvB(Convert):
 
     # handle special parameters
     g2m.modes.Waveform.value = self.waveform
-    if self.waveform == 2:
-      setv(g2mp.OutputType,5) # BipInv
+    setv(g2mp.OutputType,5) # BipInv
 
     self.inputs[0] = handlemst(self)
 
