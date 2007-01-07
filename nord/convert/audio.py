@@ -39,7 +39,7 @@ class ConvOverdrive(Convert):
 
     setv(g2mp.LogLin,1) # Lin
     setv(g2mp.Mix,25)
-    setv(g2mp.MixMod,127)
+    setv(g2mp.MixMod,74)
 
     constswt = self.addmodule('ConstSwT')
     setv(constswt.params.On,1)
@@ -53,27 +53,28 @@ class ConvOverdrive(Convert):
     setv(mix11a.params.Lev,getv(nmmp.OverdriveMod))
     shpstatic = self.addmodule('ShpStatic',name='ModIn')
     setv(shpstatic.params.Mode,0)
+    saturate = self.addmodule('Saturate')
+    setv(saturate.params.Curve,2) # 3
+    setv(saturate.params.AmountMod,127)
+    setv(saturate.params.Amount,0)
     clip = self.addmodule('Clip')
     setv(clip.params.Shape,1) # Sym
     setv(clip.params.ClipLev,0)
-    saturate = self.addmodule('Saturate')
-    setv(saturate.params.Curve,0) # 4
-    setv(saturate.params.AmountMod,127)
-    setv(saturate.params.Amount,0)
     xfade = self.addmodule('X-Fade')
     setv(xfade.params.LogLin,1) # Lin
     setv(xfade.params.Mix,64)
     setv(xfade.params.MixMod,127)
 
     self.connect(g2m.inputs.In2,xfade.inputs.In1)
-    self.connect(g2m.outputs.Out,clip.inputs.In)
+    self.connect(g2m.outputs.Out,saturate.inputs.In)
     self.connect(constswt.outputs.Out,mix11a.inputs.Chain)
     self.connect(mix11a.outputs.Out,shpstatic.inputs.In)
     self.connect(shpstatic.outputs.Out,g2m.inputs.Mod)
     self.connect(shpstatic.outputs.Out,saturate.inputs.Mod)
-    self.connect(clip.outputs.Out,saturate.inputs.In)
-    self.connect(saturate.inputs.Mod,xfade.inputs.Mod)
-    self.connect(saturate.outputs.Out,xfade.inputs.In2)
+    self.connect(saturate.inputs.Mod,clip.inputs.Mod)
+    self.connect(saturate.outputs.Out,clip.inputs.In)
+    self.connect(clip.inputs.Mod,xfade.inputs.Mod)
+    self.connect(clip.outputs.Out,xfade.inputs.In2)
 
     self.inputs = [mix11a.inputs.In,g2m.inputs.In2]
     self.outputs = [xfade.outputs.Out]
