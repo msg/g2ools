@@ -1,0 +1,84 @@
+[Header]
+Version=Nord Modular patch 3.0
+0 127 0 127 2 0 0 1 600 2 1 1 1 1 1 1 1 1 1 1 1 1 1 
+[/Header]
+[ModuleDump]
+1 
+1 24 0 0 
+3 26 0 10 
+4 80 0 14 
+5 27 0 18 
+2 25 0 5 
+6 24 1 0 
+7 24 1 5 
+8 24 1 10 
+9 24 1 15 
+10 24 1 20 
+11 24 2 0 
+12 24 2 5 
+13 24 2 10 
+14 24 2 15 
+15 24 2 20 
+[/ModuleDump]
+[ModuleDump]
+0 
+[/ModuleDump]
+[CurrentNoteDump]
+64 0 0 64 0 0 
+[/CurrentNoteDump]
+[CableDump]
+1 
+[/CableDump]
+[CableDump]
+0 
+[/CableDump]
+[ParameterDump]
+1 
+1 24 8 64 1 3 0 0 0 0 0 
+2 25 8 64 1 0 0 0 0 0 64 
+3 26 6 64 1 0 0 0 0 
+4 80 5 64 64 0 0 0 
+5 27 1 64 
+6 24 8 64 1 0 0 0 0 64 0 
+7 24 8 64 1 1 0 0 0 64 0 
+8 24 8 64 1 2 0 0 0 64 0 
+9 24 8 64 1 3 0 0 0 64 0 
+10 24 8 64 1 4 0 0 0 64 0 
+11 24 8 64 1 0 0 0 0 64 0 
+12 24 8 64 1 1 0 0 0 0 0 
+13 24 8 64 1 2 0 0 0 0 0 
+14 24 8 64 1 3 0 0 0 0 0 
+15 24 8 64 1 4 0 0 0 0 0 
+[/ParameterDump]
+[ParameterDump]
+0 
+[/ParameterDump]
+[CustomDump]
+1 
+4 1 0 
+5 1 0 
+[/CustomDump]
+[CustomDump]
+0 
+[/CustomDump]
+[NameDump]
+1 
+1 LFOA1
+2 LFOB1
+3 LFOC1
+4 LFOSlvA1
+5 LFOSlvB1
+6 LFOA2
+7 LFOA3
+8 LFOA4
+9 LFOA5
+10 LFOA6
+11 LFOA2
+12 LFOA3
+13 LFOA4
+14 LFOA5
+15 LFOA6
+[/NameDump]
+[NameDump]
+0 
+[/NameDump]
