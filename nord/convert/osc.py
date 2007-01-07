@@ -244,7 +244,7 @@ def handlemst(conv):
       fmmod, fmparam = None, None
       if hasattr(nmm.inputs,'FmMod') and len(nmm.inputs.FmMod.cables):
         fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
-        setv(fmodinput.params.On,1)
+        setv(fmmodinput.params.On,1)
         conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
         fmparam = fmmodinput.params.Lev
         fmmod = fmmodinput.inputs.In
