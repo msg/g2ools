@@ -76,7 +76,7 @@ class ConvOverdrive(Convert):
     self.connect(clip.inputs.Mod,xfade.inputs.Mod)
     self.connect(clip.outputs.Out,xfade.inputs.In2)
 
-    self.inputs = [mix11a.inputs.In,g2m.inputs.In2]
+    self.inputs = [g2m.inputs.In2,mix11a.inputs.In]
     self.outputs = [xfade.outputs.Out]
 
 class ConvWaveWrap(Convert):
