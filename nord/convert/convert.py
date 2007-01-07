@@ -146,12 +146,12 @@ def handlekbt(conv,input,kbt100,addalways=False):
   kbt = getv(nmmp.Kbt)
   if addalways:
     pass
-  if kbt == 0:
+  elif kbt == 0:
     setv(g2mp.Kbt,kbt)
-    return
+    return None
   elif kbt == 64:
     setv(g2mp.Kbt,kbt100)
-    return
+    return None
 
   if not g2m.area.patch.keyboard:
     g2m.area.patch.keyboard = conv.addmodule('Keyboard')
@@ -165,4 +165,6 @@ def handlekbt(conv,input,kbt100,addalways=False):
   setv(mix21b.params.ExpLin,1) # Lin
   setv(mix21b.params.Lev1,kbttable[kbt][0])
   setv(mix21b.params.Lev2,kbttable[kbt][1])
+  return input
+  
 
