@@ -28,8 +28,8 @@ def handleslv(conv):
   nmmp,g2mp = nmm.params, g2m.params
 
   mst,ratemod,chain=None,None,None
-  if hasattr(g2m.inputs,'Rate'):
-    ratemod = g2m.inputs.Rate
+  if hasattr(g2m.inputs,'RateVar'):
+    ratemod = g2m.inputs.RateVar
   if len(nmm.outputs.Slv.cables):
     mix21b = conv.addmodule('Mix2-1B',name='MasterRate')
     if hasattr(g2m.inputs,'Rate'):
