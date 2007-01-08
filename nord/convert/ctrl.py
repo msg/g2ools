@@ -37,7 +37,8 @@ class ConvSmooth(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    updatevals(g2mp,['Glide'],g2glidetime,nm1smoothtime)
+    setv(g2mp.Glide,1)
+    updatevals(g2mp,['Time'],nm1smoothtime,g2glidetime)
     
 class ConvPortamentoA(Convert):
   maing2module = 'Glide'
@@ -53,7 +54,6 @@ class ConvPortamentoA(Convert):
     nm1midival = getv(nmmp.Time)
     g2midival = nm2g2val(nm1midival,nm1adsrtime,porttime)
     setv(g2mp.Time,g2midival)
-
     setv(g2mp.Glide,0)
     
 class ConvPortamentoB(ConvPortamentoA):
