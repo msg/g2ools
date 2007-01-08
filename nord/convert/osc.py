@@ -690,5 +690,8 @@ class ConvDrumSynth(Convert):
       setv(g2mp[i],getv(nmmp[i]))
       self.params[i] = g2mp[i]
 
+    updatevals(g2mp,['MasterDecay','SlaveDecay','NoiseFltDecay','BendDecay'],
+        nm1adsrtime,g2adsrtime)
+
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
