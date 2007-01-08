@@ -111,9 +111,10 @@ class CableDump(Section):
     line = lines.pop(0)
     if len(line) > 1:
       if len(line.split()) == 8:
+        l = line.split()[0]
         line = ' '.join(line.split()[1:])
         lines.insert(0,line)
-      sect = 1
+      sect = int(l)
     else:
       sect = int(line)
     if sect:
