@@ -446,13 +446,28 @@ def main():
   while len(args):
     patchlist = glob(args.pop(0))
     for fname in patchlist:
-      print '"%s"' % fname
-      failed = doconvert(fname)
-      if failed:
-        failedpatches.append(failed)
+      if os.path.isdir(fname) and config.recursive:
+        for root,dirs,files in os.walk(fname):
+          for f in files:
+            if f[-3:].lower() == 'pch':
+              print '"%s"' % fname
+              fname = os.path.join(root,f)
+              failed = doconvert(fname)
+              if failed:
+                failedpatches.append(failed)
+      else:
+        print '"%s"' % fname
+        failed = doconvert(fname)
+        if failed:
+          failedpatches.append(failed)
 
   if len(failedpatches):
     print 'Failed patches: \n%s' % '\n '.join(failedpatches)
 
 if __name__ == '__main__':
+  try:
+    import psyco
+    psyco.full()
+  except ImportError:
+    pass
   main()
