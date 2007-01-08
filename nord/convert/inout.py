@@ -23,7 +23,7 @@ from convert import *
 
 class ConvKeyboard(Convert):
   maing2module = 'Keyboard'
-  outputmap = ['Note','Gate','Lin','Release']
+  outputmap = ['Pitch','Gate','Lin','Release']
   def domodule(self):
     self.g2module.area.patch.keyboard = self.g2module
 
