@@ -618,7 +618,6 @@ class ConvOscSineBank(Convert):
         for i in range(1,len(oscs)):
           self.connect(oscs[i-1].inputs.Sync,oscs[i].inputs.Sync)
     if len(nmm.inputs.Mst.cables):
-      print osc.name
       self.inputs[0] = oscs[0].inputs.Pitch
       if len(oscs) > 1:
         for i in range(1,len(oscs)):

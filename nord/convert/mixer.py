@@ -143,7 +143,6 @@ class Conv4_1Switch(Convert):
     # add a LevAmp and reorient inputs
     for i in range(1,5):
       level = getv(getattr(nmmp,'Level%d' % i))
-      #print '%d level=%d' % (i,level)
       if level == 0 or level == 127:
         continue
       if len(nmm.inputs[i-1].cables):
