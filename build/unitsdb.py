@@ -73,6 +73,9 @@ g2levamp = getnumbers('g2levamp.txt')
 
 ratios = getnumbers('ratios.txt')
 
+g2glidetime = getnumbers('g2glidetime.txt')
+nm1smoothtime = getnumbers('nm1smoothtime.txt')
+
 f = open('../nord/convert/units.py','w')
 s = '''#
 # units.py - unit convertion tables and functions
@@ -133,11 +136,18 @@ g2levamp = [%s
 
 ratios = [%s
 ]
+
+g2glidetime = [%s
+]
+
+nm1smoothtime = [%s
+]
 ''' % (formattimes(nm1adsrtime), formattimes(g2adsrtime),
        formatfreq(nm1fltfreq), formatfreq(g2fltfreq),
        formatfreq(nm1logictime), formatfreq(g2logictime),
        formatfreq(nm1levamp), formatfreq(g2levamp),
-       formatarray([ '%.3f' % ratios[i] for i in range(len(ratios))]))
+       formatarray([ '%.3f' % ratios[i] for i in range(len(ratios))]),
+       formattimes(g2glidetime),formattimes(nm1smoothtime))
 
 print s
 f.write(s)

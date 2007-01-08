@@ -33,6 +33,12 @@ class ConvSmooth(Convert):
   inputmap = ['In']
   outputmap = ['Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    updatevals(g2mp,['Glide'],g2glidetime,nm1smoothtime)
+    
 class ConvPortamentoA(Convert):
   maing2module = 'Glide'
   parammap = ['Time']
