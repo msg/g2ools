@@ -117,7 +117,10 @@ def convert(pch,config):
             module.type.shortnm, module.type.type, module.type.type)
 
     # post module parse
+    print 'PostModule:'
     for conv in converters:
+      print '%s: %d(0x%02x)' % (conv.g2module.name,
+          conv.g2module.type.type,conv.g2module.type.type)
       conv.postmodule()
 
     modcolors = [
