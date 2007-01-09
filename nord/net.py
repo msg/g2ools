@@ -20,6 +20,12 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+class NetError(Exception):
+  def __init__(self, value):
+    self.value = value
+  def __str__(self):
+    return repr(self.value)
+
 class Net:
   def __init__(self, output, inputs):
     self.output = output
@@ -42,10 +48,10 @@ def addnet(netlist, source, dest):
   if source.net and dest.net: # two separate nets need to be combined
     if source.net.output and dest.net.output and (
         source.net.output != dest.net.output): # shouldn't happen
-      raise \
+      raise NetError(
         'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
         source.module.type.shortnm, source.type.name,
-        dest.net.output.module.type.shortnm, dest.net.output.type.name)
+        dest.net.output.module.type.shortnm, dest.net.output.type.name))
     source.net.inputs += dest.net.inputs
     if dest.net.output:
       source.net.output = dest.net.output
@@ -71,10 +77,10 @@ def addnet(netlist, source, dest):
 
       if source.direction:
         if net.output and source != net.output:
-          raise \
+          raise NetError(
             'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
             source.module.type.shortnm, source.type.name,
-            net.output.module.type.shortnm, net.output.type.name)
+            net.output.module.type.shortnm, net.output.type.name))
         net.output = source
       elif not source in net.inputs: # just in case two connections are made
         net.inputs.append(source)
