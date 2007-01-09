@@ -359,7 +359,7 @@ def convert(pch,config):
         ctrl.param.type.name),
       index = ctrl.param.index
       conv = ctrl.param.module.conv
-      if index < len(conv.params) and conv.params[index]
+      if index < len(conv.params) and conv.params[index]:
         m.param = conv.params[index]
         print '-- Parameter missing'
         continue
@@ -468,7 +468,9 @@ def main():
           failedpatches.append(failed)
 
   if len(failedpatches):
-    print 'Failed patches: \n%s' % '\n '.join(failedpatches)
+    f=open('failedpatches.txt','w')
+    s = 'Failed patches: \n%s\n' % '\n '.join(failedpatches)
+    print s
 
 if __name__ == '__main__':
   try:
