@@ -18,6 +18,7 @@ Version=Nord Modular patch 3.0
 13 1 0 27 
 11 104 2 10 
 14 40 2 25 
+15 32 2 15 
 [/ModuleDump]
 [ModuleDump]
 0 
@@ -50,11 +51,12 @@ Version=Nord Modular patch 3.0
 0 12 6 0 4 2 1 
 1 5 0 0 13 0 1 
 0 12 7 0 10 0 1 
-0 14 0 0 11 0 1 
 1 8 2 0 13 2 1 
 1 8 1 0 8 2 0 
 1 7 1 0 8 1 0 
 1 7 0 0 7 1 0 
+0 15 0 0 11 0 1 
+0 14 0 0 15 0 1 
 [/CableDump]
 [CableDump]
 0 
@@ -73,6 +75,7 @@ Version=Nord Modular patch 3.0
 11 104 5 60 127 0 0 127 
 12 40 9 100 100 100 100 100 100 100 100 0 
 14 40 9 100 100 100 100 100 100 100 100 0 
+15 32 15 127 127 127 127 127 127 127 127 127 127 127 127 127 127 0 
 [/ParameterDump]
 [ParameterDump]
 0 
@@ -103,6 +106,7 @@ Version=Nord Modular patch 3.0
 12 Mixer1
 13 Keyboard1
 14 Mixer2
+15 Filter Bank1
 [/NameDump]
 [NameDump]
 0 

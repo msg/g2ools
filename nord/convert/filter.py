@@ -138,15 +138,42 @@ class ConvVocoder(Convert):
   outputmap = ['Out']
 
 class ConvFilterBank(Convert):
-  maing2module = 'Eq3Band'
-  inputmap = ['In']
-  outputmap = ['Out']
+  maing2module = 'Mix8-1B'
+  parammap = [None]*14
+  inputmap = [None]
+  outputmap = [None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
-    setv(g2mp.Active,1-getv(nmmp.Bypass))
+    mix81b = self.addmodule('Mix8-1B',name='Upper')
+    self.connect(g2m.outputs.Out,mix81b.inputs.Chain)
+    filters = []
+    banksettings = [
+      ['50',23],['75',29],['110',37],['170',44],
+      ['250',50],['380',57],['570',65],
+      ['850',71],['1.3',79],['1.9',85],['2.9',93],
+      ['4.2',99],['6.4',106],['8.3',111],
+    ]
+    for i in range(len(banksettings)):
+      name,freq = banksettings[i]
+      filter = self.addmodule('FltStatic',name=name)
+      setv(filter.params.Freq,freq)
+      setv(filter.params.GC,1)  # On
+      setv(filter.params.FilterType,1) # BP
+      setv(filter.params.Res,64)
+      if freq > 65:
+        self.connect(filter.outputs.Out,mix81b.inputs[i-7])
+        setv(mix81b.params[i-7],getv(nmm.params[i-7]))
+      else:
+        self.connect(filter.outputs.Out,g2m.inputs[i])
+        setv(g2m.params[i],getv(nmm.params[i]))
+      if i > 0:
+        self.connect(filters[i-1].inputs.In,filter.inputs.In)
+      filters.append(filter)
+    self.inputs[0] = filters[0].inputs.In
+    self.outputs[0] = mix81b.outputs.Out
 
 class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
