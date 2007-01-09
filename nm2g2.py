@@ -450,8 +450,8 @@ def main():
         for root,dirs,files in os.walk(fname):
           for f in files:
             if f[-3:].lower() == 'pch':
-              print '"%s"' % fname
               fname = os.path.join(root,f)
+              print '"%s"' % fname
               failed = doconvert(fname)
               if failed:
                 failedpatches.append(failed)
