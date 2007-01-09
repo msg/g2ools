@@ -467,6 +467,7 @@ class ConvFormantOsc(Convert):
     setv(eqpeak.params.Freq,109)
     setv(eqpeak.params.Gain,104)
     setv(eqpeak.params.Bandwidth,2)
+    setv(eqpeak.params.Level,100)
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
     self.params[4] = constswt.params.Lev
     setv(notequant.params.Range,127)
