@@ -21,6 +21,7 @@
 
 import getopt, os, sys
 from glob import glob
+from exceptions import KeyboardInterrupt
 sys.path.append('.')
 from nord.g2.file import Pch2File, MorphMap
 from nord.g2.modules import fromname as g2name
@@ -361,14 +362,15 @@ def convert(pch,config):
       conv = ctrl.param.module.conv
       if index < len(conv.params) and conv.params[index]:
         m.param = conv.params[index]
+	m.type = conv.g2module.area.index
+        print
+      else:
         print '-- Parameter missing'
-        continue
-      m.type = m.param.module.area.index
+	continue
     else:
       m.param = morphmap[ctrl.param.index-1]
       m.type = 2 # system
     g2patch.ctrls.append(m)
-    print
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
@@ -415,17 +417,19 @@ def usage(prog):
   print '\t-h --help\tPrint this message'
   print '\t-d --debug\tDebug program'
   print '\t-l --low\tLower resource usage'
+  print '\t-r --recursive\tOn directory arguments convert all .pch files'
+  print '\t-k --keepold\tDo not replace existing .pch2 files'
   
 def main():
   prog = sys.argv.pop(0)
   try:
-    opts, args = getopt.getopt(sys.argv,'hdlr',
-        ['help','debug','low','recursive'])
+    opts, args = getopt.getopt(sys.argv,'hdlrk',
+        ['help','debug','low','recursive','keepold'])
   except getopt.GetoptError:
     usage(prog)
     sys.exit(2)
 
-  config = Config(debug=None,lowresource=None,recursive=None)
+  config = Config(debug=None,lowresource=None,recursive=None,keepold=None)
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
@@ -435,6 +439,8 @@ def main():
       config.lowresource = True
     if o in ('-r','--recursive'):
       config.recursive = True
+    if o in ('-k','--keepold'):
+      config.keepold = True
 
   def doconvert(fname):
     # general algorithm for converter:
@@ -443,6 +449,8 @@ def main():
     else:
       try:
         convert(PchFile(fname),config)
+      except KeyboardInterrupt:
+        sys.exit(1)
       except Exception, e:
         print '%r' % e
         return fname
@@ -458,6 +466,8 @@ def main():
             if f[-3:].lower() == 'pch':
               fname = os.path.join(root,f)
               print '"%s"' % fname
+              if config.keepold and os.path.exists(fname+'2'):
+                continue
               failed = doconvert(fname)
               if failed:
                 failedpatches.append(failed)
@@ -470,6 +480,7 @@ def main():
   if len(failedpatches):
     f=open('failedpatches.txt','w')
     s = 'Failed patches: \n%s\n' % '\n '.join(failedpatches)
+    f.write(s)
     print s
 
 if __name__ == '__main__':
