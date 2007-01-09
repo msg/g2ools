@@ -70,6 +70,8 @@ def postmst(conv):
   nmmp,g2mp = nmm.params, g2m.params
 
   if len(nmm.inputs.Mst.cables):
+    if not nmm.inputs.Mst.net.output:
+      return
     mstconv = nmm.inputs.Mst.net.output.module.conv
     mstlfo = mstconv.g2module
     range = 3
@@ -80,8 +82,6 @@ def postmst(conv):
       setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
     if hasattr(mstlfo.params,'Kbt') and hasattr(g2mp,'Kbt'):
       setv(g2mp.Kbt,getv(mstlfo.params.Kbt))
-    if hasattr(mstconv,'kbtout') and hasattr(conv,'kbtin'):
-      conv.connect(mstconv.kbtout,conv.kbtin)
     if hasattr(mstlfo.params,'Range'):
       setv(g2mp.Range,getv(mstlfo.params.Range))
     else:
