@@ -340,17 +340,23 @@ class PchFile:
 
     starttags = []
     endtags = []
-    for i in range(len(lines)):
+    i=0
+    while i < len(lines):
       line = lines[i]
-      if not len(line):  continue
-      if line[0] != '[': continue
-      rb = line.find(']')
-      if rb < 0:
-        rb = None
-      if line[1] != '/' and line[1:rb] in validtags:
-        starttags.append(i)
-      elif line[2:rb] in validtags:
-        endtags.append(i)
+      lb = line.find('[')
+      if lb > 0:
+	lines[i] = line[:lb]
+	lines.insert(i+1,line[lb:])
+	line = lines[i]
+      if len(line) and line[0] == '[':
+	rb = line.find(']')
+	if rb < 0:
+	  rb = None
+	if line[1] != '/' and line[1:rb] in validtags:
+	  starttags.append(i)
+	elif line[2:rb] in validtags:
+	  endtags.append(i)
+      i += 1
 
     if len(endtags):
       if len(starttags) != len(endtags):
