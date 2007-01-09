@@ -306,9 +306,10 @@ def convert(pch,config):
       mmap = MorphMap()
       conv = map.param.module.conv
       mmap.range = conv.domorphrange(map.param.index,map.range)
-      mmap.param = conv.params[map.param.index]
-      mmap.morph = g2morph
-      if mmap.param:
+      index = map.param.index
+      if index < len(conv.params) and conv.params[index]:
+        mmap.param = conv.params[index]
+        mmap.morph = g2morph
         morphmap[morph].maps[0].append(mmap)
         print
       else:
@@ -329,12 +330,15 @@ def convert(pch,config):
     if hasattr(knob.param,'module'): # module parameter
       # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
       conv = knob.param.module.conv
-      print 'Knob%d: %s:%s -> %s' % (knob.knob,
-          knob.param.module.name,knob.param.type.name,conv.params[index])
-      if conv.params[index]:
+      print 'Knob%d: %s:%s ->' % (knob.knob,
+          knob.param.module.name,knob.param.type.name),
+      if index < len(conv.params) and conv.params[index]:
+        print '%s' % conv.params[index]
         g2knob.param = conv.params[index]
         g2knob.assigned = 1
         g2knob.isled = 0
+      else:
+        print 'Unknown param %d' % index
     else: # morph
       #print ' Knob%d: Morph%d' % (knob.knob,knob.param.index)
       g2knob.param = morphmap[knob.param.index-1]
@@ -353,8 +357,10 @@ def convert(pch,config):
     if hasattr(ctrl.param,'module'): # module parameter
       print ' CC%d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,
         ctrl.param.type.name),
-      m.param = ctrl.param.module.conv.params[ctrl.param.index]
-      if not m.param:
+      index = ctrl.param.index
+      conv = ctrl.param.module.conv
+      if index < len(conv.params) and conv.params[index]
+        m.param = conv.params[index]
         print '-- Parameter missing'
         continue
       m.type = m.param.module.area.index
