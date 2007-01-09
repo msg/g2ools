@@ -237,25 +237,26 @@ def handlemst(conv):
   nmm, g2m = conv.nmmodule, conv.g2module
   mst,fmmod,fmparam = g2m.inputs.Pitch,g2m.inputs.FmMod,g2m.params.FmAmount
   if len(nmm.inputs.Mst.cables):
-    if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
-      mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
-      setv(mix11a.params.On,1)
-      constswt = conv.addmodule('ConstSwT',name='Offset -64')
-      setv(constswt.params.On,1)
-      conv.connect(mix11a.outputs.Out,g2m.inputs.FmMod)
-      conv.connect(constswt.outputs.Out,g2m.inputs.Pitch)
-      setv(g2m.params.FmAmount,127)
-      setv(mix11a.params.Lev,79)
-      setv(constswt.params.Lev,0)
-      mst = mix11a.inputs.In
-      fmmod, fmparam = None, None
-      if hasattr(nmm.inputs,'FmMod') and len(nmm.inputs.FmMod.cables):
-        fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
-        setv(fmmodinput.params.On,1)
-        conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
-        fmparam = fmmodinput.params.Lev
-        fmmod = fmmodinput.inputs.In
-      mstinnum += 1
+    if nmm.inputs.Mst.net.output:
+      if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
+        mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
+        setv(mix11a.params.On,1)
+        constswt = conv.addmodule('ConstSwT',name='Offset -64')
+        setv(constswt.params.On,1)
+        conv.connect(mix11a.outputs.Out,g2m.inputs.FmMod)
+        conv.connect(constswt.outputs.Out,g2m.inputs.Pitch)
+        setv(g2m.params.FmAmount,127)
+        setv(mix11a.params.Lev,79)
+        setv(constswt.params.Lev,0)
+        mst = mix11a.inputs.In
+        fmmod, fmparam = None, None
+        if hasattr(nmm.inputs,'FmMod') and len(nmm.inputs.FmMod.cables):
+          fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
+          setv(fmmodinput.params.On,1)
+          conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
+          fmparam = fmmodinput.params.Lev
+          fmmod = fmmodinput.inputs.In
+        mstinnum += 1
   return mst,fmmod,fmparam
 
 class ConvMasterOsc(Convert):
