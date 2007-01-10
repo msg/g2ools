@@ -375,6 +375,11 @@ def convert(pch,config):
       m.type = 2 # system
     g2patch.ctrls.append(m)
 
+  # handle CurrentNotes
+  print 'CurrentNotes:'
+  for note in nmpatch.notes:
+    g2patch.notes.append(note)
+
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
 
