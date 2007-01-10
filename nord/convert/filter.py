@@ -24,9 +24,7 @@ from units import *
 
 class ConvFilter(Convert):
   def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-    updatevals(g2m.params,['Freq'],nm1fltfreq,g2fltfreq)
+    updatevals(self.g2module.params,['Freq'],nm1fltfreq,g2fltfreq)
 
 class ConvFilterA(ConvFilter):
   maing2module = 'FltLP'
@@ -51,6 +49,30 @@ class ConvFilterD(ConvFilter):
   parammap = ['Freq',None,'Res',['PitchMod','FreqMod']]
   inputmap = ['PitchVar','In']
   outputmap = ['HP','BP','LP']
+
+  def domodule(self):
+    ConvFilter.domodule(self)
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    mix11a = self.addmodule('Mix1-1A',name='Reduction')
+    setv(mix11a.params.On,1)
+    mix11a.params.On.labels = ['Fix101']
+    setv(mix11a.params.Lev,101)
+    levamp = self.addmodule('LevAmp',name='HPOut')
+    setv(levamp.params.Type,1) # Lin
+    setv(levamp.params.Gain,74)
+    levamp2 = self.addmodule('LevAmp',name='LPOut')
+    setv(levamp2.params.Type,1) # Lin
+    setv(levamp2.params.Gain,78)
+
+    self.connect(mix11a.outputs.Out,g2m.inputs.In)
+    self.connect(g2m.outputs.HP,levamp.inputs.In)
+    self.connect(g2m.outputs.LP,levamp2.inputs.In)
+    
+    self.inputs[1] = mix11a.inputs.In
+    self.outputs[0] = levamp.outputs.Out
+    self.outputs[2] = levamp2.outputs.Out
 
   def postmodule(self):
     self.kbt = self.g2module.params.Kbt
