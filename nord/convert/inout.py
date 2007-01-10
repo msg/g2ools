@@ -40,6 +40,11 @@ class ConvMIDIGlobal(Convert):
   maing2module = 'ClkGen'
   outputmap = ['1/96','Sync','ClkActive']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    setv(g2mp.Source,1) # Master
+
 class ConvAudioIn(Convert):
   maing2module = '2-In'
   outputmap = ['OutL','OutR']
