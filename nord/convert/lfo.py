@@ -200,9 +200,9 @@ class ConvClkGen(Convert):
     if len(nmm.outputs.Slv.cables):
       zerocnt = self.addmodule('ZeroCnt',name='96th In')
       oscmaster = self.addmodule('OscMaster',name='26-241 BPM')
-      setv(oscmaster.params.Freq,9) # -55 semi
+      setv(oscmaster.params.FreqCoarse,9) # -55 semi
       self.connect(zerocnt.outputs.Out,oscmaster.inputs.Pitch)
-      self.outputs[2] = oscmasters.outputs.Out
+      self.outputs[2] = oscmaster.outputs.Out
 
 class ConvClkRndGen(Convert):
   maing2module = 'RndClkA'
