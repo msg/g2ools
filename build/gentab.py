@@ -7,11 +7,30 @@ def getnumbers(fname):
   return map(lambda line: map(lambda n: eval(n), line.split()), lines)
   #return map(lambda a: eval(a.split()[-1]), lines)
 
+def interpolate(indexvals):
+  lastindex,lastval = indexvals[0]
+  interpolated = []
+  for indexval in indexvals[1:]:
+    index,val = indexval
+    slope = float(val-lastval)/(index-lastindex)
+    if index-lastindex>1:
+      for i in range(lastindex,index):
+        interpolated.append([i,int(lastval+slope*(i-lastindex)+0.5)])
+    else:
+      interpolated.append([index,val])
+    lastindex,lastval=index,val
+  return interpolated
+
 mix21b = getnumbers('mix2-1b.txt')    # val, mix %
 spectral = getnumbers('spectral.txt') # val, fmmod, fmmod %, mix %, inv %
 pitchmod = getnumbers('nm1pitch.txt') # val, pitchmod, pmod %, invpmod %
 kbt = getnumbers('kbt.txt')           # val, lev1, lev2
 notescale = getnumbers('notescale.txt') # nmval, 24db G2 val, 8db G2 val
+glidephase = getnumbers('glidephase.txt') # val, [glide, [phase]]
+glideindexes = [ gp[:2] for gp in glidephase if len(gp) > 1 ]
+phaseindexes = [ [gp[0],gp[2]] for gp in glidephase if len(gp) > 2 ]
+glides = interpolate(glideindexes)
+phases = interpolate(phaseindexes)
 
 f=open('../nord/convert/table.py','w')
 f.write('''
@@ -82,6 +101,24 @@ for i in range(len(notescale)):
   if i and i % 4 == 0:
     f.write('\n')
   f.write(' [%3d,%3d],' % (notescale[i][1],notescale[i][2]))
+f.write('''
+]
+
+glide = [
+ ''')
+for i in range(len(glides)):
+  if i and i % 16 == 0:
+    f.write('\n ')
+  f.write('%3d,' % (glides[i][1]))
+f.write('''
+]
+
+phase = [
+ ''')
+for i in range(len(phases)):
+  if i and i % 16 == 0:
+    f.write('\n ')
+  f.write('%3d,' % (phases[i][1]))
 f.write('''
 ]
 ''')

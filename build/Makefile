@@ -12,6 +12,7 @@ all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py ../no
 ../nord/convert/units.py: unitsdb.py nm1adsrtime.txt g2adsrtime.txt
 	./unitsdb.py
 
-../nord/convert/table.py: gentab.py mix2-1b.txt spectral.txt nm1pitch.txt kbt.txt notescale.txt
+../nord/convert/table.py: gentab.py mix2-1b.txt spectral.txt nm1pitch.txt \
+		kbt.txt notescale.txt glidephase.txt
 	./gentab.py
 
