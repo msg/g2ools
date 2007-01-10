@@ -318,8 +318,8 @@ class CurrentNote(Section):
         bit = setbits(0,7,data,patch.lastnote.note)
         bit = setbits(bit,7,data,patch.lastnote.vel1)
         bit = setbits(bit,7,data,patch.lastnote.vel2)
-      bit = setits(bit,5,len(self.notes)-1)
-      for note in self.notes:
+      bit = setbits(bit,5,data,len(patch.notes)-1)
+      for note in patch.notes:
         bit = setbits(bit,7,data,note.note)
         bit = setbits(bit,7,data,note.vel1)
         bit = setbits(bit,7,data,note.vel2)
