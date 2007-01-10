@@ -38,7 +38,7 @@ class ConvSmooth(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Glide,1)
-    updatevals(g2mp,['Time'],nm1smoothtime,g2glidetime)
+    setv(g2mp.Time, glide[getv(nmmp.Time))
     
 class ConvPortamentoA(Convert):
   maing2module = 'Glide'
