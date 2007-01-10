@@ -299,15 +299,15 @@ class Note:
 class CurrentNote(Section):
   def parse(self, patch, data):
     lastnote = patch.lastnote = Note()
-    bit, lastnote.note = getbits(0,7,data)
-    bit, lastnote.vel1 = getbits(bit,7,data)
-    bit, lastnote.vel2 = getbits(bit,7,data)
-    bit, notecnt       = getbits(bit,5,data)
+    bit, lastnote.note    = getbits(0,7,data)
+    bit, lastnote.attack  = getbits(bit,7,data)
+    bit, lastnote.release = getbits(bit,7,data)
+    bit, notecnt          = getbits(bit,5,data)
     notes = patch.notes = [ Note() for i in range(notecnt+1) ]
     for i in range(len(notes)):
-      bit, notes[i].note = getbits(bit,7,data)
-      bit, notes[i].vel1 = getbits(bit,7,data)
-      bit, notes[i].vel2 = getbits(bit,7,data)
+      bit, notes[i].note    = getbits(bit,7,data)
+      bit, notes[i].attack  = getbits(bit,7,data)
+      bit, notes[i].release = getbits(bit,7,data)
 
   def format(self, patch):
     data = array('B',[])
@@ -316,13 +316,13 @@ class CurrentNote(Section):
         bit = setbits(0,21,data,0)
       else:
         bit = setbits(0,7,data,patch.lastnote.note)
-        bit = setbits(bit,7,data,patch.lastnote.vel1)
-        bit = setbits(bit,7,data,patch.lastnote.vel2)
+        bit = setbits(bit,7,data,patch.lastnote.attack)
+        bit = setbits(bit,7,data,patch.lastnote.release)
       bit = setbits(bit,5,data,len(patch.notes)-1)
       for note in patch.notes:
         bit = setbits(bit,7,data,note.note)
-        bit = setbits(bit,7,data,note.vel1)
-        bit = setbits(bit,7,data,note.vel2)
+        bit = setbits(bit,7,data,note.attack)
+        bit = setbits(bit,7,data,note.release)
       return data.tostring()
     else:
       return '\x80\x00\x00\x20\x00\x00'  # normal default
