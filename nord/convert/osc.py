@@ -591,7 +591,9 @@ class ConvOscSineBank(Convert):
     for i in range(1,7): # 6 Sine Osc
       # if osc muted, don't addit
       if getv(getattr(nmmp,'Osc%dMute'%i))==0:
-        if len(getattr(nmm.inputs,'Osc%dAm'%i).cables) == 0:
+        if len(getattr(nmm.inputs,'Osc%dAm'%i).cables) == 0 and \
+           len(nmm.inputs.Sync.cables) == 0 and \
+           len(nmm.inputs.Mst.cables) == 0:
           continue
       osc = self.addmodule(osctype,name='Osc%d' % i)
       oscs.append(osc)
