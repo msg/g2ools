@@ -291,21 +291,41 @@ class ModuleList(Section):
         bit = setbits(bit,6,data,area.modules[i].modes[mode].value)
 
     return data.tostring()
-    
-# Unknown0x69 - section object for parse/format (unknown, seemingly not needed)
-class Unknown0x69(Section):
+
+class Note:
+  pass
+
+# CurrentNote - section object for parse/format
+class CurrentNote(Section):
   def parse(self, patch, data):
-    #print 'Unknown0x69:'
-    #print hexdump(data)
-    patch.unknown0x68 = data
+    lastnote = patch.lastnote = Note()
+    bit, lastnote.note = getbits(0,7,data)
+    bit, lastnote.vel1 = getbits(bit,7,data)
+    bit, lastnote.vel2 = getbits(bit,7,data)
+    bit, notecnt       = getbits(bit,5,data)
+    notes = patch.notes = [ Note() for i in range(notecnt+1) ]
+    for i in range(len(notes)):
+      bit, notes[i].note = getbits(bit,7,data)
+      bit, notes[i].vel1 = getbits(bit,7,data)
+      bit, notes[i].vel2 = getbits(bit,7,data)
 
   def format(self, patch):
-    # smallest unknown
-    # this seems to work with all files generated.
-    return '\x80\x00\x00\x20\x00\x00'
-    #print 'Unknown0x69:'
-    #print hexdump(patch.unknown0x69)
-    return patch.unknown0x69
+    data = array('B',[])
+    if len(patch.notes):
+      if not patch.lastnote:
+        bit = setbits(0,21,data,0)
+      else:
+        bit = setbits(0,7,data,patch.lastnote.note)
+        bit = setbits(bit,7,data,patch.lastnote.vel1)
+        bit = setbits(bit,7,data,patch.lastnote.vel2)
+      bit = setits(bit,5,len(self.notes)-1)
+      for note in self.notes:
+        bit = setbits(bit,7,data,note.note)
+        bit = setbits(bit,7,data,note.vel1)
+        bit = setbits(bit,7,data,note.vel2)
+      return data.tostring()
+    else:
+      return '\x80\x00\x00\x20\x00\x00'  # normal default
 
 
 # holder object for patch cables
@@ -1093,6 +1113,8 @@ class Patch:
     self.fx = Area(self,0)
     self.voice = Area(self,1)
     self.midiassignments = []
+    self.lastnote = None
+    self.notes = []
     
 
 # Pch2File - main reading/writing object for .pch2 files
@@ -1104,7 +1126,7 @@ class Pch2File:
     PatchDescription(type=0x21),
     ModuleList(type=0x4a,area=1),
     ModuleList(type=0x4a,area=0),
-    Unknown0x69(type=0x69),
+    CurrentNote(type=0x69),
     CableList(type=0x52,area=1),
     CableList(type=0x52,area=0),
     PatchSettings(type=0x4d,area=2),
