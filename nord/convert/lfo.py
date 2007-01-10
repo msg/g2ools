@@ -27,43 +27,20 @@ def handleslv(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  mst,ratemod,chain=None,None,None
+  slv,ratemod,kbt=None,None,g2m.inputs.Rate
+
   if hasattr(g2m.inputs,'RateVar'):
     ratemod = g2m.inputs.RateVar
   if len(nmm.outputs.Slv.cables):
-    mix21b = conv.addmodule('Mix2-1B',name='MasterRate')
-    if hasattr(g2m.inputs,'Rate'):
-      conv.connect(mix21b.outputs.Out,g2m.inputs.Rate)
-    setv(mix21b.params.Lev1,127)
-    setv(mix21b.params.Lev2,127)
-    mst = mix21b.outputs.Out
-    chain = mix21b.inputs.Chain
-    if hasattr(nmm.inputs,'Rate'):
-      if len(nmm.inputs.Rate.cables):
-        mix11a = conv.addmodule('Mix1-1A',name='Rate')
-        setv(mix11a.params.On,1)
-        conv.connect(mix11a.outputs.Out,mix21b.inputs.In2)
-        setv(mix11a.params.Lev,modtable[getv(nmm.params.RateMod)][0])
-        ratemod = mix11a.inputs.In
-        mst = mix21b.inputs.In2
-  return ratemod,mst,chain
-
-def handlemst(conv):
-  nmm,g2m = conv.nmmodule,conv.g2module
-  nmmp,g2mp = nmm.params, g2m.params
-
-  if len(nmm.inputs.Mst.cables):
-    mix21b = conv.addmodule('Mix2-1B',name='SlaveRate')
-    conv.connect(mix21b.outputs.Out,g2m.inputs.Rate)
-    conv.kbtin = mix21b.inputs.Chain
-    setv(mix21b.params.Lev1,127)
-    setv(mix21b.params.Lev2,127)
-    constswt = conv.addmodule('ConstSwT',name='RateFactor')
-    setv(constswt.params.On,1)
-    setv(constswt.params.Lev,getv(nmmp.Rate))
-    conv.connect(constswt.outputs.Out,mix21b.inputs.In1)
-    return mix21b.inputs.In2
-  return None
+    oscmaster = conv.addmodule('OscMaster')
+    setv(g2mp.Rate,64)
+    setv(oscmaster.params.FreqCoarse,getv(nmmp.Rate))
+    setv(oscmaster.params.PitchMod,getv(nmmp.RateMod))
+    conv.connect(oscmaster.outputs.Out,g2m.inputs.Rate)
+    ratemod = oscmaster.inputs.PitchVar
+    slv = g2m.inputs.Rate
+    kbt = oscmaster.inputs.Pitch
+  return ratemod,slv,kbt
 
 def postmst(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
@@ -74,10 +51,6 @@ def postmst(conv):
       return
     mstconv = nmm.inputs.Mst.net.output.module.conv
     mstlfo = mstconv.g2module
-    range = 3
-    if hasattr(mstlfo.params,'Rate'):
-      setv(g2mp.Rate,getv(mstlfo.params.Rate))
-      range = 1
     if hasattr(mstlfo.params,'PolyMono'):
       setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
     if hasattr(mstlfo.params,'Kbt') and hasattr(g2mp,'Kbt'):
@@ -85,7 +58,7 @@ def postmst(conv):
     if hasattr(mstlfo.params,'Range'):
       setv(g2mp.Range,getv(mstlfo.params.Range))
     else:
-      setv(g2mp.Range,range)
+      setv(g2mp.Range,3)
 
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
@@ -109,11 +82,9 @@ class ConvLFOA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.kbt = g2m.params.Kbt
-    self.inputs[0],self.outputs[0],chain = handleslv(self)
-    if chain:
-      self.kbtout = handlekbt(self,chain,4,True)
-    else:
-      self.kbtout = handlekbt(self,g2m.inputs.Rate,4)
+    # update Rate input, Slv Output
+    self.inputs[0],self.outputs[0],kbt = handleslv(self)
+    self.kbtout = handlekbt(self,kbt,4,True)
 
 class ConvLFOB(Convert):
   maing2module = 'LfoShpA'
@@ -131,11 +102,8 @@ class ConvLFOB(Convert):
     setv(g2mp.PhaseMod,getv(nmmp.PwMod))
 
     self.kbt = g2m.params.Kbt
-    self.inputs[0],self.outputs[1],chain = handleslv(self)
-    if chain:
-      self.kbtout = handlekbt(self,chain,4,True)
-    else:
-      self.kbtout = handlekbt(self,g2m.inputs.Rate,4)
+    self.inputs[0],self.outputs[1],kbt = handleslv(self)
+    self.kbtout = handlekbt(self,kbt,4,True)
 
 class ConvLFOC(Convert):
   maing2module = 'LfoA'
@@ -155,12 +123,12 @@ class ConvLFOC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.kbt = g2m.params.Kbt
-    self.inputs[0],self.outputs[1],chain = handleslv(self)
+    self.inputs[0],self.outputs[1],kbt = handleslv(self)
 
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
   parammap = ['Rate','Phase','Waveform',['PolyMono','Mono'],['Active','Mute']]
-  inputmap = [None,'Rst'] # no Mst
+  inputmap = ['Rate','Rst'] # no Mst
   outputmap = ['Out']
 
   def domodule(self):
@@ -177,8 +145,6 @@ class ConvLFOSlvA(Convert):
       setv(g2mp.Phase,(range(64,128)+range(64))[getv(nmmp.Phase)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
-    self.inputs[0] = handlemst(self)
-
   def postmodule(self):
     postmst(self)
 
@@ -186,7 +152,7 @@ class ConvLFOSlvB(Convert):
   maing2module = 'LfoC'
   waveform = 2
   parammap = ['Rate']
-  inputmap = [None] # no Mst
+  inputmap = ['Rate']
   outputmap = ['Out']
 
   def domodule(self):
@@ -195,13 +161,10 @@ class ConvLFOSlvB(Convert):
 
     # handle special parameters
     g2m.modes.Waveform.value = self.waveform
-    if waveform == 2:
+    if self.waveform != 2:
       setv(g2mp.OutputType,4) # Bip
     else:
       setv(g2mp.OutputType,5) # BipInv
-      
-
-    self.inputs[0] = handlemst(self)
 
   def postmodule(self):
     postmst(self)
@@ -231,8 +194,15 @@ class ConvClkGen(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Active,getv(getattr(nmmp,'On/Off')))
-    setv(g2mp.Source,1)  # Master
-    self.outputs[2] = handleslv(self)[1]
+    setv(g2mp.Source,0)  # Internal
+    
+    #handle Slv connections
+    if len(nmm.outputs.Slv.cables):
+      zerocnt = self.addmodule('ZeroCnt',name='96th In')
+      oscmaster = self.addmodule('OscMaster',name='26-241 BPM')
+      setv(oscmaster.params.Freq,9) # -55 semi
+      self.connect(zerocnt.outputs.Out,oscmaster.inputs.Pitch)
+      self.outputs[2] = oscmasters.outputs.Out
 
 class ConvClkRndGen(Convert):
   maing2module = 'RndClkA'
