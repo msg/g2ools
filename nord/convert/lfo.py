@@ -195,7 +195,11 @@ class ConvLFOSlvB(Convert):
 
     # handle special parameters
     g2m.modes.Waveform.value = self.waveform
-    setv(g2mp.OutputType,5) # BipInv
+    if waveform == 2:
+      setv(g2mp.OutputType,4) # Bip
+    else:
+      setv(g2mp.OutputType,5) # BipInv
+      
 
     self.inputs[0] = handlemst(self)
 
