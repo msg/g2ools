@@ -560,9 +560,9 @@ class ConvOscSlvE(ConvOscSlvC):
   def domodule(self):
     ConvOscSlvC.domodule(self)
     nmm,g2m = self.nmmodule,self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
 
-    # handle special io
-    # add AM if needed
+    setv(g2mp.FmAmount,phase[getv(nmmp.FmMod)])
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
