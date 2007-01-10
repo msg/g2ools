@@ -124,7 +124,7 @@ def convert(pch,config):
       conv.postmodule()
 
     modcolors = [
-        g2modulecolors.red2,g2modulecolors.yellow2,g2modulecolors.green2,
+        g2modulecolors.yellow2,g2modulecolors.green2,
         g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1]
     # colorize multi-module convertions
     curr = 0
