@@ -126,11 +126,11 @@ class ConvMulti_Env(Convert):
       self.connect(g2m.inputs.Gate,adsr.inputs.Gate)
       self.connect(adsr.outputs.Env,g2m.inputs.AM)
       self.inputs[2] = adsr.inputs.AM
+      return
     elif sustain == 3 and getv(nmmp.Time5) <= 16: # 16=5.3ms
       pass
-    else:
-      setv(g2mp.Time4,getv(nmmp.Time4)+getv(nmmp.Time5))
-      setv(g2mp.Level4,0)
+    setv(g2mp.Time4,getv(nmmp.Time4)+getv(nmmp.Time5))
+    setv(g2mp.Level4,0)
 
 class ConvEnvFollower(Convert):
   maing2module = 'EnvFollow'
