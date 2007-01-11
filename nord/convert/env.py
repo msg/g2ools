@@ -130,6 +130,7 @@ class ConvMulti_Env(Convert):
       pass
     else:
       setv(g2mp.Time4,getv(nmmp.Time4)+getv(nmmp.Time5))
+      setv(g2mp.Level4,0)
 
 class ConvEnvFollower(Convert):
   maing2module = 'EnvFollow'
