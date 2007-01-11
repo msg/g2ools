@@ -19,22 +19,11 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+from nord.utils import *
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
 from table import *
 from units import *
-
-def setv(g2param,val):
-  g2param.variations = [ val for variation in range(9) ]
-
-def getv(nmparam):
-  return nmparam.variations[0]
-
-def setav(g2param,array):
-  g2param.variations = array[:9]
-
-def cpv(g2param,nmparam):
-  g2param.variations = nmparam.variations[:]
 
 # updatevals - parameters set from constructor, this changes the times
 #              based on the convertion tables in ./units.py.
@@ -61,7 +50,7 @@ class Convert:
     self.outputs = []
     self.inputs = []
 
-    g2m = self.g2module = g2area.addmodule(g2name[self.maing2module])
+    g2m = self.g2module = g2area.addmodule(self.maing2module)
     g2m.name = nmm.name
     self.horiz = g2m.horiz = nmm.horiz
     self.height = g2m.type.height
@@ -93,7 +82,7 @@ class Convert:
     pass
 
   def addmodule(self, shortnm, **kw):
-    mod = self.g2area.addmodule(g2name[shortnm], **kw)
+    mod = self.g2area.addmodule(shortnm, **kw)
     mod.horiz = self.g2module.horiz
     mod.vert = self.height
     self.height += mod.type.height
