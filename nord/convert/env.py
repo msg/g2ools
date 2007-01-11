@@ -114,7 +114,8 @@ class ConvMulti_Env(Convert):
     updatevals(g2mp,['Time%d' % i for i in range(1,5)]+['NR'],
         nm1adsrtime, g2adsrtime)
     # if L4 is sustain, deal with it.
-    if getv(nmmp.Sustain) == 4:
+    sustain = getv(nmmp.Sustain)
+    if sustain == 4:
       adsr = self.addmodule('EnvADSR')
       setv(adsr.params.Shape,[3,2,1][getv(nmmp.Curve)])
       setv(adsr.params.KB,0)
@@ -125,6 +126,11 @@ class ConvMulti_Env(Convert):
       self.connect(g2m.inputs.Gate,adsr.inputs.Gate)
       self.connect(adsr.outputs.Env,g2m.inputs.AM)
       self.inputs[2] = adsr.inputs.AM
+    elif sustain == 3 and getv(nmmp.Time5) <= 49: # 49=51ms
+      pass
+    else:
+      setv(g2mp.Time4,0)
+      setv(g2mp.Level4,0)
 
 class ConvEnvFollower(Convert):
   maing2module = 'EnvFollow'
