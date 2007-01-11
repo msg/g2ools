@@ -73,33 +73,40 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   p1 = p2 = None
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
     setv(modinputparam,127)
-    mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
-    adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
-    adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
 
+    mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
     conv.connect(mix21b.outputs.Out,modinput)
-    conv.connect(adj1.outputs.Out,mix21b.inputs.In1)
-    conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
-    conv.connect(adj1.inputs.In1,adj1.inputs.In2)
-    conv.connect(adj2.outputs.Out,mix21b.inputs.In2)
-    conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
-    conv.connect(adj2.inputs.In1,adj2.inputs.In2)
 
     pmod1 = getv(nmm.params.PitchMod1)
-    setv(mix21b.params.Lev1,modtable[pmod1][0])
-    setv(adj1.params.Inv2, 1)
-    setv(adj1.params.Lev1, modtable[pmod1][1])
-    setv(adj1.params.Lev2, modtable[pmod1][2])
-
     pmod2 = getv(nmm.params.PitchMod2)
+    setv(mix21b.params.Lev1,modtable[pmod1][0])
     setv(mix21b.params.Lev2,modtable[pmod2][0])
-    setv(adj2.params.Inv2, 1)
-    setv(adj2.params.Lev1, modtable[pmod2][1])
-    setv(adj2.params.Lev2, modtable[pmod2][2])
+    if pmod1:
+      adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
+      conv.connect(adj1.outputs.Out,mix21b.inputs.In1)
+      conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
+      conv.connect(adj1.inputs.In1,adj1.inputs.In2)
+      setv(adj1.params.Inv2, 1)
+      setv(adj1.params.Lev1, modtable[pmod1][1])
+      setv(adj1.params.Lev2, modtable[pmod1][2])
+      p1 = adj1.inputs.Chain
+    else:
+      p1 = mix21b.inputs.In1
+
+    if pmod2:
+      adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
+      conv.connect(adj2.outputs.Out,mix21b.inputs.In2)
+      conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
+      conv.connect(adj2.inputs.In1,adj2.inputs.In2)
+      setv(adj2.params.Inv2, 1)
+      setv(adj2.params.Lev1, modtable[pmod2][1])
+      setv(adj2.params.Lev2, modtable[pmod2][2])
+      p2 = adj2.inputs.Chain
+    else:
+      p2 = mix21b.inputs.In2
 
     conv.params[mod1param] = mix21b.params.Lev1
     conv.params[mod2param] = mix21b.params.Lev2
-    p1,p2 = adj1.inputs.Chain,adj2.inputs.Chain
 
   elif len(nmm.inputs.PitchMod1.cables):
     setv(modinputparam,127)
@@ -232,10 +239,10 @@ def handleslv(conv):
     return None,g2m
 
 mstinnum = 1
-def handlemst(conv):
+def handlemst(conv,fmmod,fmparam):
   global mstinnum
   nmm, g2m = conv.nmmodule, conv.g2module
-  mst,fmmod,fmparam = g2m.inputs.Pitch,g2m.inputs.FmMod,g2m.params.FmAmount
+  mst = g2m.inputs.Pitch
   if len(nmm.inputs.Mst.cables):
     if nmm.inputs.Mst.net.output:
       if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
@@ -497,7 +504,8 @@ class ConvOscSlvA(Convert):
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
     # mst connection if not
-    self.inputs[0],fmmod,fmparam = handlemst(self)
+    self.inputs[0],fmmod,fmparam = handlemst(self,
+        g2m.inputs.FmMod,g2m.params.FmAmount)
     self.inputs[1] = handlefm(self,fmmod,fmparam)
     # handle special io
     # add AM if needed
@@ -525,7 +533,8 @@ class ConvOscSlvB(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
-    self.inputs[0],fmmod,fmparam = handlemst(self)
+    self.inputs[0],fmmod,fmparam = handlemst(self,
+        g2m.inputs.FmMod,g2m.params.FmAmount)
     # NOTE: since shape can be 0% - 100%, a LevConv could be used
     #       to get the actual waveform, if necessary.
     setv(g2m.params.Shape,abs(getv(nmm.params.PulseWidth)-64)*2)
@@ -548,7 +557,8 @@ class ConvOscSlvC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
-    self.inputs[0],fmmod,fmparam = handlemst(self)
+    self.inputs[0],fmmod,fmparam = handlemst(self,
+        g2m.inputs.FmMod,g2m.params.FmAmount)
     self.inputs[1] = handlefm(self,fmmod,fmparam)
 
 class ConvOscSlvD(ConvOscSlvC):
@@ -628,12 +638,27 @@ class ConvOscSineBank(Convert):
         for i in range(1,len(oscs)):
           self.connect(oscs[i-1].inputs.Pitch,oscs[i].inputs.Pitch)
 
-class ConvOscSlvFM(ConvOscSlvC):
+class ConvOscSlvFM(Convert):
+  maing2module = 'OscPM'
   waveform = 0 # sine
   parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
-              None,['FmAmount','FmMod'],['Active','Mute']]
-  inputmap = ['Pitch','FmMod','Sync'] # no Mst
+              None,['PhaseMod','FmMod'],['Active','Mute']]
+  inputmap = ['Pitch','PhaseMod','Sync'] # no Mst
  
+  def domodule(self):
+    nmm,g2m = self.nmmodule,self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    # handle special parameters
+    if len(nmm.inputs.Mst.cables):
+      setv(g2mp.Kbt,0)
+    setv(g2mp.Active,1-getv(nmmp.Mute))
+    setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
+    g2m.modes.Waveform.value = self.waveform
+    self.inputs[0],fmmod,fmparam = handlemst(self,
+        g2m.inputs.PhaseMod,g2m.params.PhaseMod)
+    self.inputs[1] = handlefm(self,fmmod,fmparam)
+
 class ConvNoise(Convert):
   maing2module = 'Noise'
   parammap = ['Color']
