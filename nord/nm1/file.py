@@ -98,8 +98,13 @@ class CurrentNoteDump(Section):
     lastnote = self.patch.lastnote = Note()
     lastnote.note,lastnote.attack,lastnote.release = values[:3]
     values = values[3:]
-    print values,l
     l-=1
+    currentnotes = []
+    for i in range(0,l,3):
+      if values[i] in currentnotes:
+        continue
+      currentnotes.append(values[i])
+    l = len(currentnotes)
     notes = self.patch.notes = [ Note() for i in range(l) ]
     for i in range(l):
       note,attack,release = values[i*3:i*3+3]
