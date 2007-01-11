@@ -124,6 +124,7 @@ class ConvNoteVelScal(Convert):
       setv(g2mp.R,notescale[r][1])
       return
 
+    setv(g2mp.Kbt,0) 
     setv(g2mp.L,notescale[l][0])
     setv(g2mp.R,notescale[r][0])
     levmult1 = self.addmodule('LevMult',name='24db')
