@@ -58,9 +58,9 @@ def parsedx7(data):
   c = x.pop(0)
   patch.OscKeySync,patch.Feedback = c>>3,c&7
   lfo = patch.lfo = LFO()
-  lfo.Rate,lfo.Dealy,lfo.PitchMod,lfo.AmMod = x[:4]; x = x[4:]
+  lfo.Rate,lfo.Delay,lfo.PitchMod,lfo.AmMod = x[:4]; x = x[4:]
   c = x.pop(0)
-  lfo.PitchModSens,patch.Wave,patch.Sync = c>>5,(c>>1)&0xf,c&1
+  lfo.PitchModSens,lfo.Waveform,lfo.Sync = c>>5,(c>>1)&0xf,c&1
   patch.Transpose = x.pop(0)
   patch.Name = x.tostring()
   return patch
@@ -117,6 +117,28 @@ for fname in sys.argv:
           g2param.variations[i] = dxparam
       # set LFO parameters
       # set PitchEG parameters
+    #
+    def addnamebars(pch2, lines, horiz, vert):
+      for line in lines:
+        m = pch2.patch.voice.addmodule('Name',name=line)
+        m.horiz = horiz
+        m.vert = vert
+        vert += 1
+      return vert
+
+    lines = ['dx2g2 converter','by','Matt Gerassimoff']
+    vert = 0
+    for module in dxconv.pch2.patch.voice.modules:
+      if module.horiz != 0:
+        continue
+      v = module.vert + module.type.height
+      #print '',module.name, module.vert, module.type.height, v
+      if v > vert:
+        vert = v
+    vert = addnamebars(dxconv.pch2,lines,0,vert+1)
+    vert = addnamebars(dxconv.pch2,['All rights','reserved'],0,vert+1)
+
+
     dxconv.pch2.write(outname+'b%d.pch2' % bank)
     bank += 1
 
