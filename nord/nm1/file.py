@@ -95,6 +95,11 @@ class CurrentNoteDump(Section):
     # 3 release velocity  0..127  7
     values = map(int, self.lines[0].split())
     l = len(values)/3
+    lastnote = self.patch.lastnote = Note()
+    lastnote.note,lastnote.attack,lastnote.release = values[:3]
+    values = values[3:]
+    print values,l
+    l-=1
     notes = self.patch.notes = [ Note() for i in range(l) ]
     for i in range(l):
       note,attack,release = values[i*3:i*3+3]
