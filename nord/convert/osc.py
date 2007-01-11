@@ -19,6 +19,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+from nord.utils import *
 from nord.nm1.colors import nm1portcolors
 from convert import *
 from table import *
@@ -250,9 +251,9 @@ def handlemst(conv,fmmod,fmparam):
         setv(mix11a.params.On,1)
         constswt = conv.addmodule('ConstSwT',name='Offset -64')
         setv(constswt.params.On,1)
-        conv.connect(mix11a.outputs.Out,g2m.inputs.FmMod)
+        conv.connect(mix11a.outputs.Out,fmmod)
         conv.connect(constswt.outputs.Out,g2m.inputs.Pitch)
-        setv(g2m.params.FmAmount,127)
+        setv(fmparam,127)
         setv(mix11a.params.Lev,79)
         setv(constswt.params.Lev,0)
         mst = mix11a.inputs.In
