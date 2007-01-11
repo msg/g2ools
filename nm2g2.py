@@ -377,6 +377,7 @@ def convert(pch,config):
 
   # handle CurrentNotes
   print 'CurrentNotes:'
+  g2patch.lastnote = nmpatch.lastnote
   for note in nmpatch.notes:
     g2patch.notes.append(note)
 
@@ -479,11 +480,13 @@ def main():
               failed = doconvert(fname)
               if failed:
                 failedpatches.append(failed)
+              print '-' * 20
       else:
         print '"%s"' % fname
         failed = doconvert(fname)
         if failed:
           failedpatches.append(failed)
+        print '-' * 20
 
   if len(failedpatches):
     f=open('failedpatches.txt','w')
