@@ -313,7 +313,9 @@ class CurrentNote(Section):
     data = array('B',[])
     if len(patch.notes):
       if not patch.lastnote:
-        bit = setbits(0,21,data,0)
+        bit = setbits(0,7,data,64)
+        bit = setbits(bit,7,data,0)
+        bit = setbits(bit,7,data,0)
       else:
         bit = setbits(0,7,data,patch.lastnote.note)
         bit = setbits(bit,7,data,patch.lastnote.attack)
