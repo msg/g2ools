@@ -19,6 +19,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+from nord.utils import *
 from nord.nm1.colors import nm1cablecolors
 from convert import *
 from table import *
