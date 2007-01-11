@@ -34,6 +34,7 @@ def handleslv(conv):
   if len(nmm.outputs.Slv.cables):
     oscmaster = conv.addmodule('OscMaster')
     setv(g2mp.Rate,64)
+    setv(oscmaster.params.Kbt,0) # Off
     setv(oscmaster.params.FreqCoarse,getv(nmmp.Rate))
     setv(oscmaster.params.PitchMod,getv(nmmp.RateMod))
     conv.connect(oscmaster.outputs.Out,g2m.inputs.Rate)
