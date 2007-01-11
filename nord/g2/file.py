@@ -22,6 +22,7 @@
 import string, struct, sys
 from nord.net import addnet
 from nord.module import Module
+from modules import fromname
 from array import array
 import modules
 
@@ -1069,9 +1070,10 @@ class Area:
         return self.modules[i]
     return None
 
-  def addmodule(self, type, **kw):
+  def addmodule(self, shortnm, **kw):
     members = [ 'name','index','color','horiz','vert','uprate','leds' ]
     # get next available index
+    type = fromname[shortnm]
     indexes = [ m.index for m in self.modules ]
     for index in range(1,128):
       if not index in indexes:

@@ -24,11 +24,9 @@ from glob import glob
 from exceptions import KeyboardInterrupt
 sys.path.append('.')
 from nord.g2.file import Pch2File, MorphMap
-from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1portcolors
-from nord.g2 import colors
 from nord.convert import typetable,setv
 from nord.net import printnet
 
@@ -401,7 +399,7 @@ def convert(pch,config):
 
   def addnamebars(lines, horiz, vert):
     for line in lines:
-      m = pch2.patch.voice.addmodule(g2name['Name'],name=line)
+      m = pch2.patch.voice.addmodule('Name',name=line)
       m.horiz = horiz
       m.vert = vert
       vert += 1
