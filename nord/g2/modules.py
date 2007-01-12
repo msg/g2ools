@@ -1633,7 +1633,7 @@ modules = [
   ),
   ModuleType(
     type=88,
-    height=4,
+    height=3,
     longnm='Switch 1-4',
     shortnm='Sw1-4',
     page=PageType('Switch', 8),

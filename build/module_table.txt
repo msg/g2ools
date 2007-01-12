@@ -1288,7 +1288,7 @@ ModuleKnowledge(
     pageindex(8)
     shortnm('Sw1-4')
     longnm('Switch 1-4')
-    height(4)
+    height(3)
     inputs(['In'])
     outputs(['Out1', 'Out2', 'Out3', 'Out4', 'Ctrl'])
     params(['Sel'])
