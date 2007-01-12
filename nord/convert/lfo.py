@@ -37,7 +37,7 @@ def handleslv(conv):
     setv(g2mp.Rate,64)
     setv(oscmaster.params.Kbt,0) # Off
     setv(oscmaster.params.FreqCoarse,getv(nmmp.Rate))
-    setv(oscmaster.params.PitchMod,getv(nmmp.RateMod))
+    setv(oscmaster.params.PitchMod,modtable[getv(nmmp.RateMod)][0])
     conv.connect(oscmaster.outputs.Out,g2m.inputs.Rate)
     ratemod = oscmaster.inputs.PitchVar
     slv = g2m.inputs.Rate
