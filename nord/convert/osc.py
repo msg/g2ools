@@ -645,6 +645,7 @@ class ConvOscSlvFM(Convert):
   parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
               None,['PhaseMod','FmMod'],['Active','Mute']]
   inputmap = ['Pitch','PhaseMod','Sync'] # no Mst
+  outputmap = ['Out']
  
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
