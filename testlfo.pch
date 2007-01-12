@@ -21,6 +21,7 @@ Version=Nord Modular patch 3.0
 15 99 2 30 
 16 40 1 18 
 17 99 1 26 
+18 27 3 15 
 [/ModuleDump]
 [ModuleDump]
 0 
@@ -60,6 +61,7 @@ Version=Nord Modular patch 3.0
 3 7 0 0 1 0 1 
 3 8 0 0 2 1 1 
 3 9 0 0 3 1 1 
+3 18 0 0 10 2 1 
 [/CableDump]
 [CableDump]
 0 
@@ -82,6 +84,7 @@ Version=Nord Modular patch 3.0
 15 99 5 0 0 0 15 0 
 16 40 9 100 100 100 100 100 100 100 100 0 
 17 99 5 0 0 1 15 0 
+18 27 1 64 
 [/ParameterDump]
 [ParameterDump]
 0 
@@ -94,6 +97,7 @@ Version=Nord Modular patch 3.0
 9 1 0 
 12 1 0 
 13 1 0 
+18 1 0 
 [/CustomDump]
 [CustomDump]
 0 
@@ -117,6 +121,7 @@ Version=Nord Modular patch 3.0
 15 PatternGen1
 16 Mixer2
 17 PatternGen2
+18 LFOSlvB2
 [/NameDump]
 [NameDump]
 0 
