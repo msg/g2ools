@@ -60,7 +60,7 @@ def postmst(conv):
     if hasattr(mstlfo.params,'Range'):
       setv(g2mp.Range,getv(mstlfo.params.Range))
     else:
-      setv(g2mp.Range,3)
+      setv(g2mp.Range,1)
 
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
@@ -203,6 +203,8 @@ class ConvClkGen(Convert):
       zerocnt = self.addmodule('ZeroCnt',name='96th In')
       oscmaster = self.addmodule('OscMaster',name='26-241 BPM')
       setv(oscmaster.params.FreqCoarse,9) # -55 semi
+      setv(oscmaster.params.Kbt,0) # off
+      self.connect(getattr(g2m.outputs,'1/96'),zerocnt.inputs.In)
       self.connect(zerocnt.outputs.Out,oscmaster.inputs.Pitch)
       self.outputs[2] = oscmaster.outputs.Out
 
