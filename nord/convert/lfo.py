@@ -218,6 +218,11 @@ class ConvClkRndGen(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    if getv(nmmp.Color) == 1:
+      setv(g2mp.StepProb,43)
+    else:
+      setv(g2mp.StepProb,127)
+
 class ConvRndStepGen(ConvLFOSlvB):
   waveform = 4
 
