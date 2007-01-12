@@ -149,7 +149,7 @@ class Conv4_1Switch(Convert):
       if len(nmm.inputs[i-1].cables):
         amp = self.addmodule('LevAmp')
         self.connect(amp.outputs.Out,getattr(g2m.inputs,'In%d' % i))
-        setv(amp.params.Gain,getv(getattr(nmmp,'Level%d' % i)))
+        setv(amp.params.Gain,level)
         self.params[i] = amp.params.Gain
         self.inputs[i-1] = amp.inputs.In
 
