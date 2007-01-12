@@ -147,11 +147,12 @@ class Conv4_1Switch(Convert):
       if level == 0 or level == 127:
         continue
       if len(nmm.inputs[i-1].cables):
-        amp = self.addmodule('LevAmp')
-        self.connect(amp.outputs.Out,getattr(g2m.inputs,'In%d' % i))
-        setv(amp.params.Gain,level)
-        self.params[i] = amp.params.Gain
-        self.inputs[i-1] = amp.inputs.In
+        mix11a = self.addmodule('Mix1-1A')
+        self.connect(mix11a.outputs.Out,getattr(g2m.inputs,'In%d' % i))
+        setv(mix11a.params.On,1)
+        setv(mix11a.params.Lev,modtable[level])
+        self.params[i] = mix11a.params.Lev
+        self.inputs[i-1] = mix11a.inputs.In
 
 class Conv1_4Switch(Convert):
   maing2module = 'Sw1-4'
@@ -169,11 +170,12 @@ class Conv1_4Switch(Convert):
     level = getv(nmmp.Level)
     if level != 0 or level != 127:
       # add LevAmp module
-      amp = self.addmodule('LevAmp')
-      self.connect(amp.outputs.Out,g2m.inputs.In)
-      setv(amp.params.Gain,level)
-      self.params[1] = amp.params.Gain
-      self.inputs[0] = amp.inputs.In
+      mix11a = self.addmodule('Mix1-1A')
+      self.connect(mix11a.outputs.Out,g2m.inputs.In)
+      setv(mix11a.params.On,1)
+      setv(mix11a.params.Lev,modtable[level])
+      self.params[1] = mix11a.params.Lev
+      self.inputs[0] = mix11a.inputs.In
 
 class ConvAmplifier(Convert):
   maing2module = 'LevAmp'
