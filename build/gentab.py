@@ -9,7 +9,7 @@ def getnumbers(fname):
 
 def interpolate(indexvals):
   lastindex,lastval = indexvals[0]
-  interpolated = []
+  interpolated = [[lastindex,lastval]]
   for indexval in indexvals[1:]:
     index,val = indexval
     slope = float(val-lastval)/(index-lastindex)
