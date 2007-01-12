@@ -142,9 +142,9 @@ def handlekbt(conv,input,kbt100,addalways=False):
     setv(conv.kbt,kbt100)
     return None
 
-  if not g2m.area.patch.keyboard:
-    g2m.area.patch.keyboard = conv.addmodule('Keyboard')
-  keyboard = g2m.area.patch.keyboard
+  if not g2m.area.keyboard:
+    g2m.area.keyboard = conv.addmodule('Keyboard')
+  keyboard = g2m.area.keyboard
 
   setv(conv.kbt,0)
   mix21b = conv.addmodule('Mix2-1B',name='Kbt')
