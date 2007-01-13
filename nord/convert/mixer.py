@@ -150,7 +150,7 @@ class Conv4_1Switch(Convert):
         mix11a = self.addmodule('Mix1-1A')
         self.connect(mix11a.outputs.Out,getattr(g2m.inputs,'In%d' % i))
         setv(mix11a.params.On,1)
-        setv(mix11a.params.Lev,modtable[level])
+        setv(mix11a.params.Lev,modtable[level][0])
         self.params[i] = mix11a.params.Lev
         self.inputs[i-1] = mix11a.inputs.In
 
@@ -173,7 +173,7 @@ class Conv1_4Switch(Convert):
       mix11a = self.addmodule('Mix1-1A')
       self.connect(mix11a.outputs.Out,g2m.inputs.In)
       setv(mix11a.params.On,1)
-      setv(mix11a.params.Lev,modtable[level])
+      setv(mix11a.params.Lev,modtable[level][0])
       self.params[1] = mix11a.params.Lev
       self.inputs[0] = mix11a.inputs.In
 
