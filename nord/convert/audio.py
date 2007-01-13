@@ -113,7 +113,7 @@ class ConvDelay(Convert):
     setv(g2mp.Time2,64)
     # fix delay and delaymod
     setv(g2mp.Time1,getv(nmmp.Time)/2)
-    setv(g2mp.TimeMod,getv(nmmp.Modulation)/2)
+    setv(g2mp.Time1Mod,getv(nmmp.Modulation)/2)
 
 class ConvSampleNHold(Convert):
   maing2module = 'S&H'
