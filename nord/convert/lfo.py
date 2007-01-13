@@ -234,6 +234,16 @@ class ConvRndPulseGen(Convert):
   parammap = [['StepProb','Density']]
   outputmap = ['Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule,self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.StepProb,96)
+    lfoc = self.addmodule('LfoC',name='Clk')
+    self.connect(lfoc.outputs.Out,g2m.inputs.Clk)
+    setv(lfoc.params.Rate,getv(nmmp.Density))
+    self.params[0] = lfoc.params.Rate
+
 class ConvPatternGen(Convert):
   maing2module = 'RndPattern'
   parammap = [['PatternA','Pattern'],['PatternB','Bank'],
