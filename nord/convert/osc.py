@@ -191,6 +191,7 @@ def handleoscmasterslv(conv,mst):
   if onlyslave:
     return mst.outputs.Out
 
+  # Grey to Blue handling
   levscaler = conv.addmodule('LevScaler',name='GreyIn')
   setv(levscaler.params.Kbt,0)
   setv(levscaler.params.L,16)
@@ -248,6 +249,7 @@ def handlemst(conv,fmmod,fmparam):
   mst = g2m.inputs.Pitch
   if len(nmm.inputs.Mst.cables):
     if nmm.inputs.Mst.net.output:
+      # Blue to Grey handling
       if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
         mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
         setv(mix11a.params.On,1)
@@ -375,7 +377,7 @@ class ConvOscC(Convert):
     self.outputs[0] = output
     self.inputs[2] = aminput
     self.outputs[1],inputmod = handleslv(self)
-    self.inputs[1] = inputmod.inputs.Pitch
+    self.inputs[1] = inputmod.inputs.PitchVar
 
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
