@@ -72,17 +72,23 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   global pitchmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
   p1 = p2 = None
+
+  mix21b = adj1 = adj2 = None
+
+  pmod1 = getv(nmm.params.PitchMod1)
+  pmod2 = getv(nmm.params.PitchMod2)
+
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
     setv(modinputparam,127)
 
     mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
     conv.connect(mix21b.outputs.Out,modinput)
 
-    pmod1 = getv(nmm.params.PitchMod1)
-    pmod2 = getv(nmm.params.PitchMod2)
-    setv(mix21b.params.Lev1,modtable[pmod1][0])
-    setv(mix21b.params.Lev2,modtable[pmod2][0])
-    if pmod1:
+    if pmod1 == 0 or pmod1 == 127:
+      setv(mix21b.params.Lev1,pmod1)
+      p1 = mix21b.inputs.In1
+    elif pmod1:
+      setv(mix21b.params.Lev1,modtable[pmod1][0])
       adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
       conv.connect(adj1.outputs.Out,mix21b.inputs.In1)
       conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
@@ -94,7 +100,11 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
     else:
       p1 = mix21b.inputs.In1
 
-    if pmod2:
+    if pmod2 == 0 or pmod2 == 127:
+      setv(mix21b.params.Lev2,pmod2)
+      p2 = mix21b.inputs.In2
+    elif pmod2:
+      setv(mix21b.params.Lev2,modtable[pmod2][0])
       adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
       conv.connect(adj2.outputs.Out,mix21b.inputs.In2)
       conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
@@ -103,45 +113,49 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
       setv(adj2.params.Lev1, modtable[pmod2][1])
       setv(adj2.params.Lev2, modtable[pmod2][2])
       p2 = adj2.inputs.Chain
-    else:
-      p2 = mix21b.inputs.In2
 
     conv.params[mod1param] = mix21b.params.Lev1
     conv.params[mod2param] = mix21b.params.Lev2
 
   elif len(nmm.inputs.PitchMod1.cables):
-    setv(modinputparam,127)
-    adj = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
-    conv.connect(adj.outputs.Out,modinput)
-    conv.connect(adj.inputs.Chain,adj.inputs.In1)
-    conv.connect(adj.inputs.In1,adj.inputs.In2)
+    if pmod1 == 0  or pmod1 == 127:
+      p1 = modinput
+    else:
+      setv(modinputparam,127)
+      adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
+      conv.connect(adj1.outputs.Out,modinput)
+      conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
+      conv.connect(adj1.inputs.In1,adj1.inputs.In2)
 
-    pmod = getv(nmm.params.PitchMod1)
-    setv(modinputparam,modtable[pmod][0])
-    setv(adj.params.Inv2, 1)
-    setv(adj.params.Lev1,modtable[pmod][1])
-    setv(adj.params.Lev2,modtable[pmod][2])
+      setv(modinputparam,modtable[pmod1][0])
+      setv(adj1.params.Inv2, 1)
+      setv(adj1.params.Lev1,modtable[pmod1][1])
+      setv(adj1.params.Lev2,modtable[pmod1][2])
+      p1 = adj1.inputs.Chain
 
     conv.params[mod1param] = modinputparam
-    p1 = adj.inputs.Chain
 
   elif len(nmm.inputs.PitchMod2.cables):
-    setv(modinputparam,127)
-    adj = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
-    conv.connect(adj.outputs.Out,modinput)
-    conv.connect(adj.inputs.Chain,adj.inputs.In1)
-    conv.connect(adj.inputs.In1,adj.inputs.In2)
+    if pmod2 == 0 or pmod2 == 127:
+      p2 = modinput
+    else:
+      setv(modinputparam,127)
+      adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
+      conv.connect(adj2.outputs.Out,modinput)
+      conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
+      conv.connect(adj2.inputs.In1,adj2.inputs.In2)
 
-    pmod = getv(nmm.params.PitchMod2)
-    setv(modinputparam,modtable[pmod][0])
-    setv(adj.params.Inv2, 1)
-    setv(adj.params.Lev1,modtable[pmod][1])
-    setv(adj.params.Lev2,modtable[pmod][2])
+      setv(modinputparam,modtable[pmod2][0])
+      setv(adj2.params.Inv2, 1)
+      setv(adj2.params.Lev1,modtable[pmod2][1])
+      setv(adj2.params.Lev2,modtable[pmod2][2])
+
+      p2 = adj2.inputs.Chain
 
     conv.params[mod2param] = modinputparam
-    p2 = adj.inputs.Chain
 
-  pitchmodnum += 1
+  if mix21b or adj1 or adj2:
+    pitchmodnum += 1
   return p1, p2
 
 fmmodnum = 1
