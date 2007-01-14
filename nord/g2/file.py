@@ -1116,7 +1116,7 @@ class Patch:
   def __init__(self):
     self.fx = Area(self,0)
     self.voice = Area(self,1)
-    self.midiassignments = []
+    self.ctrls = []
     self.lastnote = None
     self.notes = []
     
@@ -1229,11 +1229,11 @@ Info=BUILD 266\r
 #     knob.area
 #     knob.isled
 #
-#   midiassignment = patch.midiassignment
-#     midiassignment.type (1=User,2=System)
-#     midiassignment.midicc
-#     midiassignment.index
-#     midiassignment.paramindex
+#   ctrl = patch.ctrls[i]
+#     ctrl.type (1=User,2=System)
+#     ctrl.midicc
+#     ctrl.index
+#     ctrl.paramindex
 #
 #   settings = patch.settings
 #     settings.morphdial[var][dial] (var=0~8, dial=0~7)
