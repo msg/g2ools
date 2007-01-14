@@ -20,41 +20,14 @@
 #
 
 import string, struct, sys
+from array import array
+
 from nord.net import addnet
 from nord.module import Module
 from modules import fromname
-from array import array
+from nord.file import *
 import modules
 
-def out(x):
-  if x < 32 or x > 127:
-    return '.'
-  return chr(x)
-
-def hexdump(bytes,addr=0,size=1):
-  from array import array
-  '''hexdump(bytes,addr,size) -> return hex dump of size itmes using addr as address'''
-  s = []
-  if size == 4:
-    a = array('L', [])
-    fmt = '%08x'
-    l = 17
-  elif size == 2:
-    a = array('H', [])
-    fmt = '%04x'
-    l = 19
-  else:
-    a = array('B', [])
-    fmt = '%02x'
-    l = 23
-  a.fromstring(bytes)
-  for off in range(0,len(bytes),16):
-    hex = [fmt % i for i in a[off/size:(off+16)/size]]
-    s.append('%06x: %-*s  %-*s | %s' % (addr+off,
-      l, ' '.join(hex[:8/size]), l, ' '.join(hex[8/size:]),
-      ''.join([out(ord(byte)) for byte in bytes[off:off+16]])))
-  return '\n'.join(s)
- 
 # calculate crc of 1 char
 def crc16(val, icrc):
   k = (((icrc>>8)^val)&0xff)<<8
@@ -192,10 +165,6 @@ class PatchDescription(Section):
 
     return data.tostring()
 
-# holder object for patch modules
-#class Module:
-#  pass
-
 # ModuleList - section object for parse/format 
 class ModuleList(Section):
   def parse(self, patch, data):
@@ -293,9 +262,6 @@ class ModuleList(Section):
 
     return data.tostring()
 
-class Note:
-  pass
-
 # CurrentNote - section object for parse/format
 class CurrentNote(Section):
   def parse(self, patch, data):
@@ -330,11 +296,6 @@ class CurrentNote(Section):
     else:
       return '\x80\x00\x00\x20\x00\x00'  # normal default
 
-
-# holder object for patch cables
-class Cable:
-  def __init__(self, area):
-    self.area = area
 
 # validatecable - if connection valid return 0, otherwise error
 def validcable(area, smodule, sconn, direction, dmodule, dconn):
@@ -426,7 +387,7 @@ class Parameter:
     self.variations = [default]*NVARIATIONS
     self.knob = None
     self.mmap = None
-    self.midiassignment = None
+    self.ctrl = None
 
 # holder object for morph settings
 class Morph:
@@ -436,7 +397,7 @@ class Morph:
     self.params = []
     self.maps = [[] for variation in range(NVARIATIONS) ]
     self.index = index
-    self.midiassignment = None
+    self.ctrl = None
 
 # holder for patch settings
 class Settings:
@@ -664,10 +625,6 @@ class ModuleParameters(Section):
 
     return data.tostring()
 
-# holder object for patch morph parameters
-class MorphMap:
-  pass
-
 # MorphParameters - section object for parse/format 
 class MorphParameters(Section):
   def parse(self, patch, data):
@@ -735,10 +692,6 @@ class MorphParameters(Section):
 
     return data.tostring()
 
-# holder object of patch knob settings
-class Knob:
-  pass
-
 # KnobAssignments - section object for parse/format 
 class KnobAssignments(Section):
   def parse(self, patch, data):
@@ -783,10 +736,6 @@ class KnobAssignments(Section):
         bit = setbits(bit,7,data,param)
 
     return data.tostring()
-
-# holder object of patch midi assignments
-class Ctrl:
-  pass
 
 # CtrlMap - section object for parse/format 
 class CtrlAssignments(Section):
@@ -1049,78 +998,6 @@ class TextPad(Section):
   def format(self, patch):
     return patch.textpad
 
-# holder object for Performances (currently unused)
-#   - when then additional section is parsed/formatted for .prf2
-#     files, it will be.
-class Performance:
-  pass
-
-# holder object for patch voice and fx area data (modules, cables, etc..)
-class Area:
-  def __init__(self,patch,index):
-    self.patch = patch
-    self.index = index
-    self.modules = []
-    self.cables = []
-    self.netlist = []
-
-  def findmodule(self, index):
-    for i in range(len(self.modules)):
-      if self.modules[i].index == index:
-        return self.modules[i]
-    return None
-
-  def addmodule(self, shortnm, **kw):
-    members = [ 'name','index','color','horiz','vert','uprate','leds' ]
-    # get next available index
-    type = fromname[shortnm]
-    indexes = [ m.index for m in self.modules ]
-    for index in range(1,128):
-      if not index in indexes:
-        break
-    if index < 128:
-      m = Module(type,self)
-      m.name = type.shortnm
-      m.index = index
-      m.color = 0
-      m.horiz = 0
-      m.vert = 0
-      m.uprate = 0
-      m.leds = 0
-      for member in members:
-        if kw.has_key(member):
-          setattr(m,member,kw[member])
-      self.modules.append(m)
-      return m
-
-  # connect input/output to input
-  def connect(self, source, dest, color):
-    cable = Cable(self)
-    self.cables.append(cable)
-
-    cable.color = color
-
-    cable.source = source
-    source.cables.append(cable)
-
-    cable.dest = dest
-    dest.cables.append(cable)
-
-    addnet(self.netlist, cable.source, cable.dest)
-
-  def disconnect(self, connection):
-    raise 'disconnect: function not implemented'
-
-# holder object for the patch (the base of all fun/trouble/glory/nightmares)
-class Patch:
-  def __init__(self):
-    self.fx = Area(self,0)
-    self.voice = Area(self,1)
-    self.ctrls = []
-    self.lastnote = None
-    self.notes = []
-    
-
 # Pch2File - main reading/writing object for .pch2 files
 #   this may become generic G2 file for .pch2 and .prf2 files
 #   just by handling the performance sections (and perhaps others)
@@ -1153,7 +1030,7 @@ Info=BUILD 266\r
 \0'''
   standardbinhdr = 23
   def __init__(self, fname=None):
-    self.patch = Patch()
+    self.patch = Patch(fromname)
     if fname:
       self.read(fname)
 

@@ -20,9 +20,11 @@
 #
 
 import re, string, sys
+
 from nord.net import addnet
 from nord.module import Module
-import modules
+from nord.file import *
+from modules import fromname, fromtype
 
 NMORPHS = 4
 
@@ -31,10 +33,6 @@ class NM1Error(Exception):
     self.value = value
   def __str__(self):
     return repr(self.value)
-
-class Struct:
-  def __init__(self, **kw):
-    self.__dict__ = kw
 
 class Section:
   def __init__(self, patch, lines):
@@ -80,12 +78,8 @@ class ModuleDump(Section):
       (index,type,horiz,vert) = values
       module = area.findmodule(index)
       if not module:
-        module = Module(modules.fromtype[type],area)
-        area.modules.append(module)
+        module = area.addmodule(fromtype[type].shortnm)
       module.index,module.horiz,module.vert=index,horiz,vert
-
-class Note:
-  pass
 
 class CurrentNoteDump(Section):
   def parse(self):
@@ -111,9 +105,6 @@ class CurrentNoteDump(Section):
       notes[i].note = note
       notes[i].attack = attack
       notes[i].release = release
-
-class Cable:
-  pass
 
 class CableDump(Section):
   def parse(self):
@@ -150,23 +141,15 @@ class CableDump(Section):
       if dest.direction:
         dest,source = source,dest
 
-      c = Cable()
+      c = Cable(area)
       area.cables.append(c)
       c.color,c.source,c.dest = color,source,dest
 
-      if not hasattr(source,'cables'):
-        source.cables = []
       source.cables.append(c)
-
-      if not hasattr(dest,'cables'):
-        dest.cables = []
       dest.cables.append(c)
 
       # update netlist with source and dest
       addnet(area.netlist, source, dest)
-
-class Parameter:
-  pass
 
 class ParameterDump(Section):
   def parse(self):
@@ -180,7 +163,7 @@ class ParameterDump(Section):
       line = lines.pop(0)
       values = map(int, line.split())
       index = values.pop(0)
-      type = modules.fromtype[int(values.pop(0))]
+      type = fromtype[int(values.pop(0))]
       module = area.findmodule(index)
       if not module:
         module = Module(type)
@@ -218,9 +201,6 @@ class Morph:
     self.knob = None
     self.ctrl = None
 
-class MorphMap:
-  pass
-
 class MorphMapDump(Section):
   def parse(self):
     morphs = self.patch.morphs
@@ -250,9 +230,6 @@ class KeyboardAssignment(Section):
     for i in range(NMORPHS):
       morphs[i].keyassign = keyassign[i]
 
-class Knob:
-  pass
-
 class KnobMapDump(Section):
   def parse(self):
     knobs = self.patch.knobs = [ Knob() for i in range(len(self.lines)) ]
@@ -267,9 +244,6 @@ class KnobMapDump(Section):
       else:
         knobs[i].param = self.patch.morphs[param]
       knobs[i].param.knob = knobs[i]
-
-class Ctrl:
-  pass
 
 class CtrlMapDump(Section):
   def parse(self):
@@ -307,30 +281,16 @@ class Notes(Section):
   def parse(self):
     self.patch.textpad = '\r\n'.join(self.lines)
 
-class Area:
-  def __init__(self):
-    self.modules = []
-    self.cables = []
-    self.netlist = []
-
-  def findmodule(self, index):
-    for m in self.modules:
-      if m.index == index:
-        return m
-    return None
-
-class Patch:
-  def __init__(self):
-    self.voice = Area()
-    self.fx = Area()
-    self.textpad = ''
+class NM1Patch(Patch):
+  def __init__(self,fromname):
+    Patch.__init__(self,fromname)
     self.morphs = [ Morph(i+1) for i in range(NMORPHS) ]
     self.knobs = []
-    self.ctrls = []
+    self.textpad = ''
 
 class PchFile:
   def __init__(self, fname=None):
-    self.patch = Patch()
+    self.patch = NM1Patch(fromname)
     if fname:
       self.read(fname)
 

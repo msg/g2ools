@@ -23,7 +23,8 @@ import getopt, os, sys
 from glob import glob
 from exceptions import KeyboardInterrupt
 sys.path.append('.')
-from nord.g2.file import Pch2File, MorphMap
+from nord.g2.file import Pch2File
+from nord.file import MorphMap
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1portcolors
