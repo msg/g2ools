@@ -124,29 +124,32 @@ class ConvNoteVelScal(Convert):
       setv(g2mp.R,notescale[r][1])
       return
 
-    setv(g2mp.Kbt,0) 
-    setv(g2mp.L,notescale[l][0])
-    setv(g2mp.R,notescale[r][0])
-    levmult1 = self.addmodule('LevMult',name='24db')
-    self.connect(g2m.outputs.Level,g2m.inputs.In)
-    self.connect(g2m.outputs.Level,levmult1.inputs.Mod)
-    self.connect(g2m.outputs.Out,levmult1.inputs.In)
-
-    if not velinp and velsens == 0:
-      self.outputs[0] = levmult1.outputs.Out
-      return
+    if not less8db:
+      setv(g2mp.Kbt,0) 
+      setv(g2mp.L,notescale[l][0])
+      setv(g2mp.R,notescale[r][0])
+      levmult1 = self.addmodule('LevMult',name='24db')
+      self.connect(g2m.outputs.Level,g2m.inputs.In)
+      self.connect(g2m.outputs.Level,levmult1.inputs.Mod)
+      self.connect(g2m.outputs.Out,levmult1.inputs.In)
+      out = levmult1.outputs.Out
+      if not velinp and velsens == 0:
+        self.outputs[0] = levmult1.outputs.Out
+        return
+    else:
+      out = g2m.outputs.Level
 
     mix21b = self.addmodule('Mix2-1B', name='Vel')
     setv(mix21b.params.Inv2,1)
     setv(mix21b.params.Lev1,88)
-    setv(mix21b.params.Lev2,15)
+    setv(mix21b.params.Lev2,16)
     self.connect(mix21b.inputs.Chain,mix21b.inputs.In1)
     self.connect(mix21b.inputs.In1,mix21b.inputs.In2)
     levmult2 = self.addmodule('LevMult',name='')
     xfade = self.addmodule('X-Fade',name='VelSens')
     setv(xfade.params.LogLin,1) # Lin
     self.connect(mix21b.outputs.Out,levmult2.inputs.Mod)
-    self.connect(levmult1.outputs.Out,levmult2.inputs.In)
+    self.connect(out,levmult2.inputs.In)
     self.connect(levmult2.inputs.In,xfade.inputs.In1)
     self.connect(levmult2.outputs.Out,xfade.inputs.In2)
     setv(xfade.params.Mix,velsens)

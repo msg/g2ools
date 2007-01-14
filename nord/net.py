@@ -101,11 +101,24 @@ def addnet(netlist, source, dest):
   if not dest.net:
     dest.net = net
 
-# delnode - update the netlist removing the node srcdest
-def delnode(netlist, srcdest):
-  pass
-  # find net with both source and dest on it
+# delconnection - update the netlist removing cable and what side of the cable
+#                 to disconnect
+def delconnection(netlist, cable, side):
+  if not cable.net in netlist:
+    print 'Cable source=%s:%s dest=%s:%s not in netlist' % (
+      cable.source.module.name,cable.source.type.name,
+      cable.dest.module.name,cable.dest.type.name)
+    return
+  if side == cable.source:
+    opposite = cable.dest
+  else:
+    opposite = cable.source
+  if opposite.direction:
+    pass
+  else:
+    pass
   # remove dest from net
+  pass
 
 def printnet(net):
   if net.output:
