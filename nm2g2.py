@@ -423,22 +423,24 @@ class Config:
 def usage(prog):
   print 'usage: nm2g2 <flags> <.pch files>'
   print '\t<flags>'
-  print '\t-h --help\tPrint this message'
+  print '\t-a --allfiles\tProcess all files (not just extension .pch)'
   print '\t-d --debug\tDebug program'
+  print '\t-h --help\tPrint this message'
+  print '\t-k --keepold\tDo not replace existing .pch2 files'
   print '\t-l --low\tLower resource usage'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
-  print '\t-k --keepold\tDo not replace existing .pch2 files'
   
 def main():
   prog = sys.argv.pop(0)
   try:
-    opts, args = getopt.getopt(sys.argv,'hdlrk',
-        ['help','debug','low','recursive','keepold'])
+    opts, args = getopt.getopt(sys.argv,'ahdlrk',
+        ['all','debug','help','keepold','low','recursive'])
   except getopt.GetoptError:
     usage(prog)
     sys.exit(2)
 
-  config = Config(debug=None,lowresource=None,recursive=None,keepold=None)
+  config = Config(debug=False,lowresource=False,recursive=False,
+      keepold=False,allfiles=False)
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
@@ -451,7 +453,7 @@ def main():
     if o in ('-k','--keepold'):
       config.keepold = True
 
-  def doconvert(fname):
+  def doconvert(fname,config):
     # general algorithm for converter:
     if config.debug:
       convert(PchFile(fname),config) # allow exception thru if debugging
@@ -472,18 +474,18 @@ def main():
       if os.path.isdir(fname) and config.recursive:
         for root,dirs,files in os.walk(fname):
           for f in files:
-            if f[-3:].lower() == 'pch':
+            if f[-3:].lower() == 'pch' or config.allfiles:
               fname = os.path.join(root,f)
               print '"%s"' % fname
               if config.keepold and os.path.exists(fname+'2'):
                 continue
-              failed = doconvert(fname)
+              failed = doconvert(fname,config)
               if failed:
                 failedpatches.append(failed)
               print '-' * 20
       else:
         print '"%s"' % fname
-        failed = doconvert(fname)
+        failed = doconvert(fname,config)
         if failed:
           failedpatches.append(failed)
         print '-' * 20

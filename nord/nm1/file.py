@@ -301,12 +301,18 @@ class PchFile:
       'CustomDump','MorphMapDump','KeyboardAssignment','KnobMapDump',
       'CtrlMapDump','NameDump','Notes'
     ]
+    data = open(fname).read(1024)
+    if data.find('Nord Modular patch') < 0:
+      raise NM1Error('NM1File: %s not valid .pch file' % fname)
     lines = map(string.strip, open(fname).readlines())
     if not len(lines):
       raise NM1Error('NM1File: no valid data: not parsing')
     if lines[0] != '[Header]':
       print 'added missing [Header]'
       lines.insert(0,'[Header]')
+
+    if fname[-4:].lower() != '.pch':
+      fname += '.pch'
 
     starttags = []
     endtags = []
