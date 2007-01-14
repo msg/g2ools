@@ -142,42 +142,148 @@ class ConvVocoder(Convert):
   outputmap = ['Out']
 
 class ConvFilterBank(Convert):
-  maing2module = 'Mix8-1B'
+  maing2module = 'LevAmp'
   parammap = [None]*14
-  inputmap = [None]
+  inputmap = ['In']
   outputmap = [None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
-    mix81b = self.addmodule('Mix8-1B',name='Upper')
-    self.connect(g2m.outputs.Out,mix81b.inputs.Chain)
-    filters = []
-    banksettings = [
-      ['50',23],['75',29],['110',37],['170',44],
-      ['250',50],['380',57],['570',65],
-      ['850',71],['1.3',79],['1.9',85],['2.9',93],
-      ['4.2',99],['6.4',106],['8.3',111],
-    ]
-    for i in range(len(banksettings)):
-      name,freq = banksettings[i]
-      filter = self.addmodule('FltStatic',name=name)
-      setv(filter.params.Freq,freq)
-      setv(filter.params.GC,1)  # On
-      setv(filter.params.FilterType,1) # BP
-      setv(filter.params.Res,64)
-      if freq > 65:
-        self.connect(filter.outputs.Out,mix81b.inputs[i-7])
-        setv(mix81b.params[i-7],getv(nmm.params[i-7]))
-      else:
-        self.connect(filter.outputs.Out,g2m.inputs[i])
-        setv(g2m.params[i],getv(nmm.params[i]))
-      if i > 0:
-        self.connect(filters[i-1].inputs.In,filter.inputs.In)
-      filters.append(filter)
-    self.inputs[0] = filters[0].inputs.In
-    self.outputs[0] = mix81b.outputs.Out
+    setv(g2mp.Type,0) # Lin
+    setv(g2mp.Gain,44)
+
+    hc18 = self.addmodule('FltLP',name='HC 1-8')
+    hc18.modes.SlopeMode.value = 2 # 18
+    setv(hc18.params.Kbt,0)
+    setv(hc18.params.Freq,87)
+    self.connect(g2m.outputs.Out,hc18.inputs.In)
+
+    lp1 = self.addmodule('FltLP',name='')
+    lp1.modes.SlopeMode.value = 1 # 12
+    setv(lp1.params.Kbt,0)
+    setv(lp1.params.Freq,55)
+    self.connect(hc18.outputs.Out,lp1.inputs.In)
+
+    band13 = self.addmodule('FltLP',name='1-3')
+    band13.modes.SlopeMode.value = 2 # 18
+    setv(band13.params.Kbt,0)
+    setv(band13.params.Freq,36)
+    self.connect(lp1.outputs.Out,band13.inputs.In)
+
+    band45 = self.addmodule('FltStatic',name='4-5')
+    setv(band45.params.Freq,51)
+    setv(band45.params.Res,44)
+    setv(band45.params.FilterType,1) # BP
+    setv(band45.params.GC,1)
+    self.connect(band13.inputs.In,band45.inputs.In)
+
+    band45out = self.addmodule('LevConv',name='4-5 Out')
+    setv(band45out.params.InputType,0) # Bip
+    setv(band45out.params.OutputType,5) # BipInv
+    self.connect(band45.outputs.Out,band45out.inputs.In)
+
+    lc68 = self.addmodule('FltHP',name='LC 6-8')
+    lc68.modes.SlopeMode.value = 1 # 12
+    setv(lc68.params.Kbt,0)
+    setv(lc68.params.Freq,57)
+    self.connect(lp1.inputs.In,lc68.inputs.In)
+
+    levconv1 = self.addmodule('LevConv',name='')
+    setv(levconv1.params.InputType,0) # Bip
+    setv(levconv1.params.OutputType,5) # BipInv
+    self.connect(lc68.outputs.Out,levconv1.inputs.In)
+
+    band6 = self.addmodule('FltStatic',name='6')
+    setv(band6.params.Freq,57)
+    setv(band6.params.Res,75)
+    setv(band6.params.FilterType,1) # BP
+    setv(band6.params.GC,0)
+    self.connect(levconv1.outputs.Out,band6.inputs.In)
+
+    band7 = self.addmodule('FltStatic',name='7')
+    setv(band7.params.Freq,65)
+    setv(band7.params.Res,74)
+    setv(band7.params.FilterType,1) # BP
+    setv(band7.params.GC,1)
+    self.connect(band6.inputs.In,band7.inputs.In)
+
+    band8 = self.addmodule('FltStatic',name='8')
+    setv(band8.params.Freq,71)
+    setv(band8.params.Res,74)
+    setv(band8.params.FilterType,1) # BP
+    setv(band8.params.GC,1)
+    self.connect(band7.inputs.In,band8.inputs.In)
+
+    lc914 = self.addmodule('FltHP',name='LC 9-14')
+    lc914.modes.SlopeMode.value = 3 # 24
+    setv(lc914.params.Kbt,0)
+    setv(lc914.params.Freq,76)
+    self.connect(hc18.inputs.In,lc914.inputs.In)
+
+    band910 = self.addmodule('FltStatic',name='9-10')
+    setv(band910.params.Freq,83)
+    setv(band910.params.Res,29)
+    setv(band910.params.FilterType,1) # BP
+    setv(band910.params.GC,0)
+    self.connect(lc914.outputs.Out,band910.inputs.In)
+
+    band1112 = self.addmodule('FltStatic',name='11-12')
+    setv(band1112.params.Freq,97)
+    setv(band1112.params.Res,30)
+    setv(band1112.params.FilterType,1) # BP
+    setv(band1112.params.GC,0)
+    self.connect(band910.inputs.In,band1112.inputs.In)
+
+    band1314 = self.addmodule('FltHP',name='13-14')
+    band1314.modes.SlopeMode.value = 3 # 24
+    setv(band1314.params.Kbt,0)
+    setv(band1314.params.Freq,99)
+    self.connect(band910.inputs.In,band1314.inputs.In)
+
+    band1314out = self.addmodule('LevConv',name='13-14 Out')
+    setv(band1314out.params.InputType,0) # Bip
+    setv(band1314out.params.OutputType,5) # BipInv
+    self.connect(band1314.outputs.Out,band1314out.inputs.In)
+
+    mixfader = self.addmodule('MixFader',name='FilterBank')
+    mixfaderp = mixfader.params
+    onnms = ['1-3','4-5','6','7','8','9-10','11-12','13-14']
+    setv(mixfaderp.ExpLin,2) # dB
+    for i in range(len(onnms)):
+      onp = getattr(mixfaderp,'On%d'%(i+1))
+      setv(onp,1)
+      onp.labels = [onnms[i]]
+    def gv(p,nm):
+      return getv(getattr(p,nm))
+    setv(mixfaderp.Lev1,
+       (gv(nmmp,'50')+gv(nmmp,'75')+gv(nmmp,'110'))/3)
+    setv(mixfaderp.Lev2,(gv(nmmp,'170')+gv(nmmp,'250'))/2)
+    setv(mixfaderp.Lev3,gv(nmmp,'380'))
+    setv(mixfaderp.Lev4,gv(nmmp,'570'))
+    setv(mixfaderp.Lev5,gv(nmmp,'850'))
+    setv(mixfaderp.Lev6,(gv(nmmp,'1.3')+gv(nmmp,'1.9'))/2)
+    setv(mixfaderp.Lev7,(gv(nmmp,'2.9')+gv(nmmp,'4.2'))/2)
+    setv(mixfaderp.Lev8,(gv(nmmp,'6.4')+gv(nmmp,'8.3'))/2)
+    self.connect(band13.outputs.Out,mixfader.inputs.In1)
+    self.connect(band45out.outputs.Out,mixfader.inputs.In2)
+    self.connect(band6.outputs.Out,mixfader.inputs.In3)
+    self.connect(band7.outputs.Out,mixfader.inputs.In4)
+    self.connect(band8.outputs.Out,mixfader.inputs.In5)
+    self.connect(band910.outputs.Out,mixfader.inputs.In6)
+    self.connect(band1112.outputs.Out,mixfader.inputs.In7)
+    self.connect(band1314out.outputs.Out,mixfader.inputs.In8)
+
+    mix11a = self.addmodule('Mix1-1A',name='Out/Boost')
+    setv(mix11a.params.On,1)
+    mix11a.params.On.labels = ['Out']
+    setv(mix11a.params.Lev,110)
+    self.connect(mixfader.outputs.Out,mix11a.inputs.Chain)
+    self.connect(mix11a.outputs.Out,mix11a.inputs.In)
+
+    self.outputs[0] = mix11a.outputs.Out
+
 
 class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
