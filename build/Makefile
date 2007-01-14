@@ -9,7 +9,10 @@ all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py ../no
 	./nmdb.py
 	python ../nord/nm1/modules.py >../nmdb.txt
 
-../nord/convert/units.py: unitsdb.py nm1adsrtime.txt g2adsrtime.txt
+../nord/convert/units.py: unitsdb.py nm1adsrtime.txt g2adsrtime.txt \
+	nm1fltfreq.txt g2fltfreq.txt nm1logictime.txt g2logictime.txt \
+	nm1levamp.txt g2levamp.txt ratios.txt g2glidetime.txt \
+	nm1smoothtime.txt
 	./unitsdb.py
 
 ../nord/convert/table.py: gentab.py mix2-1b.txt spectral.txt nm1pitch.txt \

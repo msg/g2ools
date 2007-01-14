@@ -146,7 +146,7 @@ nm1smoothtime = [%s
        formatfreq(nm1fltfreq), formatfreq(g2fltfreq),
        formatfreq(nm1logictime), formatfreq(g2logictime),
        formatfreq(nm1levamp), formatfreq(g2levamp),
-       formatarray([ '%.3f' % ratios[i] for i in range(len(ratios))]),
+       formatarray([ '%.4f' % ratios[i] for i in range(len(ratios))]),
        formattimes(g2glidetime),formattimes(nm1smoothtime))
 
 print s
