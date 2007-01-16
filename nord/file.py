@@ -129,8 +129,32 @@ class Area:
 
     addnet(self.netlist, cable.source, cable.dest)
 
-  def disconnect(self, cable, size):
-    raise 'disconnect: function not implemented'
+  # remove a cable - create possibly 2 new netw
+  def removecable(self, cable):
+    pass
+
+  # disconnect a input or output port - update all cables connected to port
+  def disconnect(self, port):
+    # find all cables connected to port
+    cables = []
+    mindist,mincable = 10000000,None
+    for cable in self.cables:
+      if cable.source == port or cable.dest == port:
+        cables.append(cable)
+        if self.cablelength(cable) < mindist:
+          mincable = cable
+          mindist = self.cablelength(cable)
+
+  # quick cable length calculation
+  def cablelength(self, cable):
+    return self.connectionlength(cable.source, cable.dest)
+
+  # quick connection length calculation (returns square distance)
+  def connectionlength(self, start, end):
+    # horiz coordinates about 20 times bigger.
+    dh = end.module.horiz - start.module.horiz
+    dv = end.module.vert - start.module.vert
+    return (dh*20)**2+dv**2
 
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch:
