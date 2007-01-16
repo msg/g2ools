@@ -110,11 +110,11 @@ class ConvClkDivFix(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.Divider,15)
+    setv(g2mp.Divider,11)
     g2m.modes.DivMode.value = 1
 
     rst,midiclk = g2m.inputs.Rst, g2m.inputs.Clk
-    for div in [11,7]:
+    for div in [7,5]:
       clk = self.addmodule('ClkDiv')
       clk.name = g2m.name
       clk.modes.DivMode.value = 1
