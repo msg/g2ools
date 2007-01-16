@@ -102,7 +102,7 @@ class ConvNoteVelScal(Convert):
   maing2module = 'LevScaler'
   parammap = [None,['L','LeftGain'],['BP','Breakpoint'],['R','RightGain']]
   inputmap = [None,'Note'] # no Vel
-  outputmap = ['Out']
+  outputmap = ['Level']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
