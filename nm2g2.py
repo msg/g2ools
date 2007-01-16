@@ -74,6 +74,8 @@ def convert(pch,config):
   g2patch = pch2.patch
   g2patch.voice.keyboard = None
   g2patch.fx.keyboard = None
+
+  setv(g2patch.settings.patchvol,127)
   for color in ['red','blue','yellow','green','purple']:
     setattr(g2patch.description,color,getattr(nmpatch.header,color))
   if nmpatch.header.voices > 1:
