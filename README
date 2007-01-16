@@ -1,0 +1,48 @@
+
+			 g2ools - Nord Modular G2 Tools
+
+What is it?
+
+g2ools is a set of python applications and libraries to handle the Nord
+Modular G2 synthesizer.  It allows a person to write simple tools to process
+G2 .pch2 patch files as well as .prf2 performance files.  Python was chosen
+because of the authors knowledge of the langauge and portability.  The main
+application written was nm2g2 Nord Modular (nm1) to G2 patch converter.  The
+first version took 3 weeks from start to finish.  After the initial release,
+3phase provided main models of the various modules available within the nm1
+as they are quite different or missing from the Nord Modular G2.  It works
+on many patches, but there are patches that will not work after the converted
+patch is loaded into the G2.  3phase and I have made every attempt to do the
+best convertion possible.
+
+This software is released under the GPL licence and comes complete with
+source code to the applications and libraries.
+
+nm2g2.py
+
+  nm2g2.py is a converter from Clavia's original Nord Modular (nm1) patch file
+to the Nord Modular G2 (g2) patch file.  It can convert whole directories and
+currently is used to converter the Nord Modular Patch Collection consisting
+of almost 30000 patches.  Many patches work and some do not.  You're success
+will vary depending on the complexity of the original patch and the
+differences between the two synthesizers.
+
+How do I install g2ools?
+
+
+How do I run the converter?
+
+Linux:
+
+The application requires python version 2.4 or higher to be installed.  Most
+of the lastest distributions will have it.
+
+Mac OS-X:
+
+To run under Mac OS-X, python version 2.4 or higher must be installed.  Goto
+http://www.python.org
+
+Windows:
+
+There is a nm2g2.exe that should run on any Windows XP machine.
+
