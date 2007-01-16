@@ -163,7 +163,7 @@ def handlefm(conv,fminput,fmparam):
   global fmmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
   fma = getv(nmm.params.FmMod)
-  if fmparam and fmmod:
+  if fmparam and fminput:
     setv(fmparam,fmmod[fma][0])
   if len(nmm.inputs.FmMod.cables):
     mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
@@ -591,7 +591,7 @@ class ConvOscSlvE(ConvOscSlvC):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.FmAmount,phase[getv(nmmp.FmMod)])
+    setv(g2mp.FmAmount,getv(nmmp.FmMod))
     aminput, output = handleam(self)
     self.outputs[0] = output
     self.inputs[2] = aminput
@@ -678,6 +678,8 @@ class ConvOscSlvFM(Convert):
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.PhaseMod,g2m.params.PhaseMod)
     self.inputs[1] = handlefm(self,fmmod,fmparam)
+    if fmmod and fmparam:
+      setv(fmparam,phase[getv(nmmp.FmMod)])
 
 class ConvNoise(Convert):
   maing2module = 'Noise'
