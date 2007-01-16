@@ -119,6 +119,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
 
   elif len(nmm.inputs.PitchMod1.cables):
     if pmod1 == 0  or pmod1 == 127:
+      setv(modinputparam,pmod1)
       p1 = modinput
     else:
       setv(modinputparam,127)
@@ -137,6 +138,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
 
   elif len(nmm.inputs.PitchMod2.cables):
     if pmod2 == 0 or pmod2 == 127:
+      setv(modinputparam,pmod2)
       p2 = modinput
     else:
       setv(modinputparam,127)
