@@ -63,6 +63,17 @@ class ConvPolyAreaIn(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Pad,[2,1][getv(getattr(nmmp,'+6Db'))])
+    lboost = self.addmodule('LevAmp',name='L-Boost')
+    setv(lboost.params.Type,0) # Lin
+    setv(lboost.params.Gain,96) # x2.00
+    self.connect(g2m.outputs.OutL,lboost.inputs.In)
+    self.outputs[0] = lboost.outputs.Out
+
+    rboost = self.addmodule('LevAmp',name='R-Boost')
+    setv(rboost.params.Type,0) # Lin
+    setv(rboost.params.Gain,96) # x2.00
+    self.connect(g2m.outputs.OutR,rboost.inputs.In)
+    self.outputs[1] = rboost.outputs.Out
 
 class Conv1Output(Convert):
   maing2module = 'Mix1-1A'
