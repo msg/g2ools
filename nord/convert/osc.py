@@ -301,7 +301,6 @@ def postmst(conv,mstindex):
     return
 
   range = getv(mst.params.Range)
-  print 'range=',range
   if range < 2: # sub or lo
     # insert LevAdd with -48
     levadd = conv.addmodule('LevAdd',name='-48')
