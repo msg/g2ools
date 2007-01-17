@@ -30,6 +30,7 @@ glides = getnumbers('glide.txt')      # val, [glide, [phase]]
 glideindexes = [ gp[:2] for gp in glides if len(gp) > 1 ]
 glides = interpolate(glideindexes)
 fmb = getnumbers('fmb.txt')           # val, g2phasemod, mix %, inv %
+wavewrap = getnumbers('wavewrap.txt')  # val, g2wrap
 
 f=open('../nord/convert/table.py','w')
 f.write('''
@@ -123,6 +124,15 @@ for i in range(128):
     if int(10*mix21b[j][1]) == int(10*fmb[i][3]):
       inv = j
   f.write(' [%3d,%3d,%3d],' % (fmb[i][1],mix,inv))
+f.write('''
+]
+
+wavewrap = [
+ ''')
+for i in range(len(glides)):
+  if i and i % 16 == 0:
+    f.write('\n ')
+  f.write('%3d,' % (wavewrap[i][1]))
 f.write('''
 ]
 ''')
