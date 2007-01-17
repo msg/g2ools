@@ -20,15 +20,31 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+# setv - set all variations to val
 def setv(g2param,val):
   g2param.variations = [ val for variation in range(9) ]
 
+# getv - get variation[0]
 def getv(nmparam):
   return nmparam.variations[0]
 
+# setav - set variations from array
 def setav(g2param,array):
   g2param.variations = array[:9]
 
+# cpv - copy variations 
 def cpv(g2param,nmparam):
   g2param.variations = nmparam.variations[:]
 
+# isnm1osc - is NM1 module an oscillator
+def isnm1osc(module):
+  shortnms = ['OscA','OscB','OscC',
+              'OscSlvB','OscSlvC','OscSlvD','OscSlvE','OscSlvA','OscSlvFM',
+              'PercOsc','FormantOsc','SpectralOsc','MasterOsc','OscSineBank']
+  return module.type.shortnm in shortnms
+
+# isnm1lfo - is NM1 module an lfo
+def isnm1lfo(module):
+  shortnms = ['LFOA','LFOB','LFOC',
+              'LFOSlvB','LFOSlvC','LFOSlvD','LFOSlvE','LFOSlvF','ClkGen']
+  return module.type.shortnm in shortnms

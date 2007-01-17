@@ -57,7 +57,9 @@ def postmst(conv):
       setv(g2mp.PolyMono,getv(mst.params.PolyMono))
     if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
       setv(g2mp.Kbt,getv(mst.params.Kbt))
-    if not isnm1osc(mst) and hasattr(mst.params,'Range'):
+    if isnm1osc(mst):
+      setv(g2mp.Range,2)
+    elif hasattr(mst.params,'Range'):
       setv(g2mp.Range,getv(mst.params.Range))
     else:
       setv(g2mp.Range,1)
