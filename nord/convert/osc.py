@@ -287,6 +287,32 @@ def handlemst(conv,fmmod,fmparam):
         mstinnum += 1
   return mst,fmmod,fmparam
 
+def postmst(conv,mstindex):
+  nmm, g2m = conv.nmmodule, conv.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+
+  if not len(nmm.inputs.Mst.cables):
+    return
+
+  mstconv = nmm.inputs.Mst.net.output.module.conv
+  mst = mstconv.g2module
+  print mst.type.shortnm
+  if not isnm1lfo(mstconv.nmmodule):
+    return
+
+  range = getv(mst.params.Range)
+  print 'range=',range
+  if range < 2: # sub or lo
+    # insert LevAdd with -48
+    levadd = conv.addmodule('LevAdd',name='-48')
+    conv.connect(levadd.outputs.Out,g2m.inputs.Pitch)
+    setv(levadd.params.BipUni,0) # Bip
+    setv(levadd.params.Level,16) # -48
+    conv.inputs[mstindex] = levadd.inputs.In
+  if range == 0:
+    setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-79))
+    setv(g2mp.FreqFine,min(127,getv(g2mp.FreqFine)+42))
+
 class ConvMasterOsc(Convert):
   maing2module = 'OscMaster'
   parammap = ['FreqCoarse','FreqFine','Kbt',None,None]
@@ -534,6 +560,9 @@ class ConvOscSlvA(Convert):
     self.outputs[0] = output
     self.inputs[2] = aminput
 
+  def postmodule(self):
+    postmst(self,0)
+
 class ConvOscSlvB(Convert):
   maing2module = 'OscB'
   parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
@@ -560,12 +589,15 @@ class ConvOscSlvB(Convert):
     #       to get the actual waveform, if necessary.
     setv(g2m.params.Shape,abs(getv(nmm.params.PulseWidth)-64)*2)
 
+  def postmodule(self):
+    postmst(self,0)
+
 class ConvOscSlvC(Convert):
   maing2module = 'OscC'
   waveform = 2 # saw
   parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
               ['FmAmount','FmMod'],['Active','Mute']]
-  inputmap = ['Pitch','FmMod',None] # no Mst, possible AM
+  inputmap = ['Pitch','FmMod',None]
   outputmap = ['Out']
 
   def domodule(self):
@@ -581,6 +613,9 @@ class ConvOscSlvC(Convert):
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.FmMod,g2m.params.FmAmount)
     self.inputs[1] = handlefm(self,fmmod,fmparam,fmamod)
+
+  def postmodule(self):
+    postmst(self,0)
 
 class ConvOscSlvD(ConvOscSlvC):
   waveform = 1 # tri
@@ -659,12 +694,16 @@ class ConvOscSineBank(Convert):
         for i in range(1,len(oscs)):
           self.connect(oscs[i-1].inputs.Pitch,oscs[i].inputs.Pitch)
 
+  def postmodule(self):
+    postmst(self,0)
+
+
 class ConvOscSlvFM(Convert):
   maing2module = 'OscPM'
   waveform = 0 # sine
   parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
               None,['PhaseMod','FmMod'],['Active','Mute']]
-  inputmap = ['Pitch','PhaseMod','Sync'] # no Mst
+  inputmap = ['Pitch','PhaseMod','Sync']
   outputmap = ['Out']
  
   def domodule(self):
@@ -689,6 +728,9 @@ class ConvOscSlvFM(Convert):
         setv(g2mp.FreqCoarse,max(0,getv(g2m.FreqCoarse)-36))
       
     self.inputs[1] = handlefm(self,fmmod,fmparam,fmbmod)
+
+  def postmodule(self):
+    postmst(self,0)
 
 class ConvNoise(Convert):
   maing2module = 'Noise'
