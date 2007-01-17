@@ -198,8 +198,8 @@ class ConvClkGen(Convert):
     setv(g2mp.Active,getv(getattr(nmmp,'On/Off')))
     setv(g2mp.Source,0)  # Internal
     pulse = self.addmodule('Pulse')
-    setv(pulse.Time,32)
-    self.connect(g2m.outputs.Sync,pulse.inputs.In)
+    setv(pulse.params.Time,32)
+    self.connect(g2m.outputs.ClkActive,pulse.inputs.In)
     self.outputs[3] = pulse.outputs.Out
     
     #handle Slv connections
