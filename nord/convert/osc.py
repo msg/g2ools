@@ -300,6 +300,8 @@ def postmst(conv,mstindex):
   if not isnm1lfo(mstconv.nmmodule):
     return
 
+  if not hasattr(mst.params,'Range'):
+    return
   range = getv(mst.params.Range)
   if range < 2: # sub or lo
     # insert LevAdd with -48
@@ -722,9 +724,9 @@ class ConvOscSlvFM(Convert):
     if getv(getattr(nmmp,'-3Oct')):
       freqmode = getv(g2mp.FreqMode)
       if freqmode == 3: # Part
-        setv(g2mp.FreqCoarse,max(0,getv(g2m.FreqCoarse)-8))
+        setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-8))
       else:
-        setv(g2mp.FreqCoarse,max(0,getv(g2m.FreqCoarse)-36))
+        setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-36))
       
     self.inputs[1] = handlefm(self,fmmod,fmparam,fmbmod)
 

@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import *
-from nord.nm1.colors import nm1cablecolors
+from nord.nm1.colors import nm1cablecolors, nm1portcolors
 from convert import *
 from table import *
 
@@ -75,6 +75,7 @@ def postmst(conv,mstindex):
     pout = conv.addmodule('ZeroCnt',name='')
     conv.connect(pout.outputs.Out,g2m.inputs.Rate)
     setv(g2mp.Range,2)
+    conv.inputs[mstindex] = pout.inputs.In
 
   mstconv = nmm.inputs.Mst.net.output.module.conv
   mst = mstconv.g2module

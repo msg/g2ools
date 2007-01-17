@@ -129,7 +129,7 @@ class ConvMulti_Env(Convert):
       return
     elif sustain == 3 and getv(nmmp.Time5) <= 16: # 16=5.3ms
       pass
-    time = nm1adsrtime[setv(nmmp.Time4)]+nm1adsrtime[getv(nmmp.Time5)]
+    time = nm1adsrtime[getv(nmmp.Time4)]+nm1adsrtime[getv(nmmp.Time5)]
     timeval = 0
     timemin = abs(g2adsrtime[0]-time)
     for i in range(1,len(g2adsrtime)):
