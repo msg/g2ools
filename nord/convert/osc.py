@@ -161,21 +161,21 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   return p1, p2
 
 fmmodnum = 1
-def handlefm(conv,fminput,fmparam):
+def handlefm(conv,fminput,fmparam,fmtable):
   global fmmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
   fma = getv(nmm.params.FmMod)
   if fmparam and fminput:
-    setv(fmparam,fmmod[fma][0])
+    setv(fmparam,fmtable[fma][0])
   if len(nmm.inputs.FmMod.cables):
     mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
     fmmodnum += 1
     conv.connect(mix21b.outputs.Out,fminput)
     conv.connect(mix21b.inputs.Chain,mix21b.inputs.In1)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
-    setv(mix21b.params.Lev1,fmmod[fma][1])
+    setv(mix21b.params.Lev1,fmtable[fma][1])
     setv(mix21b.params.Inv2,1)
-    setv(mix21b.params.Lev2,fmmod[fma][2])
+    setv(mix21b.params.Lev2,fmtable[fma][2])
     return mix21b.inputs.Chain
   return fminput
 
@@ -330,7 +330,7 @@ class ConvOscA(Convert):
         inputmod.params.PitchMod,5,6)
     self.inputs[2:4] = p1,p2
 
-    self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
+    self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount,fmamod)
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
 
 class ConvOscB(Convert):
@@ -365,7 +365,7 @@ class ConvOscB(Convert):
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1, p2
-    self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
+    self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount,fmamod)
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
 
 class ConvOscC(Convert):
@@ -387,7 +387,7 @@ class ConvOscC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
     
-    self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
+    self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount,fmamod)
     # add AM if needed, handle special io
     aminput, output = handleam(self)
     self.outputs[0] = output
@@ -414,7 +414,7 @@ class ConvSpectralOsc(Convert):
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1,p2
-    self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount)
+    self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount,fmamod)
 
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.Waveform,[3,2][getv(nmmp.Partials)])
@@ -527,7 +527,7 @@ class ConvOscSlvA(Convert):
     # mst connection if not
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.FmMod,g2m.params.FmAmount)
-    self.inputs[1] = handlefm(self,fmmod,fmparam)
+    self.inputs[1] = handlefm(self,fmmod,fmparam,fmamod)
     # handle special io
     # add AM if needed
     aminput, output = handleam(self)
@@ -580,7 +580,7 @@ class ConvOscSlvC(Convert):
     g2m.modes.Waveform.value = self.waveform
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.FmMod,g2m.params.FmAmount)
-    self.inputs[1] = handlefm(self,fmmod,fmparam)
+    self.inputs[1] = handlefm(self,fmmod,fmparam,fmamod)
 
 class ConvOscSlvD(ConvOscSlvC):
   waveform = 1 # tri
@@ -679,9 +679,7 @@ class ConvOscSlvFM(Convert):
     g2m.modes.Waveform.value = self.waveform
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.PhaseMod,g2m.params.PhaseMod)
-    self.inputs[1] = handlefm(self,fmmod,fmparam)
-    if fmmod and fmparam:
-      setv(fmparam,phase[getv(nmmp.FmMod)])
+    self.inputs[1] = handlefm(self,fmmod,fmparam,fmbmod)
 
 class ConvNoise(Convert):
   maing2module = 'Noise'
