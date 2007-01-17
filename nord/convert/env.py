@@ -129,7 +129,14 @@ class ConvMulti_Env(Convert):
       return
     elif sustain == 3 and getv(nmmp.Time5) <= 16: # 16=5.3ms
       pass
-    setv(g2mp.Time4,getv(nmmp.Time4)+getv(nmmp.Time5))
+    time = nm1adsrtime[setv(nmmp.Time4)]+nm1adsrtime[getv(nmmp.Time5)]
+    timeval = 0
+    timemin = abs(g2adsrtime[0]-time)
+    for i in range(1,len(g2adsrtime)):
+      if abs(g2adsrtime[i]-time) < timemin:
+        timemin = abs(g2adsrtime[i]-time)
+        timeval = i
+    setv(g2mp.Time4, timeval)
     setv(g2mp.Level4,0)
 
 class ConvEnvFollower(Convert):
