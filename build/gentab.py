@@ -26,11 +26,10 @@ spectral = getnumbers('spectral.txt') # val, fmmod, fmmod %, mix %, inv %
 pitchmod = getnumbers('nm1pitch.txt') # val, pitchmod, pmod %, invpmod %
 kbt = getnumbers('kbt.txt')           # val, lev1, lev2
 notescale = getnumbers('notescale.txt') # nmval, 24db G2 val, 8db G2 val
-glidephase = getnumbers('glidephase.txt') # val, [glide, [phase]]
-glideindexes = [ gp[:2] for gp in glidephase if len(gp) > 1 ]
-phaseindexes = [ [gp[0],gp[2]] for gp in glidephase if len(gp) > 2 ]
+glides = getnumbers('glide.txt')      # val, [glide, [phase]]
+glideindexes = [ gp[:2] for gp in glides if len(gp) > 1 ]
 glides = interpolate(glideindexes)
-phases = interpolate(phaseindexes)
+fma = getnumbers('fma.txt')           # val, g2phasemod, mix %, inv %
 
 f=open('../nord/convert/table.py','w')
 f.write('''
@@ -59,7 +58,7 @@ f.write('''
 # mod conversion table calculated by 3phase
 # kbt conversion table calculated by 3phase 
 ''')
-f.write('fmmod = [ # [fmmod,mix,inv]\n')
+f.write('fmamod = [ # [fmmod,mix,inv]\n')
 for i in range(128):
   if i and i % 4 == 0:
     f.write('\n')
@@ -113,13 +112,17 @@ for i in range(len(glides)):
 f.write('''
 ]
 
-phase = [
- ''')
-for i in range(len(phases)):
-  if i and i % 16 == 0:
-    f.write('\n ')
-  f.write('%3d,' % (phases[i][1]))
+fma = [ # [phasemod,mix,inv]
+''')
+for i in range(128):
+  if i and i % 4 == 0:
+    f.write('\n')
+  for j in range(128):
+    if int(10*mix21b[j][1]) == int(10*fma[i][2]):
+      mix = j
+    if int(10*mix21b[j][1]) == int(10*fma[i][3]):
+      inv = j
+  f.write(' [%3d,%3d,%3d],' % (fma[i][1],mix,inv))
 f.write('''
 ]
 ''')
-
