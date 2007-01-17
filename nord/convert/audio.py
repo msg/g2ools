@@ -29,57 +29,82 @@ class ConvClip(Convert):
   outputmap = ['Out']
 
 class ConvOverdrive(Convert):
-  maing2module = 'X-Fade'
+  maing2module = 'Clip'
   parammap = [None,None]
-  inputmap = [None,'In2']
+  inputmap = [None,'In']
   outputmap = [None]
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.LogLin,1) # Lin
-    setv(g2mp.Mix,51)
-    setv(g2mp.MixMod,74)
+    setv(g2mp.Shape,1) # Sym
+    setv(g2mp.ClipLevMod,91)
 
-    constswt = self.addmodule('ConstSwT')
-    setv(constswt.params.On,1)
-    constswt.params.On.labels = ['Drive']
-    setv(constswt.params.BipUni,1) # Uni
-    setv(constswt.params.Lev,getv(nmmp.Overdrive))
-    mix11a = self.addmodule('Mix1-1A')
-    setv(mix11a.params.On,1)
-    setv(mix11a.params.ExpLin,1) # Lin
-    mix11a.params.On.labels = ['Amount']
-    setv(mix11a.params.Lev,getv(nmmp.OverdriveMod))
-    shpstatic = self.addmodule('ShpStatic',name='ModIn')
-    setv(shpstatic.params.Mode,0)
-    saturate = self.addmodule('Saturate')
-    setv(saturate.params.Curve,2) # 3
-    setv(saturate.params.AmountMod,32)
-    setv(saturate.params.Amount,0)
-    clip = self.addmodule('Clip')
-    setv(clip.params.Shape,1) # Sym
-    setv(clip.params.ClipLev,34)
-    setv(clip.params.ClipLevMod,25)
-    xfade = self.addmodule('X-Fade')
-    setv(xfade.params.LogLin,1) # Lin
-    setv(xfade.params.Mix,64)
-    setv(xfade.params.MixMod,85)
+    modin = self.addmodule('Mix1-1A',name='Mod In')
+    setv(modin.params.On,1)
+    modin.params.On.labels = ['Drive']
+    setv(modin.params.ExpLin,1) # Lin
+    setv(modin.params.Lev,getv(nmmp.OverdriveMod))
+    setv(modin.params.Lev,64)
 
-    self.connect(g2m.inputs.In2,xfade.inputs.In1)
-    self.connect(g2m.outputs.Out,saturate.inputs.In)
-    self.connect(constswt.outputs.Out,mix11a.inputs.Chain)
-    self.connect(mix11a.outputs.Out,shpstatic.inputs.In)
+    overdrive = self.addmodule('ConstSwT',name='Overdrive')
+    setv(overdrive.params.Lev,getv(nmmp.Overdrive))
+    self.connect(overdrive.outputs.Out,modin.inputs.Chain)
+    
+    shpstatic = self.addmodule('ShpStatic',name='')
+    setv(shpstatic.params.Mode,0) # Inv x3
+    self.connect(modin.outputs.Out,shpstatic.inputs.In)
     self.connect(shpstatic.outputs.Out,g2m.inputs.Mod)
-    self.connect(shpstatic.outputs.Out,saturate.inputs.Mod)
-    self.connect(saturate.inputs.Mod,clip.inputs.Mod)
-    self.connect(saturate.outputs.Out,clip.inputs.In)
-    self.connect(clip.inputs.Mod,xfade.inputs.Mod)
-    self.connect(clip.outputs.Out,xfade.inputs.In2)
 
-    self.inputs = [g2m.inputs.In2,mix11a.inputs.In]
-    self.outputs = [xfade.outputs.Out]
+    levmult = self.addmodule('LevMult',name='')
+    self.connect(shpstatic.outputs.Out,levmult.inputs.Mod)
+
+    mix21b = self.addmodule('Mix2-1B',name='')
+    setv(mix21b.params.ExpLin,0) # Exp
+    setv(mix21b.params.Inv1,1)
+    setv(mix21b.params.Lev1,53)
+    setv(mix21b.params.Lev2,120)
+    self.connect(g2m.outputs.Out,mix21b.inputs.Chain)
+    self.connect(levmult.outputs.Out,mix21b.inputs.In2)
+    self.connect(mix21b.outputs.Out,levmult.inputs.In)
+
+    mix11a = self.addmodule('Mix1-1A',name='')
+    setv(mix11a.params.ExpLin,0) # Exp
+    setv(mix11a.params.On,1)
+    setv(mix11a.params.Lev,96)
+    self.connect(mix21b.outputs.Out,mix11a.inputs.In)
+
+    xfade = self.addmodule('X-Fade',name='')
+    setv(xfade.params.LogLin,0) # Log
+    setv(xfade.params.Mix,0)
+    setv(xfade.params.MixMod,127)
+    self.connect(levmult.inputs.Mod,xfade.inputs.Mod)
+    self.connect(xfade.inputs.In1,g2m.inputs.In)
+    self.connect(xfade.inputs.In2,mix11a.outputs.Out)
+
+    shpstatic2 = self.addmodule('ShpStatic',name='')
+    setv(shpstatic2.params.Mode,2) # Inv x2
+    self.connect(xfade.outputs.Out,shpstatic2.inputs.In)
+
+    mix21b2 = self.addmodule('Mix2-1B',name='')
+    setv(mix21b2.params.ExpLin,0) # Exp
+    setv(mix21b2.params.Lev1,112)
+    setv(mix21b2.params.Lev2,106)
+    self.connect(shpstatic2.outputs.Out,mix21b2.inputs.In1)
+    self.connect(mix21b2.outputs.Out,mix21b.inputs.In1)
+    self.connect(mix21b2.outputs.Out,mix21b2.inputs.In2)
+
+    out = self.addmodule('X-Fade',name='Out')
+    setv(out.params.LogLin,1) # Lin
+    setv(out.params.Mix,0)
+    setv(out.params.MixMod,127)
+    self.connect(xfade.inputs.Mod,out.inputs.Mod)
+    self.connect(xfade.inputs.In1,out.inputs.In1)
+    self.connect(mix21b2.outputs.Out,out.inputs.In2)
+
+    self.inputs[0] = modin.inputs.In
+    self.outputs[0] = out.outputs.Out
 
 class ConvWaveWrap(Convert):
   maing2module = 'WaveWrap'
