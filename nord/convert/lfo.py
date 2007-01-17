@@ -61,25 +61,33 @@ def handleslv(conv,ratemodin,ratemodparam):
   return ratemodin,ratemodparam,slv,kbt
 
 
-def postmst(conv):
+def postmst(conv,mstindex):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  if len(nmm.inputs.Mst.cables):
-    if not nmm.inputs.Mst.net.output:
-      return
-    mstconv = nmm.inputs.Mst.net.output.module.conv
-    mst = mstconv.g2module
-    if hasattr(mst.params,'PolyMono'):
-      setv(g2mp.PolyMono,getv(mst.params.PolyMono))
-    if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
-      setv(g2mp.Kbt,getv(mst.params.Kbt))
-    if isnm1osc(mst):
-      setv(g2mp.Range,2)
-    elif hasattr(mst.params,'Range'):
-      setv(g2mp.Range,getv(mst.params.Range))
-    else:
-      setv(g2mp.Range,1)
+  if not len(nmm.inputs.Mst.cables):
+    return
+
+  if not nmm.inputs.Mst.net.output:
+    return
+
+  if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
+    pout = conv.addmodule('ZeroCnt',name='')
+    conv.connect(pout.outputs.Out,g2m.inputs.Rate)
+    setv(g2mp.Range,2)
+
+  mstconv = nmm.inputs.Mst.net.output.module.conv
+  mst = mstconv.g2module
+  if hasattr(mst.params,'PolyMono'):
+    setv(g2mp.PolyMono,getv(mst.params.PolyMono))
+  if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
+    setv(g2mp.Kbt,getv(mst.params.Kbt))
+  if isnm1osc(mst):
+    setv(g2mp.Range,2)
+  elif hasattr(mst.params,'Range'):
+    setv(g2mp.Range,getv(mst.params.Range))
+  else:
+    setv(g2mp.Range,1)
 
 class ConvLFOA(Convert):
   maing2module = 'LfoB'
@@ -153,7 +161,7 @@ class ConvLFOC(Convert):
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
   parammap = ['Rate','Phase','Waveform',['PolyMono','Mono'],['Active','Mute']]
-  inputmap = ['Rate','Rst'] # no Mst
+  inputmap = ['Rate','Rst']
   outputmap = ['Out']
 
   def domodule(self):
@@ -171,7 +179,7 @@ class ConvLFOSlvA(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
   def postmodule(self):
-    postmst(self)
+    postmst(self,0)
 
 class ConvLFOSlvB(Convert):
   maing2module = 'LfoC'
@@ -192,7 +200,7 @@ class ConvLFOSlvB(Convert):
       setv(g2mp.OutputType,5) # BipInv
 
   def postmodule(self):
-    postmst(self)
+    postmst(self,0)
 
 class ConvLFOSlvC(ConvLFOSlvB):
   waveform = 0
