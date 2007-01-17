@@ -797,5 +797,11 @@ class ConvDrumSynth(Convert):
     updatevals(g2mp,['MasterDecay','SlaveDecay','NoiseFltDecay','BendDecay'],
         nm1adsrtime,g2adsrtime)
 
+    setv(g2mp.MasterLevel,modtable[getv(g2mp.MasterLevel)][0])
+    setv(g2mp.SlaveLevel,modtable[getv(g2mp.SlaveLevel)][0])
+    setv(g2mp.BendAmount,modtable[getv(g2mp.BendAmount)][0])
+    setv(g2mp.Click,modtable[getv(g2mp.Click)][0])
+    setv(g2mp.Noise,modtable[getv(g2mp.Noise)][0])
+
     # handle special parameters
     setv(g2mp.Active,1-getv(nmmp.Mute))
