@@ -12,6 +12,10 @@ class DX7Converter:
     self.dxrouter = self.modulebyname('DXRouter1')
     self.operators = [self.modulebyname('Operator%d'%i) for i in range(1,7)]
     self.lfo = self.modulebyname('LFO')
+    self.lfosync = self.modulebyname('LFO Sync')
+    self.lfodelay = self.modulebyname('LFO Delay')
+    self.lfopitchmod = self.modulebyname('LFO PM')
+    self.lfoam = self.modulebyname('LFO AM')
     self.pitcheg = self.modulebyname('PitchEG')
 
   def modulebyname(self, name):
@@ -60,7 +64,7 @@ def parsedx7(data):
   lfo = patch.lfo = LFO()
   lfo.Rate,lfo.Delay,lfo.PitchMod,lfo.AmMod = x[:4]; x = x[4:]
   c = x.pop(0)
-  lfo.PitchModSens,lfo.Waveform,lfo.Sync = c>>5,(c>>1)&0xf,c&1
+  lfo.PitchModSens,lfo.Waveform,lfo.Sync = c>>4,(c>>1)&0x7,c&1
   patch.Transpose = x.pop(0)
   patch.Name = x.tostring()
   return patch
@@ -116,7 +120,30 @@ for fname in sys.argv:
           dxparam = getattr(dxop,paramnm)
           g2param.variations[i] = dxparam
       # set LFO parameters
+      lfop = dxconv.lfo.params
+      lfop.Waveform.variations[i] = [1,2,2,3,0,4][dxpatch.lfo.Waveform]
+      if dxpatch.lfo.Waveform == 2:
+        lfop.OutputType.variations[i] = 5 # Bip
+      else:
+        lfop.OutputType.variations[i] = 4 # BipInv
+      lfop.Rate.variations[i] = dxpatch.lfo.Rate
+      lfop.PolyMono.variations[i] = dxpatch.lfo.Sync
+      dxconv.lfodelay.params.Decay.variations[i] = dxpatch.lfo.Delay
+      dxconv.lfopitchmod.params.Lev.variations[i] = dxpatch.lfo.PitchMod
+      dxconv.lfoam.params.Level.variations[i] = dxpatch.lfo.AmMod
+      # variations[i] = dxpatch.lfo.PitchModSens)
       # set PitchEG parameters
+      pitchegp = dxconv.pitcheg.params
+      pitchegp.Time1.variations[i] = dxpatch.pitcheg.R1
+      pitchegp.Level1.variations[i] = dxpatch.pitcheg.L1
+      pitchegp.Time2.variations[i] = dxpatch.pitcheg.R2
+      pitchegp.Level2.variations[i] = dxpatch.pitcheg.L2
+      pitchegp.Time3.variations[i] = dxpatch.pitcheg.R3
+      pitchegp.Level3.variations[i] = dxpatch.pitcheg.L3
+      pitchegp.Time4.variations[i] = dxpatch.pitcheg.R4
+      pitchegp.Level4.variations[i] = dxpatch.pitcheg.L4
+      # set Transpose
+      # setv(,dxpatch.Transpose)
     #
     def addnamebars(pch2, lines, horiz, vert):
       for line in lines:
