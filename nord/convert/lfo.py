@@ -75,6 +75,7 @@ def postmst(conv,mstindex):
     oscc = conv.addmodule('OscC',name='')
     setv(oscc.params.FreqCoarse,0)
     setv(oscc.params.FmAmount,79)
+    setv(oscc.params.Kbt,0)
     pout = conv.addmodule('ZeroCnt',name='')
     conv.connect(oscc.outputs.Out,pout.inputs.In)
     conv.connect(pout.outputs.Out,g2m.inputs.Rate)
