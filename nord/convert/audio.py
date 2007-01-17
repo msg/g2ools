@@ -103,6 +103,7 @@ class ConvOverdrive(Convert):
     self.connect(xfade.inputs.In1,out.inputs.In1)
     self.connect(mix21b2.outputs.Out,out.inputs.In2)
 
+    self.params = [ modin.params.Lev, overdrive.params.Lev ]
     self.inputs[0] = modin.inputs.In
     self.outputs[0] = out.outputs.Out
 
