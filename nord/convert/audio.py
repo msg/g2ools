@@ -87,6 +87,11 @@ class ConvWaveWrap(Convert):
   inputmap = ['In','Mod']
   outputmap = ['Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    setv(g2mp.Amount,wavewrap[getv(nmmp.Wrap)])
+
 class ConvQuantizer(Convert):
   maing2module = 'Digitizer'
   parammap = ['Bits']
