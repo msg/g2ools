@@ -24,25 +24,42 @@ from nord.nm1.colors import nm1cablecolors
 from convert import *
 from table import *
 
-def handleslv(conv):
+def handleslv(conv,ratemodin,ratemodparam):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  slv,ratemod,kbt=None,None,g2m.inputs.Rate
+  slv,kbt=None,g2m.inputs.Rate
 
-  if hasattr(g2m.inputs,'RateVar'):
-    ratemod = g2m.inputs.RateVar
   if len(nmm.outputs.Slv.cables):
     oscmaster = conv.addmodule('OscMaster')
     setv(g2mp.Rate,64)
     setv(oscmaster.params.Kbt,0) # Off
     setv(oscmaster.params.FreqCoarse,getv(nmmp.Rate))
-    setv(oscmaster.params.PitchMod,modtable[getv(nmmp.RateMod)][0])
+    #setv(oscmaster.params.PitchMod,modtable[getv(nmmp.RateMod)][0])
     conv.connect(oscmaster.outputs.Out,g2m.inputs.Rate)
-    ratemod = oscmaster.inputs.PitchVar
+    ratemodin = oscmaster.inputs.PitchVar
+    ratemodparam = oscmaster.params.PitchMod
     slv = g2m.inputs.Rate
     kbt = oscmaster.inputs.Pitch
-  return ratemod,slv,kbt
+
+  # add fine tuning 
+  if len(nmm.inputs.Rate.cables):
+    mod = getv(nmmp.RateMod)
+    if mod == 0 or mod == 127:
+      setv(ratemodparam,mod)
+    else:
+      setv(ratemodparam,modtable[mod][0])
+      adj = conv.addmodule('Mix2-1B',name='PitchAdj')
+      conv.connect(adj.outputs.Out,ratemodin)
+      conv.connect(adj.inputs.Chain,adj.inputs.In1)
+      conv.connect(adj.inputs.In1,adj.inputs.In2)
+      setv(adj.params.Inv1,1)
+      setv(adj.params.Lev1,modtable[mod][1])
+      setv(adj.params.Lev2,modtable[mod][2])
+      ratemodin = adj.inputs.Chain
+
+  return ratemodin,ratemodparam,slv,kbt
+
 
 def postmst(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
@@ -87,7 +104,8 @@ class ConvLFOA(Convert):
 
     self.kbt = g2m.params.Kbt
     # update Rate input, Slv Output
-    self.inputs[0],self.outputs[0],kbt = handleslv(self)
+    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
+    self.inputs[0],self.outputs[0],kbt = ratemodin,slv,kbt
     self.kbtout = handlekbt(self,kbt,4,True)
 
 class ConvLFOB(Convert):
@@ -106,7 +124,9 @@ class ConvLFOB(Convert):
     setv(g2mp.PhaseMod,getv(nmmp.PwMod))
 
     self.kbt = g2m.params.Kbt
-    self.inputs[0],self.outputs[1],kbt = handleslv(self)
+
+    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
+    self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
     self.kbtout = handlekbt(self,kbt,4,True)
 
 class ConvLFOC(Convert):
@@ -127,7 +147,8 @@ class ConvLFOC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.kbt = g2m.params.Kbt
-    self.inputs[0],self.outputs[1],kbt = handleslv(self)
+    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
+    self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
 
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
