@@ -22,6 +22,19 @@
 from nord.utils import *
 from convert import *
 
+def handlelength(conv):
+  nmm,g2m = conv.nmmodule,conv.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+  length = getv(nmmp.Length)
+  if length > 16:
+    clkdiv = conv.addmodule('ClkDiv')
+    clkdiv.modes.DivMode.value = 0
+    setv(clkdiv.params.Divider,length)
+    conv.connect(clkdiv.outputs.Out,g2m.inputs.Rst)
+    conv.connect(clkdiv.inputs.Clk,g2m.inputs.Clk)
+    conv.inputs[1] = clkdiv.inputs.Rst
+    setv(g2mp.Loop,0) # Once
+
 class ConvEventSeq(Convert):
   maing2module = 'SeqEvent'
   parammap = ['Length','Loop',['TG1','Gate1'],['TG2','Gate2']]+[None]*32
