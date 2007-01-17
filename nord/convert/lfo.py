@@ -72,10 +72,14 @@ def postmst(conv,mstindex):
     return
 
   if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
+    oscc = conv.addmodule('OscC',name='')
+    setv(oscc.params.FreqCoarse,0)
+    setv(oscc.params.FmAmount,79)
     pout = conv.addmodule('ZeroCnt',name='')
+    conv.connect(oscc.outputs.Out,pout.inputs.In)
     conv.connect(pout.outputs.Out,g2m.inputs.Rate)
     setv(g2mp.Range,2)
-    conv.inputs[mstindex] = pout.inputs.In
+    conv.inputs[mstindex] = oscc.inputs.FmMod
 
   mstconv = nmm.inputs.Mst.net.output.module.conv
   mst = mstconv.g2module
