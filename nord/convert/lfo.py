@@ -52,13 +52,13 @@ def postmst(conv):
     if not nmm.inputs.Mst.net.output:
       return
     mstconv = nmm.inputs.Mst.net.output.module.conv
-    mstlfo = mstconv.g2module
-    if hasattr(mstlfo.params,'PolyMono'):
-      setv(g2mp.PolyMono,getv(mstlfo.params.PolyMono))
-    if hasattr(mstlfo.params,'Kbt') and hasattr(g2mp,'Kbt'):
-      setv(g2mp.Kbt,getv(mstlfo.params.Kbt))
-    if hasattr(mstlfo.params,'Range'):
-      setv(g2mp.Range,getv(mstlfo.params.Range))
+    mst = mstconv.g2module
+    if hasattr(mst.params,'PolyMono'):
+      setv(g2mp.PolyMono,getv(mst.params.PolyMono))
+    if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
+      setv(g2mp.Kbt,getv(mst.params.Kbt))
+    if not isnm1osc(mst) and hasattr(mst.params,'Range'):
+      setv(g2mp.Range,getv(mst.params.Range))
     else:
       setv(g2mp.Range,1)
 
