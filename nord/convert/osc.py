@@ -671,7 +671,7 @@ class ConvOscSlvFM(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    # handle special parameters
+
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
@@ -679,6 +679,15 @@ class ConvOscSlvFM(Convert):
     g2m.modes.Waveform.value = self.waveform
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.PhaseMod,g2m.params.PhaseMod)
+
+    # must happen after handle mst to get Range
+    if getv(getattr(nmmp,'-3Oct')):
+      freqmode = getv(g2mp.FreqMode)
+      if freqmode == 3: # Part
+        setv(g2mp.FreqCoarse,max(0,getv(g2m.FreqCoarse)-8))
+      else:
+        setv(g2mp.FreqCoarse,max(0,getv(g2m.FreqCoarse)-36))
+      
     self.inputs[1] = handlefm(self,fmmod,fmparam,fmbmod)
 
 class ConvNoise(Convert):
