@@ -1329,8 +1329,8 @@ modules = [
     shortnm='ClkDiv',
     page=PageType('Logic', 3),
     inputs=[
-      InputType('Rst',          g2portcolors.yellow_orange),
       InputType('Clk',          g2portcolors.yellow_orange),
+      InputType('Rst',          g2portcolors.yellow_orange),
     ],
     outputs=[
       OutputType('Out',          g2portcolors.yellow_orange),

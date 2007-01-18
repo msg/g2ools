@@ -1128,7 +1128,7 @@ ModuleKnowledge(
     shortnm('ClkDiv')
     longnm('Clock Divider')
     height(2)
-    inputs(['Rst','Clk'])
+    inputs(['Clk','Rst'])
     outputs(['Out'])
     params(['Divider'])
     modes(['DivMode'])
