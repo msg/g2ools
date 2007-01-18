@@ -104,6 +104,15 @@ class ConvMulti_Env(Convert):
   inputmap = ['Gate','In','AM']
   outputmap = ['Env','Out']
 
+  def closesttime(self, time):
+    timeval = 0
+    timemin = abs(g2adsrtime[0]-time)
+    for i in range(1,len(g2adsrtime)):
+      if abs(g2adsrtime[i]-time) < timemin:
+        timemin = abs(g2adsrtime[i]-time)
+        timeval = i
+    return timeval
+
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
@@ -131,13 +140,7 @@ class ConvMulti_Env(Convert):
     elif sustain == 3 and getv(nmmp.Time5) <= 16: # 16=5.3ms
       pass
     time = nm1adsrtime[getv(nmmp.Time4)]+nm1adsrtime[getv(nmmp.Time5)]
-    timeval = 0
-    timemin = abs(g2adsrtime[0]-time)
-    for i in range(1,len(g2adsrtime)):
-      if abs(g2adsrtime[i]-time) < timemin:
-        timemin = abs(g2adsrtime[i]-time)
-        timeval = i
-    setv(g2mp.Time4, timeval)
+    setv(g2mp.Time4, self.closesttime(time))
     setv(g2mp.Level4,0)
 
 class ConvEnvFollower(Convert):
