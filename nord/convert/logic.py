@@ -91,8 +91,8 @@ class ConvClkDiv(Convert):
 
 class ConvClkDivFix(Convert):
   maing2module = 'ClkDiv'
-  inputmap = ['Rst','Clk']
-  outputmap = ['Out',None,None]
+  inputmap = ['Clk','Rst']
+  outputmap = [None,None,'Out']
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
@@ -110,5 +110,6 @@ class ConvClkDivFix(Convert):
       self.connect(rst,clk.inputs.Rst)
       self.connect(midiclk,clk.inputs.Clk)
       rst,midiclk = clk.inputs.Rst,clk.inputs.Clk
-    self.outputs[-1:] = [ mod.outputs.Out for mod in self.g2modules ]
+    self.outputs[1] = self.g2modules[0].outputs.Out
+    self.outputs[0] = self.g2modules[1].outputs.Out
 
