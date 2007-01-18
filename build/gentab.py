@@ -119,12 +119,7 @@ fmbmod = [ # [phasemod,mix,inv]
 for i in range(128):
   if i and i % 4 == 0:
     f.write('\n')
-  for j in range(128):
-    if int(10*mix21b[j][1]) == int(10*fmb[i][2]):
-      mix = j
-    if int(10*mix21b[j][1]) == int(10*fmb[i][3]):
-      inv = j
-  f.write(' [%3d,%3d,%3d],' % (fmb[i][1],mix,inv))
+  f.write(' [%3d,%3d,%3d],' % (fmb[i][1],fmb[i][2],fmb[i][3]))
 f.write('''
 ]
 
