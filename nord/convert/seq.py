@@ -52,6 +52,8 @@ class ConvEventSeq(Convert):
         setv(step,getv(getattr(nmmp,s)))
         self.params[4+j*16+i] = step
 
+    handlelength(self)
+
 class ConvCtrlSeq(Convert):
   maing2module = 'SeqLev'
   parammap = [None]*16 + ['Length',['BipUni','Uni'],'Loop']
@@ -68,6 +70,8 @@ class ConvCtrlSeq(Convert):
       t = 'Ctrl%d' % (i+1)
       setv(step,getv(getattr(nmmp,t)))
       self.params[i] = step
+
+    handlelength(self)
 
 class ConvNoteSeqA(Convert):
   maing2module = 'SeqLev'
@@ -89,6 +93,7 @@ class ConvNoteSeqA(Convert):
       s = 'Seq2Step%d' % (i+1)
       setv(getattr(g2mp,s),1)
     setv(g2mp.TG,0) # simulate GClk (maybe?)
+    handlelength(self)
 
 class ConvNoteSeqB(Convert):
   maing2module = 'SeqNote'
@@ -110,4 +115,5 @@ class ConvNoteSeqB(Convert):
       s = 'Seq2Step%d' % (i+1)
       setv(getattr(g2mp,s),1)
     setv(g2mp.TG,0) # simulate GClk (maybe?)
+    handlelength(self)
 
