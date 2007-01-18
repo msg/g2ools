@@ -306,7 +306,7 @@ def postmst(conv,mstindex):
   if range < 2: # sub or lo
     # insert LevAdd with -48
     levadd = conv.addmodule('LevAdd',name='-48')
-    conv.connect(levadd.outputs.Out,g2m.inputs.Pitch)
+    conv.connect(levadd.outputs.Out,conv.inputs[mstindex])
     setv(levadd.params.BipUni,0) # Bip
     setv(levadd.params.Level,16) # -48
     conv.inputs[mstindex] = levadd.inputs.In
