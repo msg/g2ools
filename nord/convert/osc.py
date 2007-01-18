@@ -639,6 +639,31 @@ class ConvOscSlvE(ConvOscSlvC):
     self.outputs[0] = output
     self.inputs[2] = aminput
 
+def sinepostmst(conv,mstindex):
+  nmm,g2m = conv.nmmodule,conv.g2module
+  nmmp,g2mp = nmm.params, g2m.params
+
+  mstin = nmm.inputs.Mst
+  if not len(mstin.cables):
+    return
+
+  if not mstin.net.output:
+    return
+
+  mstconv = mstin.net.output.module.conv
+  mst = mstconv.g2module
+
+  if mstin.net.output.rate != nm1portcolors.slave:
+    oscc = conv.addmodule('OscC',name='')
+    setv(oscc.params.FreqCoarse,0)
+    setv(oscc.params.FmAmount,79)
+    setv(oscc.params.Kbt,0)
+    pout = conv.addmodule('ZeroCnt',name='')
+    conv.connect(oscc.outputs.Out,pout.inputs.In)
+    conv.connect(pout.outputs.Out,conv.inputs[mstindex])
+    conv.inputs[mstindex] = oscc.inputs.FmMod
+    return
+
 class ConvOscSineBank(Convert):
   maing2module = 'Mix8-1B'
   parammap = [ None ] * 24
@@ -701,8 +726,7 @@ class ConvOscSineBank(Convert):
           self.connect(oscs[i-1].inputs.Pitch,oscs[i].inputs.Pitch)
 
   def postmodule(self):
-    postmst(self,0)
-
+    sinepostmst(self,0)
 
 class ConvOscSlvFM(Convert):
   maing2module = 'OscPM'
@@ -721,8 +745,6 @@ class ConvOscSlvFM(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
-    self.inputs[0],fmmod,fmparam = handlemst(self,
-        g2m.inputs.PhaseMod,g2m.params.PhaseMod)
 
     # must happen after handle mst to get Range
     if getv(getattr(nmmp,'-3Oct')):
@@ -732,10 +754,10 @@ class ConvOscSlvFM(Convert):
       else:
         setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-36))
       
-    self.inputs[1] = handlefm(self,fmmod,fmparam,fmbmod)
+    self.inputs[1] = handlefm(self,g2m.inputs.PhaseMod,g2mp.PhaseMod,fmbmod)
 
   def postmodule(self):
-    postmst(self,0)
+    sinepostmst(self,0)
 
 class ConvNoise(Convert):
   maing2module = 'Noise'
