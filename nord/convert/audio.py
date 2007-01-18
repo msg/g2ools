@@ -81,10 +81,10 @@ class ConvOverdrive(Convert):
     setv(xfade.params.MixMod,127)
     self.connect(levmult.inputs.Mod,xfade.inputs.Mod)
     self.connect(xfade.inputs.In1,g2m.inputs.In)
-    self.connect(xfade.inputs.In2,mix11a.outputs.Out)
+    self.connect(mix11a.outputs.Out,xfade.inputs.In2)
 
     shpstatic2 = self.addmodule('ShpStatic',name='')
-    setv(shpstatic2.params.Mode,2) # Inv x2
+    setv(shpstatic2.params.Mode,1) # Inv x2
     self.connect(xfade.outputs.Out,shpstatic2.inputs.In)
 
     mix21b2 = self.addmodule('Mix2-1B',name='')
@@ -307,7 +307,7 @@ class ConvDigitizer(Convert):
     setv(g2mp.Bits,getv(nmmp.Bits)) # becuase it's also used for QuantOff
     quantoff = getv(nmmp.QuantOff)
     if quantoff:
-      setv(g2mp.Bits,0)
+      setv(g2mp.Bits,12)
     setv(g2mp.Active,1-getv(nmmp.SamplingOff))
 
 class ConvRingMod(Convert):
