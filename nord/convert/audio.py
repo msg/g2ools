@@ -31,7 +31,7 @@ class ConvClip(Convert):
 class ConvOverdrive(Convert):
   maing2module = 'Clip'
   parammap = [None,None]
-  inputmap = [None,'In']
+  inputmap = ['In',None]
   outputmap = [None]
 
   def domodule(self):
@@ -50,6 +50,7 @@ class ConvOverdrive(Convert):
 
     overdrive = self.addmodule('ConstSwT',name='Overdrive')
     setv(overdrive.params.Lev,getv(nmmp.Overdrive))
+    setv(overdrive.params.BipUni,1) # Uni
     self.connect(overdrive.outputs.Out,modin.inputs.Chain)
     
     shpstatic = self.addmodule('ShpStatic',name='')
@@ -104,7 +105,7 @@ class ConvOverdrive(Convert):
     self.connect(mix21b2.outputs.Out,out.inputs.In2)
 
     self.params = [ modin.params.Lev, overdrive.params.Lev ]
-    self.inputs[0] = modin.inputs.In
+    self.inputs[1] = modin.inputs.In
     self.outputs[0] = out.outputs.Out
 
 class ConvWaveWrap(Convert):
