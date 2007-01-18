@@ -122,6 +122,7 @@ class ConvMulti_Env(Convert):
       setv(adsr.params.Attack,0)
       setv(adsr.params.Decay,0)
       setv(adsr.params.Sustain,127)
+      setv(adsr.params.Release,getv(nmmp.Time5))
       updatevals(adsr.params,['Release'],nm1adsrtime,g2adsrtime)
       self.connect(g2m.inputs.Gate,adsr.inputs.Gate)
       self.connect(adsr.outputs.Env,g2m.inputs.AM)
