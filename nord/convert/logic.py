@@ -33,20 +33,8 @@ class ConvPosEdgeDly(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    nm1midival = getv(nmmp.Time)
-    time = nm1logictime[nm1midival]
-    if time <= 1000.:
-      g2picktime = [ .1*val for val in g2logictime ]
-      range = 0
-    elif time <= 10000.:
-      g2picktime = g2logictime[:]
-      range = 1
-    else:
-      g2picktime = [ 10*val for val in g2logictime ]
-      range = 2
-    g2midival = nm2g2val(nm1midival, nm1logictime, g2picktime)
-    setv(g2mp.Range,range)
-    setv(g2mp.Time, g2midival)
+    setv(g2mp.Range,1) # Lo
+    setv(g2mp.Time, logicdel[getv(nmmp.Time)])
     g2m.modes.Mode.value = self.mode
 
 class ConvNegEdgeDly(ConvPosEdgeDly):
