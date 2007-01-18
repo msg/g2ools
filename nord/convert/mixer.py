@@ -80,11 +80,22 @@ class ConvX_Fade(Convert):
   inputmap = ['In1','In2','Mod']
   outputmap = ['Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.LogLin,1) # Lin
 class ConvPan(Convert):
   maing2module = 'Pan'
   parammap = ['PanMod','Pan']
   inputmap = ['In','Mod']
   outputmap = ['OutL','OutR']
+
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.LogLin,1) # Lin
 
 class Conv1to2Fade(Convert):
   maing2module = 'Fade1-2'
