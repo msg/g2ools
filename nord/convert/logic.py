@@ -112,15 +112,15 @@ class ConvClkDivFix(Convert):
 
     setv(g2mp.Divider,11)
     g2m.modes.DivMode.value = 1
+    g2m.name = '8'
 
     rst,midiclk = g2m.inputs.Rst, g2m.inputs.Clk
-    for div in [7,5]:
-      clk = self.addmodule('ClkDiv')
-      clk.name = g2m.name
+    for div,nm in [[7,'8T'],[5,'16']]:
+      clk = self.addmodule('ClkDiv',name=nm)
       clk.modes.DivMode.value = 1
       setv(clk.params.Divider,div)
       self.connect(rst,clk.inputs.Rst)
       self.connect(midiclk,clk.inputs.Clk)
       rst,midiclk = clk.inputs.Rst,clk.inputs.Clk
-    self.outputs[1:] = [ mod.outputs.Out for mod in self.g2modules ]
+    self.outputs[-1:] = [ mod.outputs.Out for mod in self.g2modules ]
 
