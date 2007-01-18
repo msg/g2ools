@@ -65,20 +65,21 @@ def postmst(conv,mstindex):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  if not len(nmm.inputs.Mst.cables):
+  mstin = nmm.inputs.Mst
+  if not len(mstin.cables):
     return
 
-  if not nmm.inputs.Mst.net.output:
+  if not mstin.net.output:
     return
 
-  mstconv = nmm.inputs.Mst.net.output.module.conv
+  mstconv = mstin.net.output.module.conv
   mst = mstconv.g2module
   if hasattr(mst.params,'PolyMono'):
     setv(g2mp.PolyMono,getv(mst.params.PolyMono))
   if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
     setv(g2mp.Kbt,getv(mst.params.Kbt))
 
-  if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
+  if mstin.net.output.rate != nm1portcolors.slave:
     oscc = conv.addmodule('OscC',name='')
     setv(oscc.params.FreqCoarse,0)
     setv(oscc.params.FmAmount,79)
