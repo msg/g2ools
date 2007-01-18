@@ -71,6 +71,13 @@ def postmst(conv,mstindex):
   if not nmm.inputs.Mst.net.output:
     return
 
+  mstconv = nmm.inputs.Mst.net.output.module.conv
+  mst = mstconv.g2module
+  if hasattr(mst.params,'PolyMono'):
+    setv(g2mp.PolyMono,getv(mst.params.PolyMono))
+  if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
+    setv(g2mp.Kbt,getv(mst.params.Kbt))
+
   if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
     oscc = conv.addmodule('OscC',name='')
     setv(oscc.params.FreqCoarse,0)
@@ -81,13 +88,8 @@ def postmst(conv,mstindex):
     conv.connect(pout.outputs.Out,g2m.inputs.Rate)
     setv(g2mp.Range,2)
     conv.inputs[mstindex] = oscc.inputs.FmMod
+    return
 
-  mstconv = nmm.inputs.Mst.net.output.module.conv
-  mst = mstconv.g2module
-  if hasattr(mst.params,'PolyMono'):
-    setv(g2mp.PolyMono,getv(mst.params.PolyMono))
-  if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
-    setv(g2mp.Kbt,getv(mst.params.Kbt))
   if isnm1osc(mst):
     setv(g2mp.Range,2)
   elif hasattr(mst.params,'Range'):
