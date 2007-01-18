@@ -291,17 +291,22 @@ def postmst(conv,mstindex):
   nmm, g2m = conv.nmmodule, conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
-  if not len(nmm.inputs.Mst.cables):
+  mstin = nmm.inputs.Mst
+  if not len(mstin.cables):
     return
 
-  mstconv = nmm.inputs.Mst.net.output.module.conv
+  if mstin.net.output.rate != nm1portcolors.slave:
+    return
+
+  mstconv = mstin.net.output.module.conv
   mst = mstconv.g2module
-  print mst.type.shortnm
+  
   if not isnm1lfo(mstconv.nmmodule):
     return
 
   if not hasattr(mst.params,'Range'):
     return
+
   range = getv(mst.params.Range)
   if range < 2: # sub or lo
     # insert LevAdd with -48
@@ -710,7 +715,6 @@ class ConvOscSlvFM(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-
 
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
