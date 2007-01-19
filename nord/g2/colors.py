@@ -55,7 +55,7 @@ class g2cablecolors:
   purple = 5
   white = 6
 
-class g2portcolors:
+class g2conncolors:
   red = 0
   blue = 1
   yellow = 2

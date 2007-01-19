@@ -4,7 +4,7 @@ import os,string,sys
 from array import array
 sys.path.append('.')
 from nord.g2.file import Pch2File, MorphMap
-from nord.g2.colors import g2modulecolors, g2cablecolors, g2portcolors
+from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 
 class DX7Converter: 
   def __init__(self):

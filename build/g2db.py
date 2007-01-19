@@ -112,7 +112,7 @@ f=open('../nord/g2/modules.py','w')
 f.write('''#!/usr/bin/env python
 
 from nord.types import *
-from nord.g2.colors import g2portcolors
+from nord.g2.colors import g2conncolors
 from params import parammap
 
 class ModuleMap(Struct): pass
@@ -134,7 +134,7 @@ for struct in modulestructs:
     s += '''    inputs=[
 %s
     ],\n''' % (
-      '\n'.join(["      InputType(%-16sg2portcolors.%s)," % ("'%s'," % nm,t) 
+      '\n'.join(["      InputType(%-16sg2conncolors.%s)," % ("'%s'," % nm,t) 
 	  for nm,t in zip(struct.inputs, struct.inputtypes) ]),
       )
   else:
@@ -144,7 +144,7 @@ for struct in modulestructs:
     s += '''    outputs=[
 %s
     ],\n''' % (
-      '\n'.join(["      OutputType(%-16sg2portcolors.%s)," % ("'%s'," % nm,t) 
+      '\n'.join(["      OutputType(%-16sg2conncolors.%s)," % ("'%s'," % nm,t) 
 	  for nm,t in zip(struct.outputs, struct.outputtypes) ]),
       )
   else:

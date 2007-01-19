@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import *
-from nord.nm1.colors import nm1cablecolors, nm1portcolors
+from nord.nm1.colors import nm1cablecolors, nm1conncolors
 from convert import *
 from table import *
 
@@ -79,7 +79,7 @@ def postmst(conv,mstindex):
   if hasattr(mst.params,'Kbt') and hasattr(g2mp,'Kbt'):
     setv(g2mp.Kbt,getv(mst.params.Kbt))
 
-  if mstin.net.output.rate != nm1portcolors.slave:
+  if mstin.net.output.rate != nm1conncolors.slave:
     oscc = conv.addmodule('OscC',name='')
     setv(oscc.params.FreqCoarse,0)
     setv(oscc.params.FmAmount,79)

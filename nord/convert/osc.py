@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import *
-from nord.nm1.colors import nm1portcolors
+from nord.nm1.colors import nm1conncolors
 from convert import *
 from table import *
 
@@ -206,7 +206,7 @@ def handleoscmasterslv(conv,mst):
 
   onlyslave = 1
   for inputs in nmm.outputs.Slv.net.inputs:
-    if inputs.rate != nm1portcolors.slave:
+    if inputs.rate != nm1conncolors.slave:
       onlyslave = 0
 
   if onlyslave:
@@ -271,7 +271,7 @@ def handlemst(conv,fmmod,fmparam):
   if len(nmm.inputs.Mst.cables):
     if nmm.inputs.Mst.net.output:
       # Blue to Grey handling
-      if nmm.inputs.Mst.net.output.rate != nm1portcolors.slave:
+      if nmm.inputs.Mst.net.output.rate != nm1conncolors.slave:
         mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
         setv(mix11a.params.On,1)
         constswt = conv.addmodule('ConstSwT',name='Offset -64')
@@ -300,7 +300,7 @@ def postmst(conv,mstindex):
   if not len(mstin.cables):
     return
 
-  if mstin.net.output.rate != nm1portcolors.slave:
+  if mstin.net.output.rate != nm1conncolors.slave:
     return
 
   mstconv = mstin.net.output.module.conv
@@ -663,7 +663,7 @@ def sinepostmst(conv,mstindex):
   mstconv = mstin.net.output.module.conv
   mst = mstconv.g2module
 
-  if mstin.net.output.rate != nm1portcolors.slave:
+  if mstin.net.output.rate != nm1conncolors.slave:
     oscc = conv.addmodule('OscC',name='')
     setv(oscc.params.FreqCoarse,0)
     setv(oscc.params.FmAmount,79)

@@ -25,9 +25,9 @@ from exceptions import KeyboardInterrupt
 sys.path.append('.')
 from nord.g2.file import Pch2File
 from nord.file import MorphMap
-from nord.g2.colors import g2modulecolors, g2cablecolors, g2portcolors
+from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 from nord.nm1.file import PchFile
-from nord.nm1.colors import nm1cablecolors, nm1portcolors
+from nord.nm1.colors import nm1cablecolors, nm1conncolors
 from nord.nm1.file import NM1Error
 from nord.convert import typetable,setv
 from nord.net import printnet
@@ -41,12 +41,12 @@ nm2g2colors = {
   nm1cablecolors.purple: g2cablecolors.purple,
 }
 port2cablecolors = {
-  g2portcolors.red:           g2cablecolors.red,
-  g2portcolors.blue:          g2cablecolors.blue,
-  g2portcolors.yellow:        g2cablecolors.yellow,
-  g2portcolors.orange:        g2cablecolors.orange,
-  g2portcolors.blue_red:      g2cablecolors.blue,
-  g2portcolors.yellow_orange: g2cablecolors.yellow,
+  g2conncolors.red:           g2cablecolors.red,
+  g2conncolors.blue:          g2cablecolors.blue,
+  g2conncolors.yellow:        g2cablecolors.yellow,
+  g2conncolors.orange:        g2cablecolors.orange,
+  g2conncolors.blue_red:      g2cablecolors.blue,
+  g2conncolors.yellow_orange: g2cablecolors.yellow,
 }
 
 def convert(pch,config):
@@ -178,7 +178,7 @@ def convert(pch,config):
         if not source.net.output:
           print ' No source connection'
           color = g2cablecolors.white
-        elif source.net.output.type.type == nm1portcolors.slave:
+        elif source.net.output.type.type == nm1conncolors.slave:
           color = g2cablecolors.purple
         else:
           color = source.net.output.type.type
@@ -198,35 +198,35 @@ def convert(pch,config):
             continue
           #print '',input.type.name, input.rate
           # try and make all logic run at control rate.
-          if input.rate == g2portcolors.yellow_orange:
-            input.rate = g2portcolors.yellow
+          if input.rate == g2conncolors.yellow_orange:
+            input.rate = g2conncolors.yellow
             continue
-          if input.rate != g2portcolors.blue_red:
+          if input.rate != g2conncolors.blue_red:
             continue
           if not input.net.output:
             continue
-          if input.net.output.rate == g2portcolors.red:
+          if input.net.output.rate == g2conncolors.red:
             #print module.name,input.type.name,input.net.output.type.name
             modified = 1
             module.uprate = 1
-            input.rate = g2portcolors.red
+            input.rate = g2conncolors.red
             # change all outputs to red for next iteration
             for output in module.outputs:
-              if output.rate == g2portcolors.blue_red:
-                output.rate = g2portcolors.red
-              if output.rate == g2portcolors.yellow_orange:
-                output.rate = g2portcolors.orange
+              if output.rate == g2conncolors.blue_red:
+                output.rate = g2conncolors.red
+              if output.rate == g2conncolors.yellow_orange:
+                output.rate = g2conncolors.orange
             break
-          #elif input.net.output.rate == g2portcolors.blue:
+          #elif input.net.output.rate == g2conncolors.blue:
           #  modified = 1
           #  module.uprate = 0
-          #  input.rate = g2portcolors.red
+          #  input.rate = g2conncolors.red
           #  # change all outputs to red for next iteration
           #  for output in module.outputs:
-          #    if output.rate == g2portcolors.blue_red:
-          #      output.rate = g2portcolors.blue
-          #    if output.rate == g2portcolors.yellow_orange:
-          #      output.rate = g2portcolors.yellow
+          #    if output.rate == g2conncolors.blue_red:
+          #      output.rate = g2conncolors.blue
+          #    if output.rate == g2conncolors.yellow_orange:
+          #      output.rate = g2conncolors.yellow
           #  break
       if not modified:
         done = 1

@@ -28,7 +28,7 @@ class nm1cablecolors:
   purple = 5
   white = 6
 
-class nm1portcolors:
+class nm1conncolors:
   audio = 0
   control = 1
   logic = 2

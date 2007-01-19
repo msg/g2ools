@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from nord.types import *
-from nord.g2.colors import g2portcolors
+from nord.g2.colors import g2conncolors
 from params import parammap
 
 class ModuleMap(Struct): pass
@@ -16,12 +16,12 @@ modules = [
     page=PageType('In/Out', 5),
     inputs=[],
     outputs=[
-      OutputType('Pitch',        g2portcolors.blue),
-      OutputType('Gate',         g2portcolors.yellow),
-      OutputType('Lin',          g2portcolors.blue),
-      OutputType('Release',      g2portcolors.blue),
-      OutputType('Note',         g2portcolors.blue),
-      OutputType('Exp',          g2portcolors.blue),
+      OutputType('Pitch',        g2conncolors.blue),
+      OutputType('Gate',         g2conncolors.yellow),
+      OutputType('Lin',          g2conncolors.blue),
+      OutputType('Release',      g2conncolors.blue),
+      OutputType('Note',         g2conncolors.blue),
+      OutputType('Exp',          g2conncolors.blue),
     ],
     params=[],
     modes=[],
@@ -33,10 +33,10 @@ modules = [
     shortnm='4-Out',
     page=PageType('In/Out', 1),
     inputs=[
-      InputType('In1',          g2portcolors.red),
-      InputType('In2',          g2portcolors.red),
-      InputType('In3',          g2portcolors.red),
-      InputType('In4',          g2portcolors.red),
+      InputType('In1',          g2conncolors.red),
+      InputType('In2',          g2conncolors.red),
+      InputType('In3',          g2conncolors.red),
+      InputType('In4',          g2conncolors.red),
     ],
     outputs=[],
     params=[
@@ -53,8 +53,8 @@ modules = [
     shortnm='2-Out',
     page=PageType('In/Out', 0),
     inputs=[
-      InputType('InL',          g2portcolors.red),
-      InputType('InR',          g2portcolors.red),
+      InputType('InL',          g2conncolors.red),
+      InputType('InR',          g2conncolors.red),
     ],
     outputs=[],
     params=[
@@ -71,12 +71,12 @@ modules = [
     shortnm='Invert',
     page=PageType('Logic', 1),
     inputs=[
-      InputType('In1',          g2portcolors.yellow_orange),
-      InputType('In2',          g2portcolors.yellow_orange),
+      InputType('In1',          g2conncolors.yellow_orange),
+      InputType('In2',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.yellow_orange),
-      OutputType('Out2',         g2portcolors.yellow_orange),
+      OutputType('Out1',         g2conncolors.yellow_orange),
+      OutputType('Out2',         g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[],
@@ -88,14 +88,14 @@ modules = [
     shortnm='OscB',
     page=PageType('Osc', 1),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Sync',         g2portcolors.red),
-      InputType('FmMod',        g2portcolors.red),
-      InputType('ShapeMod',     g2portcolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Sync',         g2conncolors.red),
+      InputType('FmMod',        g2conncolors.red),
+      InputType('ShapeMod',     g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -119,14 +119,14 @@ modules = [
     shortnm='OscShpB',
     page=PageType('Osc', 6),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Sync',         g2portcolors.red),
-      InputType('FmMod',        g2portcolors.red),
-      InputType('ShapeMod',     g2portcolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Sync',         g2conncolors.red),
+      InputType('FmMod',        g2conncolors.red),
+      InputType('ShapeMod',     g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -151,13 +151,13 @@ modules = [
     shortnm='OscC',
     page=PageType('Osc', 2),
     inputs=[
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Sync',         g2portcolors.red),
-      InputType('FmMod',        g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Sync',         g2conncolors.red),
+      InputType('FmMod',        g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -180,12 +180,12 @@ modules = [
     shortnm='Reverb',
     page=PageType('FX', 7),
     inputs=[
-      InputType('InL',          g2portcolors.red),
-      InputType('InR',          g2portcolors.red),
+      InputType('InL',          g2conncolors.red),
+      InputType('InR',          g2conncolors.red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.red),
-      OutputType('OutR',         g2portcolors.red),
+      OutputType('OutL',         g2conncolors.red),
+      OutputType('OutR',         g2conncolors.red),
     ],
     params=[
       ParameterType('Time',         parammap.ReverbTime),
@@ -204,12 +204,12 @@ modules = [
     shortnm='OscString',
     page=PageType('Osc', 13),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue),
-      InputType('PitchVar',     g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue),
+      InputType('PitchVar',     g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -230,18 +230,18 @@ modules = [
     shortnm='Sw8-1',
     page=PageType('Switch', 5),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
-      InputType('In7',          g2portcolors.blue_red),
-      InputType('In8',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
+      InputType('In7',          g2conncolors.blue_red),
+      InputType('In8',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Control',      g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Control',      g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.sw_3,
@@ -257,12 +257,12 @@ modules = [
     shortnm='ValSw1-2',
     page=PageType('Switch', 11),
     inputs=[
-      InputType('Input',        g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.blue_red),
+      InputType('Input',        g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('OutOn',        g2portcolors.blue_red),
-      OutputType('OutOff',       g2portcolors.blue_red),
+      OutputType('OutOn',        g2conncolors.blue_red),
+      OutputType('OutOff',       g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Val',          parammap.ValSwVal,
@@ -278,12 +278,12 @@ modules = [
     shortnm='X-Fade',
     page=PageType('Mixer', 13),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('MixMod',       parammap.Level_100),
@@ -299,14 +299,14 @@ modules = [
     shortnm='Mix4-1B',
     page=PageType('Mixer', 5),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.MixLevel),
@@ -324,13 +324,13 @@ modules = [
     shortnm='EnvADSR',
     page=PageType('Env', 0),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('AM',           g2portcolors.blue),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('AM',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Shape',        parammap.EnvShape_3),
@@ -351,18 +351,18 @@ modules = [
     shortnm='Mux1-8',
     page=PageType('Switch', 14),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.blue),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.blue_red),
-      OutputType('Out2',         g2portcolors.blue_red),
-      OutputType('Out3',         g2portcolors.blue_red),
-      OutputType('Out4',         g2portcolors.blue_red),
-      OutputType('Out5',         g2portcolors.blue_red),
-      OutputType('Out6',         g2portcolors.blue_red),
-      OutputType('Out7',         g2portcolors.blue_red),
-      OutputType('Out8',         g2portcolors.blue_red),
+      OutputType('Out1',         g2conncolors.blue_red),
+      OutputType('Out2',         g2conncolors.blue_red),
+      OutputType('Out3',         g2conncolors.blue_red),
+      OutputType('Out4',         g2conncolors.blue_red),
+      OutputType('Out5',         g2conncolors.blue_red),
+      OutputType('Out6',         g2conncolors.blue_red),
+      OutputType('Out7',         g2conncolors.blue_red),
+      OutputType('Out8',         g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -374,10 +374,10 @@ modules = [
     shortnm='PartQuant',
     page=PageType('Note', 2),
     inputs=[
-      InputType('In',           g2portcolors.blue),
+      InputType('In',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Range',        parammap.PartialRange),
@@ -391,17 +391,17 @@ modules = [
     shortnm='ModADSR',
     page=PageType('Env', 8),
     inputs=[
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('AttackMod',    g2portcolors.blue),
-      InputType('DecayMod',     g2portcolors.blue),
-      InputType('SustainMod',   g2portcolors.blue),
-      InputType('ReleaseMod',   g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
-      InputType('AM',           g2portcolors.blue),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('AttackMod',    g2conncolors.blue),
+      InputType('DecayMod',     g2conncolors.blue),
+      InputType('SustainMod',   g2conncolors.blue),
+      InputType('ReleaseMod',   g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('AM',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Attack',       parammap.EnvTime),
@@ -424,10 +424,10 @@ modules = [
     shortnm='LfoC',
     page=PageType('LFO', 2),
     inputs=[
-      InputType('Rate',         g2portcolors.blue),
+      InputType('Rate',         g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Rate',         parammap.LfoRate_3),
@@ -447,16 +447,16 @@ modules = [
     shortnm='LfoShpA',
     page=PageType('LFO', 3),
     inputs=[
-      InputType('Rate',         g2portcolors.blue),
-      InputType('RateVar',      g2portcolors.blue),
-      InputType('Rst',          g2portcolors.blue),
-      InputType('ShapeMod',     g2portcolors.blue),
-      InputType('PhaseMod',     g2portcolors.blue),
-      InputType('Dir',          g2portcolors.blue),
+      InputType('Rate',         g2conncolors.blue),
+      InputType('RateVar',      g2conncolors.blue),
+      InputType('Rst',          g2conncolors.blue),
+      InputType('ShapeMod',     g2conncolors.blue),
+      InputType('PhaseMod',     g2conncolors.blue),
+      InputType('Dir',          g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
-      OutputType('Snc',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
+      OutputType('Snc',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Rate',         parammap.LfoRate_4),
@@ -481,11 +481,11 @@ modules = [
     shortnm='LfoA',
     page=PageType('LFO', 0),
     inputs=[
-      InputType('Rate',         g2portcolors.blue),
-      InputType('RateVar',      g2portcolors.blue),
+      InputType('Rate',         g2conncolors.blue),
+      InputType('RateVar',      g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Rate',         parammap.LfoRate_3),
@@ -506,11 +506,11 @@ modules = [
     shortnm='OscMaster',
     page=PageType('Osc', 16),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -528,11 +528,11 @@ modules = [
     shortnm='Saturate',
     page=PageType('Shaper', 2),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Amount',       parammap.Level_100),
@@ -549,11 +549,11 @@ modules = [
     shortnm='MetNoise',
     page=PageType('Osc', 10),
     inputs=[
-      InputType('FreqMod',      g2portcolors.blue_red),
-      InputType('ColorMod',     g2portcolors.blue_red),
+      InputType('FreqMod',      g2conncolors.blue_red),
+      InputType('ColorMod',     g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Color',        parammap.Level_100),
@@ -572,13 +572,13 @@ modules = [
     page=PageType('In/Out', 7),
     inputs=[],
     outputs=[
-      OutputType('Wheel',        g2portcolors.blue),
-      OutputType('AftTouch',     g2portcolors.blue),
-      OutputType('ControlPedal', g2portcolors.blue),
-      OutputType('SustainPedal', g2portcolors.yellow),
-      OutputType('PitchStick',   g2portcolors.blue),
-      OutputType('GlobalWheel1', g2portcolors.blue),
-      OutputType('GlobalWheel2', g2portcolors.blue),
+      OutputType('Wheel',        g2conncolors.blue),
+      OutputType('AftTouch',     g2conncolors.blue),
+      OutputType('ControlPedal', g2conncolors.blue),
+      OutputType('SustainPedal', g2conncolors.yellow),
+      OutputType('PitchStick',   g2conncolors.blue),
+      OutputType('GlobalWheel1', g2conncolors.blue),
+      OutputType('GlobalWheel2', g2conncolors.blue),
     ],
     params=[],
     modes=[],
@@ -591,7 +591,7 @@ modules = [
     page=PageType('Osc', 9),
     inputs=[],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Color',        parammap.NoiseColor),
@@ -606,10 +606,10 @@ modules = [
     shortnm='Eq2Band',
     page=PageType('Filter', 12),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('LoSlope',      parammap.EqdB),
@@ -628,10 +628,10 @@ modules = [
     shortnm='Eq3Band',
     page=PageType('Filter', 13),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('LoSlope',      parammap.EqdB),
@@ -652,11 +652,11 @@ modules = [
     shortnm='ShpExp',
     page=PageType('Shaper', 3),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Amount',       parammap.Level_100),
@@ -673,11 +673,11 @@ modules = [
     shortnm='SwOnOffM',
     page=PageType('Switch', 0),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('On',           parammap.OffOn,
@@ -693,11 +693,11 @@ modules = [
     shortnm='Pulse',
     page=PageType('Logic', 4),
     inputs=[
-      InputType('In',           g2portcolors.yellow_orange),
-      InputType('Time',         g2portcolors.blue_red),
+      InputType('In',           g2conncolors.yellow_orange),
+      InputType('Time',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Time',         parammap.LogicTime),
@@ -715,18 +715,18 @@ modules = [
     shortnm='Mix8-1B',
     page=PageType('Mixer', 9),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
-      InputType('In7',          g2portcolors.blue_red),
-      InputType('In8',          g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
+      InputType('In7',          g2conncolors.blue_red),
+      InputType('In8',          g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.MixLevel),
@@ -749,13 +749,13 @@ modules = [
     shortnm='EnvH',
     page=PageType('Env', 1),
     inputs=[
-      InputType('Trig',         g2portcolors.yellow),
-      InputType('AM',           g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow),
+      InputType('AM',           g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Hold',         parammap.EnvTime),
@@ -770,11 +770,11 @@ modules = [
     shortnm='Delay',
     page=PageType('Logic', 5),
     inputs=[
-      InputType('In',           g2portcolors.yellow_orange),
-      InputType('TimeMod',      g2portcolors.blue_red),
+      InputType('In',           g2conncolors.yellow_orange),
+      InputType('TimeMod',      g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Time',         parammap.LogicTime),
@@ -793,7 +793,7 @@ modules = [
     page=PageType('Level', 0),
     inputs=[],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Level',        parammap.LevBipUni),
@@ -808,11 +808,11 @@ modules = [
     shortnm='LevMult',
     page=PageType('Level', 6),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -824,12 +824,12 @@ modules = [
     shortnm='FltVoice',
     page=PageType('Filter', 9),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('VowelMod',     g2portcolors.blue),
-      InputType('FreqMod',      g2portcolors.red),
+      InputType('In',           g2conncolors.red),
+      InputType('VowelMod',     g2conncolors.blue),
+      InputType('FreqMod',      g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Vowel1',       parammap.Vowel),
@@ -852,13 +852,13 @@ modules = [
     shortnm='EnvAHD',
     page=PageType('Env', 4),
     inputs=[
-      InputType('Trig',         g2portcolors.yellow),
-      InputType('AM',           g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow),
+      InputType('AM',           g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Shape',        parammap.EnvShape_3),
@@ -878,12 +878,12 @@ modules = [
     shortnm='Pan',
     page=PageType('Mixer', 12),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.blue_red),
-      OutputType('OutR',         g2portcolors.blue_red),
+      OutputType('OutL',         g2conncolors.blue_red),
+      OutputType('OutR',         g2conncolors.blue_red),
     ],
     params=[
       ParameterType('PanMod',       parammap.Level_100),
@@ -899,16 +899,16 @@ modules = [
     shortnm='MixStereo',
     page=PageType('Mixer', 11),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.blue_red),
-      OutputType('OutR',         g2portcolors.blue_red),
+      OutputType('OutL',         g2conncolors.blue_red),
+      OutputType('OutR',         g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.Level_100),
@@ -934,14 +934,14 @@ modules = [
     shortnm='FltMulti',
     page=PageType('Filter', 4),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('In',           g2conncolors.red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('LP',           g2portcolors.red),
-      OutputType('BP',           g2portcolors.red),
-      OutputType('HP',           g2portcolors.red),
+      OutputType('LP',           g2conncolors.red),
+      OutputType('BP',           g2conncolors.red),
+      OutputType('HP',           g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.FltFreq),
@@ -962,7 +962,7 @@ modules = [
     page=PageType('Level', 2),
     inputs=[],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Lev',          parammap.LevBipUni),
@@ -980,14 +980,14 @@ modules = [
     shortnm='FltNord',
     page=PageType('Filter', 2),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('FMLin',        g2portcolors.blue_red),
-      InputType('Res',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('FMLin',        g2conncolors.blue_red),
+      InputType('Res',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.FltFreq),
@@ -1010,13 +1010,13 @@ modules = [
     shortnm='EnvMulti',
     page=PageType('Env', 6),
     inputs=[
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('In',           g2portcolors.blue_red),
-      InputType('AM',           g2portcolors.blue),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('AM',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Level1',       parammap.EnvLevel),
@@ -1042,11 +1042,11 @@ modules = [
     shortnm='S&H',
     page=PageType('Switch', 16),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.yellow_orange),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -1058,10 +1058,10 @@ modules = [
     shortnm='FltStatic',
     page=PageType('Filter', 5),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.FltFreq),
@@ -1079,13 +1079,13 @@ modules = [
     shortnm='EnvD',
     page=PageType('Env', 2),
     inputs=[
-      InputType('Trig',         g2portcolors.yellow),
-      InputType('AM',           g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow),
+      InputType('AM',           g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Decay',        parammap.EnvTime),
@@ -1100,10 +1100,10 @@ modules = [
     shortnm='Automate',
     page=PageType('MIDI', 6),
     inputs=[
-      InputType('In',           g2portcolors.yellow),
+      InputType('In',           g2conncolors.yellow),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow),
+      OutputType('Out',          g2conncolors.yellow),
     ],
     params=[
       ParameterType('Ctrl',         parammap.MidiData),
@@ -1120,12 +1120,12 @@ modules = [
     shortnm='DrumSynth',
     page=PageType('Osc', 12),
     inputs=[
-      InputType('Trig',         g2portcolors.yellow),
-      InputType('Vel',          g2portcolors.blue),
-      InputType('Pitch',        g2portcolors.blue),
+      InputType('Trig',         g2conncolors.yellow),
+      InputType('Vel',          g2conncolors.blue),
+      InputType('Pitch',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Masterfreq',   parammap.DrumSynthFreq),
@@ -1154,10 +1154,10 @@ modules = [
     shortnm='CompLev',
     page=PageType('Level', 10),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('C',            parammap.Bipolar_127),
@@ -1171,18 +1171,18 @@ modules = [
     shortnm='Mux8-1X',
     page=PageType('Switch', 15),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
-      InputType('In7',          g2portcolors.blue_red),
-      InputType('In8',          g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.blue),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
+      InputType('In7',          g2conncolors.blue_red),
+      InputType('In8',          g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('XFade',        parammap.Level_100),
@@ -1196,11 +1196,11 @@ modules = [
     shortnm='Clip',
     page=PageType('Shaper', 0),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('ClipLevMod',   parammap.Level_100),
@@ -1217,11 +1217,11 @@ modules = [
     shortnm='Overdrive',
     page=PageType('Shaper', 1),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('AmountMod',    parammap.Level_100),
@@ -1239,11 +1239,11 @@ modules = [
     shortnm='Scratch',
     page=PageType('FX', 6),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Mod',          g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Mod',          g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Ratio',        parammap.ScratchRatio),
@@ -1260,14 +1260,14 @@ modules = [
     shortnm='Gate',
     page=PageType('Logic', 0),
     inputs=[
-      InputType('In1_1',        g2portcolors.yellow_orange),
-      InputType('In1_2',        g2portcolors.yellow_orange),
-      InputType('In2_1',        g2portcolors.yellow_orange),
-      InputType('In2_2',        g2portcolors.yellow_orange),
+      InputType('In1_1',        g2conncolors.yellow_orange),
+      InputType('In1_2',        g2conncolors.yellow_orange),
+      InputType('In2_1',        g2conncolors.yellow_orange),
+      InputType('In2_2',        g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.yellow_orange),
-      OutputType('Out2',         g2portcolors.yellow_orange),
+      OutputType('Out1',         g2conncolors.yellow_orange),
+      OutputType('Out2',         g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[
@@ -1282,12 +1282,12 @@ modules = [
     shortnm='Mix2-1B',
     page=PageType('Mixer', 3),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Inv1',         parammap.MixInvert),
@@ -1305,13 +1305,13 @@ modules = [
     shortnm='ClkGen',
     page=PageType('LFO', 4),
     inputs=[
-      InputType('Rst',          g2portcolors.yellow),
+      InputType('Rst',          g2conncolors.yellow),
     ],
     outputs=[
-      OutputType('1/96',         g2portcolors.yellow),
-      OutputType('1/16',         g2portcolors.yellow),
-      OutputType('ClkActive',    g2portcolors.yellow),
-      OutputType('Sync',         g2portcolors.yellow),
+      OutputType('1/96',         g2conncolors.yellow),
+      OutputType('1/16',         g2conncolors.yellow),
+      OutputType('ClkActive',    g2conncolors.yellow),
+      OutputType('Sync',         g2conncolors.yellow),
     ],
     params=[
       ParameterType('Rate',         parammap.RateBpm),
@@ -1329,11 +1329,11 @@ modules = [
     shortnm='ClkDiv',
     page=PageType('Logic', 3),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Divider',      parammap.Range_128),
@@ -1349,10 +1349,10 @@ modules = [
     shortnm='EnvFollow',
     page=PageType('Level', 8),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Attack',       parammap.EnvFollowAttack),
@@ -1367,10 +1367,10 @@ modules = [
     shortnm='NoteScaler',
     page=PageType('Note', 3),
     inputs=[
-      InputType('In',           g2portcolors.blue),
+      InputType('In',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Range',        parammap.NoteRange),
@@ -1384,11 +1384,11 @@ modules = [
     shortnm='WaveWrap',
     page=PageType('Shaper', 4),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('AmountMod',    parammap.Level_100),
@@ -1404,10 +1404,10 @@ modules = [
     shortnm='NoteQuant',
     page=PageType('Note', 0),
     inputs=[
-      InputType('In',           g2portcolors.blue),
+      InputType('In',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Range',        parammap.NoteRange),
@@ -1422,11 +1422,11 @@ modules = [
     shortnm='SwOnOffT',
     page=PageType('Switch', 1),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('On',           parammap.OffOn,
@@ -1442,18 +1442,18 @@ modules = [
     shortnm='Sw1-8',
     page=PageType('Switch', 9),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.blue_red),
-      OutputType('Out2',         g2portcolors.blue_red),
-      OutputType('Out3',         g2portcolors.blue_red),
-      OutputType('Out4',         g2portcolors.blue_red),
-      OutputType('Out5',         g2portcolors.blue_red),
-      OutputType('Out6',         g2portcolors.blue_red),
-      OutputType('Out7',         g2portcolors.blue_red),
-      OutputType('Out8',         g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out1',         g2conncolors.blue_red),
+      OutputType('Out2',         g2conncolors.blue_red),
+      OutputType('Out3',         g2conncolors.blue_red),
+      OutputType('Out4',         g2conncolors.blue_red),
+      OutputType('Out5',         g2conncolors.blue_red),
+      OutputType('Out6',         g2conncolors.blue_red),
+      OutputType('Out7',         g2conncolors.blue_red),
+      OutputType('Out8',         g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.sw_3),
@@ -1467,14 +1467,14 @@ modules = [
     shortnm='Sw4-1',
     page=PageType('Switch', 4),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.sw_2,
@@ -1490,10 +1490,10 @@ modules = [
     shortnm='LevAmp',
     page=PageType('Level', 5),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Gain',         parammap.LevAmpGain),
@@ -1508,10 +1508,10 @@ modules = [
     shortnm='Rect',
     page=PageType('Shaper', 6),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Mode',         parammap.RectMode),
@@ -1526,10 +1526,10 @@ modules = [
     shortnm='ShpStatic',
     page=PageType('Shaper', 5),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Mode',         parammap.ShpStaticMode),
@@ -1544,14 +1544,14 @@ modules = [
     shortnm='EnvADR',
     page=PageType('Env', 3),
     inputs=[
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('In',           g2portcolors.blue_red),
-      InputType('AM',           g2portcolors.blue),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('AM',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('End',          g2portcolors.yellow),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('End',          g2conncolors.yellow),
     ],
     params=[
       ParameterType('Shape',        parammap.EnvShape_3),
@@ -1572,12 +1572,12 @@ modules = [
     shortnm='WindSw',
     page=PageType('Switch', 12),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Gate',         g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Gate',         g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('ValFrom',      parammap.Range_64),
@@ -1592,18 +1592,18 @@ modules = [
     shortnm='8Counter',
     page=PageType('Logic', 6),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.yellow_orange),
-      OutputType('Out2',         g2portcolors.yellow_orange),
-      OutputType('Out3',         g2portcolors.yellow_orange),
-      OutputType('Out4',         g2portcolors.yellow_orange),
-      OutputType('Out5',         g2portcolors.yellow_orange),
-      OutputType('Out6',         g2portcolors.yellow_orange),
-      OutputType('Out7',         g2portcolors.yellow_orange),
-      OutputType('Out8',         g2portcolors.yellow_orange),
+      OutputType('Out1',         g2conncolors.yellow_orange),
+      OutputType('Out2',         g2conncolors.yellow_orange),
+      OutputType('Out3',         g2conncolors.yellow_orange),
+      OutputType('Out4',         g2conncolors.yellow_orange),
+      OutputType('Out5',         g2conncolors.yellow_orange),
+      OutputType('Out6',         g2conncolors.yellow_orange),
+      OutputType('Out7',         g2conncolors.yellow_orange),
+      OutputType('Out8',         g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[],
@@ -1615,11 +1615,11 @@ modules = [
     shortnm='FltLP',
     page=PageType('Filter', 0),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('In',           g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.FltFreq),
@@ -1638,14 +1638,14 @@ modules = [
     shortnm='Sw1-4',
     page=PageType('Switch', 8),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.blue_red),
-      OutputType('Out2',         g2portcolors.blue_red),
-      OutputType('Out3',         g2portcolors.blue_red),
-      OutputType('Out4',         g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out1',         g2conncolors.blue_red),
+      OutputType('Out2',         g2conncolors.blue_red),
+      OutputType('Out3',         g2conncolors.blue_red),
+      OutputType('Out4',         g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.sw_2,
@@ -1661,10 +1661,10 @@ modules = [
     shortnm='Flanger',
     page=PageType('FX', 2),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Rate',         parammap.FlangerRate),
@@ -1681,12 +1681,12 @@ modules = [
     shortnm='Sw1-2',
     page=PageType('Switch', 7),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out2',         g2portcolors.blue_red),
-      OutputType('Out1',         g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out2',         g2conncolors.blue_red),
+      OutputType('Out1',         g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.Sw_1),
@@ -1700,13 +1700,13 @@ modules = [
     shortnm='FlipFlop',
     page=PageType('Logic', 2),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('In',           g2portcolors.yellow_orange),
-      InputType('Res',          g2portcolors.yellow_orange),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('In',           g2conncolors.yellow_orange),
+      InputType('Res',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('NotQ',         g2portcolors.yellow_orange),
-      OutputType('Q',            g2portcolors.yellow_orange),
+      OutputType('NotQ',         g2conncolors.yellow_orange),
+      OutputType('Q',            g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[
@@ -1720,12 +1720,12 @@ modules = [
     shortnm='FltClassic',
     page=PageType('Filter', 3),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('In',           g2conncolors.red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.FltFreq),
@@ -1744,11 +1744,11 @@ modules = [
     shortnm='StChorus',
     page=PageType('FX', 0),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.red),
-      OutputType('OutR',         g2portcolors.red),
+      OutputType('OutL',         g2conncolors.red),
+      OutputType('OutR',         g2conncolors.red),
     ],
     params=[
       ParameterType('Detune',       parammap.Level_100),
@@ -1764,10 +1764,10 @@ modules = [
     shortnm='OscD',
     page=PageType('Osc', 3),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -1787,11 +1787,11 @@ modules = [
     shortnm='OscA',
     page=PageType('Osc', 0),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -1811,12 +1811,12 @@ modules = [
     shortnm='FreqShift',
     page=PageType('FX', 4),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Shift',        g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Shift',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Dn',           g2portcolors.red),
-      OutputType('Up',           g2portcolors.red),
+      OutputType('Dn',           g2conncolors.red),
+      OutputType('Up',           g2conncolors.red),
     ],
     params=[
       ParameterType('FreqShift',    parammap.FreqShiftFreq),
@@ -1833,12 +1833,12 @@ modules = [
     shortnm='Sw2-1',
     page=PageType('Switch', 3),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.Sw_1,
@@ -1854,14 +1854,14 @@ modules = [
     shortnm='FltPhase',
     page=PageType('Filter', 6),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Spr',          g2portcolors.blue),
-      InputType('FB',           g2portcolors.blue),
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('In',           g2conncolors.red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Spr',          g2conncolors.blue),
+      InputType('FB',           g2conncolors.blue),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('PitchMod',     parammap.Level_100),
@@ -1885,10 +1885,10 @@ modules = [
     shortnm='EqPeak',
     page=PageType('Filter', 11),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.Freq_3),
@@ -1906,12 +1906,12 @@ modules = [
     shortnm='ValSw2-1',
     page=PageType('Switch', 10),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Val',          parammap.ValSwVal),
@@ -1925,12 +1925,12 @@ modules = [
     shortnm='OscNoise',
     page=PageType('Osc', 8),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Width',        g2portcolors.blue_red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Width',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -1951,11 +1951,11 @@ modules = [
     shortnm='Vocoder',
     page=PageType('Filter', 10),
     inputs=[
-      InputType('Ctrl',         g2portcolors.red),
-      InputType('In',           g2portcolors.red),
+      InputType('Ctrl',         g2conncolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Band1',        parammap.VocoderBand),
@@ -1986,10 +1986,10 @@ modules = [
     shortnm='LevAdd',
     page=PageType('Level', 3),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Level',        parammap.LevBipUni),
@@ -2004,12 +2004,12 @@ modules = [
     shortnm='Fade1-2',
     page=PageType('Mixer', 14),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.blue_red),
-      OutputType('Out2',         g2portcolors.blue_red),
+      OutputType('Out1',         g2conncolors.blue_red),
+      OutputType('Out2',         g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Mix',          parammap.Fade12Mix),
@@ -2024,12 +2024,12 @@ modules = [
     shortnm='Fade2-1',
     page=PageType('Mixer', 15),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Mix',          parammap.Fade21Mix),
@@ -2044,12 +2044,12 @@ modules = [
     shortnm='LevScaler',
     page=PageType('Note', 7),
     inputs=[
-      InputType('Note',         g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
+      InputType('Note',         g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Level',        g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Level',        g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('L',            parammap.LevScaledB),
@@ -2066,17 +2066,17 @@ modules = [
     shortnm='Mix8-1A',
     page=PageType('Mixer', 8),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
-      InputType('In7',          g2portcolors.blue_red),
-      InputType('In8',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
+      InputType('In7',          g2conncolors.blue_red),
+      InputType('In8',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Pad',          parammap.Pad_3),
@@ -2090,12 +2090,12 @@ modules = [
     shortnm='LevMod',
     page=PageType('Level', 7),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
-      InputType('ModDepth',     g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
+      InputType('ModDepth',     g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('ModDepth',     parammap.Level_100),
@@ -2110,11 +2110,11 @@ modules = [
     shortnm='Digitizer',
     page=PageType('FX', 3),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Rate',         g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Rate',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Bits',         parammap.DigitizerBits),
@@ -2131,13 +2131,13 @@ modules = [
     shortnm='EnvADDSR',
     page=PageType('Env', 5),
     inputs=[
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('AM',           g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('AM',           g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('KB',           parammap.OffOn),
@@ -2161,19 +2161,19 @@ modules = [
     shortnm='SeqNote',
     page=PageType('Seq', 3),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
-      InputType('Loop',         g2portcolors.yellow_orange),
-      InputType('Park',         g2portcolors.yellow_orange),
-      InputType('Note',         g2portcolors.blue_red),
-      InputType('Trig',         g2portcolors.yellow_orange),
-      InputType('RecVal',       g2portcolors.blue_red),
-      InputType('RecEnable',    g2portcolors.yellow_orange),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
+      InputType('Loop',         g2conncolors.yellow_orange),
+      InputType('Park',         g2conncolors.yellow_orange),
+      InputType('Note',         g2conncolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow_orange),
+      InputType('RecVal',       g2conncolors.blue_red),
+      InputType('RecEnable',    g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Link',         g2portcolors.yellow_orange),
-      OutputType('Note',         g2portcolors.blue_red),
-      OutputType('Trig',         g2portcolors.yellow_orange),
+      OutputType('Link',         g2conncolors.yellow_orange),
+      OutputType('Note',         g2conncolors.blue_red),
+      OutputType('Trig',         g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Seq1Step1',    parammap.FreqCoarse),
@@ -2223,14 +2223,14 @@ modules = [
     shortnm='Mix4-1C',
     page=PageType('Mixer', 6),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.MixLevel),
@@ -2261,18 +2261,18 @@ modules = [
     shortnm='Mux8-1',
     page=PageType('Switch', 13),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
-      InputType('In7',          g2portcolors.blue_red),
-      InputType('In8',          g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.blue),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
+      InputType('In7',          g2conncolors.blue_red),
+      InputType('In8',          g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -2284,11 +2284,11 @@ modules = [
     shortnm='WahWah',
     page=PageType('Filter', 8),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Sweep',        g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Sweep',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('SweepMod',     parammap.Level_100),
@@ -2316,8 +2316,8 @@ modules = [
     page=PageType('In/Out', 4),
     inputs=[],
     outputs=[
-      OutputType('OutL',         g2portcolors.red),
-      OutputType('OutR',         g2portcolors.red),
+      OutputType('OutL',         g2conncolors.red),
+      OutputType('OutR',         g2conncolors.red),
     ],
     params=[
       ParameterType('Source',       parammap.Source_1),
@@ -2333,12 +2333,12 @@ modules = [
     shortnm='MinMax',
     page=PageType('Level', 12),
     inputs=[
-      InputType('A',            g2portcolors.blue_red),
-      InputType('B',            g2portcolors.blue_red),
+      InputType('A',            g2conncolors.blue_red),
+      InputType('B',            g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Min',          g2portcolors.blue_red),
-      OutputType('Max',          g2portcolors.blue_red),
+      OutputType('Min',          g2conncolors.blue_red),
+      OutputType('Max',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -2350,18 +2350,18 @@ modules = [
     shortnm='BinCounter',
     page=PageType('Logic', 7),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out001',       g2portcolors.yellow_orange),
-      OutputType('Out002',       g2portcolors.yellow_orange),
-      OutputType('Out004',       g2portcolors.yellow_orange),
-      OutputType('Out008',       g2portcolors.yellow_orange),
-      OutputType('Out016',       g2portcolors.yellow_orange),
-      OutputType('Out032',       g2portcolors.yellow_orange),
-      OutputType('Out064',       g2portcolors.yellow_orange),
-      OutputType('Out128',       g2portcolors.yellow_orange),
+      OutputType('Out001',       g2conncolors.yellow_orange),
+      OutputType('Out002',       g2conncolors.yellow_orange),
+      OutputType('Out004',       g2conncolors.yellow_orange),
+      OutputType('Out008',       g2conncolors.yellow_orange),
+      OutputType('Out016',       g2conncolors.yellow_orange),
+      OutputType('Out032',       g2conncolors.yellow_orange),
+      OutputType('Out064',       g2conncolors.yellow_orange),
+      OutputType('Out128',       g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[],
@@ -2373,17 +2373,17 @@ modules = [
     shortnm='ADConv',
     page=PageType('Logic', 8),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('D0',           g2portcolors.yellow_orange),
-      OutputType('D1',           g2portcolors.yellow_orange),
-      OutputType('D2',           g2portcolors.yellow_orange),
-      OutputType('D3',           g2portcolors.yellow_orange),
-      OutputType('D4',           g2portcolors.yellow_orange),
-      OutputType('D5',           g2portcolors.yellow_orange),
-      OutputType('D6',           g2portcolors.yellow_orange),
-      OutputType('D7',           g2portcolors.yellow_orange),
+      OutputType('D0',           g2conncolors.yellow_orange),
+      OutputType('D1',           g2conncolors.yellow_orange),
+      OutputType('D2',           g2conncolors.yellow_orange),
+      OutputType('D3',           g2conncolors.yellow_orange),
+      OutputType('D4',           g2conncolors.yellow_orange),
+      OutputType('D5',           g2conncolors.yellow_orange),
+      OutputType('D6',           g2conncolors.yellow_orange),
+      OutputType('D7',           g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[],
@@ -2395,17 +2395,17 @@ modules = [
     shortnm='DAConv',
     page=PageType('Logic', 9),
     inputs=[
-      InputType('D0',           g2portcolors.yellow_orange),
-      InputType('D1',           g2portcolors.yellow_orange),
-      InputType('D2',           g2portcolors.yellow_orange),
-      InputType('D3',           g2portcolors.yellow_orange),
-      InputType('D4',           g2portcolors.yellow_orange),
-      InputType('D5',           g2portcolors.yellow_orange),
-      InputType('D6',           g2portcolors.yellow_orange),
-      InputType('D7',           g2portcolors.yellow_orange),
+      InputType('D0',           g2conncolors.yellow_orange),
+      InputType('D1',           g2conncolors.yellow_orange),
+      InputType('D2',           g2conncolors.yellow_orange),
+      InputType('D3',           g2conncolors.yellow_orange),
+      InputType('D4',           g2conncolors.yellow_orange),
+      InputType('D5',           g2conncolors.yellow_orange),
+      InputType('D6',           g2conncolors.yellow_orange),
+      InputType('D7',           g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -2417,11 +2417,11 @@ modules = [
     shortnm='FltHP',
     page=PageType('Filter', 1),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.FltFreq),
@@ -2440,11 +2440,11 @@ modules = [
     shortnm='T&H',
     page=PageType('Switch', 17),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Ctrl',         g2portcolors.yellow_orange),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Ctrl',         g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -2456,20 +2456,20 @@ modules = [
     shortnm='Mix4-1S',
     page=PageType('Mixer', 7),
     inputs=[
-      InputType('In1L',         g2portcolors.blue_red),
-      InputType('In1R',         g2portcolors.blue_red),
-      InputType('In2L',         g2portcolors.blue_red),
-      InputType('In2R',         g2portcolors.blue_red),
-      InputType('In3L',         g2portcolors.blue_red),
-      InputType('In3R',         g2portcolors.blue_red),
-      InputType('In4L',         g2portcolors.blue_red),
-      InputType('In4R',         g2portcolors.blue_red),
-      InputType('ChainL',       g2portcolors.blue_red),
-      InputType('ChainR',       g2portcolors.blue_red),
+      InputType('In1L',         g2conncolors.blue_red),
+      InputType('In1R',         g2conncolors.blue_red),
+      InputType('In2L',         g2conncolors.blue_red),
+      InputType('In2R',         g2conncolors.blue_red),
+      InputType('In3L',         g2conncolors.blue_red),
+      InputType('In3R',         g2conncolors.blue_red),
+      InputType('In4L',         g2conncolors.blue_red),
+      InputType('In4R',         g2conncolors.blue_red),
+      InputType('ChainL',       g2conncolors.blue_red),
+      InputType('ChainR',       g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.blue_red),
-      OutputType('OutR',         g2portcolors.blue_red),
+      OutputType('OutL',         g2conncolors.blue_red),
+      OutputType('OutR',         g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.MixLevel),
@@ -2499,11 +2499,11 @@ modules = [
     shortnm='CtrlSend',
     page=PageType('MIDI', 0),
     inputs=[
-      InputType('Send',         g2portcolors.yellow),
-      InputType('Value',        g2portcolors.blue),
+      InputType('Send',         g2conncolors.yellow),
+      InputType('Value',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Send',         g2portcolors.yellow),
+      OutputType('Send',         g2conncolors.yellow),
     ],
     params=[
       ParameterType('Ctrl',         parammap.MidiData),
@@ -2519,11 +2519,11 @@ modules = [
     shortnm='PCSend',
     page=PageType('MIDI', 1),
     inputs=[
-      InputType('Send',         g2portcolors.yellow),
-      InputType('Program',      g2portcolors.blue),
+      InputType('Send',         g2conncolors.yellow),
+      InputType('Program',      g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Send',         g2portcolors.yellow),
+      OutputType('Send',         g2conncolors.yellow),
     ],
     params=[
       ParameterType('Program',      parammap.MidiData),
@@ -2538,9 +2538,9 @@ modules = [
     shortnm='NoteSend',
     page=PageType('MIDI', 2),
     inputs=[
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('Vel',          g2portcolors.blue),
-      InputType('Note',         g2portcolors.blue),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('Vel',          g2conncolors.blue),
+      InputType('Note',         g2conncolors.blue),
     ],
     outputs=[],
     params=[
@@ -2557,17 +2557,17 @@ modules = [
     shortnm='SeqEvent',
     page=PageType('Seq', 0),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow),
-      InputType('Loop',         g2portcolors.yellow),
-      InputType('Park',         g2portcolors.yellow),
-      InputType('Trig1',        g2portcolors.yellow),
-      InputType('Trig2',        g2portcolors.yellow),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow),
+      InputType('Loop',         g2conncolors.yellow),
+      InputType('Park',         g2conncolors.yellow),
+      InputType('Trig1',        g2conncolors.yellow),
+      InputType('Trig2',        g2conncolors.yellow),
     ],
     outputs=[
-      OutputType('Link',         g2portcolors.yellow),
-      OutputType('Trig1',        g2portcolors.yellow_orange),
-      OutputType('Trig2',        g2portcolors.yellow_orange),
+      OutputType('Link',         g2conncolors.yellow),
+      OutputType('Trig1',        g2conncolors.yellow_orange),
+      OutputType('Trig2',        g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Seq1Step1',    parammap.OffOn),
@@ -2616,17 +2616,17 @@ modules = [
     shortnm='SeqVal',
     page=PageType('Seq', 1),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow),
-      InputType('Loop',         g2portcolors.yellow),
-      InputType('Park',         g2portcolors.yellow),
-      InputType('Val',          g2portcolors.blue_red),
-      InputType('Trig',         g2portcolors.yellow),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow),
+      InputType('Loop',         g2conncolors.yellow),
+      InputType('Park',         g2conncolors.yellow),
+      InputType('Val',          g2conncolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow),
     ],
     outputs=[
-      OutputType('Link',         g2portcolors.yellow),
-      OutputType('Val',          g2portcolors.blue_red),
-      OutputType('Trig',         g2portcolors.yellow_orange),
+      OutputType('Link',         g2conncolors.yellow),
+      OutputType('Val',          g2conncolors.blue_red),
+      OutputType('Trig',         g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Seq1Step1',    parammap.LevBipUni),
@@ -2677,17 +2677,17 @@ modules = [
     shortnm='SeqLev',
     page=PageType('Seq', 2),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
-      InputType('Loop',         g2portcolors.yellow_orange),
-      InputType('Park',         g2portcolors.yellow_orange),
-      InputType('Val',          g2portcolors.blue_red),
-      InputType('Trig',         g2portcolors.yellow_orange),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
+      InputType('Loop',         g2conncolors.yellow_orange),
+      InputType('Park',         g2conncolors.yellow_orange),
+      InputType('Val',          g2conncolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Link',         g2portcolors.yellow_orange),
-      OutputType('Val',          g2portcolors.blue_red),
-      OutputType('Trig',         g2portcolors.yellow_orange),
+      OutputType('Link',         g2conncolors.yellow_orange),
+      OutputType('Val',          g2conncolors.blue_red),
+      OutputType('Trig',         g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Seq1Step1',    parammap.LevBipUni),
@@ -2739,8 +2739,8 @@ modules = [
     page=PageType('MIDI', 3),
     inputs=[],
     outputs=[
-      OutputType('Rcv',          g2portcolors.yellow),
-      OutputType('Val',          g2portcolors.blue),
+      OutputType('Rcv',          g2conncolors.yellow),
+      OutputType('Val',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Ctrl',         parammap.MidiData),
@@ -2756,9 +2756,9 @@ modules = [
     page=PageType('MIDI', 4),
     inputs=[],
     outputs=[
-      OutputType('Gate',         g2portcolors.yellow),
-      OutputType('Vel',          g2portcolors.blue),
-      OutputType('RelVel',       g2portcolors.blue),
+      OutputType('Gate',         g2conncolors.yellow),
+      OutputType('Vel',          g2conncolors.blue),
+      OutputType('RelVel',       g2conncolors.blue),
     ],
     params=[
       ParameterType('Note',         parammap.MidiData),
@@ -2791,13 +2791,13 @@ modules = [
     shortnm='Compressor',
     page=PageType('FX', 8),
     inputs=[
-      InputType('InL',          g2portcolors.red),
-      InputType('InR',          g2portcolors.red),
-      InputType('SideChain',    g2portcolors.red),
+      InputType('InL',          g2conncolors.red),
+      InputType('InR',          g2conncolors.red),
+      InputType('SideChain',    g2conncolors.red),
     ],
     outputs=[
-      OutputType('OutR',         g2portcolors.red),
-      OutputType('OutL',         g2portcolors.red),
+      OutputType('OutR',         g2conncolors.red),
+      OutputType('OutL',         g2conncolors.red),
     ],
     params=[
       ParameterType('Threshold',    parammap.Treshold_42),
@@ -2817,10 +2817,10 @@ modules = [
     shortnm='KeyQuant',
     page=PageType('Note', 1),
     inputs=[
-      InputType('In',           g2portcolors.blue),
+      InputType('In',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Range',        parammap.NoteRange),
@@ -2847,13 +2847,13 @@ modules = [
     shortnm='SeqCtr',
     page=PageType('Seq', 4),
     inputs=[
-      InputType('Ctrl',         g2portcolors.blue_red),
-      InputType('Val',          g2portcolors.blue_red),
-      InputType('Trig',         g2portcolors.yellow_orange),
+      InputType('Ctrl',         g2conncolors.blue_red),
+      InputType('Val',          g2conncolors.blue_red),
+      InputType('Trig',         g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Val',          g2portcolors.blue_red),
-      OutputType('Trig',         g2portcolors.yellow_orange),
+      OutputType('Val',          g2conncolors.blue_red),
+      OutputType('Trig',         g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('Seq1Step1',    parammap.LevBipUni),
@@ -2904,9 +2904,9 @@ modules = [
     page=PageType('In/Out', 9),
     inputs=[],
     outputs=[
-      OutputType('Gate',         g2portcolors.yellow),
-      OutputType('Vel',          g2portcolors.blue),
-      OutputType('RelVel',       g2portcolors.blue),
+      OutputType('Gate',         g2conncolors.yellow),
+      OutputType('Vel',          g2conncolors.blue),
+      OutputType('RelVel',       g2conncolors.blue),
     ],
     params=[
       ParameterType('Note',         parammap.FreqCoarse),
@@ -2920,10 +2920,10 @@ modules = [
     shortnm='LevConv',
     page=PageType('Level', 4),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('OutputType',   parammap.PosNegInvBipInv),
@@ -2938,11 +2938,11 @@ modules = [
     shortnm='Glide',
     page=PageType('Note', 4),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('On',           g2portcolors.yellow_orange),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('On',           g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Time',         parammap.GlideTime),
@@ -2958,11 +2958,11 @@ modules = [
     shortnm='CompSig',
     page=PageType('Level', 11),
     inputs=[
-      InputType('A',            g2portcolors.blue_red),
-      InputType('B',            g2portcolors.blue_red),
+      InputType('A',            g2conncolors.blue_red),
+      InputType('B',            g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.yellow_orange),
     ],
     params=[],
     modes=[],
@@ -2974,10 +2974,10 @@ modules = [
     shortnm='ZeroCnt',
     page=PageType('Note', 6),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[],
     modes=[],
@@ -2989,18 +2989,18 @@ modules = [
     shortnm='MixFader',
     page=PageType('Mixer', 10),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
-      InputType('In5',          g2portcolors.blue_red),
-      InputType('In6',          g2portcolors.blue_red),
-      InputType('In7',          g2portcolors.blue_red),
-      InputType('In8',          g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
+      InputType('In5',          g2conncolors.blue_red),
+      InputType('In6',          g2conncolors.blue_red),
+      InputType('In7',          g2conncolors.blue_red),
+      InputType('In8',          g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.MixLevel),
@@ -3047,13 +3047,13 @@ modules = [
     shortnm='FltComb',
     page=PageType('Filter', 7),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('FB',           g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('FB',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Freq',         parammap.Freq_1),
@@ -3074,14 +3074,14 @@ modules = [
     shortnm='OscShpA',
     page=PageType('Osc', 5),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Sync',         g2portcolors.red),
-      InputType('FmMod',        g2portcolors.red),
-      InputType('ShapeMod',     g2portcolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Sync',         g2conncolors.red),
+      InputType('FmMod',        g2conncolors.red),
+      InputType('ShapeMod',     g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -3105,14 +3105,14 @@ modules = [
     shortnm='OscDual',
     page=PageType('Osc', 7),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Sync',         g2portcolors.red),
-      InputType('PW',           g2portcolors.red),
-      InputType('Phase',        g2portcolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Sync',         g2conncolors.red),
+      InputType('PW',           g2conncolors.red),
+      InputType('Phase',        g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -3139,21 +3139,21 @@ modules = [
     shortnm='DXRouter',
     page=PageType('Osc', 15),
     inputs=[
-      InputType('In1',          g2portcolors.red),
-      InputType('In2',          g2portcolors.red),
-      InputType('In3',          g2portcolors.red),
-      InputType('In4',          g2portcolors.red),
-      InputType('In5',          g2portcolors.red),
-      InputType('In6',          g2portcolors.red),
+      InputType('In1',          g2conncolors.red),
+      InputType('In2',          g2conncolors.red),
+      InputType('In3',          g2conncolors.red),
+      InputType('In4',          g2conncolors.red),
+      InputType('In5',          g2conncolors.red),
+      InputType('In6',          g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.red),
-      OutputType('Out2',         g2portcolors.red),
-      OutputType('Out3',         g2portcolors.red),
-      OutputType('Out4',         g2portcolors.red),
-      OutputType('Out5',         g2portcolors.red),
-      OutputType('Out6',         g2portcolors.red),
-      OutputType('Main',         g2portcolors.red),
+      OutputType('Out1',         g2conncolors.red),
+      OutputType('Out2',         g2conncolors.red),
+      OutputType('Out3',         g2conncolors.red),
+      OutputType('Out4',         g2conncolors.red),
+      OutputType('Out5',         g2conncolors.red),
+      OutputType('Out6',         g2conncolors.red),
+      OutputType('Main',         g2conncolors.red),
     ],
     params=[
       ParameterType('Algorithm',    parammap.DxAlgorithm),
@@ -3168,11 +3168,11 @@ modules = [
     shortnm='PShift',
     page=PageType('FX', 5),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue),
+      InputType('In',           g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('ShiftSemi',    parammap.PShiftCoarse),
@@ -3190,16 +3190,16 @@ modules = [
     shortnm='ModAHD',
     page=PageType('Env', 7),
     inputs=[
-      InputType('Trig',         g2portcolors.yellow),
-      InputType('AttackMod',    g2portcolors.blue),
-      InputType('HoldMod',      g2portcolors.blue),
-      InputType('DecayMod',     g2portcolors.blue),
-      InputType('In',           g2portcolors.blue_red),
-      InputType('AM',           g2portcolors.blue),
+      InputType('Trig',         g2conncolors.yellow),
+      InputType('AttackMod',    g2conncolors.blue),
+      InputType('HoldMod',      g2conncolors.blue),
+      InputType('DecayMod',     g2conncolors.blue),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('AM',           g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Env',          g2portcolors.blue),
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Attack',       parammap.EnvTime),
@@ -3221,8 +3221,8 @@ modules = [
     page=PageType('In/Out', 2),
     inputs=[],
     outputs=[
-      OutputType('OutL',         g2portcolors.red),
-      OutputType('OutR',         g2portcolors.red),
+      OutputType('OutL',         g2conncolors.red),
+      OutputType('OutR',         g2conncolors.red),
     ],
     params=[
       ParameterType('Source',       parammap.Source_2),
@@ -3239,10 +3239,10 @@ modules = [
     page=PageType('In/Out', 3),
     inputs=[],
     outputs=[
-      OutputType('Out1',         g2portcolors.red),
-      OutputType('Out2',         g2portcolors.red),
-      OutputType('Out3',         g2portcolors.red),
-      OutputType('Out4',         g2portcolors.red),
+      OutputType('Out1',         g2conncolors.red),
+      OutputType('Out2',         g2conncolors.red),
+      OutputType('Out3',         g2conncolors.red),
+      OutputType('Out4',         g2conncolors.red),
     ],
     params=[
       ParameterType('Source',       parammap.Source_3),
@@ -3258,10 +3258,10 @@ modules = [
     shortnm='DlySingleA',
     page=PageType('Delay', 0),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Time',         parammap.DelayTime_3),
@@ -3277,11 +3277,11 @@ modules = [
     shortnm='DlySingleB',
     page=PageType('Delay', 1),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Time',         g2portcolors.red),
+      InputType('In',           g2conncolors.red),
+      InputType('Time',         g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Time',         parammap.DelayTime_3),
@@ -3298,13 +3298,13 @@ modules = [
     shortnm='DelayDual',
     page=PageType('Delay', 2),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Time1',        g2portcolors.red),
-      InputType('Time2',        g2portcolors.red),
+      InputType('In',           g2conncolors.red),
+      InputType('Time1',        g2conncolors.red),
+      InputType('Time2',        g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.red),
-      OutputType('Out2',         g2portcolors.red),
+      OutputType('Out1',         g2conncolors.red),
+      OutputType('Out2',         g2conncolors.red),
     ],
     params=[
       ParameterType('Time1',        parammap.DelayTime_3),
@@ -3323,18 +3323,18 @@ modules = [
     shortnm='DelayQuad',
     page=PageType('Delay', 3),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('Time1',        g2portcolors.red),
-      InputType('Time2',        g2portcolors.red),
-      InputType('Time3',        g2portcolors.red),
-      InputType('Time4',        g2portcolors.red),
+      InputType('In',           g2conncolors.red),
+      InputType('Time1',        g2conncolors.red),
+      InputType('Time2',        g2conncolors.red),
+      InputType('Time3',        g2conncolors.red),
+      InputType('Time4',        g2conncolors.red),
     ],
     outputs=[
-      OutputType('OutMain',      g2portcolors.red),
-      OutputType('Out1',         g2portcolors.red),
-      OutputType('Out2',         g2portcolors.red),
-      OutputType('Out3',         g2portcolors.red),
-      OutputType('Out4',         g2portcolors.red),
+      OutputType('OutMain',      g2conncolors.red),
+      OutputType('Out1',         g2conncolors.red),
+      OutputType('Out2',         g2conncolors.red),
+      OutputType('Out3',         g2conncolors.red),
+      OutputType('Out4',         g2conncolors.red),
     ],
     params=[
       ParameterType('Time1',        parammap.DelayTime_3),
@@ -3358,10 +3358,10 @@ modules = [
     shortnm='DelayA',
     page=PageType('Delay', 7),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Time',         parammap.DelayTime_2),
@@ -3382,12 +3382,12 @@ modules = [
     shortnm='DelayB',
     page=PageType('Delay', 8),
     inputs=[
-      InputType('In',           g2portcolors.red),
-      InputType('FBMod',        g2portcolors.blue_red),
-      InputType('DryWetMod',    g2portcolors.blue_red),
+      InputType('In',           g2conncolors.red),
+      InputType('FBMod',        g2conncolors.blue_red),
+      InputType('DryWetMod',    g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Time',         parammap.DelayTime_2),
@@ -3411,11 +3411,11 @@ modules = [
     shortnm='DlyClock',
     page=PageType('Delay', 6),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Clk',          g2portcolors.yellow_orange),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Clk',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Delay',        parammap.Range_128),
@@ -3429,18 +3429,18 @@ modules = [
     shortnm='DlyShiftReg',
     page=PageType('Delay', 5),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Clk',          g2portcolors.yellow_orange),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Clk',          g2conncolors.yellow_orange),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.blue_red),
-      OutputType('Out2',         g2portcolors.blue_red),
-      OutputType('Out3',         g2portcolors.blue_red),
-      OutputType('Out4',         g2portcolors.blue_red),
-      OutputType('Out5',         g2portcolors.blue_red),
-      OutputType('Out6',         g2portcolors.blue_red),
-      OutputType('Out7',         g2portcolors.blue_red),
-      OutputType('Out8',         g2portcolors.blue_red),
+      OutputType('Out1',         g2conncolors.blue_red),
+      OutputType('Out2',         g2conncolors.blue_red),
+      OutputType('Out3',         g2conncolors.blue_red),
+      OutputType('Out4',         g2conncolors.blue_red),
+      OutputType('Out5',         g2conncolors.blue_red),
+      OutputType('Out6',         g2conncolors.blue_red),
+      OutputType('Out7',         g2conncolors.blue_red),
+      OutputType('Out8',         g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -3452,16 +3452,16 @@ modules = [
     shortnm='Operator',
     page=PageType('Osc', 14),
     inputs=[
-      InputType('Freq',         g2portcolors.blue),
-      InputType('FM',           g2portcolors.red),
-      InputType('Gate',         g2portcolors.yellow),
-      InputType('Note',         g2portcolors.blue),
-      InputType('AMod',         g2portcolors.blue),
-      InputType('Vel',          g2portcolors.blue),
-      InputType('Pitch',        g2portcolors.blue),
+      InputType('Freq',         g2conncolors.blue),
+      InputType('FM',           g2conncolors.red),
+      InputType('Gate',         g2conncolors.yellow),
+      InputType('Note',         g2conncolors.blue),
+      InputType('AMod',         g2conncolors.blue),
+      InputType('Vel',          g2conncolors.blue),
+      InputType('Pitch',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Kbt',          parammap.Kbt_1),
@@ -3501,17 +3501,17 @@ modules = [
     shortnm='DlyEight',
     page=PageType('Delay', 4),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out1',         g2portcolors.red),
-      OutputType('Out2',         g2portcolors.red),
-      OutputType('Out3',         g2portcolors.red),
-      OutputType('Out4',         g2portcolors.red),
-      OutputType('Out5',         g2portcolors.red),
-      OutputType('Out6',         g2portcolors.red),
-      OutputType('Out7',         g2portcolors.red),
-      OutputType('Out8',         g2portcolors.red),
+      OutputType('Out1',         g2conncolors.red),
+      OutputType('Out2',         g2conncolors.red),
+      OutputType('Out3',         g2conncolors.red),
+      OutputType('Out4',         g2conncolors.red),
+      OutputType('Out5',         g2conncolors.red),
+      OutputType('Out6',         g2conncolors.red),
+      OutputType('Out7',         g2conncolors.red),
+      OutputType('Out8',         g2conncolors.red),
     ],
     params=[
       ParameterType('Time',         parammap.DelayTime_3),
@@ -3527,11 +3527,11 @@ modules = [
     shortnm='DlyStereo',
     page=PageType('Delay', 9),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.red),
-      OutputType('OutR',         g2portcolors.red),
+      OutputType('OutL',         g2conncolors.red),
+      OutputType('OutR',         g2conncolors.red),
     ],
     params=[
       ParameterType('TimeLeft',     parammap.DelayTime_1),
@@ -3557,13 +3557,13 @@ modules = [
     shortnm='OscPM',
     page=PageType('Osc', 4),
     inputs=[
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Sync',         g2portcolors.red),
-      InputType('PhaseMod',     g2portcolors.red),
-      InputType('Pitch',        g2portcolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Sync',         g2conncolors.red),
+      InputType('PhaseMod',     g2conncolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -3585,11 +3585,11 @@ modules = [
     shortnm='Mix1-1A',
     page=PageType('Mixer', 0),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev',          parammap.MixLevel),
@@ -3607,14 +3607,14 @@ modules = [
     shortnm='Mix1-1S',
     page=PageType('Mixer', 1),
     inputs=[
-      InputType('InL',          g2portcolors.blue_red),
-      InputType('InR',          g2portcolors.blue_red),
-      InputType('LChain',       g2portcolors.blue_red),
-      InputType('RChain',       g2portcolors.blue_red),
+      InputType('InL',          g2conncolors.blue_red),
+      InputType('InR',          g2conncolors.blue_red),
+      InputType('LChain',       g2conncolors.blue_red),
+      InputType('RChain',       g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('OutL',         g2portcolors.blue_red),
-      OutputType('OutR',         g2portcolors.blue_red),
+      OutputType('OutL',         g2conncolors.blue_red),
+      OutputType('OutR',         g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev',          parammap.MixLevel),
@@ -3632,12 +3632,12 @@ modules = [
     shortnm='Sw1-2M',
     page=PageType('Switch', 6),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('OutOn',        g2portcolors.blue_red),
-      OutputType('OutOff',       g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('OutOn',        g2conncolors.blue_red),
+      OutputType('OutOff',       g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.OffOn,
@@ -3653,12 +3653,12 @@ modules = [
     shortnm='Sw2-1M',
     page=PageType('Switch', 2),
     inputs=[
-      InputType('InOff',        g2portcolors.blue_red),
-      InputType('InOn',         g2portcolors.blue_red),
+      InputType('InOff',        g2conncolors.blue_red),
+      InputType('InOn',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Ctrl',         g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Ctrl',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Sel',          parammap.OffOn,
@@ -3675,7 +3675,7 @@ modules = [
     page=PageType('Level', 1),
     inputs=[],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Lev',          parammap.LevBipUni),
@@ -3691,11 +3691,11 @@ modules = [
     shortnm='NoiseGate',
     page=PageType('Level', 9),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
-      OutputType('Env',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue_red),
+      OutputType('Env',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Treshold',     parammap.Treshold_127),
@@ -3712,14 +3712,14 @@ modules = [
     shortnm='LfoB',
     page=PageType('LFO', 1),
     inputs=[
-      InputType('Rate',         g2portcolors.blue),
-      InputType('RateVar',      g2portcolors.blue),
-      InputType('Rst',          g2portcolors.blue),
-      InputType('Phase',        g2portcolors.blue),
+      InputType('Rate',         g2conncolors.blue),
+      InputType('RateVar',      g2conncolors.blue),
+      InputType('Rst',          g2conncolors.blue),
+      InputType('Phase',        g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
-      OutputType('Sync',         g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
+      OutputType('Sync',         g2conncolors.blue),
     ],
     params=[
       ParameterType('Rate',         parammap.LfoRate_4),
@@ -3742,10 +3742,10 @@ modules = [
     shortnm='Phaser',
     page=PageType('FX', 1),
     inputs=[
-      InputType('In',           g2portcolors.red),
+      InputType('In',           g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('Type',         parammap.PhaserType),
@@ -3762,13 +3762,13 @@ modules = [
     shortnm='Mix4-1A',
     page=PageType('Mixer', 4),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('In3',          g2portcolors.blue_red),
-      InputType('In4',          g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('In3',          g2conncolors.blue_red),
+      InputType('In4',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[],
     modes=[],
@@ -3780,12 +3780,12 @@ modules = [
     shortnm='Mix2-1A',
     page=PageType('Mixer', 2),
     inputs=[
-      InputType('In1',          g2portcolors.blue_red),
-      InputType('In2',          g2portcolors.blue_red),
-      InputType('Chain',        g2portcolors.blue_red),
+      InputType('In1',          g2conncolors.blue_red),
+      InputType('In2',          g2conncolors.blue_red),
+      InputType('Chain',        g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('Lev1',         parammap.MixLevel),
@@ -3807,11 +3807,11 @@ modules = [
     shortnm='ModAmt',
     page=PageType('Level', 13),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
-      InputType('Mod',          g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
+      InputType('Mod',          g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('ModDepth',     parammap.Level_100),
@@ -3830,12 +3830,12 @@ modules = [
     shortnm='OscPerc',
     page=PageType('Osc', 11),
     inputs=[
-      InputType('Pitch',        g2portcolors.blue_red),
-      InputType('PitchVar',     g2portcolors.blue_red),
-      InputType('Trig',         g2portcolors.red),
+      InputType('Pitch',        g2conncolors.blue_red),
+      InputType('PitchVar',     g2conncolors.blue_red),
+      InputType('Trig',         g2conncolors.red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.red),
+      OutputType('Out',          g2conncolors.red),
     ],
     params=[
       ParameterType('FreqCoarse',   parammap.FreqCoarse),
@@ -3858,9 +3858,9 @@ modules = [
     page=PageType('In/Out', 8),
     inputs=[],
     outputs=[
-      OutputType('PatchActive',  g2portcolors.yellow),
-      OutputType('VarActive',    g2portcolors.yellow),
-      OutputType('VoiceNo',      g2portcolors.blue),
+      OutputType('PatchActive',  g2conncolors.yellow),
+      OutputType('VarActive',    g2conncolors.yellow),
+      OutputType('VoiceNo',      g2conncolors.blue),
     ],
     params=[],
     modes=[],
@@ -3872,12 +3872,12 @@ modules = [
     shortnm='PitchTrack',
     page=PageType('Note', 5),
     inputs=[
-      InputType('In',           g2portcolors.blue_red),
+      InputType('In',           g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Period',       g2portcolors.yellow_orange),
-      OutputType('Gate',         g2portcolors.yellow_orange),
-      OutputType('Pitch',        g2portcolors.blue),
+      OutputType('Period',       g2conncolors.yellow_orange),
+      OutputType('Gate',         g2conncolors.yellow_orange),
+      OutputType('Pitch',        g2conncolors.blue),
     ],
     params=[
       ParameterType('Treshold',     parammap.Treshold_127),
@@ -3892,9 +3892,9 @@ modules = [
     page=PageType('In/Out', 6),
     inputs=[],
     outputs=[
-      OutputType('Pitch',        g2portcolors.blue),
-      OutputType('Gate',         g2portcolors.yellow),
-      OutputType('Vel',          g2portcolors.blue),
+      OutputType('Pitch',        g2conncolors.blue),
+      OutputType('Gate',         g2conncolors.yellow),
+      OutputType('Vel',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Mode',         parammap.MonoKeyMode),
@@ -3908,10 +3908,10 @@ modules = [
     shortnm='RandomA',
     page=PageType('Rnd', 0),
     inputs=[
-      InputType('Rate',         g2portcolors.blue),
+      InputType('Rate',         g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Rate',         parammap.LfoRate_3),
@@ -3931,11 +3931,11 @@ modules = [
     shortnm='RandomB',
     page=PageType('Rnd', 1),
     inputs=[
-      InputType('Rate',         g2portcolors.blue),
-      InputType('RateVar',      g2portcolors.blue),
+      InputType('Rate',         g2conncolors.blue),
+      InputType('RateVar',      g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue),
+      OutputType('Out',          g2conncolors.blue),
     ],
     params=[
       ParameterType('Rate',         parammap.LfoRate_3),
@@ -3957,12 +3957,12 @@ modules = [
     shortnm='RndClkA',
     page=PageType('Rnd', 2),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
-      InputType('Seed',         g2portcolors.blue_red),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
+      InputType('Seed',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('StepProb',     parammap.Level_100),
@@ -3980,13 +3980,13 @@ modules = [
     shortnm='RndTrig',
     page=PageType('Rnd', 4),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
-      InputType('Seed',         g2portcolors.blue_red),
-      InputType('Prob',         g2portcolors.blue_red),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
+      InputType('Seed',         g2conncolors.blue_red),
+      InputType('Prob',         g2conncolors.blue_red),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.yellow_orange),
+      OutputType('Out',          g2conncolors.yellow_orange),
     ],
     params=[
       ParameterType('StepProb',     parammap.Level_100),
@@ -4003,13 +4003,13 @@ modules = [
     shortnm='RndClkB',
     page=PageType('Rnd', 3),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
-      InputType('Seed',         g2portcolors.blue_red),
-      InputType('Step',         g2portcolors.blue),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
+      InputType('Seed',         g2conncolors.blue_red),
+      InputType('Step',         g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('StepProb',     parammap.Level_100),
@@ -4029,14 +4029,14 @@ modules = [
     shortnm='RndPattern',
     page=PageType('Rnd', 5),
     inputs=[
-      InputType('Clk',          g2portcolors.yellow_orange),
-      InputType('Rst',          g2portcolors.yellow_orange),
-      InputType('A',            g2portcolors.blue),
-      InputType('B',            g2portcolors.blue),
-      InputType('StepProb',     g2portcolors.blue),
+      InputType('Clk',          g2conncolors.yellow_orange),
+      InputType('Rst',          g2conncolors.yellow_orange),
+      InputType('A',            g2conncolors.blue),
+      InputType('B',            g2conncolors.blue),
+      InputType('StepProb',     g2conncolors.blue),
     ],
     outputs=[
-      OutputType('Out',          g2portcolors.blue_red),
+      OutputType('Out',          g2conncolors.blue_red),
     ],
     params=[
       ParameterType('PatternA',     parammap.RangeBip_128),

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from nord.types import *
-from nord.nm1.colors import nm1portcolors
+from nord.nm1.colors import nm1conncolors
 
 class ParameterDef(Struct): pass
 
@@ -16,10 +16,10 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Note',         nm1portcolors.control),
-      OutputType('Gate',         nm1portcolors.logic),
-      OutputType('VelocityOn',   nm1portcolors.control),
-      OutputType('VelocityOff',  nm1portcolors.control),
+      OutputType('Note',         nm1conncolors.control),
+      OutputType('Gate',         nm1conncolors.logic),
+      OutputType('VelocityOn',   nm1conncolors.control),
+      OutputType('VelocityOff',  nm1conncolors.control),
     ],
     params=[],
     modes=[],
@@ -30,8 +30,8 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Left',         nm1portcolors.audio),
-      OutputType('Right',        nm1portcolors.audio),
+      OutputType('Left',         nm1conncolors.audio),
+      OutputType('Right',        nm1conncolors.audio),
     ],
     params=[],
     modes=[],
@@ -41,10 +41,10 @@ modules = [
     type=3,
     height=3,
     inputs=[
-      InputType('Out1',         nm1portcolors.audio),
-      InputType('Out2',         nm1portcolors.audio),
-      InputType('Out3',         nm1portcolors.audio),
-      InputType('Out4',         nm1portcolors.audio),
+      InputType('Out1',         nm1conncolors.audio),
+      InputType('Out2',         nm1conncolors.audio),
+      InputType('Out3',         nm1conncolors.audio),
+      InputType('Out4',         nm1conncolors.audio),
     ],
     outputs=[],
     params=[
@@ -64,8 +64,8 @@ modules = [
     type=4,
     height=3,
     inputs=[
-      InputType('OutLeft',      nm1portcolors.audio),
-      InputType('OutRight',     nm1portcolors.audio),
+      InputType('OutLeft',      nm1conncolors.audio),
+      InputType('OutRight',     nm1conncolors.audio),
     ],
     outputs=[],
     params=[
@@ -101,7 +101,7 @@ modules = [
     type=5,
     height=3,
     inputs=[
-      InputType('Out',          nm1portcolors.audio),
+      InputType('Out',          nm1conncolors.audio),
     ],
     outputs=[],
     params=[
@@ -137,15 +137,15 @@ modules = [
     type=7,
     height=6,
     inputs=[
-      InputType('Sync',         nm1portcolors.audio),
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('PitchMod1',    nm1portcolors.audio),
-      InputType('PitchMod2',    nm1portcolors.audio),
-      InputType('PwMod',        nm1portcolors.audio),
+      InputType('Sync',         nm1conncolors.audio),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('PitchMod1',    nm1conncolors.audio),
+      InputType('PitchMod2',    nm1conncolors.audio),
+      InputType('PwMod',        nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.audio),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -245,14 +245,14 @@ modules = [
     type=8,
     height=6,
     inputs=[
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('PitchMod1',    nm1portcolors.control),
-      InputType('PitchMod2',    nm1portcolors.control),
-      InputType('PwMod',        nm1portcolors.control),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('PitchMod1',    nm1conncolors.control),
+      InputType('PitchMod2',    nm1conncolors.control),
+      InputType('PwMod',        nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.audio),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -344,13 +344,13 @@ modules = [
     type=9,
     height=4,
     inputs=[
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('Pitch',        nm1portcolors.audio),
-      InputType('Am',           nm1portcolors.audio),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('Pitch',        nm1conncolors.audio),
+      InputType('Am',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.audio),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -418,11 +418,11 @@ modules = [
     type=10,
     height=3,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('PwMod',        nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('PwMod',        nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('DetuneCoarse',
@@ -482,11 +482,11 @@ modules = [
     type=11,
     height=3,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('FmMod',        nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('FmMod',        nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('DetuneCoarse',
@@ -538,11 +538,11 @@ modules = [
     type=12,
     height=3,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('FmMod',        nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('FmMod',        nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('DetuneCoarse',
@@ -594,12 +594,12 @@ modules = [
     type=13,
     height=3,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('Am',           nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('Am',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('DetuneCoarse',
@@ -651,13 +651,13 @@ modules = [
     type=14,
     height=4,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('Am',           nm1portcolors.audio),
-      InputType('Sync',         nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('Am',           nm1conncolors.audio),
+      InputType('Sync',         nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('DetuneCoarse',
@@ -717,14 +717,14 @@ modules = [
     type=15,
     height=7,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
-      InputType('Reset',        nm1portcolors.logic),
+      InputType('Clk',          nm1conncolors.logic),
+      InputType('Reset',        nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
-      OutputType('Snc',          nm1portcolors.logic),
-      OutputType('Link',         nm1portcolors.logic),
-      OutputType('Gclk',         nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.control),
+      OutputType('Snc',          nm1conncolors.logic),
+      OutputType('Link',         nm1conncolors.logic),
+      OutputType('Gclk',         nm1conncolors.logic),
     ],
     params=[
       ParameterType('Note1',
@@ -903,11 +903,11 @@ modules = [
     type=16,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
-      InputType('Jmp',          nm1portcolors.logic),
+      InputType('In',           nm1conncolors.control),
+      InputType('Jmp',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Time',
@@ -926,14 +926,14 @@ modules = [
     type=17,
     height=5,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
-      InputType('Rst',          nm1portcolors.logic),
+      InputType('Clk',          nm1conncolors.logic),
+      InputType('Rst',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out1',         nm1portcolors.logic),
-      OutputType('Out2',         nm1portcolors.logic),
-      OutputType('Snc',          nm1portcolors.logic),
-      OutputType('Link',         nm1portcolors.logic),
+      OutputType('Out1',         nm1conncolors.logic),
+      OutputType('Out2',         nm1conncolors.logic),
+      OutputType('Snc',          nm1conncolors.logic),
+      OutputType('Link',         nm1conncolors.logic),
     ],
     params=[
       ParameterType('Length',
@@ -1232,12 +1232,12 @@ modules = [
     type=18,
     height=3,
     inputs=[
-      InputType('In1',          nm1portcolors.audio),
-      InputType('In2',          nm1portcolors.audio),
-      InputType('MixMod',       nm1portcolors.audio),
+      InputType('In1',          nm1conncolors.audio),
+      InputType('In2',          nm1conncolors.audio),
+      InputType('MixMod',       nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('MixMod',
@@ -1264,12 +1264,12 @@ modules = [
     type=19,
     height=2,
     inputs=[
-      InputType('In1',          nm1portcolors.audio),
-      InputType('In2',          nm1portcolors.audio),
-      InputType('In3',          nm1portcolors.audio),
+      InputType('In1',          nm1conncolors.audio),
+      InputType('In2',          nm1conncolors.audio),
+      InputType('In3',          nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Lev1',
@@ -1304,14 +1304,14 @@ modules = [
     type=20,
     height=5,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('Gate',         nm1portcolors.logic),
-      InputType('Retrig',       nm1portcolors.logic),
-      InputType('Amp',          nm1portcolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Gate',         nm1conncolors.logic),
+      InputType('Retrig',       nm1conncolors.logic),
+      InputType('Amp',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Env',          nm1portcolors.control),
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Env',          nm1conncolors.control),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('AttackShape',
@@ -1370,13 +1370,13 @@ modules = [
     type=21,
     height=7,
     inputs=[
-      InputType('Left',         nm1portcolors.audio),
-      InputType('Right',        nm1portcolors.audio),
-      InputType('Side',         nm1portcolors.audio),
+      InputType('Left',         nm1conncolors.audio),
+      InputType('Right',        nm1conncolors.audio),
+      InputType('Side',         nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Left',         nm1portcolors.audio),
-      OutputType('Right',        nm1portcolors.audio),
+      OutputType('Left',         nm1conncolors.audio),
+      OutputType('Right',        nm1conncolors.audio),
     ],
     params=[
       ParameterType('Attack',
@@ -1459,10 +1459,10 @@ modules = [
     type=22,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
+      InputType('In',           nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Range',
@@ -1481,18 +1481,18 @@ modules = [
     type=23,
     height=6,
     inputs=[
-      InputType('Gate',         nm1portcolors.logic),
-      InputType('Retrig',       nm1portcolors.logic),
-      InputType('AttackMod',    nm1portcolors.control),
-      InputType('DecayMod',     nm1portcolors.control),
-      InputType('SustainMod',   nm1portcolors.control),
-      InputType('ReleaseMod',   nm1portcolors.control),
-      InputType('In',           nm1portcolors.audio),
-      InputType('Amp',          nm1portcolors.control),
+      InputType('Gate',         nm1conncolors.logic),
+      InputType('Retrig',       nm1conncolors.logic),
+      InputType('AttackMod',    nm1conncolors.control),
+      InputType('DecayMod',     nm1conncolors.control),
+      InputType('SustainMod',   nm1conncolors.control),
+      InputType('ReleaseMod',   nm1conncolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Amp',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Env',          nm1portcolors.control),
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Env',          nm1conncolors.control),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Attack',
@@ -1575,12 +1575,12 @@ modules = [
     type=24,
     height=5,
     inputs=[
-      InputType('Rate',         nm1portcolors.control),
-      InputType('Reset',        nm1portcolors.logic),
+      InputType('Rate',         nm1conncolors.control),
+      InputType('Reset',        nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Slv',          nm1portcolors.slave),
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Slv',          nm1conncolors.slave),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -1655,13 +1655,13 @@ modules = [
     type=25,
     height=5,
     inputs=[
-      InputType('Rate',         nm1portcolors.control),
-      InputType('Rst',          nm1portcolors.logic),
-      InputType('Pwmod',        nm1portcolors.control),
+      InputType('Rate',         nm1conncolors.control),
+      InputType('Rst',          nm1conncolors.logic),
+      InputType('Pwmod',        nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.control),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('Rate',
@@ -1736,11 +1736,11 @@ modules = [
     type=26,
     height=4,
     inputs=[
-      InputType('Rate',         nm1portcolors.control),
+      InputType('Rate',         nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.control),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('Rate',
@@ -1799,10 +1799,10 @@ modules = [
     type=27,
     height=2,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
+      InputType('Mst',          nm1conncolors.slave),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -1830,10 +1830,10 @@ modules = [
     type=28,
     height=2,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
+      InputType('Mst',          nm1conncolors.slave),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -1861,10 +1861,10 @@ modules = [
     type=29,
     height=2,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
+      InputType('Mst',          nm1conncolors.slave),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -1892,10 +1892,10 @@ modules = [
     type=30,
     height=2,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
+      InputType('Mst',          nm1conncolors.slave),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -1924,7 +1924,7 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Color',
@@ -1943,10 +1943,10 @@ modules = [
     type=32,
     height=7,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('50',
@@ -2077,10 +2077,10 @@ modules = [
     type=33,
     height=2,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
+      InputType('Clk',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Mono',
@@ -2107,10 +2107,10 @@ modules = [
     type=34,
     height=2,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
+      InputType('Mst',          nm1conncolors.slave),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -2130,7 +2130,7 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Density',
@@ -2149,10 +2149,10 @@ modules = [
     type=36,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.logic),
+      InputType('In',           nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Time',
@@ -2171,10 +2171,10 @@ modules = [
     type=37,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.logic),
+      InputType('In',           nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Time',
@@ -2193,10 +2193,10 @@ modules = [
     type=38,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.logic),
+      InputType('In',           nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Time',
@@ -2215,10 +2215,10 @@ modules = [
     type=39,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
+      InputType('In',           nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Time',
@@ -2237,17 +2237,17 @@ modules = [
     type=40,
     height=4,
     inputs=[
-      InputType('In1',          nm1portcolors.audio),
-      InputType('In2',          nm1portcolors.audio),
-      InputType('In3',          nm1portcolors.audio),
-      InputType('In4',          nm1portcolors.audio),
-      InputType('In5',          nm1portcolors.audio),
-      InputType('In6',          nm1portcolors.audio),
-      InputType('In7',          nm1portcolors.audio),
-      InputType('In8',          nm1portcolors.audio),
+      InputType('In1',          nm1conncolors.audio),
+      InputType('In2',          nm1conncolors.audio),
+      InputType('In3',          nm1conncolors.audio),
+      InputType('In4',          nm1conncolors.audio),
+      InputType('In5',          nm1conncolors.audio),
+      InputType('In6',          nm1conncolors.audio),
+      InputType('In7',          nm1conncolors.audio),
+      InputType('In8',          nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Lev1',
@@ -2331,7 +2331,7 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Value',
@@ -2358,11 +2358,11 @@ modules = [
     type=44,
     height=2,
     inputs=[
-      InputType('Control',      nm1portcolors.audio),
-      InputType('In',           nm1portcolors.audio),
+      InputType('Control',      nm1conncolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Shift',
@@ -2381,12 +2381,12 @@ modules = [
     type=45,
     height=5,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('VowelMod',     nm1portcolors.control),
-      InputType('FrequencyMod', nm1portcolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('VowelMod',     nm1conncolors.control),
+      InputType('FrequencyMod', nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Vowel1',
@@ -2469,16 +2469,16 @@ modules = [
     type=46,
     height=5,
     inputs=[
-      InputType('Trig',         nm1portcolors.logic),
-      InputType('AttackMod',    nm1portcolors.control),
-      InputType('HoldMod',      nm1portcolors.control),
-      InputType('DecayMod',     nm1portcolors.control),
-      InputType('In',           nm1portcolors.audio),
-      InputType('Amp',          nm1portcolors.control),
+      InputType('Trig',         nm1conncolors.logic),
+      InputType('AttackMod',    nm1conncolors.control),
+      InputType('HoldMod',      nm1conncolors.control),
+      InputType('DecayMod',     nm1conncolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Amp',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Env',          nm1portcolors.control),
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Env',          nm1conncolors.control),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Attack',
@@ -2537,12 +2537,12 @@ modules = [
     type=47,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('Panmod',       nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Panmod',       nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Outl',         nm1portcolors.audio),
-      OutputType('Outr',         nm1portcolors.audio),
+      OutputType('Outl',         nm1conncolors.audio),
+      OutputType('Outr',         nm1conncolors.audio),
     ],
     params=[
       ParameterType('PanMod',
@@ -2569,11 +2569,11 @@ modules = [
     type=48,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
-      InputType('On',           nm1portcolors.logic),
+      InputType('In',           nm1conncolors.control),
+      InputType('On',           nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Time',
@@ -2592,13 +2592,13 @@ modules = [
     type=49,
     height=5,
     inputs=[
-      InputType('FreqMod',      nm1portcolors.control),
-      InputType('In',           nm1portcolors.audio),
+      InputType('FreqMod',      nm1conncolors.control),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Hp',           nm1portcolors.audio),
-      OutputType('Bp',           nm1portcolors.audio),
-      OutputType('Lp',           nm1portcolors.audio),
+      OutputType('Hp',           nm1conncolors.audio),
+      OutputType('Bp',           nm1conncolors.audio),
+      OutputType('Lp',           nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -2650,12 +2650,12 @@ modules = [
     type=50,
     height=4,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Lp',           nm1portcolors.audio),
-      OutputType('Bp',           nm1portcolors.audio),
-      OutputType('Hp',           nm1portcolors.audio),
+      OutputType('Lp',           nm1conncolors.audio),
+      OutputType('Bp',           nm1conncolors.audio),
+      OutputType('Hp',           nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -2699,13 +2699,13 @@ modules = [
     type=51,
     height=6,
     inputs=[
-      InputType('FreqMod1',     nm1portcolors.audio),
-      InputType('ResMod',       nm1portcolors.audio),
-      InputType('In',           nm1portcolors.audio),
-      InputType('FreqMod2',     nm1portcolors.audio),
+      InputType('FreqMod1',     nm1conncolors.audio),
+      InputType('ResMod',       nm1conncolors.audio),
+      InputType('In',           nm1conncolors.audio),
+      InputType('FreqMod2',     nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('FilterType',
@@ -2805,13 +2805,13 @@ modules = [
     type=52,
     height=7,
     inputs=[
-      InputType('Gate',         nm1portcolors.logic),
-      InputType('In',           nm1portcolors.audio),
-      InputType('Amp',          nm1portcolors.control),
+      InputType('Gate',         nm1conncolors.logic),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Amp',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Env',          nm1portcolors.control),
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Env',          nm1conncolors.control),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Level1',
@@ -2910,11 +2910,11 @@ modules = [
     type=53,
     height=2,
     inputs=[
-      InputType('Trig',         nm1portcolors.logic),
-      InputType('In',           nm1portcolors.audio),
+      InputType('Trig',         nm1conncolors.logic),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[],
     modes=[],
@@ -2924,10 +2924,10 @@ modules = [
     type=54,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Bits',
@@ -2946,10 +2946,10 @@ modules = [
     type=57,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Mode',
@@ -2976,12 +2976,12 @@ modules = [
     type=58,
     height=9,
     inputs=[
-      InputType('Trig',         nm1portcolors.logic),
-      InputType('Vel',          nm1portcolors.control),
-      InputType('Pitch',        nm1portcolors.control),
+      InputType('Trig',         nm1conncolors.logic),
+      InputType('Vel',          nm1conncolors.control),
+      InputType('Pitch',        nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Masterfreq',
@@ -3120,10 +3120,10 @@ modules = [
     type=59,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
+      InputType('In',           nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Level',
@@ -3142,11 +3142,11 @@ modules = [
     type=61,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('Clip',         nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Clip',         nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('ClipMod',
@@ -3181,11 +3181,11 @@ modules = [
     type=62,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('OverdriveMod', nm1portcolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('OverdriveMod', nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Overdrive',
@@ -3213,10 +3213,10 @@ modules = [
     height=3,
     inputs=[],
     outputs=[
-      OutputType('LatestNote',   nm1portcolors.control),
-      OutputType('PatchGate',    nm1portcolors.logic),
-      OutputType('LatestVelOn',  nm1portcolors.control),
-      OutputType('LatestRelVel', nm1portcolors.control),
+      OutputType('LatestNote',   nm1conncolors.control),
+      OutputType('PatchGate',    nm1conncolors.logic),
+      OutputType('LatestVelOn',  nm1conncolors.control),
+      OutputType('LatestRelVel', nm1conncolors.control),
     ],
     params=[],
     modes=[],
@@ -3226,10 +3226,10 @@ modules = [
     type=64,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.logic),
+      InputType('In',           nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Time',
@@ -3249,9 +3249,9 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Clk',          nm1portcolors.logic),
-      OutputType('Sync',         nm1portcolors.logic),
-      OutputType('Active',       nm1portcolors.logic),
+      OutputType('Clk',          nm1conncolors.logic),
+      OutputType('Sync',         nm1conncolors.logic),
+      OutputType('Active',       nm1conncolors.logic),
     ],
     params=[],
     modes=[],
@@ -3261,11 +3261,11 @@ modules = [
     type=66,
     height=2,
     inputs=[
-      InputType('In1',          nm1portcolors.control),
-      InputType('In2',          nm1portcolors.control),
+      InputType('In1',          nm1conncolors.control),
+      InputType('In2',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Inv1',
@@ -3317,9 +3317,9 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Gate',         nm1portcolors.logic),
-      OutputType('Velocity',     nm1portcolors.control),
-      OutputType('Releasevelocity',nm1portcolors.control),
+      OutputType('Gate',         nm1conncolors.logic),
+      OutputType('Velocity',     nm1conncolors.control),
+      OutputType('Releasevelocity',nm1conncolors.control),
     ],
     params=[
       ParameterType('Note',
@@ -3338,13 +3338,13 @@ modules = [
     type=68,
     height=3,
     inputs=[
-      InputType('Rst',          nm1portcolors.logic),
+      InputType('Rst',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('24Pulses/Beat',nm1portcolors.logic),
-      OutputType('4Pulses/Beat', nm1portcolors.logic),
-      OutputType('Slv',          nm1portcolors.slave),
-      OutputType('Sync',         nm1portcolors.logic),
+      OutputType('24Pulses/Beat',nm1conncolors.logic),
+      OutputType('4Pulses/Beat', nm1conncolors.logic),
+      OutputType('Slv',          nm1conncolors.slave),
+      OutputType('Sync',         nm1conncolors.logic),
     ],
     params=[
       ParameterType('Rate',
@@ -3371,11 +3371,11 @@ modules = [
     type=69,
     height=2,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
-      InputType('Rst',          nm1portcolors.logic),
+      InputType('Clk',          nm1conncolors.logic),
+      InputType('Rst',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Divider',
@@ -3394,10 +3394,10 @@ modules = [
     type=70,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.logic),
+      InputType('In',           nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[],
     modes=[],
@@ -3407,10 +3407,10 @@ modules = [
     type=71,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Attack',
@@ -3437,10 +3437,10 @@ modules = [
     type=72,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
+      InputType('In',           nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Transpose',
@@ -3459,11 +3459,11 @@ modules = [
     type=73,
     height=2,
     inputs=[
-      InputType('In1',          nm1portcolors.logic),
-      InputType('In2',          nm1portcolors.logic),
+      InputType('In1',          nm1conncolors.logic),
+      InputType('In2',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
       ParameterType('Mode',
@@ -3482,11 +3482,11 @@ modules = [
     type=74,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('WrapMod',      nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
+      InputType('WrapMod',      nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('WrapMod',
@@ -3513,10 +3513,10 @@ modules = [
     type=75,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.control),
+      InputType('In',           nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Range',
@@ -3543,10 +3543,10 @@ modules = [
     type=76,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('On',
@@ -3565,13 +3565,13 @@ modules = [
     type=77,
     height=2,
     inputs=[
-      InputType('Reset',        nm1portcolors.logic),
-      InputType('MidiClock',    nm1portcolors.logic),
+      InputType('Reset',        nm1conncolors.logic),
+      InputType('MidiClock',    nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('16',           nm1portcolors.logic),
-      OutputType('T8',           nm1portcolors.logic),
-      OutputType('8',            nm1portcolors.logic),
+      OutputType('16',           nm1conncolors.logic),
+      OutputType('T8',           nm1conncolors.logic),
+      OutputType('8',            nm1conncolors.logic),
     ],
     params=[],
     modes=[],
@@ -3581,12 +3581,12 @@ modules = [
     type=78,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('Modulation',   nm1portcolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Modulation',   nm1conncolors.control),
     ],
     outputs=[
-      OutputType('2.65MsFixedDelay',nm1portcolors.audio),
-      OutputType('VariableDelayOut',nm1portcolors.audio),
+      OutputType('2.65MsFixedDelay',nm1conncolors.audio),
+      OutputType('VariableDelayOut',nm1conncolors.audio),
     ],
     params=[
       ParameterType('Modulation',
@@ -3613,13 +3613,13 @@ modules = [
     type=79,
     height=3,
     inputs=[
-      InputType('In1',          nm1portcolors.audio),
-      InputType('In2',          nm1portcolors.audio),
-      InputType('In3',          nm1portcolors.audio),
-      InputType('In4',          nm1portcolors.audio),
+      InputType('In1',          nm1conncolors.audio),
+      InputType('In2',          nm1conncolors.audio),
+      InputType('In3',          nm1conncolors.audio),
+      InputType('In4',          nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Sel',
@@ -3678,11 +3678,11 @@ modules = [
     type=80,
     height=4,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('Reset',        nm1portcolors.logic),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('Reset',        nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -3742,10 +3742,10 @@ modules = [
     type=81,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Gain',
@@ -3764,10 +3764,10 @@ modules = [
     type=82,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Mode',
@@ -3786,10 +3786,10 @@ modules = [
     type=83,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Mode',
@@ -3808,13 +3808,13 @@ modules = [
     type=84,
     height=3,
     inputs=[
-      InputType('Trigger',      nm1portcolors.logic),
-      InputType('In',           nm1portcolors.audio),
-      InputType('Amp',          nm1portcolors.control),
+      InputType('Trigger',      nm1conncolors.logic),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Amp',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Envelope',     nm1portcolors.control),
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Envelope',     nm1conncolors.control),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Attack',
@@ -3849,12 +3849,12 @@ modules = [
     type=85,
     height=3,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('Sync',         nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('Sync',         nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('DetuneCoarse',
@@ -3914,10 +3914,10 @@ modules = [
     type=86,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -3936,10 +3936,10 @@ modules = [
     type=87,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -3958,13 +3958,13 @@ modules = [
     type=88,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out1',         nm1portcolors.audio),
-      OutputType('Out2',         nm1portcolors.audio),
-      OutputType('Out3',         nm1portcolors.audio),
-      OutputType('Out4',         nm1portcolors.audio),
+      OutputType('Out1',         nm1conncolors.audio),
+      OutputType('Out2',         nm1conncolors.audio),
+      OutputType('Out3',         nm1conncolors.audio),
+      OutputType('Out4',         nm1conncolors.audio),
     ],
     params=[
       ParameterType('Sel',
@@ -3999,11 +3999,11 @@ modules = [
     type=89,
     height=2,
     inputs=[
-      InputType('A',            nm1portcolors.control),
-      InputType('B',            nm1portcolors.control),
+      InputType('A',            nm1conncolors.control),
+      InputType('B',            nm1conncolors.control),
     ],
     outputs=[
-      OutputType('A>=B',         nm1portcolors.logic),
+      OutputType('A>=B',         nm1conncolors.logic),
     ],
     params=[],
     modes=[],
@@ -4013,14 +4013,14 @@ modules = [
     type=90,
     height=9,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
-      InputType('Rst',          nm1portcolors.logic),
+      InputType('Clk',          nm1conncolors.logic),
+      InputType('Rst',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
-      OutputType('Snc',          nm1portcolors.logic),
-      OutputType('Link',         nm1portcolors.logic),
-      OutputType('Gclk',         nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.control),
+      OutputType('Snc',          nm1conncolors.logic),
+      OutputType('Link',         nm1conncolors.logic),
+      OutputType('Gclk',         nm1conncolors.logic),
     ],
     params=[
       ParameterType('Note1',
@@ -4216,13 +4216,13 @@ modules = [
     type=91,
     height=7,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
-      InputType('Rst',          nm1portcolors.logic),
+      InputType('Clk',          nm1conncolors.logic),
+      InputType('Rst',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
-      OutputType('Snc',          nm1portcolors.logic),
-      OutputType('Link',         nm1portcolors.logic),
+      OutputType('Out',          nm1conncolors.control),
+      OutputType('Snc',          nm1conncolors.logic),
+      OutputType('Link',         nm1conncolors.logic),
     ],
     params=[
       ParameterType('Ctrl1',
@@ -4385,12 +4385,12 @@ modules = [
     type=92,
     height=6,
     inputs=[
-      InputType('FreqMod1',     nm1portcolors.control),
-      InputType('FreqMod2',     nm1portcolors.control),
-      InputType('In',           nm1portcolors.audio),
+      InputType('FreqMod1',     nm1conncolors.control),
+      InputType('FreqMod2',     nm1conncolors.control),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -4466,11 +4466,11 @@ modules = [
     type=94,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Outleft',      nm1portcolors.audio),
-      OutputType('Outright',     nm1portcolors.audio),
+      OutputType('Outleft',      nm1conncolors.audio),
+      OutputType('Outright',     nm1conncolors.audio),
     ],
     params=[
       ParameterType('Detune',
@@ -4505,12 +4505,12 @@ modules = [
     type=95,
     height=4,
     inputs=[
-      InputType('Trig',         nm1portcolors.audio),
-      InputType('Am',           nm1portcolors.audio),
-      InputType('PitchMod',     nm1portcolors.control),
+      InputType('Trig',         nm1conncolors.audio),
+      InputType('Am',           nm1conncolors.audio),
+      InputType('PitchMod',     nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -4586,13 +4586,13 @@ modules = [
     type=96,
     height=4,
     inputs=[
-      InputType('PitchMod1',    nm1portcolors.control),
-      InputType('PitchMod2',    nm1portcolors.control),
-      InputType('Timbre',       nm1portcolors.control),
+      InputType('PitchMod1',    nm1conncolors.control),
+      InputType('PitchMod2',    nm1conncolors.control),
+      InputType('Timbre',       nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.audio),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -4668,11 +4668,11 @@ modules = [
     type=97,
     height=3,
     inputs=[
-      InputType('PitchMod1',    nm1portcolors.control),
-      InputType('PitchMod2',    nm1portcolors.control),
+      InputType('PitchMod1',    nm1conncolors.control),
+      InputType('PitchMod2',    nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -4732,10 +4732,10 @@ modules = [
     type=98,
     height=4,
     inputs=[
-      InputType('In',           nm1portcolors.control),
+      InputType('In',           nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Range',
@@ -4858,12 +4858,12 @@ modules = [
     type=99,
     height=4,
     inputs=[
-      InputType('Clk',          nm1portcolors.logic),
-      InputType('Rst',          nm1portcolors.logic),
-      InputType('Pattern&Bank', nm1portcolors.control),
+      InputType('Clk',          nm1conncolors.logic),
+      InputType('Rst',          nm1conncolors.logic),
+      InputType('Pattern&Bank', nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Pattern',
@@ -4914,14 +4914,14 @@ modules = [
     type=100,
     height=3,
     inputs=[
-      InputType('Note',         nm1portcolors.control),
-      InputType('Gate',         nm1portcolors.logic),
-      InputType('Vel',          nm1portcolors.control),
+      InputType('Note',         nm1conncolors.control),
+      InputType('Gate',         nm1conncolors.logic),
+      InputType('Vel',          nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Note',         nm1portcolors.control),
-      OutputType('Gate',         nm1portcolors.logic),
-      OutputType('Vel',          nm1portcolors.control),
+      OutputType('Note',         nm1conncolors.control),
+      OutputType('Gate',         nm1conncolors.logic),
+      OutputType('Vel',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Upper',
@@ -4948,12 +4948,12 @@ modules = [
     type=102,
     height=7,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('FreqMod',      nm1portcolors.control),
-      InputType('SpreadMod',    nm1portcolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('FreqMod',      nm1conncolors.control),
+      InputType('SpreadMod',    nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Rate',
@@ -5052,10 +5052,10 @@ modules = [
     type=103,
     height=4,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -5106,10 +5106,10 @@ modules = [
     type=104,
     height=4,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Freq',
@@ -5160,13 +5160,13 @@ modules = [
     type=105,
     height=7,
     inputs=[
-      InputType('InLeft',       nm1portcolors.audio),
-      InputType('InRight',      nm1portcolors.audio),
-      InputType('Sidechain',    nm1portcolors.audio),
+      InputType('InLeft',       nm1conncolors.audio),
+      InputType('InRight',      nm1conncolors.audio),
+      InputType('Sidechain',    nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('OutLeft',      nm1portcolors.audio),
-      OutputType('OutRight',     nm1portcolors.audio),
+      OutputType('OutLeft',      nm1conncolors.audio),
+      OutputType('OutRight',     nm1conncolors.audio),
     ],
     params=[
       ParameterType('Attack',
@@ -5249,18 +5249,18 @@ modules = [
     type=106,
     height=10,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
-      InputType('Mixin',        nm1portcolors.audio),
-      InputType('Sync',         nm1portcolors.audio),
-      InputType('Osc1Am',       nm1portcolors.audio),
-      InputType('Osc2Am',       nm1portcolors.audio),
-      InputType('Osc3Am',       nm1portcolors.audio),
-      InputType('Osc4Am',       nm1portcolors.audio),
-      InputType('Osc5Am',       nm1portcolors.audio),
-      InputType('Osc6Am',       nm1portcolors.audio),
+      InputType('Mst',          nm1conncolors.slave),
+      InputType('Mixin',        nm1conncolors.audio),
+      InputType('Sync',         nm1conncolors.audio),
+      InputType('Osc1Am',       nm1conncolors.audio),
+      InputType('Osc2Am',       nm1conncolors.audio),
+      InputType('Osc3Am',       nm1conncolors.audio),
+      InputType('Osc4Am',       nm1conncolors.audio),
+      InputType('Osc5Am',       nm1conncolors.audio),
+      InputType('Osc6Am',       nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Osc1Coarse',
@@ -5463,14 +5463,14 @@ modules = [
     type=107,
     height=5,
     inputs=[
-      InputType('FmMod',        nm1portcolors.audio),
-      InputType('PitchMod1',    nm1portcolors.control),
-      InputType('PitchMod2',    nm1portcolors.control),
-      InputType('ShapeMod',     nm1portcolors.control),
+      InputType('FmMod',        nm1conncolors.audio),
+      InputType('PitchMod1',    nm1conncolors.control),
+      InputType('PitchMod2',    nm1conncolors.control),
+      InputType('ShapeMod',     nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
-      OutputType('Slv',          nm1portcolors.slave),
+      OutputType('Out',          nm1conncolors.audio),
+      OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
       ParameterType('FreqCoarse',
@@ -5570,11 +5570,11 @@ modules = [
     type=108,
     height=8,
     inputs=[
-      InputType('Control',      nm1portcolors.audio),
-      InputType('In',           nm1portcolors.audio),
+      InputType('Control',      nm1conncolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Band1',
@@ -5737,10 +5737,10 @@ modules = [
     type=110,
     height=2,
     inputs=[
-      InputType('Mst',          nm1portcolors.slave),
+      InputType('Mst',          nm1conncolors.slave),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('Rate',
@@ -5759,10 +5759,10 @@ modules = [
     type=111,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Gain',
@@ -5789,10 +5789,10 @@ modules = [
     type=112,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Level',
@@ -5819,11 +5819,11 @@ modules = [
     type=113,
     height=2,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out1',         nm1portcolors.audio),
-      OutputType('Out2',         nm1portcolors.audio),
+      OutputType('Out1',         nm1conncolors.audio),
+      OutputType('Out2',         nm1conncolors.audio),
     ],
     params=[
       ParameterType('Mix',
@@ -5842,11 +5842,11 @@ modules = [
     type=114,
     height=2,
     inputs=[
-      InputType('In1',          nm1portcolors.audio),
-      InputType('In2',          nm1portcolors.audio),
+      InputType('In1',          nm1conncolors.audio),
+      InputType('In2',          nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Mix',
@@ -5865,11 +5865,11 @@ modules = [
     type=115,
     height=4,
     inputs=[
-      InputType('Velocity',     nm1portcolors.control),
-      InputType('Note',         nm1portcolors.control),
+      InputType('Velocity',     nm1conncolors.control),
+      InputType('Note',         nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.control),
+      OutputType('Out',          nm1conncolors.control),
     ],
     params=[
       ParameterType('VelocitySensitivity',
@@ -5912,12 +5912,12 @@ modules = [
     type=117,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('Mod',          nm1portcolors.audio),
-      InputType('ModDepth',     nm1portcolors.audio),
+      InputType('In',           nm1conncolors.audio),
+      InputType('Mod',          nm1conncolors.audio),
+      InputType('ModDepth',     nm1conncolors.audio),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('ModDepth',
@@ -5944,11 +5944,11 @@ modules = [
     type=118,
     height=3,
     inputs=[
-      InputType('In',           nm1portcolors.audio),
-      InputType('RateMod',      nm1portcolors.control),
+      InputType('In',           nm1conncolors.audio),
+      InputType('RateMod',      nm1conncolors.control),
     ],
     outputs=[
-      OutputType('Out',          nm1portcolors.audio),
+      OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
       ParameterType('Bits',
@@ -6000,8 +6000,8 @@ modules = [
     height=2,
     inputs=[],
     outputs=[
-      OutputType('Left',         nm1portcolors.audio),
-      OutputType('Right',        nm1portcolors.audio),
+      OutputType('Left',         nm1conncolors.audio),
+      OutputType('Right',        nm1conncolors.audio),
     ],
     params=[
       ParameterType('+6Db',

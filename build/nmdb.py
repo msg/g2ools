@@ -90,7 +90,7 @@ out = open('../nord/nm1/modules.py','w')
 out.write('''#!/usr/bin/env python
 
 from nord.types import *
-from nord.nm1.colors import nm1portcolors
+from nord.nm1.colors import nm1conncolors
 
 class ParameterDef(Struct): pass
 
@@ -111,7 +111,7 @@ for module in modules:
     s += '''    inputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      InputType(%-16snm1portcolors.%s)," % (
+        '\n'.join(["      InputType(%-16snm1conncolors.%s)," % (
           "'%s'," %  nm.title().replace(' ',''),
           t.lower().replace(' ',''))
           for (n,nm,t) in module.inputs
@@ -123,7 +123,7 @@ for module in modules:
     s += '''    outputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      OutputType(%-16snm1portcolors.%s)," % (
+        '\n'.join(["      OutputType(%-16snm1conncolors.%s)," % (
           "'%s'," %  nm.title().replace(' ',''),
           t.lower().replace(' ',''))
           for (n,nm,t) in module.outputs
