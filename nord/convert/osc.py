@@ -459,13 +459,18 @@ class ConvSpectralOsc(Convert):
     setv(constswt.params.On,1)
     constswt.params.On.labels = ['Shape']
     setv(constswt.params.Lev,getv(nmmp.Shape))
+    self.params[2] = constswt.params.Lev
+
     mix11a = self.addmodule('Mix1-1A',name='ShapeMod')
     setv(mix11a.params.ExpLin,1) # Line
     setv(mix11a.params.On,1)
     mix11a.params.On.labels = ['Amount']
     setv(mix11a.params.Lev,getv(nmmp.ShapeMod))
+    self.params[7] = mix11a.params.Lev
+
     levmult = self.addmodule('LevMult')
     levmult2 = self.addmodule('LevMult')
+
     mix21a = self.addmodule('Mix2-1A',name='Out')
     setv(mix21a.params.ExpLin,1) # Lin
     setv(mix21a.params.On1,1)
