@@ -117,7 +117,7 @@ class ConvNoteVelScal(Convert):
       for checknm in ['knob','ctrl','morph']:
         if getattr(param,checknm) != None:
           external = 1
-    less8db = (abs(l-24) > 8 or abs(r-24) > 8)
+    less8db = (abs(l-24) <= 8 and abs(r-24) <= 8)
     velinp = len(nmm.inputs.Velocity.cables) != 0
     if not external and less8db and not velinp and velsens == 0 :
       setv(g2mp.L,notescale[l][1])
