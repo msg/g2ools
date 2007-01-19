@@ -754,10 +754,21 @@ class ConvOscSlvFM(Convert):
     # must happen after handle mst to get Range
     if getv(getattr(nmmp,'-3Oct')):
       freqmode = getv(g2mp.FreqMode)
+      nm1freqcoarse = getv(nmmp.DetuneCoarse)
+      g2freqcoarse = getv(g2mp.FreqCoarse)
       if freqmode == 3: # Part
-        setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-8))
+        offset = 8
       else:
-        setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-36))
+        offset = 36
+      if g2freqcoarse - offset < 0:
+        constswt = self.addmodule('ConstSwT',name='Offset')
+        setv(constswt.params.On,1)
+        constswt.params.On.labels = ['Offset']
+        setv(constswt.params.Lev,offset)
+        setv(g2mp.PitchVar,127)
+        self.connect(constswt.outputs.Out,g2m.inputs.PitchVar)
+      else:
+        setv(g2mp.FreqCoarse,g2freqcoarse-offset)
       
     self.inputs[1] = handlefm(self,g2m.inputs.PhaseMod,g2mp.PhaseMod,fmbmod)
 
