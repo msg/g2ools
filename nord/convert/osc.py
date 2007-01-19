@@ -24,7 +24,7 @@ from nord.nm1.colors import nm1portcolors
 from convert import *
 from table import *
 
-def handlepw(conv,pw,haspw):
+def handlepw(conv,pw,haspw,shape,shapemod):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params,g2m.params
   # add mix2-1b so input can be doubled/inverted
@@ -35,9 +35,11 @@ def handlepw(conv,pw,haspw):
     mix11a = conv.addmodule('Mix1-1A',name='ShapeMod')
     setv(mix11a.params.ExpLin, 1) # Lin
     setv(mix11a.params.On,1)
+    mix11a.params.On.labels = ['Mod']
     if haspw:
       constswt = conv.addmodule('ConstSwT',name='Shape')
       setv(constswt.params.On,1)
+      constswt.params.On.labels = ['Shape']
     mix21b = conv.addmodule('Mix2-1B',name='ModIn')
     conv.connect(clip.outputs.Out,g2m.inputs.ShapeMod)
     conv.connect(mix11a.outputs.Out,clip.inputs.In)
@@ -54,6 +56,9 @@ def handlepw(conv,pw,haspw):
     setv(g2mp.Shape,0)
     setv(g2mp.ShapeMod,127)
     setv(mix11a.params.Lev,getv(nmmp.PwMod))
+    conv.params[shapemod] = mix11a.params.Lev
+    if shape > -1:
+      conv.params[shape] = constswt.params.Lev
     return mix21b.inputs.In1
   if pw < 64:
     pw = 64-pw
@@ -349,7 +354,7 @@ class ConvOscA(Convert):
 
     setv(g2mp.Shape,0)
     # handle special parameters
-    self.inputs[4] = handlepw(self,getv(nmmp.PulseWidth),1)
+    self.inputs[4] = handlepw(self,getv(nmmp.PulseWidth),1,3,8)
 
     self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
@@ -383,7 +388,7 @@ class ConvOscB(Convert):
 
     setv(g2mp.Shape,0)
     if getv(g2mp.Waveform) == 3:
-      pwmod = handlepw(self,64,0)
+      pwmod = handlepw(self,64,0,-1,7)
       if pwmod:
         notequant = self.addmodule('NoteQuant',name='BlueRate')
         self.connect(notequant.outputs.Out,pwmod)
@@ -586,7 +591,7 @@ class ConvOscSlvB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.Shape,0)
-    self.inputs[1] = handlepw(self,64,1)
+    self.inputs[1] = handlepw(self,64,1,2,3)
     # handle special parameters 
     if len(nmm.inputs.Mst.cables):
       setv(g2mp.Kbt,0)
