@@ -523,10 +523,10 @@ class ConvFormantOsc(Convert):
     self.connect(notequant.outputs.Out,mix41a.inputs.In3)
     self.connect(levamp.outputs.Out,notequant.inputs.In)
 
-    rndclkb.modes.Character.value = 1
+    rndclkb.modes.Character.value = 0
     setv(rndclkb.params.StepProb,61)
     setv(eqpeak.params.Freq,109)
-    setv(eqpeak.params.Gain,104)
+    setv(eqpeak.params.Gain,100)
     setv(eqpeak.params.Bandwidth,2)
     setv(eqpeak.params.Level,100)
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
