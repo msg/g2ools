@@ -141,7 +141,32 @@ class Area:
     dest.cables.remove(cable)
     for cable in dest.cables:
       addnet(self.netlist,cable.source,cable.dest)
-    
+
+  # removeconnector - remove a port from a cable net
+  def removeconnector(self, connector):
+    connectors = []
+    minport = None
+    mindist = 200000  # max is 131072
+    for cable in connector.cables:
+      source,dest = cable.source,cable.dest
+      self.disconnect(cable)
+      if connector == source:
+        other = dest
+      else:
+        other = source
+      dist = self.connectionlength(connector,other)
+      if dist < mindist:
+        mindist = dist
+        minport = other
+      elif not other in connectors:
+        ports.append(other)
+
+    if len(connectors) == 0:
+      return
+
+    for connector in connectors:
+      self.connect(minport,connector)
+
   # quick cable length calculation
   def cablelength(self, cable):
     return self.connectionlength(cable.source, cable.dest)
