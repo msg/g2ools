@@ -2728,7 +2728,7 @@ ModuleKnowledge(
     height(3)
     inputs(['PitchVar', 'Sync', 'PhaseMod', 'Pitch'])
     outputs(['Out'])
-    params(['FreqCoarse', 'FreqFine', 'Kbt', 'FreqMode', 'PhaseMod', 'Active', 'FreqMod'])
+    params(['FreqCoarse', 'FreqFine', 'Kbt', 'FreqMode', 'PhaseMod', 'Active', 'PitchVar'])
     modes(['Waveform'])
     inputtypes(['blue_red', 'red', 'red', 'blue_red'])
     outputtypes(['red'])

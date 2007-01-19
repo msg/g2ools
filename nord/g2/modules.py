@@ -3572,7 +3572,7 @@ modules = [
       ParameterType('FreqMode',     parammap.FreqMode_3),
       ParameterType('PhaseMod',     parammap.Level_100),
       ParameterType('Active',       parammap.ActiveMonitor),
-      ParameterType('FreqMod',      parammap.Level_100),
+      ParameterType('PitchVar',     parammap.Level_100),
     ],
     modes=[
       ModeType('Waveform',     parammap.OscWaveform_1),
