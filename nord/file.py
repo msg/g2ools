@@ -18,7 +18,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from net import addnet
+from net import addnet, delnet
 from nord.module import Module
 
 def out(x):
@@ -129,22 +129,19 @@ class Area:
 
     addnet(self.netlist, cable.source, cable.dest)
 
-  # remove a cable - create possibly 2 new netw
-  def removecable(self, cable):
-    pass
-
   # disconnect a input or output port - update all cables connected to port
-  def disconnect(self, port):
-    # find all cables connected to port
-    cables = []
-    mindist,mincable = 10000000,None
-    for cable in self.cables:
-      if cable.source == port or cable.dest == port:
-        cables.append(cable)
-        if self.cablelength(cable) < mindist:
-          mincable = cable
-          mindist = self.cablelength(cable)
+  def disconnect(self, cable):
+    source,dest = cable.source,cable.dest
+    delnet(self.netlist,source,dest)
 
+    source.cables.remove(cable)
+    for cable in source.cables:
+      addnet(self.netlist,cable.source,cable.dest)
+
+    dest.cables.remove(cable)
+    for cable in dest.cables:
+      addnet(self.netlist,cable.source,cable.dest)
+    
   # quick cable length calculation
   def cablelength(self, cable):
     return self.connectionlength(cable.source, cable.dest)

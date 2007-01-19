@@ -52,21 +52,25 @@ def addnet(netlist, source, dest):
         'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
         source.module.type.shortnm, source.type.name,
         dest.net.output.module.type.shortnm, dest.net.output.type.name))
-    source.net.inputs += dest.net.inputs
+
     if dest.net.output:
       source.net.output = dest.net.output
       source.net.output.net = source.net
+
     oldnet = dest.net
+    netlist.remove(oldnet)
+
+    source.net.inputs += dest.net.inputs
     for input in dest.net.inputs:
       input.net = source.net
-    netlist.remove(oldnet)
+
     #print 'Combine:'
     #print source.net, dest.net
     #output = source.net.output
     #inputs = source.net.inputs
     #print '%s:%s' % (output.module.name,output.type.name),[
     #  '%s:%s' % (input.module.name,input.type.name) for input in inputs]
-    ##return
+    return
 
   found = 0
   for net in netlist:
@@ -101,24 +105,20 @@ def addnet(netlist, source, dest):
   if not dest.net:
     dest.net = net
 
-# delconnection - update the netlist removing cable and what side of the cable
-#                 to disconnect
-def delconnection(netlist, cable, side):
-  if not cable.net in netlist:
-    print 'Cable source=%s:%s dest=%s:%s not in netlist' % (
+# delnet - remove a net from the netlist with checks
+def delnet(netlist, source, dest):
+  if source.net != dest.net:
+    raise NetError('source=%s:%s dest=%s:%s not connected' % (
       cable.source.module.name,cable.source.type.name,
-      cable.dest.module.name,cable.dest.type.name)
+      cable.dest.module.name,cable.dest.type.name))
+  if not source.net in netlist:
+    raise NetError('source=%s:%s dest=%s:%s not in netlist' % (
+      cable.source.module.name,cable.source.type.name,
+      cable.dest.module.name,cable.dest.type.name))
     return
-  if side == cable.source:
-    opposite = cable.dest
-  else:
-    opposite = cable.source
-  if opposite.direction:
-    pass
-  else:
-    pass
-  # remove dest from net
-  pass
+  # remove net from netlist and rebuild two nets
+  net = source.net
+  netlist.remove(net)
 
 def printnet(net):
   if net.output:
