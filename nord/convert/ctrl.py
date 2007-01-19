@@ -119,9 +119,9 @@ class ConvNoteVelScal(Convert):
           external = 1
     less8db = (abs(l-24) <= 8 and abs(r-24) <= 8)
     velinp = len(nmm.inputs.Velocity.cables) != 0
+    setv(g2mp.L,notescale[l][1])
+    setv(g2mp.R,notescale[r][1])
     if not external and less8db and not velinp and velsens == 0 :
-      setv(g2mp.L,notescale[l][1])
-      setv(g2mp.R,notescale[r][1])
       return
 
     if not less8db:
