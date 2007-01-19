@@ -28,6 +28,7 @@ from nord.file import MorphMap
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2portcolors
 from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1portcolors
+from nord.nm1.file import NM1Error
 from nord.convert import typetable,setv
 from nord.net import printnet
 
@@ -379,7 +380,8 @@ def convert(pch,config):
 
   # handle CurrentNotes
   print 'CurrentNotes:'
-  g2patch.lastnote = nmpatch.lastnote
+  #g2patch.lastnote = nmpatch.lastnote
+  g2patch.notes.append(nmpatch.lastnote)
   for note in nmpatch.notes:
     g2patch.notes.append(note)
 
@@ -458,7 +460,10 @@ def main():
   def doconvert(fname,config):
     # general algorithm for converter:
     if config.debug:
-      convert(PchFile(fname),config) # allow exception thru if debugging
+      try:
+        convert(PchFile(fname),config) # allow exception thru if debugging
+      except NM1Error:
+        pass
     else:
       try:
         convert(PchFile(fname),config)
