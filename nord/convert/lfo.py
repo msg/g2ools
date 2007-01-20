@@ -42,6 +42,11 @@ def handleslv(conv,ratemodin,ratemodparam):
     slv = g2m.inputs.Rate
     kbt = oscmaster.inputs.Pitch
 
+    if getv(nmmp.Range) == 0: # Sub
+      slv = handleoscmasterslv(conv,oscmaster,64,40,50,103,41,True)
+    else:
+      slv = handleoscmasterslv(conv,oscmaster,76,64,52,104,35,False)
+
   # add fine tuning 
   if len(nmm.inputs.Rate.cables):
     mod = getv(nmmp.RateMod)
@@ -125,6 +130,9 @@ class ConvLFOA(Convert):
     self.inputs[0],self.outputs[0],kbt = ratemodin,slv,kbt
     self.kbtout = handlekbt(self,kbt,4,False)
 
+  def precables(self):
+    doslvcables(self)
+
 class ConvLFOB(Convert):
   maing2module = 'LfoShpA'
   parammap = ['Rate','Range','Phase','RateMod',['PolyMono','Mono'],
@@ -146,6 +154,9 @@ class ConvLFOB(Convert):
     self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
     self.kbtout = handlekbt(self,kbt,4,False)
 
+  def precables(self):
+    doslvcables(self)
+
 class ConvLFOC(Convert):
   maing2module = 'LfoA'
   parammap = ['Rate','Range','Waveform','RateMod',['PolyMono','Mono'],
@@ -166,6 +177,9 @@ class ConvLFOC(Convert):
     self.kbt = g2m.params.Kbt
     ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
     self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
+
+  def precables(self):
+    doslvcables(self)
 
 class ConvLFOSlvA(Convert):
   maing2module = 'LfoB'
