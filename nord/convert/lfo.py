@@ -123,7 +123,7 @@ class ConvLFOA(Convert):
     # update Rate input, Slv Output
     ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
     self.inputs[0],self.outputs[0],kbt = ratemodin,slv,kbt
-    self.kbtout = handlekbt(self,kbt,4,True)
+    self.kbtout = handlekbt(self,kbt,4,False)
 
 class ConvLFOB(Convert):
   maing2module = 'LfoShpA'
@@ -144,7 +144,7 @@ class ConvLFOB(Convert):
 
     ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
     self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
-    self.kbtout = handlekbt(self,kbt,4,True)
+    self.kbtout = handlekbt(self,kbt,4,False)
 
 class ConvLFOC(Convert):
   maing2module = 'LfoA'
