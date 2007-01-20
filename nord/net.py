@@ -33,16 +33,15 @@ class Net:
 
 # addnet - update the netlist adding source and dest
 def addnet(netlist, source, dest):
-
   if source.net and dest.net and source.net == dest.net:
-    print 'Connecting already create net'
+    print 'Connecting already created net'
     print source.net, dest.net
     print '  %d:%s -> %d:%s' % (source.module.index,source.type.name,
         dest.module.index,dest.type.name),
-    #print 'source net:'
-    #printnet(source.net)
-    #print 'dest net:'
-    #printnet(dest.net)
+    print 'source net:'
+    printnet(source.net)
+    print 'dest net:'
+    printnet(dest.net)
     return
 
   if source.net and dest.net: # two separate nets need to be combined
@@ -53,23 +52,25 @@ def addnet(netlist, source, dest):
         source.module.type.shortnm, source.type.name,
         dest.net.output.module.type.shortnm, dest.net.output.type.name))
 
+    #print 'Combine:'
+    #print ' source',
+    #printnet(source.net)
+    #print ' dest',
+    #printnet(dest.net)
+
+    netlist.remove(dest.net)
+
+    source.net.inputs += dest.net.inputs
+    for input in dest.net.inputs:
+      #source.net.inputs.append(input)
+      input.net = source.net
+
     if dest.net.output:
       source.net.output = dest.net.output
       source.net.output.net = source.net
 
-    oldnet = dest.net
-    netlist.remove(oldnet)
-
-    source.net.inputs += dest.net.inputs
-    for input in dest.net.inputs:
-      input.net = source.net
-
-    #print 'Combine:'
-    #print source.net, dest.net
-    #output = source.net.output
-    #inputs = source.net.inputs
-    #print '%s:%s' % (output.module.name,output.type.name),[
-    #  '%s:%s' % (input.module.name,input.type.name) for input in inputs]
+    #print ' combine',
+    #printnet(source.net)
     return
 
   found = 0
@@ -107,20 +108,31 @@ def addnet(netlist, source, dest):
 
 # delnet - remove a net from the netlist with checks
 def delnet(netlist, source, dest):
+  #print 'delnet source=%s:%s dest=%s:%s' % (
+  #  source.module.name,source.type.name,
+  #  dest.module.name,dest.type.name)
   if source.net != dest.net:
     raise NetError('source=%s:%s dest=%s:%s not connected' % (
-      cable.source.module.name,cable.source.type.name,
-      cable.dest.module.name,cable.dest.type.name))
+      source.module.name,source.type.name,
+      dest.module.name,dest.type.name))
+    return
   if not source.net in netlist:
     raise NetError('source=%s:%s dest=%s:%s not in netlist' % (
-      cable.source.module.name,cable.source.type.name,
-      cable.dest.module.name,cable.dest.type.name))
+      source.module.name,source.type.name,
+      dest.module.name,dest.type.name))
     return
   # remove net from netlist and rebuild two nets
   net = source.net
+  if net.output:
+    net.output.net = None
+  for input in net.inputs:
+    input.net = None
   netlist.remove(net)
 
 def printnet(net):
+  if not net:
+    print '<empty>'
+    return
   if net.output:
     out = '%s:%s' % (net.output.module.name,net.output.type.name)
   else:
