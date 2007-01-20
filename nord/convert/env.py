@@ -82,19 +82,19 @@ class ConvMod_Env(Convert):
     updatevals(g2mp,['Attack','Decay','Release'],nm1adsrtime,g2adsrtime)
     if len(nmm.inputs.AttackMod.cables):
       levconv = self.addmodule('LevConv',name='Attack')
-      setv(levconv.params.InputType,1)  # Pos
+      setv(levconv.params.InputType,0)  # Bip
       setv(levconv.params.OutputType,5) # BipInv
       self.connect(levconv.outputs.Out,g2m.inputs.AttackMod)
       self.inputs[2] = levconv.inputs.In
     if len(nmm.inputs.DecayMod.cables):
       levconv = self.addmodule('LevConv',name='Decay')
-      setv(levconv.params.InputType,1)  # Pos
+      setv(levconv.params.InputType,0)  # Bip
       setv(levconv.params.OutputType,5) # BipInv
       self.connect(levconv.outputs.Out,g2m.inputs.DecayMod)
       self.inputs[3] = levconv.inputs.In
     if len(nmm.inputs.ReleaseMod.cables):
       levconv = self.addmodule('LevConv',name='Release')
-      setv(levconv.params.InputType,1)  # Pos
+      setv(levconv.params.InputType,0)  # Bip
       setv(levconv.params.OutputType,5) # BipInv
       self.connect(levconv.outputs.Out,g2m.inputs.ReleaseMod)
       self.inputs[5] = levconv.inputs.In
@@ -115,13 +115,13 @@ class ConvAHD_Env(Convert):
     updatevals(g2mp,['Attack','Hold','Decay'],nm1adsrtime,g2adsrtime)
     if len(nmm.inputs.AttackMod.cables):
       levconv = self.addmodule('LevConv',name='Attack')
-      setv(levconv.params.InputType,1)  # Pos
+      setv(levconv.params.InputType,0)  # Bip
       setv(levconv.params.OutputType,5) # BipInv
       self.connect(levconv.outputs.Out,g2m.inputs.AttackMod)
       self.inputs[1] = levconv.inputs.In
     if len(nmm.inputs.DecayMod.cables):
       levconv = self.addmodule('LevConv',name='Decay')
-      setv(levconv.params.InputType,1)  # Pos
+      setv(levconv.params.InputType,0)  # Bip
       setv(levconv.params.OutputType,5) # BipInv
       self.connect(levconv.outputs.Out,g2m.inputs.DecayMod)
       self.inputs[3] = levconv.inputs.In
