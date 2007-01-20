@@ -41,6 +41,7 @@ def handleslv(conv,ratemodin,ratemodparam):
     ratemodparam = oscmaster.params.PitchMod
     slv = g2m.inputs.Rate
     kbt = oscmaster.inputs.Pitch
+    conv.kbt = oscmaster.params.Kbt
 
     if getv(nmmp.Range) == 0: # Sub
       slv = handleoscmasterslv(conv,oscmaster,64,40,50,103,41,True)
@@ -64,7 +65,6 @@ def handleslv(conv,ratemodin,ratemodparam):
       ratemodin = adj.inputs.Chain
 
   return ratemodin,ratemodparam,slv,kbt
-
 
 def postmst(conv,mstindex):
   nmm,g2m = conv.nmmodule,conv.g2module
