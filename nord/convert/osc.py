@@ -201,24 +201,22 @@ def handleam(conv):
 def handleoscmasterslv(conv,mst):
   nmm, g2m = conv.nmmodule, conv.g2module
 
-  if mst.type.shortnm != 'OscMaster' or len(nmm.outputs.Slv.cables) == 0:
+  conv.nonslaves = []
+  conv.slaves = []
+  slv = nmm.outputs.Slv
+  if mst.type.shortnm != 'OscMaster' or len(slv.cables) == 0:
     return None
 
-  slaves = []
-  nonslaves = []
-  for inputs in nmm.outputs.Slv.net.inputs:
-    if inputs.rate != nm1conncolors.slave:
-      nonslaves.append(inputs)
+  conv.slvoutput = mst.outputs.Out
+
+  for input in slv.net.inputs:
+    if input.rate != nm1conncolors.slave:
+      conv.nonslaves.append(input)
     else:
-      slaves.append(inputs)
+      conv.slaves.append(input)
 
-  if len(nonslaves) == 0:
+  if len(conv.nonslaves) == 0:
     return mst.outputs.Out
-
-  #if len(slaves):
-  #  # move this to a different cable
-  #  for slave in slaves:
-  #    slave.module.area.removeconnector(slave)
 
   # Grey to Blue handling
   levscaler = conv.addmodule('LevScaler',name='GreyIn')
@@ -245,10 +243,18 @@ def handleoscmasterslv(conv,mst):
 
   return greyout.outputs.Out
 
+def doslvcables(conv):
+  if not hasattr(conv,'slvoutput'):
+    return
+  for input in conv.slaves:
+    conv.nmmodule.area.removeconnector(input)
+    conv.connect(conv.slvoutput,input.module.conv.inputs[input.index])
 
 slvoutnum=1
 def handleslv(conv):
   global slvoutnum
+  conv.nonslaves = []
+  conv.slaves = []
   nmm, g2m = conv.nmmodule, conv.g2module
   if len(nmm.outputs.Slv.cables):
     # add a masterosc
@@ -307,16 +313,12 @@ def postmst(conv,mstindex):
   mstin = nmm.inputs.Mst
   if not len(mstin.cables):
     return
-
   if mstin.net.output.rate != nm1conncolors.slave:
     return
-
   mstconv = mstin.net.output.module.conv
   mst = mstconv.g2module
-  
   if not isnm1lfo(mstconv.nmmodule):
     return
-
   if not hasattr(mst.params,'Range'):
     return
 
@@ -348,6 +350,9 @@ class ConvMasterOsc(Convert):
     self.inputs[:2] = [p1,p2]
     self.outputs[0] = handleoscmasterslv(self,g2m)
 
+  def precables(self):
+    doslvcables(self)
+
 class ConvOscA(Convert):
   maing2module = 'OscB'
   parammap = ['FreqCoarse','FreqFine',None,['Shape','PulseWidth'],
@@ -377,6 +382,9 @@ class ConvOscA(Convert):
 
     self.inputs[1] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount,fmamod)
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
+
+  def precables(self):
+    doslvcables(self)
 
 class ConvOscB(Convert):
   maing2module = 'OscB'
@@ -413,6 +421,9 @@ class ConvOscB(Convert):
     self.inputs[0] = handlefm(self,g2m.inputs.FmMod,g2mp.FmAmount,fmamod)
     handlekbt(self,self.inputmod.inputs.Pitch,1) # 0=off,1=on
 
+  def precables(self):
+    doslvcables(self)
+
 class ConvOscC(Convert):
   maing2module = 'OscC'
   parammap = ['FreqCoarse', 'FreqFine','Kbt',
@@ -439,6 +450,9 @@ class ConvOscC(Convert):
     self.inputs[2] = aminput
     self.outputs[1],inputmod = handleslv(self)
     self.inputs[1] = inputmod.inputs.PitchVar
+
+  def precables(self):
+    doslvcables(self)
 
 class ConvSpectralOsc(Convert):
   maing2module = 'OscShpA'
@@ -734,7 +748,6 @@ class ConvOscSineBank(Convert):
         for i in range(1,len(oscs)):
           self.connect(oscs[i-1].inputs.Sync,oscs[i].inputs.Sync)
     if len(nmm.inputs.Mst.cables):
-      print oscs
       self.inputs[0] = oscs[0].inputs.Pitch
       if len(oscs) > 1:
         for i in range(1,len(oscs)):
