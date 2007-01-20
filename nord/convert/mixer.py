@@ -50,7 +50,6 @@ class Conv8Mixer(Convert):
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
     setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
     setv(g2mp.Lev4,modtable[getv(g2mp.Lev4)][0])
-    setv(g2mp.Lev5,modtable[getv(g2mp.Lev4)][0])
     setv(g2mp.Lev5,modtable[getv(g2mp.Lev5)][0])
     setv(g2mp.Lev6,modtable[getv(g2mp.Lev6)][0])
     setv(g2mp.Lev7,modtable[getv(g2mp.Lev7)][0])
