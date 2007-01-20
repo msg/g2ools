@@ -21,6 +21,7 @@
 #
 from nord.utils import *
 from nord.nm1.colors import nm1conncolors
+from nord.g2.colors import g2conncolors
 from convert import *
 from table import *
 
@@ -503,6 +504,9 @@ class ConvFormantOsc(Convert):
     self.connect(notequant.outputs.Out,mix41a.inputs.In3)
     self.connect(levamp.outputs.Out,notequant.inputs.In)
 
+    inv.uprate = 1
+    inv.outputs.Out1.rate = g2conncolors.orange
+    rndclkb.uprate = 1
     rndclkb.modes.Character.value = 0
     setv(rndclkb.params.StepProb,61)
     setv(eqpeak.params.Freq,109)
