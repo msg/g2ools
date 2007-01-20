@@ -18,7 +18,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from net import addnet, delnet
+from net import addnet, delnet, printnet
 from nord.module import Module
 
 def out(x):
@@ -132,22 +132,50 @@ class Area:
   # disconnect a input or output port - update all cables connected to port
   def disconnect(self, cable):
     source,dest = cable.source,cable.dest
+
+    #print 'disconnect %s:%s -> %s:%s' % (
+    #  cable.source.module.name,cable.source.type.name,
+    #  cable.dest.module.name,cable.dest.type.name)
+    #print ' cable',
+    #printnet(cable.source.net)
+
+    # collect all the cables on the net
+    cables = []
+    for input in source.net.inputs:
+      for c in input.cables:
+        if not c in cables:
+          cables.append(c)
+
+    cables.remove(cable)
+    source.cables.remove(cable)
+    dest.cables.remove(cable)
+    self.cables.remove(cable)
     delnet(self.netlist,source,dest)
 
-    source.cables.remove(cable)
-    for cable in source.cables:
-      addnet(self.netlist,cable.source,cable.dest)
+    source.net = dest.net = None
+    for c in cables:
+      #print 'connect'
+      #print ' source',
+      #printnet(c.source.net)
+      #print ' dest',
+      #printnet(c.dest.net)
+      addnet(self.netlist,c.source,c.dest)
 
-    dest.cables.remove(cable)
-    for cable in dest.cables:
-      addnet(self.netlist,cable.source,cable.dest)
+    #print 'after disconnect'
+    #print ' source',
+    #printnet(source.net)
+    #print ' dest',
+    #printnet(dest.net)
 
   # removeconnector - remove a port from a cable net
   def removeconnector(self, connector):
     connectors = []
-    minport = None
-    mindist = 200000  # max is 131072
-    for cable in connector.cables:
+    minconn = None
+    mindist = 1000000
+
+    #print 'removeconnector %s:%s' % (connector.module.name,connector.type.name)
+    while len(connector.cables):
+      cable = connector.cables[0]
       source,dest = cable.source,cable.dest
       self.disconnect(cable)
       if connector == source:
@@ -156,16 +184,27 @@ class Area:
         other = source
       dist = self.connectionlength(connector,other)
       if dist < mindist:
+        if minconn:
+          connectors.append(minconn)
         mindist = dist
-        minport = other
+        minconn = other
       elif not other in connectors:
-        ports.append(other)
+        connectors.append(other)
 
-    if len(connectors) == 0:
-      return
+    if len(connectors) != 0:
+      for connector in connectors:
+        #print ' new %s:%s -> %s:%s' % (minconn.module.name,minconn.type.name,
+        #    connector.module.name,connector.type.name)
+        if minconn.direction:
+          self.connect(minconn,connector,0)
+        else:
+          self.connect(connector,minconn,0)
+        #print ' done',
+        #printnet(connector.net)
 
-    for connector in connectors:
-      self.connect(minport,connector)
+    #print 'after remove',
+    #printnet(minconn.net)
+    #print
 
   # quick cable length calculation
   def cablelength(self, cable):
