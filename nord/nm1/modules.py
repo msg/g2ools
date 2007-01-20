@@ -3188,7 +3188,7 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Overdrive',
+      ParameterType('OverdriveMod',
         ParameterDef(  
           default=0,
           low=0,
@@ -3196,7 +3196,7 @@ modules = [
           comment=''
         ),
       ),
-      ParameterType('OverdriveMod',
+      ParameterType('Overdrive',
         ParameterDef(  
           default=0,
           low=0,

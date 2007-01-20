@@ -46,8 +46,7 @@ class ConvOverdrive(Convert):
     modin.params.On.labels = ['Mod']
     setv(modin.params.ExpLin,1) # Lin
     setv(modin.params.Lev,getv(nmmp.OverdriveMod))
-    setv(modin.params.Lev,64)
-    self.params[1] = modin.params.Lev
+    self.params[0] = modin.params.Lev
 
     overdrive = self.addmodule('ConstSwT',name='Overdrive')
     setv(overdrive.params.On,1)
@@ -55,7 +54,7 @@ class ConvOverdrive(Convert):
     setv(overdrive.params.BipUni,1) # Uni
     setv(overdrive.params.Lev,getv(nmmp.Overdrive))
     self.connect(overdrive.outputs.Out,modin.inputs.Chain)
-    self.params[0] = overdrive.params.Lev
+    self.params[1] = overdrive.params.Lev
     
     shpstatic = self.addmodule('ShpStatic',name='')
     setv(shpstatic.params.Mode,0) # Inv x3
