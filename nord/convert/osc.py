@@ -172,7 +172,7 @@ def handlefm(conv,fminput,fmparam,fmtable):
   fma = getv(nmm.params.FmMod)
   if fmparam and fminput:
     setv(fmparam,fmtable[fma][0])
-  if len(nmm.inputs.FmMod.cables):
+  if len(nmm.inputs.FmMod.cables) and fma:
     mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
     fmmodnum += 1
     conv.connect(mix21b.outputs.Out,fminput)
@@ -583,8 +583,7 @@ class ConvOscSlvA(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    if len(nmm.inputs.Mst.cables):
-      setv(g2mp.Kbt,0)
+    setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
 
@@ -614,8 +613,7 @@ class ConvOscSlvB(Convert):
     setv(g2mp.Shape,0)
     self.inputs[1] = handlepw(self,64,1,2,3)
     # handle special parameters 
-    if len(nmm.inputs.Mst.cables):
-      setv(g2mp.Kbt,0)
+    setv(g2mp.Kbt,0)
     setv(g2mp.Waveform,3) # square
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
@@ -641,8 +639,7 @@ class ConvOscSlvC(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
-    if len(nmm.inputs.Mst.cables):
-      setv(g2mp.Kbt,0)
+    setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
@@ -723,8 +720,7 @@ class ConvOscSineBank(Convert):
           continue
       osc = self.addmodule(osctype,name='Osc%d' % i)
       oscs.append(osc)
-      if len(nmm.inputs.Mst.cables):
-        setv(osc.params.Kbt,0)
+      setv(osc.params.Kbt,0)
       setv(osc.params.FreqCoarse,getv(getattr(nmmp,'Osc%dCoarse'%i)))
       self.params[(i-1)*3] = osc.params.FreqCoarse
       setv(osc.params.FreqFine,getv(getattr(nmmp,'Osc%dFine'%i)))
@@ -767,8 +763,7 @@ class ConvOscSlvFM(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    if len(nmm.inputs.Mst.cables):
-      setv(g2mp.Kbt,0)
+    setv(g2mp.Kbt,0)
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
@@ -786,7 +781,7 @@ class ConvOscSlvFM(Convert):
         constswt = self.addmodule('ConstSwT',name='Offset')
         setv(constswt.params.On,1)
         constswt.params.On.labels = ['Offset']
-        setv(constswt.params.Lev,offset)
+        setv(constswt.params.Lev,g2freqcoarse-offset)
         setv(g2mp.PitchVar,127)
         self.connect(constswt.outputs.Out,g2m.inputs.PitchVar)
       else:
