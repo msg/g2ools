@@ -78,9 +78,6 @@ class Convert:
           output = getattr(g2m.outputs,output)
         self.outputs.append(output)
 
-  def postmodule(self):
-    pass
-
   def addmodule(self, shortnm, **kw):
     mod = self.g2area.addmodule(shortnm, **kw)
     mod.horiz = self.g2module.horiz

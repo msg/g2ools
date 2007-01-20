@@ -204,13 +204,21 @@ def handleoscmasterslv(conv,mst):
   if mst.type.shortnm != 'OscMaster' or len(nmm.outputs.Slv.cables) == 0:
     return None
 
-  onlyslave = 1
+  slaves = []
+  nonslaves = []
   for inputs in nmm.outputs.Slv.net.inputs:
     if inputs.rate != nm1conncolors.slave:
-      onlyslave = 0
+      nonslaves.append(inputs)
+    else:
+      slaves.append(inputs)
 
-  if onlyslave:
+  if len(nonslaves) == 0:
     return mst.outputs.Out
+
+  #if len(slaves):
+  #  # move this to a different cable
+  #  for slave in slaves:
+  #    slave.module.area.removeconnector(slave)
 
   # Grey to Blue handling
   levscaler = conv.addmodule('LevScaler',name='GreyIn')
@@ -576,7 +584,6 @@ class ConvOscSlvA(Convert):
     self.outputs[0] = output
     self.inputs[2] = aminput
 
-  def postmodule(self):
     postmst(self,0)
 
 class ConvOscSlvB(Convert):
@@ -605,7 +612,6 @@ class ConvOscSlvB(Convert):
     #       to get the actual waveform, if necessary.
     setv(g2m.params.Shape,abs(getv(nmm.params.PulseWidth)-64)*2)
 
-  def postmodule(self):
     postmst(self,0)
 
 class ConvOscSlvC(Convert):
@@ -630,7 +636,6 @@ class ConvOscSlvC(Convert):
         g2m.inputs.FmMod,g2m.params.FmAmount)
     self.inputs[1] = handlefm(self,fmmod,fmparam,fmamod)
 
-  def postmodule(self):
     postmst(self,0)
 
 class ConvOscSlvD(ConvOscSlvC):
@@ -735,7 +740,6 @@ class ConvOscSineBank(Convert):
         for i in range(1,len(oscs)):
           self.connect(oscs[i-1].inputs.Pitch,oscs[i].inputs.Pitch)
 
-  def postmodule(self):
     sinepostmst(self,0)
 
 class ConvOscSlvFM(Convert):
@@ -777,7 +781,6 @@ class ConvOscSlvFM(Convert):
       
     self.inputs[1] = handlefm(self,g2m.inputs.PhaseMod,g2mp.PhaseMod,fmbmod)
 
-  def postmodule(self):
     sinepostmst(self,0)
 
 class ConvNoise(Convert):

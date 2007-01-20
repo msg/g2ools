@@ -56,9 +56,8 @@ class ConvFilterD(ConvFilter):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-  def postmodule(self):
-    self.kbt = self.g2module.params.Kbt
-    handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
+    self.kbt = g2mp.Kbt
+    handlekbt(self,g2m.inputs.Pitch,4) # 4=Kbt 100%
 
 # copied from convert.py for osc.py (maybe it can be unified?)
 def fltdualpitchmod(nmm,g2m,conv,mod1,mod2):
@@ -103,9 +102,8 @@ class ConvFilterE(ConvFilter):
     self.inputs[0] = p1
     self.inputs[3] = p2
 
-  def postmodule(self):
-    self.kbt = self.g2module.params.Kbt
-    handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
+    self.kbt = g2mp.Kbt
+    handlekbt(self,g2m.inputs.Pitch,4) # 4=Kbt 100%
 
 class ConvFilterF(ConvFilter):
   maing2module = 'FltClassic'
@@ -124,9 +122,8 @@ class ConvFilterF(ConvFilter):
     p1,p2 = fltdualpitchmod(nmm,g2m,self,3,4)
     self.inputs[0:2] = p1,p2
 
-  def postmodule(self):
-    self.kbt = self.g2module.params.Kbt
-    handlekbt(self,self.g2module.inputs.Pitch,4) # 4=Kbt 100%
+    self.kbt = g2mp.Kbt
+    handlekbt(self,g2m.inputs.Pitch,4) # 4=Kbt 100%
 
 class ConvVocalFilter(ConvFilter):
   maing2module = 'FltVoice'

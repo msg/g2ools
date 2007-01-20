@@ -187,7 +187,6 @@ class ConvLFOSlvA(Convert):
       setv(g2mp.Phase,(range(64,128)+range(64))[getv(nmmp.Phase)])
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
-  def postmodule(self):
     postmst(self,0)
 
 class ConvLFOSlvB(Convert):
@@ -208,7 +207,6 @@ class ConvLFOSlvB(Convert):
     else:
       setv(g2mp.OutputType,5) # BipInv
 
-  def postmodule(self):
     postmst(self,0)
 
 class ConvLFOSlvC(ConvLFOSlvB):

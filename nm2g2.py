@@ -111,7 +111,6 @@ def convert(pch,config):
            module.type.type,module.type.type)
         conv = typetable[module.type.type](nmarea,g2area,module,config)
         converters.append(conv)
-        conv.domodule()
         #g2module = conv.g2module
         #print '%s (%d,%d)' % (g2module.type.shortnm,
         #    g2module.horiz, g2module.vert)
@@ -124,7 +123,7 @@ def convert(pch,config):
     for conv in converters:
       print '%s: %d(0x%02x)' % (conv.g2module.name,
           conv.g2module.type.type,conv.g2module.type.type)
-      conv.postmodule()
+      conv.domodule()
 
     modcolors = [
         g2modulecolors.yellow2,g2modulecolors.green2,
