@@ -198,58 +198,6 @@ def handleam(conv):
     output = am.outputs.Out
   return aminput, output
 
-def handleoscmasterslv(conv,mst):
-  nmm, g2m = conv.nmmodule, conv.g2module
-
-  conv.nonslaves = []
-  conv.slaves = []
-  slv = nmm.outputs.Slv
-  if mst.type.shortnm != 'OscMaster' or len(slv.cables) == 0:
-    return None
-
-  conv.slvoutput = mst.outputs.Out
-
-  for input in slv.net.inputs:
-    if input.rate != nm1conncolors.slave:
-      conv.nonslaves.append(input)
-    else:
-      conv.slaves.append(input)
-
-  if len(conv.nonslaves) == 0:
-    return mst.outputs.Out
-
-  # Grey to Blue handling
-  levscaler = conv.addmodule('LevScaler',name='GreyIn')
-  setv(levscaler.params.Kbt,0)
-  setv(levscaler.params.L,16)
-  setv(levscaler.params.BP,127)
-  setv(levscaler.params.R,112)
-  levscaler2 = conv.addmodule('LevScaler',name='GreyIn')
-  setv(levscaler2.params.Kbt,0)
-  setv(levscaler2.params.L,91)
-  setv(levscaler2.params.BP,64)
-  setv(levscaler2.params.R,10)
-  mix21b = conv.addmodule('Mix2-1B')
-  setv(mix21b.params.Lev1,105)
-  setv(mix21b.params.Lev2,25)
-  greyout = conv.addmodule('LevAmp',name='GreyOut')
-  setv(greyout.params.Gain,127)
-  conv.connect(mst.outputs.Out,levscaler.inputs.Note)
-  conv.connect(levscaler.inputs.Note,levscaler2.inputs.Note)
-  conv.connect(levscaler.outputs.Level,mix21b.inputs.In1)
-  conv.connect(mix21b.inputs.In1,levscaler2.inputs.In)
-  conv.connect(levscaler2.outputs.Out,mix21b.inputs.In2)
-  conv.connect(mix21b.outputs.Out,greyout.inputs.In)
-
-  return greyout.outputs.Out
-
-def doslvcables(conv):
-  if not hasattr(conv,'slvoutput'):
-    return
-  for input in conv.slaves:
-    conv.nmmodule.area.removeconnector(input)
-    conv.connect(conv.slvoutput,input.module.conv.inputs[input.index])
-
 slvoutnum=1
 def handleslv(conv):
   global slvoutnum
@@ -268,7 +216,7 @@ def handleslv(conv):
     setv(master.params.FreqMode,getv(g2m.params.FreqMode))
     setv(g2m.params.FreqCoarse,64)
     setv(g2m.params.FreqFine,64)
-    out = handleoscmasterslv(conv,master)
+    out = handleoscmasterslv(conv,master,44,64,69,103,42)
     if out:
       return out,master
     else:
@@ -348,7 +296,7 @@ class ConvMasterOsc(Convert):
     # handle special inputs
     p1,p2 = handledualpitchmod(self,g2m.inputs.PitchVar,g2m.params.PitchMod,3,4)
     self.inputs[:2] = [p1,p2]
-    self.outputs[0] = handleoscmasterslv(self,g2m)
+    self.outputs[0] = handleoscmasterslv(self,g2m,44,64,69,103,42)
 
   def precables(self):
     doslvcables(self)

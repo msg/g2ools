@@ -22,6 +22,7 @@
 from nord.utils import *
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
+from nord.nm1.colors import nm1conncolors
 from table import *
 from units import *
 
@@ -158,4 +159,62 @@ def handlekbt(conv,input,kbt100,addalways=False):
   setv(mix21b.params.Lev2,kbttable[kbt][1])
   return input
   
+def handleoscmasterslv(conv,mst,left,bp,right,lev1,lev2,sub48=False):
+  nmm, g2m = conv.nmmodule, conv.g2module
+
+  conv.nonslaves = []
+  conv.slaves = []
+  slv = nmm.outputs.Slv
+  if mst.type.shortnm != 'OscMaster' or len(slv.cables) == 0:
+    return None
+
+  out = mst.outputs.Out
+  conv.slvoutput = out
+
+  for input in slv.net.inputs:
+    if input.rate != nm1conncolors.slave:
+      conv.nonslaves.append(input)
+    else:
+      conv.slaves.append(input)
+
+  if len(conv.nonslaves) == 0:
+    return mst.outputs.Out
+
+  if sub48:
+    sub48 = conv.addmodule('LevAdd',name='-48')
+    setv(sub48.params.Level,16)
+    conv.connect(out,sub48.inputs.In)
+    out = sub48.outputs.Out
+    
+  # Grey to Blue handling
+  levscaler = conv.addmodule('LevScaler',name='GreyIn')
+  setv(levscaler.params.Kbt,0)
+  setv(levscaler.params.L,16)
+  setv(levscaler.params.BP,127)
+  setv(levscaler.params.R,112)
+  levscaler2 = conv.addmodule('LevScaler',name='GreyIn')
+  setv(levscaler2.params.Kbt,0)
+  setv(levscaler2.params.L,left)
+  setv(levscaler2.params.BP,bp)
+  setv(levscaler2.params.R,right)
+  mix21b = conv.addmodule('Mix2-1B')
+  setv(mix21b.params.Lev1,lev1)
+  setv(mix21b.params.Lev2,lev2)
+  greyout = conv.addmodule('LevAmp',name='GreyOut')
+  setv(greyout.params.Gain,127)
+  conv.connect(out,levscaler.inputs.Note)
+  conv.connect(levscaler.inputs.Note,levscaler2.inputs.Note)
+  conv.connect(levscaler.outputs.Level,mix21b.inputs.In1)
+  conv.connect(levscaler.outputs.Level,levscaler2.inputs.In)
+  conv.connect(levscaler2.outputs.Out,mix21b.inputs.In2)
+  conv.connect(mix21b.outputs.Out,greyout.inputs.In)
+
+  return greyout.outputs.Out
+
+def doslvcables(conv):
+  if not hasattr(conv,'slvoutput'):
+    return
+  for input in conv.slaves:
+    conv.nmmodule.area.removeconnector(input)
+    conv.connect(conv.slvoutput,input.module.conv.inputs[input.index])
 
