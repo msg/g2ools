@@ -93,6 +93,11 @@ class Convert:
   def domodule(self):
     pass
 
+  # precables - process modules after after all domodules() are done
+  #             but before cabling starts
+  def precables(self):
+    pass
+
   def domorphrange(self,paramindex,morphrange):
     return morphrange
 
