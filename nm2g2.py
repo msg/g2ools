@@ -119,7 +119,7 @@ def convert(pch,config):
             module.type.shortnm, module.type.type, module.type.type)
 
     # post module parse
-    print 'PostModule:'
+    print 'domodule:'
     for conv in converters:
       print '%s: %d(0x%02x)' % (conv.g2module.name,
           conv.g2module.type.type,conv.g2module.type.type)
@@ -154,6 +154,12 @@ def convert(pch,config):
           cb.reposition(ca)
         else:
           cb.reposition(None)
+
+    print 'precables:'
+    for conv in converters:
+      print '%s: %d(0x%02x)' % (conv.g2module.name,
+          conv.g2module.type.type,conv.g2module.type.type)
+      conv.precables()
 
     # now do the cables
     print 'Cables:'
