@@ -81,7 +81,7 @@ def convert(pch,config):
     setattr(g2patch.description,color,getattr(nmpatch.header,color))
   if nmpatch.header.voices > 1:
     g2patch.description.monopoly = 0
-    g2patch.description.voicecnt = nmpatch.header.voices
+    g2patch.description.voicecnt = nmpatch.header.voices - 1
   setv(g2patch.settings.glide,nmpatch.header.porta)
   setv(g2patch.settings.glidetime,nmpatch.header.portatime)
   setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
