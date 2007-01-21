@@ -312,8 +312,10 @@ class ConvPatternGen(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    pattern = getv(nmmp.Pattern) + 64
-    setv(g2mp.PatternA,pattern % 128)
+    pattern = (getv(nmmp.Pattern) + 64) % 128
+    setv(g2mp.PatternA,pattern)
+    bank = (getv(nmmp.Bank) + 64) % 128
+    setv(g2mp.PatternB,bank)
 
     # PatternA and PatternB receive same input
     if len(getattr(nmm.inputs,'Pattern&Bank').cables):
