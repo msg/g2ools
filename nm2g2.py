@@ -453,6 +453,8 @@ def main():
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
+    if o in ('-a','--all-files'):
+      config.allfiles = True
     if o in ('-d','--debug'):
       config.debug = True
     if o in ('-l','--low'):
@@ -486,8 +488,8 @@ def main():
       if os.path.isdir(fname) and config.recursive:
         for root,dirs,files in os.walk(fname):
           for f in files:
-            if f[-3:].lower() == 'pch' or config.allfiles:
-              fname = os.path.join(root,f)
+            fname = os.path.join(root,f)
+            if fname[-3:].lower() == 'pch' or config.allfiles:
               print '"%s"' % fname
               if config.keepold and os.path.exists(fname+'2'):
                 continue
