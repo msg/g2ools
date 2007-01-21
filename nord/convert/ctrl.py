@@ -98,6 +98,13 @@ class ConvControlMixer(Convert):
   inputmap = ['In1','In2']
   outputmap = ['Out']
 
+  def domodule(self):
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
+    setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
+
 class ConvNoteVelScal(Convert):
   maing2module = 'LevScaler'
   parammap = [None,['L','LeftGain'],['BP','Breakpoint'],['R','RightGain']]
