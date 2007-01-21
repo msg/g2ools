@@ -231,28 +231,70 @@ def handlemst(conv,fmmod,fmparam):
   global mstinnum
   nmm, g2m = conv.nmmodule, conv.g2module
   mst = g2m.inputs.Pitch
-  if len(nmm.inputs.Mst.cables):
-    if nmm.inputs.Mst.net.output:
-      # Blue to Grey handling
-      if nmm.inputs.Mst.net.output.rate != nm1conncolors.slave:
-        mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
-        setv(mix11a.params.On,1)
-        constswt = conv.addmodule('ConstSwT',name='Offset -64')
-        setv(constswt.params.On,1)
-        conv.connect(mix11a.outputs.Out,fmmod)
-        conv.connect(constswt.outputs.Out,g2m.inputs.Pitch)
-        setv(fmparam,127)
-        setv(mix11a.params.Lev,79)
-        setv(constswt.params.Lev,0)
-        mst = mix11a.inputs.In
-        fmmod, fmparam = None, None
-        if hasattr(nmm.inputs,'FmMod') and len(nmm.inputs.FmMod.cables):
-          fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
-          setv(fmmodinput.params.On,1)
-          conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
-          fmparam = fmmodinput.params.Lev
-          fmmod = fmmodinput.inputs.In
-        mstinnum += 1
+
+  if not len(nmm.inputs.Mst.cables):
+    return mst,fmmod,fmparam
+
+  if not nmm.inputs.Mst.net.output:
+    return mst,fmmod,fmparam
+
+  if nmm.inputs.Mst.net.output.rate == nm1conncolors.slave:
+    return mst,fmmod,fmparam
+
+  # Blue to Grey handling
+  coarsefreq = getv(nmm.params.DetuneCoarse)
+  if hasattr(nmm.inputs,'FmMod'):
+    hasfmmod = len(nmm.inputs.FmMod.cables) != 0
+  else:
+    hasfmmod = False
+  
+  if not hasfmmod and coarsefreq == 64:
+    setv(g2m.params.FreqCoarse,0)
+    setv(fmparam,79)
+    return mst,fmmod,fmparam
+    
+  if hasfmmod and coarsefreq != 64:
+    # OscC/ZeroCnt
+    tune = conv.addmodule('Mix2-1B',name='Tune')
+    setv(tune.params.Inv2,1)
+    setv(tune.params.Lev1,32)
+    setv(tune.params.Lev2,11)
+    conv.connect(tune.inputs.Chain,tune.inputs.In1)
+    conv.connect(tune.inputs.In1,tune.inputs.In2)
+
+    greyto = conv.addmodule('OscC',name='Grey To')
+    setv(greyto.params.FreqCoarse,0)
+    setv(greyto.params.FmAmount,79)
+    greyto.modes.Waveform.value = 0 # Sine
+    conv.connect(tune.outputs.Out,greyto.inputs.FmMod)
+
+    zerocnt = conv.addmodule('ZeroCnt',name='Pitch')
+    conv.connect(greyto.outputs.Out,zerocnt.inputs.In)
+
+    conv.connect(zerocnt.outputs.Out,g2m.inputs.Pitch)
+
+    mst = tune.inputs.Chain
+    return mst,fmmod,fmparam
+
+  setv(g2m.params.FreqCoarse,0)
+
+  mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
+  setv(mix11a.params.On,1)
+  setv(mix11a.params.Lev,79)
+  conv.connect(mix11a.outputs.Out,fmmod)
+
+  setv(fmparam,79)
+
+  mst = mix11a.inputs.In
+  fmmod, fmparam = None, None
+  if hasfmmod:
+    fmmodinput = conv.addmodule('Mix1-1A',name='FMA%d' % mstinnum)
+    setv(fmmodinput.params.On,1)
+    conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
+    fmparam = fmmodinput.params.Lev
+    fmmod = fmmodinput.inputs.In
+  mstinnum += 1
+
   return mst,fmmod,fmparam
 
 def postmst(conv,mstindex):
@@ -562,7 +604,6 @@ class ConvOscSlvB(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.Shape,0)
     self.inputs[1] = handlepw(self,64,1,2,3)
     # handle special parameters 
     setv(g2mp.Kbt,0)
@@ -572,9 +613,6 @@ class ConvOscSlvB(Convert):
 
     self.inputs[0],fmmod,fmparam = handlemst(self,
         g2m.inputs.FmMod,g2m.params.FmAmount)
-    # NOTE: since shape can be 0% - 100%, a LevConv could be used
-    #       to get the actual waveform, if necessary.
-    setv(g2m.params.Shape,abs(getv(nmm.params.PulseWidth)-64)*2)
 
     postmst(self,0)
 
