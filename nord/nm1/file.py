@@ -321,9 +321,14 @@ class PchFile:
       line = lines[i]
       lb = line.find('[')
       if lb > 0:
-	lines[i] = line[:lb]
-	lines.insert(i+1,line[lb:])
-	line = lines[i]
+        validsection = 0
+        for tag in validtags:
+          if line.find(tag) > -1:
+            validsection = 1
+        if validsection:
+          lines[i] = line[:lb]
+          lines.insert(i+1,line[lb:])
+          line = lines[i]
       if len(line) and line[0] == '[':
 	rb = line.find(']')
 	if rb < 0:
