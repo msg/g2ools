@@ -283,7 +283,7 @@ def handlemst(conv,fmmod,fmparam):
   setv(mix11a.params.Lev,79)
   conv.connect(mix11a.outputs.Out,fmmod)
 
-  setv(fmparam,79)
+  setv(fmparam,127)
 
   mst = mix11a.inputs.In
   fmmod, fmparam = None, None
