@@ -439,10 +439,10 @@ def usage(prog):
   print '\t-l --low\tLower resource usage'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
   
-def main():
-  prog = sys.argv.pop(0)
+def main(argv):
+  prog = argv.pop(0)
   try:
-    opts, args = getopt.getopt(sys.argv,'ahdlrk',
+    opts, args = getopt.getopt(argv,'ahdlrk',
         ['all','debug','help','keepold','low','recursive'])
   except getopt.GetoptError:
     usage(prog)
@@ -516,4 +516,4 @@ if __name__ == '__main__':
     psyco.full()
   except ImportError:
     pass
-  main()
+  main(sys.argv)
