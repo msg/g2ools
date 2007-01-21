@@ -215,6 +215,7 @@ def handleslv(conv):
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
     setv(master.params.FreqFine,getv(g2m.params.FreqFine))
     setv(master.params.FreqMode,getv(g2m.params.FreqMode))
+    setv(master.params.PitchMod,getv(g2m.params.PitchMod))
     setv(g2m.params.FreqCoarse,64)
     setv(g2m.params.FreqFine,64)
     out = handleoscmasterslv(conv,master,44,64,69,103,42)
@@ -253,7 +254,7 @@ def handlemst(conv,fmmod,fmparam):
     setv(fmparam,79)
     return mst,fmmod,fmparam
     
-  if hasfmmod and coarsefreq != 64:
+  if not hasfmmod and coarsefreq != 64:
     # OscC/ZeroCnt
     tune = conv.addmodule('Mix2-1B',name='Tune')
     setv(tune.params.Inv2,1)
