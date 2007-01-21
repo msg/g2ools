@@ -126,7 +126,7 @@ class ConvLFOA(Convert):
 
     self.kbt = g2m.params.Kbt
     # update Rate input, Slv Output
-    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
+    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.RateMod)
     self.inputs[0],self.outputs[0],kbt = ratemodin,slv,kbt
     self.kbtout = handlekbt(self,kbt,4,False)
 
@@ -150,7 +150,7 @@ class ConvLFOB(Convert):
 
     self.kbt = g2m.params.Kbt
 
-    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
+    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.RateMod)
     self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
     self.kbtout = handlekbt(self,kbt,4,False)
 
@@ -175,7 +175,7 @@ class ConvLFOC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
 
     self.kbt = g2m.params.Kbt
-    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.Rate)
+    ratemodin,rateparam,slv,kbt = handleslv(self,g2m.inputs.RateVar,g2mp.RateMod)
     self.inputs[0],self.outputs[1],kbt = ratemodin,slv,kbt
 
   def precables(self):
