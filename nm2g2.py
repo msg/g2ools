@@ -107,7 +107,7 @@ def convert(pch,config):
     # do the modules
     for module in nmarea.modules:
       if module.type.type in typetable:
-        print '%s: %d(0x%02x)' % (module.name,
+        print '%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
            module.type.type,module.type.type)
         conv = typetable[module.type.type](nmarea,g2area,module,config)
         converters.append(conv)
@@ -121,8 +121,8 @@ def convert(pch,config):
     # post module parse
     print 'domodule:'
     for conv in converters:
-      print '%s: %d(0x%02x)' % (conv.g2module.name,
-          conv.g2module.type.type,conv.g2module.type.type)
+      print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
       conv.domodule()
 
     modcolors = [
@@ -157,8 +157,8 @@ def convert(pch,config):
 
     print 'precables:'
     for conv in converters:
-      print '%s: %d(0x%02x)' % (conv.g2module.name,
-          conv.g2module.type.type,conv.g2module.type.type)
+      print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
       conv.precables()
 
     # now do the cables
