@@ -489,9 +489,12 @@ def main(argv):
         for root,dirs,files in os.walk(fname):
           for f in files:
             fname = os.path.join(root,f)
-            if fname[-3:].lower() == 'pch' or config.allfiles:
+            if fname[-4:].lower() == '.pch' or config.allfiles:
               print '"%s"' % fname
-              if config.keepold and os.path.exists(fname+'2'):
+              testname = fname
+              if fname[-4:].lower() != '.pch':
+                testname = fname+'.pch'
+              if config.keepold and os.path.exists(testname+'2'):
                 continue
               failed = doconvert(fname,config)
               if failed:

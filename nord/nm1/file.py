@@ -312,7 +312,7 @@ class PchFile:
       lines.insert(0,'[Header]')
 
     if fname[-4:].lower() != '.pch':
-      fname += '.pch'
+      self.fname += '.pch'
 
     starttags = []
     endtags = []
