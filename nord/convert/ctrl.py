@@ -106,8 +106,9 @@ class ConvNoteVelScal(Convert):
 
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
-
     nmmp,g2mp = nmm.params, g2m.params
+
+    setv(g2mp.Kbt,0)
     l = getv(nmmp.LeftGain)
     r = getv(nmmp.RightGain)
     velsens = getv(nmmp.VelocitySensitivity)
