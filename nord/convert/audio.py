@@ -147,12 +147,7 @@ class ConvDelay(Convert):
     # just divide parameters by 2 to get in ball park
     setv(g2mp.Time2,64)
     # fix delay and delaymod
-    time = getv(nmmp.Time)
-    if time == 127:
-      time = 64
-    else:
-      time /= 2
-    setv(g2mp.Time1,time)
+    setv(g2mp.Time1,(getv(nmmp.Time)+1)/2)
     setv(g2mp.Time1Mod,getv(nmmp.Modulation)/2)
 
 class ConvSampleNHold(Convert):
