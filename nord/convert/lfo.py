@@ -43,7 +43,7 @@ def handleslv(conv,ratemodin,ratemodparam):
     kbt = oscmaster.inputs.Pitch
     conv.kbt = oscmaster.params.Kbt
 
-    if getv(nmmp.Range) == 0: # Sub
+    if getv(nmmp.Range) == 1: # Lo
       slv = handleoscmasterslv(conv,oscmaster,64,40,50,103,41,True)
     else:
       slv = handleoscmasterslv(conv,oscmaster,76,64,52,104,35,False)
