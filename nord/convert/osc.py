@@ -170,9 +170,6 @@ fmmodnum = 1
 def handlefm(conv,fminput,fmparam,fmtable):
   global fmmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
-  if fminput:
-    if len(fminput.cables) == 0:
-      return fminput
   fma = getv(nmm.params.FmMod)
   if fmparam and fminput:
     setv(fmparam,fmtable[fma][0])
@@ -241,6 +238,9 @@ def handlemst(conv,fmmod,fmparam):
   if not nmm.inputs.Mst.net.output:
     return mst,fmmod,fmparam
 
+  if nmm.inputs.Mst.net.output.rate == nm1conncolors.slave:
+    return mst,fmmod,fmparam
+
   # Blue to Grey handling
   coarsefreq = getv(nmm.params.DetuneCoarse)
   if hasattr(nmm.inputs,'FmMod'):
@@ -248,11 +248,9 @@ def handlemst(conv,fmmod,fmparam):
   else:
     hasfmmod = False
   
-  if nmm.inputs.Mst.net.output.rate == nm1conncolors.slave and \
-     not hasfmmod and coarsefreq == 64:
+  if not hasfmmod and coarsefreq == 64:
     setv(g2m.params.FreqCoarse,0)
     setv(fmparam,79)
-    mst = g2m.inputs.FmMod
     return mst,fmmod,fmparam
     
   if hasfmmod and coarsefreq != 64:
