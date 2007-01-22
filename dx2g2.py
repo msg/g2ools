@@ -70,7 +70,7 @@ def parsedx7(data):
   return patch
   
 def convert(fname):
-  f = open(fname,'r')
+  f = open(fname,'rb')
   data = f.read()
   voice1 = '\xf0\x43\x00\x00\x01\x1b'
   voice32 = '\xf0\x43\x00\x09\x20\x00'
