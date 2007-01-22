@@ -489,6 +489,8 @@ def main(argv):
         for root,dirs,files in os.walk(fname):
           for f in files:
             fname = os.path.join(root,f)
+            if fname[-5:].lower() == 'pch2':
+              continue
             if fname[-4:].lower() == '.pch' or config.allfiles:
               print '"%s"' % fname
               testname = fname
