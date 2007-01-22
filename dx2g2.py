@@ -69,10 +69,7 @@ def parsedx7(data):
   patch.Name = x.tostring()
   return patch
   
-prog = sys.argv.pop(0)
-for fname in sys.argv:
-  if fname[-4:].lower() != '.syx':
-    continue
+def convert(fname):
   f = open(fname,'r')
   data = f.read()
   voice1 = '\xf0\x43\x00\x00\x01\x1b'
@@ -169,3 +166,16 @@ for fname in sys.argv:
     dxconv.pch2.write(outname+'b%d.pch2' % bank)
     bank += 1
 
+if __name__ == '__main__':
+  prog = sys.argv.pop(0)
+  fails = []
+  for fname in sys.argv:
+    if fname[-4:].lower() != '.syx':
+      continue
+    try:
+      convert(fname)
+    except:
+      fails.append(fname)
+  print 'Failures:'
+  for fail in fails:
+    print file
