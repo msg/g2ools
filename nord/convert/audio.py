@@ -144,11 +144,8 @@ class ConvDelay(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
-    # just divide parameters by 2 to get in ball park
-    setv(g2mp.Time2,64)
-    # fix delay and delaymod
     setv(g2mp.Time1,(getv(nmmp.Time)+1)/2)
-    setv(g2mp.Time1Mod,getv(nmmp.Modulation)/2)
+    setv(g2mp.Time1Mod,(getv(nmmp.Modulation)+1)/2)
 
 class ConvSampleNHold(Convert):
   maing2module = 'S&H'
