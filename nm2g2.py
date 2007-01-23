@@ -530,7 +530,7 @@ def main(argv):
 
   if len(failedpatches):
     f=open('failedpatches.txt','w')
-    s = 'Failed patches: \n%s\n' % '\n '.join(failedpatches)
+    s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
     f.write(s)
     print s
 
