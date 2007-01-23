@@ -99,6 +99,11 @@ class Convert:
   def precables(self):
     pass
 
+  # finailize - after all cables, colors, repositioning, uprate,
+  #             knobs, morphs, midiccs, and current notes.
+  def finalize(self):
+    pass
+
   def domorphrange(self,paramindex,morphrange):
     return morphrange
 

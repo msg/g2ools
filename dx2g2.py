@@ -94,9 +94,10 @@ def convert(fname):
   groups = [ patches[i:i+8] for i in range(0,len(patches),8)]
   bank = 1
   opparamnms = [
-    'R1','L1','R2','L2','R3','L3','R4','L4','AMod',
-    'BrPoint','LDepthMode','LDepth','RDepthMode','RDepth',
-    'OutLevel'
+    'R1','L1','R2','L2','R3','L3','R4','L4',
+    'BrPoint','LDepth','RDepth','LDepthMode','RDepthMode',
+    'FreqDetune','RateScale','Vel','AMod',
+    'OutLevel','FreqCoarse','RatioFixed','FreqFine',
   ]
   for group in groups:
     dxconv = DX7Converter()
@@ -115,6 +116,7 @@ def convert(fname):
         for paramnm in opparamnms:
           g2param = getattr(g2op.params,paramnm)
           dxparam = getattr(dxop,paramnm)
+	  #print ' ',paramnm, dxparam
           g2param.variations[i] = dxparam
       # set LFO parameters
       lfop = dxconv.lfo.params
@@ -128,7 +130,7 @@ def convert(fname):
       dxconv.lfodelay.params.Decay.variations[i] = dxpatch.lfo.Delay
       dxconv.lfopitchmod.params.Lev.variations[i] = dxpatch.lfo.PitchMod
       dxconv.lfoam.params.Level.variations[i] = dxpatch.lfo.AmMod
-      # variations[i] = dxpatch.lfo.PitchModSens)
+      # variations[i] = dxpatch.lfo.PitchModSens
       # set PitchEG parameters
       pitchegp = dxconv.pitcheg.params
       pitchegp.Time1.variations[i] = dxpatch.pitcheg.R1
@@ -172,10 +174,11 @@ if __name__ == '__main__':
   for fname in sys.argv:
     if fname[-4:].lower() != '.syx':
       continue
-    try:
-      convert(fname)
-    except:
-      fails.append(fname)
+    #try:
+    #  convert(fname)
+    #except:
+    #  fails.append(fname)
+    convert(fname)
   print 'Failures:'
   for fail in fails:
     print file

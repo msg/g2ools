@@ -49,6 +49,168 @@ port2cablecolors = {
   g2conncolors.yellow_orange: g2cablecolors.yellow,
 }
 
+def doconverters(nmarea,g2area,config):
+  converters = []
+  for module in nmarea.modules:
+    if module.type.type in typetable:
+      print '%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
+          module.type.type,module.type.type)
+      conv = typetable[module.type.type](nmarea,g2area,module,config)
+      converters.append(conv)
+      #g2module = conv.g2module
+      #print '%s (%d,%d)' % (g2module.type.shortnm,
+      #    g2module.horiz, g2module.vert)
+    else:
+      print 'No converter for module "%s" type %d(0x%02x)' % (
+          module.type.shortnm, module.type.type, module.type.type)
+  return converters
+
+def domodules(converters, config):
+  print 'domodule:'
+  for conv in converters:
+    print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
+    conv.domodule()
+
+
+def docolorizemultis(converters, config):
+  modcolors = [
+      g2modulecolors.yellow2,g2modulecolors.green2,
+      g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1]
+  # colorize multi-module convertions
+  curr = 0
+  for conv in converters:
+    if len(conv.g2modules):
+      conv.g2module.color = modcolors[curr]
+      for mod in conv.g2modules:
+        mod.color = modcolors[curr]
+      curr = (curr+1)%len(modcolors)
+
+def doreposition(converters, config):
+  print 'reposition:'
+  # reposition modules
+  locsorted = converters[:]
+  def loccmp(a, b):
+    if a.horiz == b.horiz:
+      return cmp(a.nmmodule.vert, b.nmmodule.vert)
+    return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
+  locsorted.sort(loccmp)
+
+  if len(locsorted):
+    locsorted[0].reposition(None)
+    for i in range(1,len(locsorted)):
+      ca = locsorted[i-1]
+      cb = locsorted[i]
+      if ca.nmmodule.horiz == cb.nmmodule.horiz:
+        cb.reposition(ca)
+      else:
+        cb.reposition(None)
+
+def doprecables(converters, config):
+  print 'precables:'
+  for conv in converters:
+    print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
+    conv.precables()
+
+def docables(nmarea, g2area, converters, config):
+  # now do the cables
+  print 'Cables:'
+  for cable in nmarea.cables:
+    source = cable.source
+    g2source = None
+    if source.direction:
+      if source.index < len(source.conv.outputs):
+        g2source = source.conv.outputs[source.index]
+    elif source.index < len(source.conv.inputs):
+      g2source = source.conv.inputs[source.index]
+    dest = cable.dest
+    print '%s:%s:%d -> %s:%s:%d :' % (
+        source.module.name,source.type.name, source.type.type,
+        dest.module.name,dest.type.name, dest.type.type),
+    if dest.index >= len(dest.conv.inputs) or not g2source:
+      print ' UNCONNECTED'
+    else:
+      print ' connected'
+      g2dest = dest.conv.inputs[dest.index]
+      if not source.net.output:
+        print ' No source connection'
+        color = g2cablecolors.white
+      elif source.net.output.type.type == nm1conncolors.slave:
+        color = g2cablecolors.purple
+      else:
+        color = source.net.output.type.type
+      g2area.connect(g2source,g2dest,color)
+
+def douprate(g2area,config):
+  # now parse the entire netlist of the area and .uprate=1 all
+  # modules with blue_red and yello_orange inputs connected to red outputs.
+  # scan module list until we done change any modules
+  print 'Uprate:'
+  done = 0
+  while not done:
+    modified = 0
+    for module in g2area.modules:
+      #print module.name, module.type.shortnm
+      for input in module.inputs:
+        if not input.net:
+          continue
+        #print '',input.type.name, input.rate
+        # try and make all logic run at control rate.
+        if input.rate == g2conncolors.yellow_orange:
+          input.rate = g2conncolors.yellow
+          continue
+        if input.rate != g2conncolors.blue_red:
+          continue
+        if not input.net.output:
+          continue
+        if input.net.output.rate == g2conncolors.red:
+          #print module.name,input.type.name,input.net.output.type.name
+          modified = 1
+          module.uprate = 1
+          input.rate = g2conncolors.red
+          # change all outputs to red for next iteration
+          for output in module.outputs:
+            if output.rate == g2conncolors.blue_red:
+              output.rate = g2conncolors.red
+            if output.rate == g2conncolors.yellow_orange:
+              output.rate = g2conncolors.orange
+          break
+        #elif input.net.output.rate == g2conncolors.blue:
+        #  modified = 1
+        #  module.uprate = 0
+        #  input.rate = g2conncolors.red
+        #  # change all outputs to red for next iteration
+        #  for output in module.outputs:
+        #    if output.rate == g2conncolors.blue_red:
+        #      output.rate = g2conncolors.blue
+        #    if output.rate == g2conncolors.yellow_orange:
+        #      output.rate = g2conncolors.yellow
+        #  break
+    if not modified:
+      done = 1
+
+def cablerecolorize(g2area,config):
+  print 'cable recolorize:'
+  for cable in g2area.cables:
+    #print '%s:%s -> %s:%s %d' % (
+    #    cable.source.module.name,cable.source.type.name,
+    #    cable.dest.module.name,cable.dest.type.name,
+    #    cable.source.net.output.rate),
+    if cable.source.net.output:
+      cable.color = port2cablecolors[cable.source.net.output.rate]
+    #print cable.color, cable.source.net.output.module.type.shortnm
+    #printnet(cable.source.net)
+
+def dofinalize(areaconverters,config):
+  print 'Finalize:'
+  for areanm in 'voice','fx':
+    print 'Area %s:' % areanm
+    for conv in areaconverters[areanm]:
+      print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
+      conv.finalize()
+
 def convert(pch,config):
   #   loop through each module
   #     determine and store separation from module above >= 0
@@ -86,166 +248,21 @@ def convert(pch,config):
   setv(g2patch.settings.glidetime,nmpatch.header.portatime)
   setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
 
+  areaconverters = { }
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
     g2area = getattr(g2patch,areanm)
     print 'Area %s:' % areanm
 
-    # if there is a Keyboard module, move it to the front of the list
-    # because various Mst/Slv connections rely on it.  This way
-    # they can add one if it doesn't.  It's only specified first so
-    # it can be created by the Mst/Slv connections if necessary.
-    keyboard = None
-    for module in nmarea.modules:
-      if module.type.shortnm == 'Keyboard':
-        keyboard = module
-    if keyboard:
-      nmarea.modules.remove(keyboard)
-      nmarea.modules.insert(0,keyboard)
-
-    converters = []
-    # do the modules
-    for module in nmarea.modules:
-      if module.type.type in typetable:
-        print '%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
-           module.type.type,module.type.type)
-        conv = typetable[module.type.type](nmarea,g2area,module,config)
-        converters.append(conv)
-        #g2module = conv.g2module
-        #print '%s (%d,%d)' % (g2module.type.shortnm,
-        #    g2module.horiz, g2module.vert)
-      else:
-        print 'No converter for module "%s" type %d(0x%02x)' % (
-            module.type.shortnm, module.type.type, module.type.type)
-
-    # post module parse
-    print 'domodule:'
-    for conv in converters:
-      print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
-      conv.domodule()
-
-    modcolors = [
-        g2modulecolors.yellow2,g2modulecolors.green2,
-        g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1]
-    # colorize multi-module convertions
-    curr = 0
-    for conv in converters:
-      if len(conv.g2modules):
-        conv.g2module.color = modcolors[curr]
-        for mod in conv.g2modules:
-          mod.color = modcolors[curr]
-        curr = (curr+1)%len(modcolors)
-
-    # reposition modules
-    locsorted = converters[:]
-    def loccmp(a, b):
-      if a.horiz == b.horiz:
-        return cmp(a.nmmodule.vert, b.nmmodule.vert)
-      return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
-    locsorted.sort(loccmp)
-
-    if len(locsorted):
-      locsorted[0].reposition(None)
-      for i in range(1,len(locsorted)):
-        ca = locsorted[i-1]
-        cb = locsorted[i]
-        if ca.nmmodule.horiz == cb.nmmodule.horiz:
-          cb.reposition(ca)
-        else:
-          cb.reposition(None)
-
-    print 'precables:'
-    for conv in converters:
-      print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
-      conv.precables()
-
-    # now do the cables
-    print 'Cables:'
-    for cable in nmarea.cables:
-      source = cable.source
-      g2source = None
-      if source.direction:
-        if source.index < len(source.conv.outputs):
-          g2source = source.conv.outputs[source.index]
-      elif source.index < len(source.conv.inputs):
-        g2source = source.conv.inputs[source.index]
-      dest = cable.dest
-      print '%s:%s:%d -> %s:%s:%d :' % (
-          source.module.name,source.type.name, source.type.type,
-          dest.module.name,dest.type.name, dest.type.type),
-      if dest.index >= len(dest.conv.inputs) or not g2source:
-        print ' UNCONNECTED'
-      else:
-        print ' connected'
-        g2dest = dest.conv.inputs[dest.index]
-        if not source.net.output:
-          print ' No source connection'
-          color = g2cablecolors.white
-        elif source.net.output.type.type == nm1conncolors.slave:
-          color = g2cablecolors.purple
-        else:
-          color = source.net.output.type.type
-        g2area.connect(g2source,g2dest,color)
-
-    # now parse the entire netlist of the area and .uprate=1 all
-    # modules with blue_red and yello_orange inputs connected to red outputs.
-    # scan module list until we done change any modules
-    print 'Uprate:'
-    done = 0
-    while not done:
-      modified = 0
-      for module in g2area.modules:
-        #print module.name, module.type.shortnm
-        for input in module.inputs:
-	  if not input.net:
-            continue
-          #print '',input.type.name, input.rate
-          # try and make all logic run at control rate.
-          if input.rate == g2conncolors.yellow_orange:
-            input.rate = g2conncolors.yellow
-            continue
-          if input.rate != g2conncolors.blue_red:
-            continue
-          if not input.net.output:
-            continue
-          if input.net.output.rate == g2conncolors.red:
-            #print module.name,input.type.name,input.net.output.type.name
-            modified = 1
-            module.uprate = 1
-            input.rate = g2conncolors.red
-            # change all outputs to red for next iteration
-            for output in module.outputs:
-              if output.rate == g2conncolors.blue_red:
-                output.rate = g2conncolors.red
-              if output.rate == g2conncolors.yellow_orange:
-                output.rate = g2conncolors.orange
-            break
-          #elif input.net.output.rate == g2conncolors.blue:
-          #  modified = 1
-          #  module.uprate = 0
-          #  input.rate = g2conncolors.red
-          #  # change all outputs to red for next iteration
-          #  for output in module.outputs:
-          #    if output.rate == g2conncolors.blue_red:
-          #      output.rate = g2conncolors.blue
-          #    if output.rate == g2conncolors.yellow_orange:
-          #      output.rate = g2conncolors.yellow
-          #  break
-      if not modified:
-        done = 1
-
-    print 'Cable recolorize:'
-    for cable in g2area.cables:
-      #print '%s:%s -> %s:%s %d' % (
-      #    cable.source.module.name,cable.source.type.name,
-      #    cable.dest.module.name,cable.dest.type.name,
-      #    cable.source.net.output.rate),
-      if cable.source.net.output:
-        cable.color = port2cablecolors[cable.source.net.output.rate]
-      #print cable.color, cable.source.net.output.module.type.shortnm
-      #printnet(cable.source.net)
+    # build converters for all NM1 modules
+    converters = areaconverters[areanm] = doconverters(nmarea,g2area,config)
+    domodules(converters,config)              # do the modules
+    docolorizemultis(converters,config)       # colorize multi module setups
+    doreposition(converters,config)           # repostion all modules
+    doprecables(converters,config)            # precable processing
+    docables(nmarea,g2area,converters,config) # connect cables
+    douprate(g2area,config)                   # uprate necessary modules
+    cablerecolorize(g2area,config)            # recolor cables based on output
 
   # handle Morphs
   #  morphs[x].ctrl.midicc
@@ -268,7 +285,7 @@ def convert(pch,config):
   #    This means if keyassign is found it's will ignore the other two
   #
   # build a morphmap[x] that maps x to g2 morph
-  print 'Morphs:'
+  print 'morphs:'
   nmmorphs = nmpatch.morphs
   g2morphs = g2patch.settings.morphs
   unused = g2morphs[:]
@@ -332,7 +349,7 @@ def convert(pch,config):
   # add parameters to morphs
 
   # handle Knobs
-  print 'Knobs:'
+  print 'knobs:'
   knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
   for knob in nmpatch.knobs:
     if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
@@ -384,11 +401,13 @@ def convert(pch,config):
     g2patch.ctrls.append(m)
 
   # handle CurrentNotes
-  print 'CurrentNotes:'
+  print 'currentnotes:'
   #g2patch.lastnote = nmpatch.lastnote
   g2patch.notes.append(nmpatch.lastnote)
   for note in nmpatch.notes:
     g2patch.notes.append(note)
+
+  dofinalize(areaconverters,config)
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
@@ -489,7 +508,7 @@ def main(argv):
         for root,dirs,files in os.walk(fname):
           for f in files:
             fname = os.path.join(root,f)
-            if fname[-5:].lower() == 'pch2':
+            if fname[-5:].lower() == '.pch2':
               continue
             if fname[-4:].lower() == '.pch' or config.allfiles:
               print '"%s"' % fname
