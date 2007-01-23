@@ -49,7 +49,7 @@ def parsedx7(data):
     op.R1,op.R2,op.R3,op.R4 = x[:4]; x = x[4:]
     op.L1,op.L2,op.L3,op.L4 = x[:4]; x = x[4:]
     op.BrPoint,op.LDepth,op.RDepth = x[:3]; x = x[3:]
-    c = x.pop(0); op.LDepthMode,op.RDepthMode = (c>>2),c&3
+    c = x.pop(0); op.RDepthMode,op.LDepthMode = (c>>2),c&3
     c = x.pop(0); op.FreqDetune,op.RateScale = c>>4,c&7
     c = x.pop(0); op.Vel,op.AMod = c>>2,c&3
     op.OutLevel = x.pop(0)
@@ -59,12 +59,10 @@ def parsedx7(data):
   pitcheg.R1,pitcheg.R2,pitcheg.R3,pitcheg.R4 = x[:4]; x = x[4:]
   pitcheg.L1,pitcheg.L2,pitcheg.L3,pitcheg.L4 = x[:4]; x = x[4:]
   patch.Algorithm = x.pop(0)
-  c = x.pop(0)
-  patch.OscKeySync,patch.Feedback = c>>3,c&7
+  c = x.pop(0); patch.OscKeySync,patch.Feedback = c>>3,c&7
   lfo = patch.lfo = LFO()
   lfo.Rate,lfo.Delay,lfo.PitchMod,lfo.AmMod = x[:4]; x = x[4:]
-  c = x.pop(0)
-  lfo.PitchModSens,lfo.Waveform,lfo.Sync = c>>4,(c>>1)&0x7,c&1
+  c = x.pop(0); lfo.PitchModSens,lfo.Waveform,lfo.Sync = c>>4,(c>>1)&0x7,c&1
   patch.Transpose = x.pop(0)
   patch.Name = x.tostring()
   return patch
@@ -142,7 +140,13 @@ def convert(fname):
       pitchegp.Time4.variations[i] = dxpatch.pitcheg.R4
       pitchegp.Level4.variations[i] = dxpatch.pitcheg.L4
       # set Transpose
-      # setv(,dxpatch.Transpose)
+      # setv(,dxpatch.Transpose
+      # sync)
+      morph = dxconv.pch2.patch.settings.morphs[7]
+      if dxconv.OscKeySync:
+        morph.dials.variations[i] = 127
+      else:
+        morph.dials.variations[i] = 0
     #
     def addnamebars(pch2, lines, horiz, vert):
       for line in lines:
