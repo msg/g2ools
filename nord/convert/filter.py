@@ -37,7 +37,7 @@ class ConvFilterA(ConvFilter):
     ConvFilter.domodule(self)
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    setv(g2mp.Freq,lphpfreq[getv(nmmp.Freq)][lphp])
+    setv(g2mp.Freq,lphpfreq[getv(nmmp.Freq)][self.lphp])
 
 class ConvFilterB(ConvFilterA):
   maing2module = 'FltHP'
