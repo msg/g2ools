@@ -105,6 +105,9 @@ class ConvControlMixer(Convert):
     setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
 
+  def finalize(self):
+    self.g2module.uprate = 0
+
 class ConvNoteVelScal(Convert):
   maing2module = 'LevScaler'
   parammap = [None,['L','LeftGain'],['BP','Breakpoint'],['R','RightGain']]
