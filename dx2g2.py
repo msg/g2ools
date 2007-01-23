@@ -84,9 +84,9 @@ def convert(fname):
       print fname, '32 voice'
       v32data = data[syx+len(voice32):esx]
       for i in range(len(v32data)/128):
-	patch = parsedx7(v32data[i*128:i*128+128])
+        patch = parsedx7(v32data[i*128:i*128+128])
         patch.number = i+1
-	patches.append(patch)
+        patches.append(patch)
     data = data[esx+1:]
   outname = fname[:-4]
   groups = [ patches[i:i+8] for i in range(0,len(patches),8)]
@@ -114,7 +114,7 @@ def convert(fname):
         for paramnm in opparamnms:
           g2param = getattr(g2op.params,paramnm)
           dxparam = getattr(dxop,paramnm)
-	  #print ' ',paramnm, dxparam
+          #print ' ',paramnm, dxparam
           g2param.variations[i] = dxparam
       # set LFO parameters
       lfop = dxconv.lfo.params

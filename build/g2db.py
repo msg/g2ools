@@ -135,7 +135,7 @@ for struct in modulestructs:
 %s
     ],\n''' % (
       '\n'.join(["      InputType(%-16sg2conncolors.%s)," % ("'%s'," % nm,t) 
-	  for nm,t in zip(struct.inputs, struct.inputtypes) ]),
+          for nm,t in zip(struct.inputs, struct.inputtypes) ]),
       )
   else:
     s += '    inputs=[],\n'
@@ -145,7 +145,7 @@ for struct in modulestructs:
 %s
     ],\n''' % (
       '\n'.join(["      OutputType(%-16sg2conncolors.%s)," % ("'%s'," % nm,t) 
-	  for nm,t in zip(struct.outputs, struct.outputtypes) ]),
+          for nm,t in zip(struct.outputs, struct.outputtypes) ]),
       )
   else:
     s += '    outputs=[],\n'
@@ -171,7 +171,7 @@ for struct in modulestructs:
 %s
     ],\n''' % (
       '\n'.join(["      ModeType(%-16sparammap.%s)," % ("'%s'," % nm,t) 
-	  for nm,t in zip(struct.modes, struct.modetypes) ]),
+          for nm,t in zip(struct.modes, struct.modetypes) ]),
       )
   else:
     s += '    modes=[],\n'
@@ -218,13 +218,13 @@ for struct in modulestructs:
   #print struct.longnm
   fromname[struct.shortnm] = fromtype[struct.type] = Struct(
     inputs=[ Struct(name=nm,type=t)
-	    for nm,t in zip(struct.inputs, struct.inputtypes) ],
+            for nm,t in zip(struct.inputs, struct.inputtypes) ],
     outputs=[ Struct(name=nm, type=t)
-	    for nm,t in zip(struct.outputs, struct.outputtypes) ],
+            for nm,t in zip(struct.outputs, struct.outputtypes) ],
     modes=[ Struct(name=nm, type=t) for nm,t in zip(struct.modes,
-	    map(lambda a,p=parammap: getattr(p,a), struct.modetypes)) ],
+            map(lambda a,p=parammap: getattr(p,a), struct.modetypes)) ],
     params=[ Struct(name=nm, type=t) for nm,t in zip(struct.params,
-	    map(lambda a,p=parammap: getattr(p,a), struct.paramtypes)) ],
+            map(lambda a,p=parammap: getattr(p,a), struct.paramtypes)) ],
     page=Struct(name=struct.page,index=struct.pageindex),
     height=struct.height,type=struct.type,
     longnm=struct.longnm,shortnm=struct.shortnm

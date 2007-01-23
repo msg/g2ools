@@ -390,11 +390,11 @@ def convert(pch,config):
       conv = ctrl.param.module.conv
       if index < len(conv.params) and conv.params[index]:
         m.param = conv.params[index]
-	m.type = conv.g2module.area.index
+        m.type = conv.g2module.area.index
         print
       else:
         print '-- Parameter missing'
-	continue
+        continue
     else:
       m.param = morphmap[ctrl.param.index-1]
       m.type = 2 # system
@@ -415,8 +415,8 @@ def convert(pch,config):
   lines = ['nm2g2 converter',
            'by',
            'Matt Gerassimoff',
-	   'models by',
-	   'Sven Roehrig']
+           'models by',
+           'Sven Roehrig']
 
   vert = 0
   for module in pch2.patch.voice.modules:

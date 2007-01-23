@@ -330,13 +330,13 @@ class PchFile:
           lines.insert(i+1,line[lb:])
           line = lines[i]
       if len(line) and line[0] == '[':
-	rb = line.find(']')
-	if rb < 0:
-	  rb = None
-	if line[1] != '/' and line[1:rb] in validtags:
-	  starttags.append(i)
-	elif line[2:rb] in validtags:
-	  endtags.append(i)
+        rb = line.find(']')
+        if rb < 0:
+          rb = None
+        if line[1] != '/' and line[1:rb] in validtags:
+          starttags.append(i)
+        elif line[2:rb] in validtags:
+          endtags.append(i)
       i += 1
 
     if len(endtags):
