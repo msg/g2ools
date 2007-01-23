@@ -143,7 +143,7 @@ def convert(fname):
       # setv(,dxpatch.Transpose
       # sync)
       morph = dxconv.pch2.patch.settings.morphs[7]
-      if dxconv.OscKeySync:
+      if dxpatch.OscKeySync:
         morph.dials.variations[i] = 127
       else:
         morph.dials.variations[i] = 0
