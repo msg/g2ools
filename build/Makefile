@@ -17,6 +17,6 @@ all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py ../no
 
 ../nord/convert/table.py: gentab.py mix2-1b.txt spectral.txt nm1pitch.txt \
 		kbt.txt notescale.txt glide.txt fmb.txt wavewrap.txt \
-		logicdel.txt
+		logicdel.txt lphpfreq.txt
 	./gentab.py
 

@@ -32,6 +32,7 @@ glides = interpolate(glideindexes)
 fmb = getnumbers('fmb.txt')           # val, g2phasemod, mix %, inv %
 wavewrap = getnumbers('wavewrap.txt') # val, g2wrap
 logicdel = getnumbers('logicdel.txt') # val, g2del
+lphpfreq = getnumbers('lphpfreq.txt') # nmlpfreq,g2lpfrew,nmhpfreq,g2hpfreq
 
 f=open('../nord/convert/table.py','w')
 f.write('''
@@ -138,6 +139,16 @@ for i in range(len(glides)):
   if i and i % 16 == 0:
     f.write('\n ')
   f.write('%3d,' % (logicdel[i][1]))
+f.write('''
+]
+
+lphpfreq = [
+ ''')
+for i in range(len(lphpfreq)):
+  if i and i % 16 == 0:
+    f.write('\n')
+  f.write(' [%3d,%3d],' % (lphpfreq[i][1],lphpfreq[i][3]))
+
 f.write('''
 ]
 ''')
