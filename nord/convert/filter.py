@@ -32,12 +32,19 @@ class ConvFilterA(ConvFilter):
   parammap = ['Freq']
   inputmap = ['In']
   outputmap = ['Out']
+  lphp = 0
+  def domodule(self):
+    ConvFilter.domodule(self)
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    setv(g2mp.Freq,lphpfreq[getv(nmmp.Freq)][lphp])
 
-class ConvFilterB(ConvFilter):
+class ConvFilterB(ConvFilterA):
   maing2module = 'FltHP'
   parammap = ['Freq']
   inputmap = ['In']
   outputmap = ['Out']
+  lphp = 1
 
 class ConvFilterC(ConvFilter):
   maing2module = 'FltMulti'
