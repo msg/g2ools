@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+import logging
 import getopt, os, sys
 from glob import glob
 from exceptions import KeyboardInterrupt
@@ -53,23 +54,23 @@ def doconverters(nmarea,g2area,config):
   converters = []
   for module in nmarea.modules:
     if module.type.type in typetable:
-      print '%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
-          module.type.type,module.type.type)
+      logging.debug('%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
+          module.type.type,module.type.type))
       conv = typetable[module.type.type](nmarea,g2area,module,config)
       converters.append(conv)
       #g2module = conv.g2module
       #print '%s (%d,%d)' % (g2module.type.shortnm,
       #    g2module.horiz, g2module.vert)
     else:
-      print 'No converter for module "%s" type %d(0x%02x)' % (
-          module.type.shortnm, module.type.type, module.type.type)
+      logging.warning('No converter for module "%s" type %d(0x%02x)' % (
+          module.type.shortnm, module.type.type, module.type.type))
   return converters
 
 def domodules(converters, config):
-  print 'domodule:'
+  logging.info('domodule:')
   for conv in converters:
-    print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
+    logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
     conv.domodule()
 
 
@@ -87,7 +88,7 @@ def docolorizemultis(converters, config):
       curr = (curr+1)%len(modcolors)
 
 def doreposition(converters, config):
-  print 'reposition:'
+  logging.info('reposition:')
   # reposition modules
   locsorted = converters[:]
   def loccmp(a, b):
@@ -107,15 +108,15 @@ def doreposition(converters, config):
         cb.reposition(None)
 
 def doprecables(converters, config):
-  print 'precables:'
+  logging.info('precables:')
   for conv in converters:
-    print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
+    logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
     conv.precables()
 
 def docables(nmarea, g2area, converters, config):
   # now do the cables
-  print 'Cables:'
+  logging.info('Cables:')
   for cable in nmarea.cables:
     source = cable.source
     g2source = None
@@ -125,37 +126,38 @@ def docables(nmarea, g2area, converters, config):
     elif source.index < len(source.conv.inputs):
       g2source = source.conv.inputs[source.index]
     dest = cable.dest
-    print '%s:%s:%d -> %s:%s:%d :' % (
+    s = '%s:%s:%d -> %s:%s:%d :' % (
         source.module.name,source.type.name, source.type.type,
-        dest.module.name,dest.type.name, dest.type.type),
+        dest.module.name,dest.type.name, dest.type.type)
     if dest.index >= len(dest.conv.inputs) or not g2source:
-      print ' UNCONNECTED'
+      logging.warning(s + ' UNCONNECTED')
     else:
-      print ' connected'
+      s += ' connected'
       g2dest = dest.conv.inputs[dest.index]
       if not source.net.output:
-        print ' No source connection'
+        s += ' No source connection'
         color = g2cablecolors.white
       elif source.net.output.type.type == nm1conncolors.slave:
         color = g2cablecolors.purple
       else:
         color = source.net.output.type.type
       g2area.connect(g2source,g2dest,color)
+      logging.debug(s)
 
 def douprate(g2area,config):
   # now parse the entire netlist of the area and .uprate=1 all
   # modules with blue_red and yello_orange inputs connected to red outputs.
   # scan module list until we done change any modules
-  print 'Uprate:'
+  logging.info('Uprate:')
   done = 0
   while not done:
     modified = 0
     for module in g2area.modules:
-      #print module.name, module.type.shortnm
+      #logging.debug('%s:%s' % (module.name, module.type.shortnm))
       for input in module.inputs:
         if not input.net:
           continue
-        #print '',input.type.name, input.rate
+        #logging.debug(' %s:%d' % (input.type.name, input.rate))
         # try and make all logic run at control rate.
         if input.rate == g2conncolors.yellow_orange:
           input.rate = g2conncolors.yellow
@@ -165,7 +167,8 @@ def douprate(g2area,config):
         if not input.net.output:
           continue
         if input.net.output.rate == g2conncolors.red:
-          #print module.name,input.type.name,input.net.output.type.name
+          #logging.debug('%s:%s %s' % (
+          #     module.name,input.type.name,input.net.output.type.name))
           modified = 1
           module.uprate = 1
           input.rate = g2conncolors.red
@@ -191,24 +194,18 @@ def douprate(g2area,config):
       done = 1
 
 def cablerecolorize(g2area,config):
-  print 'cable recolorize:'
+  logging.info('cable recolorize:')
   for cable in g2area.cables:
-    #print '%s:%s -> %s:%s %d' % (
-    #    cable.source.module.name,cable.source.type.name,
-    #    cable.dest.module.name,cable.dest.type.name,
-    #    cable.source.net.output.rate),
     if cable.source.net.output:
       cable.color = port2cablecolors[cable.source.net.output.rate]
-    #print cable.color, cable.source.net.output.module.type.shortnm
-    #printnet(cable.source.net)
 
 def dofinalize(areaconverters,config):
-  print 'Finalize:'
+  logging.info('Finalize:')
   for areanm in 'voice','fx':
-    print 'Area %s:' % areanm
+    logging.info('--- area %s: ---' % areanm)
     for conv in areaconverters[areanm]:
-      print '%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type)
+      logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
       conv.finalize()
 
 def convert(pch,config):
@@ -252,7 +249,7 @@ def convert(pch,config):
   for areanm in 'voice','fx':
     nmarea = getattr(nmpatch,areanm)
     g2area = getattr(g2patch,areanm)
-    print 'Area %s:' % areanm
+    logging.info('--- area %s: ---' % areanm)
 
     # build converters for all NM1 modules
     converters = areaconverters[areanm] = doconverters(nmarea,g2area,config)
@@ -285,14 +282,15 @@ def convert(pch,config):
   #    This means if keyassign is found it's will ignore the other two
   #
   # build a morphmap[x] that maps x to g2 morph
-  print 'morphs:'
+  logging.info('morphs:')
   nmmorphs = nmpatch.morphs
   g2morphs = g2patch.settings.morphs
   unused = g2morphs[:]
   morphmap = [None] * 4
   for morph in range(len(nmmorphs)):
     if nmmorphs[morph].ctrl:
-      print ' nm morph%d: midicc=%d' % (morph,nmmorphs[morph].ctrl.midicc)
+      logging.debug(' nm morph%d: midicc=%d' %
+          (morph,nmmorphs[morph].ctrl.midicc))
       # ignore Volume cannot be assigned anyways
       if nmmorphs[morph].ctrl.midicc == 1:
         morphmap[morph] = g2morphs[0]
@@ -303,14 +301,15 @@ def convert(pch,config):
         unused.remove(g2morphs[5])
         continue
     if nmmorphs[morph].keyassign:
-      print ' nm morph%d: keyassign=%d' % (morph,nmmorphs[morph].keyassign)
+      logging.debug(' nm morph%d: keyassign=%d' %
+          (morph,nmmorphs[morph].keyassign))
       m = g2morphs[nmmorphs[morph].keyassign]
       unused.remove(m)
       morphmap[morph] = m
       continue
     if nmmorphs[morph].knob:
       knob = nmmorphs[morph].knob
-      print ' nm morph%d: knob=%d' % (morph,knob.knob)
+      logging.debug(' nm morph%d: knob=%d' % (morph,knob.knob))
       if knob.knob > 18:                  #  v: 0 unused
         m = g2morphs[[4,3,0,6][knob.knob-19]]
         morphmap[morph] = m
@@ -323,15 +322,15 @@ def convert(pch,config):
       setv(morphmap[morph].modes,0)
     else:
       setv(morphmap[morph].modes,1)
-    print ' nm morph%d -> g2 morph%d' % (morph,morphmap[morph].index)
+    logging.debug(' nm morph%d -> g2 morph%d' % (morph,morphmap[morph].index))
 
   for morph in range(len(morphmap)):
     g2morph = morphmap[morph]
     setv(g2morph.dials,nmmorphs[morph].dial)
-    print ' Morph%d: dial=%d' % (morph+1,nmmorphs[morph].dial)
+    logging.debug(' Morph%d: dial=%d' % (morph+1,nmmorphs[morph].dial))
     for map in nmmorphs[morph].maps:
-      print '  %s:%s range=%d' % (map.param.module.name,map.param.type.name,
-          map.range),
+      s = '  %s:%s range=%d' % (map.param.module.name,map.param.type.name,
+          map.range)
       mmap = MorphMap()
       conv = map.param.module.conv
       mmap.range = conv.domorphrange(map.param.index,map.range)
@@ -340,16 +339,16 @@ def convert(pch,config):
         mmap.param = conv.params[index]
         mmap.morph = g2morph
         morphmap[morph].maps[0].append(mmap)
-        print
+        logging.debug(s)
       else:
-        print '-- Parameter missing'
+        logging.warning(s + ' -- Parameter missing')
     for variation in range(1,9):
       g2morph.maps[variation]=g2morph.maps[0][:]
       
   # add parameters to morphs
 
   # handle Knobs
-  print 'knobs:'
+  logging.info('knobs:')
   knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
   for knob in nmpatch.knobs:
     if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
@@ -359,23 +358,24 @@ def convert(pch,config):
     if hasattr(knob.param,'module'): # module parameter
       # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
       conv = knob.param.module.conv
-      print 'Knob%d: %s:%s ->' % (knob.knob,
-          knob.param.module.name,knob.param.type.name),
+      s = 'Knob%d: %s:%s ->' % (knob.knob,
+          knob.param.module.name,knob.param.type.name)
       if index < len(conv.params) and conv.params[index]:
-        print '%s' % conv.params[index]
+        s += ' %s' % conv.params[index]
         g2knob.param = conv.params[index]
         g2knob.assigned = 1
         g2knob.isled = 0
+        logging.debug(s)
       else:
-        print 'Unknown param %d' % index
+        logging.warning(s + ' Unknown param %d' % index)
     else: # morph
-      #print ' Knob%d: Morph%d' % (knob.knob,knob.param.index)
+      #logging.debug(' Knob%d: Morph%d' % (knob.knob,knob.param.index))
       g2knob.param = morphmap[knob.param.index-1]
       g2knob.assigned = 1
       g2knob.isled = 0
   
   # handle Midi CCs
-  print 'MIDI CCs:'
+  logging.info('MIDI CCs:')
   reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97,121,123 ]
   from nord.g2.file import Ctrl
   for ctrl in nmpatch.ctrls:
@@ -384,16 +384,16 @@ def convert(pch,config):
     m = Ctrl()
     m.midicc = ctrl.midicc
     if hasattr(ctrl.param,'module'): # module parameter
-      print ' CC%d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,
-        ctrl.param.type.name),
+      s = ' CC%d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,
+        ctrl.param.type.name)
       index = ctrl.param.index
       conv = ctrl.param.module.conv
       if index < len(conv.params) and conv.params[index]:
         m.param = conv.params[index]
         m.type = conv.g2module.area.index
-        print
+        logging.debug(s)
       else:
-        print '-- Parameter missing'
+        logging.warning(s + ' -- Parameter missing')
         continue
     else:
       m.param = morphmap[ctrl.param.index-1]
@@ -401,7 +401,7 @@ def convert(pch,config):
     g2patch.ctrls.append(m)
 
   # handle CurrentNotes
-  print 'currentnotes:'
+  logging.info('currentnotes:')
   #g2patch.lastnote = nmpatch.lastnote
   g2patch.notes.append(nmpatch.lastnote)
   for note in nmpatch.notes:
@@ -423,7 +423,6 @@ def convert(pch,config):
     if module.horiz != 0:
       continue
     v = module.vert + module.type.height
-    #print '',module.name, module.vert, module.type.height, v
     if v > vert:
       vert = v
 
@@ -440,7 +439,7 @@ def convert(pch,config):
   vert = addnamebars(lines,0,vert+1)
   vert = addnamebars(['All rights','reserved'],0,vert+1)
 
-  print 'Writing patch "%s2"' % (pch.fname)
+  logging.info('Writing patch "%s2"' % (pch.fname))
   pch2.write(pch.fname+'2')
   
 
@@ -452,23 +451,24 @@ def usage(prog):
   print 'usage: nm2g2 <flags> <.pch files>'
   print '\t<flags>'
   print '\t-a --allfiles\tProcess all files (not just extension .pch)'
-  print '\t-d --debug\tDebug program'
+  print '\t-d --debug\tDo not catch exceptions to debug.'
   print '\t-h --help\tPrint this message'
   print '\t-k --keepold\tDo not replace existing .pch2 files'
   print '\t-l --low\tLower resource usage'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
+  print '\t-v --verbosity\tSet converter verbosity level 0-4'
   
 def main(argv):
   prog = argv.pop(0)
   try:
-    opts, args = getopt.getopt(argv,'ahdlrk',
-        ['all','debug','help','keepold','low','recursive'])
+    opts, args = getopt.getopt(argv,'adhlrkv:',
+        ['all','debug','help','keepold','low','recursive','verbosity='])
   except getopt.GetoptError:
     usage(prog)
     sys.exit(2)
 
   config = Config(debug=False,lowresource=False,recursive=False,
-      keepold=False,allfiles=False)
+      keepold=False,allfiles=False,verbosity=logging.INFO)
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
@@ -482,6 +482,16 @@ def main(argv):
       config.recursive = True
     if o in ('-k','--keepold'):
       config.keepold = True
+    if o in ('-v','--verbosity'):
+      print o,a
+      config.verbosity = [
+          logging.DEBUG,logging.INFO,logging.WARNING,
+          logging.ERROR,logging.CRITICAL ][int(a)]
+
+  logging.basicConfig(level=config.verbosity,format='%(message)s')
+  #console = logging.StreamHandler()
+  #console.setLevel(logging.DEBUG)
+  #logging.getLogger('').addHandler(console)
 
   def doconvert(fname,config):
     # general algorithm for converter:
@@ -511,7 +521,7 @@ def main(argv):
             if fname[-5:].lower() == '.pch2':
               continue
             if fname[-4:].lower() == '.pch' or config.allfiles:
-              print '"%s"' % fname
+              logging.info('"%s"' % fname)
               testname = fname
               if fname[-4:].lower() != '.pch':
                 testname = fname+'.pch'
@@ -520,19 +530,19 @@ def main(argv):
               failed = doconvert(fname,config)
               if failed:
                 failedpatches.append(failed)
-              print '-' * 20
+              logging.info('-' * 20)
       else:
-        print '"%s"' % fname
+        logging.info('"%s"' % fname)
         failed = doconvert(fname,config)
         if failed:
           failedpatches.append(failed)
-        print '-' * 20
+        logging.info('-' * 20)
 
   if len(failedpatches):
     f=open('failedpatches.txt','w')
     s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
     f.write(s)
-    print s
+    logging.warning(s)
 
 if __name__ == '__main__':
   try:
