@@ -349,7 +349,7 @@ class PchFile:
       if len(starttags) != len(endtags):
         raise NM1Error(
             'NM1File: Start/End tag mismatch: Cannot parse\n%s\n%s' %
-            repr(starttags), repr(endtags))
+            (repr(starttags), repr(endtags)))
       sections = map(lambda s,e,l=lines: l[s:e+1], starttags, endtags)
     else:
       sections = map(lambda s,e,l=lines: l[s:e+1], starttags[:-1], starttags[1:])
