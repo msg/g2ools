@@ -102,7 +102,7 @@ def convert(fname,config):
     'FreqDetune','RateScale','Vel','AMod',
     'OutLevel','FreqCoarse','RatioFixed','FreqFine',
   ]
-  def scale100to127(x)
+  def scale100to127(x):
     return int(0.5+127*x/99.)
   for group in groups:
     dxconv = DX7Converter()
