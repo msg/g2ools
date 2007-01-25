@@ -163,9 +163,10 @@ class ParameterDump(Section):
       line = lines.pop(0)
       values = map(int, line.split())
       index = values.pop(0)
-      type = fromtype[int(values.pop(0))]
+      typecode = int(values.pop(0))
       module = area.findmodule(index)
       if not module:
+        type = fromtype[typecode]
         module = Module(type)
         area.modules.append(module)
       module.index = index
