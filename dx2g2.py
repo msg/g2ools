@@ -156,7 +156,7 @@ def convert(fname,config):
       pitchegp.Time4.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R4][1]
       pitchegp.Level4.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L4][0]
       # set Transpose
-      dxconv.transpose.params.Lev.variations[i] = dxpatch.Transpose
+      dxconv.transpose.params.Lev.variations[i] = dxpatch.Transpose + 40
       # sync
       morph = dxconv.pch2.patch.settings.morphs[7]
       if dxpatch.OscKeySync:
