@@ -498,8 +498,8 @@ def main(argv):
     if config.debug:
       try:
         convert(PchFile(fname),config) # allow exception thru if debugging
-      except NM1Error:
-        pass
+      except NM1Error, s:
+        logging.error(s)
     else:
       try:
         convert(PchFile(fname),config)
