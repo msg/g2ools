@@ -1,5 +1,6 @@
 
-all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py ../nord/convert/table.py
+all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py \
+		../nord/convert/table.py ../dxtable.py
 
 ../nord/g2/modules.py: g2db.py module_table.txt param_table.txt
 	./g2db.py
@@ -20,3 +21,6 @@ all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py ../no
 		logicdel.txt lphpfreq.txt
 	./gentab.py
 
+../dxtable.py: dxgen.py dxlfo.txt dxamodsens.txt dxlfodelay.txt dxpitcheg.txt \
+		dxpmodsens.txt
+	./dxgen.py

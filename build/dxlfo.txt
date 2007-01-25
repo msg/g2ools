@@ -1,0 +1,101 @@
+dxspeed	range	lfomod	rate
+0	LO	55	24
+1	LO	55	36
+2	LO	55	52
+3	LO	55	58
+4	LO	55	64
+5	LO	0	67
+6	LO	0	70
+7	LO	55	74
+8	LO	55	76
+9	LO	55	78
+10	LO	55	80
+11	LO	 	 
+12	LO	 	 
+13	LO	 	 
+14	LO	 	 
+15	LO	 	 
+16	LO	 	 
+17	LO	 	 
+18	LO	 	 
+19	LO	 	 
+20	LO	55	92
+21	LO	 	 
+22	LO	 	 
+23	LO	 	 
+24	LO	 	 
+25	LO	 	 
+26	LO	 	 
+27	LO	 	 
+28	LO	 	 
+29	LO	 	 
+30	LO	55	99
+31	LO	 	 
+32	LO	 	 
+33	LO	 	 
+34	LO	 	 
+35	LO	 	 
+36	LO	 	 
+37	LO	 	 
+38	LO	 	 
+39	LO	 	 
+40	LO	55	104
+41	LO	 	 
+42	LO	 	 
+43	LO	 	 
+44	LO	 	 
+45	LO	 	 
+46	LO	 	 
+47	LO	 	 
+48	LO	 	 
+49	LO	 	 
+50	LO	55	107
+51	LO	 	 
+52	LO	 	 
+53	LO	 	 
+54	LO	 	 
+55	LO	 	 
+56	LO	 	 
+57	LO	 	 
+58	LO	 	 
+59	LO	 	 
+60	LO	55	111
+61	LO	 	 
+62	LO	 	 
+63	LO	 	 
+64	LO	 	 
+65	LO	 	 
+66	LO	 	 
+67	LO	 	 
+68	LO	 	 
+69	LO	 	 
+70	LO	55	118
+71	Hi	55	74
+72	Hi	 	 
+73	Hi	 	 
+74	Hi	 	 
+75	Hi	 	 
+76	Hi	 	 
+77	Hi	 	 
+78	Hi	 	 
+79	Hi	 	 
+80	HI	55	67
+81	HI	 	 
+82	HI	 	 
+83	HI	 	 
+84	HI	 	 
+85	HI	 	 
+86	HI	 	 
+87	HI	 	 
+88	HI	 	 
+89	HI	 	 
+90	HI	55	84
+91	HI	 	 
+92	HI	 	 
+93	HI	 	 
+94	HI	 	 
+95	HI	 	 
+96	HI	 	 
+97	HI	 	 
+98	HI	 	 
+99	HI	0	87
