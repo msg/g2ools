@@ -5,6 +5,7 @@ from array import array
 sys.path.append('.')
 from nord.g2.file import Pch2File, MorphMap
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
+import dxtable
 
 class DX7Converter: 
   def __init__(self):
@@ -17,6 +18,10 @@ class DX7Converter:
     self.lfopitchmod = self.modulebyname('LFO PM')
     self.lfoam = self.modulebyname('LFO AM')
     self.pitcheg = self.modulebyname('PitchEG')
+    self.moffset = self.modulebyname('Moffset')
+    self.pmodsens = self.modulebyname('PmodSens')
+    self.pmodadj = self.modulebyname('PmodAdj')
+    self.transpose = self.modulebyname('Transpose')
 
   def modulebyname(self, name):
     for module in self.pch2.patch.voice.modules:
@@ -67,7 +72,7 @@ def parsedx7(data):
   patch.Name = x.tostring()
   return patch
   
-def convert(fname):
+def convert(fname,config):
   f = open(fname,'rb')
   data = f.read()
   voice1 = '\xf0\x43\x00\x00\x01\x1b'
@@ -116,6 +121,7 @@ def convert(fname):
           dxparam = getattr(dxop,paramnm)
           #print ' ',paramnm, dxparam
           g2param.variations[i] = dxparam
+        g2op.params.AMod.variations[i] = dxtable.amodsens[dxop.AMod][1]
       # set LFO parameters
       lfop = dxconv.lfo.params
       lfop.Waveform.variations[i] = [1,2,2,3,0,4][dxpatch.lfo.Waveform]
@@ -123,25 +129,35 @@ def convert(fname):
         lfop.OutputType.variations[i] = 5 # Bip
       else:
         lfop.OutputType.variations[i] = 4 # BipInv
-      lfop.Rate.variations[i] = dxpatch.lfo.Rate
+      lfop.Rate.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][1]
+      lfop.Range.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][0]
+      lfop.RateMod.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][2]
+      dxconv.lfodelay.params.Attack.variations[i] = \
+          dxtable.lfo[dxpatch.lfo.Delay][3]
       lfop.PolyMono.variations[i] = dxpatch.lfo.Sync
-      dxconv.lfodelay.params.Decay.variations[i] = dxpatch.lfo.Delay
-      dxconv.lfopitchmod.params.Lev.variations[i] = dxpatch.lfo.PitchMod
-      dxconv.lfoam.params.Level.variations[i] = dxpatch.lfo.AmMod
-      # variations[i] = dxpatch.lfo.PitchModSens
+      dxconv.lfopitchmod.params.Lev1.variations[i] = dxpatch.lfo.PitchMod
+      dxconv.lfoam.params.Lev1.variations[i] = dxpatch.lfo.AmMod
+      dxconv.pmodsens.params.Gain.variations[i] = \
+          dxtable.pmodsens[dxpatch.lfo.PitchModSens][1]
+      dxconv.pmodadj.params.Lev1.variations[i] = \
+          dxtable.pmodsens[dxpatch.lfo.PitchModSens][2]
+      dxconv.pmodadj.params.Lev2.variations[i] = \
+          dxtable.pmodsens[dxpatch.lfo.PitchModSens][3]
+      dxconv.moffset.params.Lev.variations[i] = \
+          dxtable.pmodsens[dxpatch.lfo.PitchModSens][4]
       # set PitchEG parameters
       pitchegp = dxconv.pitcheg.params
-      pitchegp.Time1.variations[i] = dxpatch.pitcheg.R1
-      pitchegp.Level1.variations[i] = dxpatch.pitcheg.L1
-      pitchegp.Time2.variations[i] = dxpatch.pitcheg.R2
-      pitchegp.Level2.variations[i] = dxpatch.pitcheg.L2
-      pitchegp.Time3.variations[i] = dxpatch.pitcheg.R3
-      pitchegp.Level3.variations[i] = dxpatch.pitcheg.L3
-      pitchegp.Time4.variations[i] = dxpatch.pitcheg.R4
-      pitchegp.Level4.variations[i] = dxpatch.pitcheg.L4
+      pitchegp.Time1.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R1][1]
+      pitchegp.Level1.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L1][0]
+      pitchegp.Time2.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R2][1]
+      pitchegp.Level2.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L2][0]
+      pitchegp.Time3.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R3][1]
+      pitchegp.Level3.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L3][0]
+      pitchegp.Time4.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R4][1]
+      pitchegp.Level4.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L4][0]
       # set Transpose
-      # setv(,dxpatch.Transpose
-      # sync)
+      dxconv.transpose.params.Lev.variations[i] = dxpatch.Transpose
+      # sync
       morph = dxconv.pch2.patch.settings.morphs[7]
       if dxpatch.OscKeySync:
         morph.dials.variations[i] = 127
@@ -156,7 +172,11 @@ def convert(fname):
         vert += 1
       return vert
 
-    lines = ['dx2g2 converter','by','Matt Gerassimoff']
+    lines = ['dx2g2 converter',
+           'by',
+           'Matt Gerassimoff',
+           'model by',
+           'Sven Roehrig']
     vert = 0
     for module in dxconv.pch2.patch.voice.modules:
       if module.horiz != 0:
@@ -172,17 +192,81 @@ def convert(fname):
     dxconv.pch2.write(outname+'b%d.pch2' % bank)
     bank += 1
 
+class Config:
+  def __init__(self, **kw):
+    self.__dict__ = kw
+
+def usage(prog):
+  print 'usage: dx2g2 <flags> <.syx files>'
+  print '\t<flags>'
+  print '\t-d --debug\tDebug program'
+  print '\t-h --help\tPrint this message'
+  print '\t-r --recursive\tOn directory arguments convert all .syx files'
+  
+def main(argv):
+  import getopt
+  from glob import glob
+
+  prog = argv.pop(0)
+  try:
+    opts, args = getopt.getopt(argv,'ahdr',
+        ['debug','help','recursive'])
+  except getopt.GetoptError:
+    usage(prog)
+    sys.exit(2)
+
+  config = Config(debug=False,recursive=False)
+  for o, a in opts:
+    if o in ('-h','--help'):
+      usage(prog)
+    if o in ('-d','--debug'):
+      config.debug = True
+    if o in ('-r','--recursive'):
+      config.recursive = True
+
+  def doconvert(fname,config):
+    # general algorithm for converter:
+    if config.debug:
+      convert(fname,config) # allow exception thru if debugging
+    else:
+      try:
+        convert(fname,config)
+      except KeyboardInterrupt:
+        sys.exit(1)
+      except Exception, e:
+        print '%r' % e
+        return fname
+    return ''
+
+  failedpatches = []
+  while len(args):
+    patchlist = glob(args.pop(0))
+    for fname in patchlist:
+      if os.path.isdir(fname) and config.recursive:
+        for root,dirs,files in os.walk(fname):
+          for f in files:
+            fname = os.path.join(root,f)
+            if fname[-4:].lower() == '.syx':
+              print '"%s"' % fname
+              testname = fname
+              if fname[-4:].lower() != '.syx':
+                testname = fname+'.syx'
+              failed = doconvert(fname,config)
+              if failed:
+                failedpatches.append(failed)
+              print '-' * 20
+      else:
+        print '"%s"' % fname
+        failed = doconvert(fname,config)
+        if failed:
+          failedpatches.append(failed)
+        print '-' * 20
+
+  if len(failedpatches):
+    f=open('failedpatches.txt','w')
+    s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
+    f.write(s)
+    print s
+
 if __name__ == '__main__':
-  prog = sys.argv.pop(0)
-  fails = []
-  for fname in sys.argv:
-    if fname[-4:].lower() != '.syx':
-      continue
-    #try:
-    #  convert(fname)
-    #except:
-    #  fails.append(fname)
-    convert(fname)
-  print 'Failures:'
-  for fail in fails:
-    print file
+  main(sys.argv)
