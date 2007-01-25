@@ -102,6 +102,8 @@ def convert(fname,config):
     'FreqDetune','RateScale','Vel','AMod',
     'OutLevel','FreqCoarse','RatioFixed','FreqFine',
   ]
+  def scale100to127(x)
+    return int(0.5+127*x/99.)
   for group in groups:
     dxconv = DX7Converter()
     for i in range(len(group)):
@@ -135,8 +137,9 @@ def convert(fname,config):
       dxconv.lfodelay.params.Attack.variations[i] = \
           dxtable.lfo[dxpatch.lfo.Delay][3]
       lfop.PolyMono.variations[i] = dxpatch.lfo.Sync
-      dxconv.lfopitchmod.params.Lev1.variations[i] = dxpatch.lfo.PitchMod
-      dxconv.lfoam.params.Lev1.variations[i] = dxpatch.lfo.AmMod
+      dxconv.lfopitchmod.params.Lev1.variations[i] = \
+           scale100to127(dxpatch.lfo.PitchMod)
+      dxconv.lfoam.params.Lev1.variations[i] = scale100to127(dxpatch.lfo.AmMod)
       dxconv.pmodsens.params.Gain.variations[i] = \
           dxtable.pmodsens[dxpatch.lfo.PitchModSens][1]
       dxconv.pmodadj.params.Lev1.variations[i] = \
