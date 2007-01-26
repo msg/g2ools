@@ -18,7 +18,6 @@ class DX7Converter:
     self.lfopitchmod = self.modulebyname('LFO PM')
     self.lfoam = self.modulebyname('LFO AM')
     self.pitcheg = self.modulebyname('PitchEG')
-    self.moffset = self.modulebyname('Moffset')
     self.pmodsens = self.modulebyname('PmodSens')
     self.pmodadj = self.modulebyname('PmodAdj')
     self.transpose = self.modulebyname('Transpose')
@@ -146,8 +145,6 @@ def convert(fname,config):
           dxtable.pmodsens[dxpatch.lfo.PitchModSens][2]
       dxconv.pmodadj.params.Lev2.variations[i] = \
           dxtable.pmodsens[dxpatch.lfo.PitchModSens][3]
-      dxconv.moffset.params.Lev.variations[i] = \
-          dxtable.pmodsens[dxpatch.lfo.PitchModSens][4]
       # set PitchEG parameters
       pitchegp = dxconv.pitcheg.params
       pitchegp.Time1.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R1][1]
