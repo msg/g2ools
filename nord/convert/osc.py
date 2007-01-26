@@ -254,7 +254,7 @@ def handlemst(conv,fmmod,fmparam):
     setv(fmparam,79)
     return mst,fmmod,fmparam
     
-  if not hasfmmod and coarsefreq != 64:
+  if coarsefreq != 64:
     # OscC/ZeroCnt
     tune = conv.addmodule('Mix2-1B',name='Tune')
     setv(tune.params.Inv2,1)
@@ -623,7 +623,7 @@ class ConvOscSlvC(Convert):
   waveform = 2 # saw
   parammap = [['FreqCoarse','DetuneCoarse'],['FreqFine','DetuneFine'],
               ['FmAmount','FmMod'],['Active','Mute']]
-  inputmap = ['Pitch','FmMod',None]
+  inputmap = ['Pitch','FmMod']
   outputmap = ['Out']
 
   def domodule(self):
@@ -654,7 +654,7 @@ class ConvOscSlvE(ConvOscSlvC):
 
     aminput, output = handleam(self)
     self.outputs[0] = output
-    self.inputs[2] = aminput
+    self.inputs.append(aminput)
 
 def sinepostmst(conv,mstindex):
   nmm,g2m = conv.nmmodule,conv.g2module
