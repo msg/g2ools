@@ -192,7 +192,7 @@ def handleam(conv):
   aminput = None
   output = g2m.outputs.Out
   if len(nmm.inputs.Am.cables):
-    am = conv.addmodule('LevMod',name='AM%d' % ammodnum)
+    am = conv.addmodule('LevMult',name='AM%d' % ammodnum)
     ammodnum += 1
     conv.connect(g2m.outputs.Out,am.inputs.In)
     aminput = am.inputs.Mod
