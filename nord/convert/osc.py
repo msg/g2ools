@@ -471,7 +471,8 @@ class ConvSpectralOsc(Convert):
     setv(g2mp.Waveform,[3,2][getv(nmmp.Partials)])
     self.params[3] = g2mp.Waveform
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
-    setv(g2mp.ShapeMod,127)
+    setv(g2mp.ShapeMod,125)
+    setv(g2mp.Shape,2)
 
     constswt = self.addmodule('ConstSwT',name='Shape')
     setv(constswt.params.BipUni,1) # Uni
