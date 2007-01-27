@@ -206,7 +206,7 @@ def convert(fname,config):
         vert += 1
       return vert
 
-    lines = ['Converter by',
+    lines = ['Converted by',
            'g2ools-%s' % g2oolsversion,
            'by',
            'Matt Gerassimoff',
