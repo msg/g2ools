@@ -35,7 +35,7 @@ def handlelength(conv):
     conv.connect(g2m.inputs.Rst,seq.inputs.Park)
     conv.connect(g2m.outputs.Link,seq.inputs.Rst)
     conv.connect(g2m.inputs.Clk,seq.inputs.Clk)
-    return
+    return seq.outputs.Link
   if length > 16:
     clkdiv = conv.addmodule('ClkDiv')
     clkdiv.modes.DivMode.value = 0
@@ -44,6 +44,7 @@ def handlelength(conv):
     conv.connect(clkdiv.inputs.Clk,g2m.inputs.Clk)
     conv.inputs[1] = clkdiv.inputs.Rst
     setv(g2mp.Loop,0) # Once
+    return g2m.outputs.Link
 
 class ConvEventSeq(Convert):
   maing2module = 'SeqEvent'
@@ -62,7 +63,7 @@ class ConvEventSeq(Convert):
         setv(step,getv(getattr(nmmp,s)))
         self.params[4+j*16+i] = step
 
-    handlelength(self)
+    self.outputs[2] = handlelength(self)
 
 class ConvCtrlSeq(Convert):
   maing2module = 'SeqLev'
@@ -81,7 +82,7 @@ class ConvCtrlSeq(Convert):
       setv(step,getv(getattr(nmmp,t)))
       self.params[i] = step
 
-    handlelength(self)
+    self.outputs[2] = handlelength(self)
 
 class ConvNoteSeqA(Convert):
   maing2module = 'SeqLev'
@@ -103,7 +104,7 @@ class ConvNoteSeqA(Convert):
       s = 'Seq2Step%d' % (i+1)
       setv(getattr(g2mp,s),1)
     setv(g2mp.TG,0) # simulate GClk (maybe?)
-    handlelength(self)
+    self.outputs[2] = handlelength(self)
 
 class ConvNoteSeqB(Convert):
   maing2module = 'SeqNote'
@@ -125,5 +126,5 @@ class ConvNoteSeqB(Convert):
       s = 'Seq2Step%d' % (i+1)
       setv(getattr(g2mp,s),1)
     setv(g2mp.TG,0) # simulate GClk (maybe?)
-    handlelength(self)
+    self.outputs[2] = handlelength(self)
 
