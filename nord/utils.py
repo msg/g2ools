@@ -38,7 +38,7 @@ def cpv(g2param,nmparam):
 
 # isnm1osc - is NM1 module an oscillator
 def isnm1osc(module):
-  shortnms = ['OscA','OscB','OscC',
+  shortnms = ['OscMaster','OscA','OscB','OscC',
               'OscSlvB','OscSlvC','OscSlvD','OscSlvE','OscSlvA','OscSlvFM',
               'PercOsc','FormantOsc','SpectralOsc','MasterOsc','OscSineBank']
   return module.type.shortnm in shortnms
