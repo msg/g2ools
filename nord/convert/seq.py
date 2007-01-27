@@ -26,11 +26,11 @@ def handlelength(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
   length = getv(nmmp.Length)
-  if getv(nmmp.Loop) == 0 and length > 16:
+  if getv(nmmp.Loop) == 0 and length > 15:
     link = g2m.outputs.Link
     setv(g2mp.Length,16)
     for l in range(16,length,16):
-      seq = conv.addmodule(g2m.type.shortnm,)
+      seq = conv.addmodule(g2m.type.shortnm)
       if l + 16 > length:
         setv(seq.params.Length,length - l)
       else:
@@ -49,7 +49,7 @@ def handlelength(conv):
     conv.connect(clkdiv.inputs.Clk,g2m.inputs.Clk)
     conv.inputs[1] = clkdiv.inputs.Rst
     setv(g2mp.Loop,0) # Once
-    return g2m.outputs.Link
+  return g2m.outputs.Link
 
 class ConvEventSeq(Convert):
   maing2module = 'SeqEvent'
@@ -68,7 +68,7 @@ class ConvEventSeq(Convert):
         setv(step,getv(getattr(nmmp,s)))
         self.params[4+j*16+i] = step
 
-    self.outputs[2] = handlelength(self)
+    self.outputs[3] = handlelength(self)
 
 class ConvCtrlSeq(Convert):
   maing2module = 'SeqLev'
