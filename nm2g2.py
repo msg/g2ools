@@ -32,6 +32,7 @@ from nord.nm1.colors import nm1cablecolors, nm1conncolors
 from nord.nm1.file import NM1Error
 from nord.convert import typetable,setv
 from nord.net import printnet
+from nord.convert.version import version as g2oolsversion
 
 nm2g2colors = {
   nm1cablecolors.red:    g2cablecolors.red,
@@ -412,7 +413,7 @@ def convert(pch,config):
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
 
-  lines = ['nm2g2 converter',
+  lines = ['gtools-%s converter' % (g2oolsversion),
            'by',
            'Matt Gerassimoff',
            'models by',

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+L=g2ools-
+
+rm -rf ~/nord/${L}*
+hg clone . ..//${L}$1
+echo "version='$1'" >../${L}$1/nord/convert/version.py
+(cd ..;zip -r ${L}$1.zip ${L}$1)
+rm /var/www/localhost/htdocs/files/${L}*
+cp ~/nord/${L}$1.zip /var/www/localhost/htdocs/files
+ls /var/www/localhost/htdocs/files
+
