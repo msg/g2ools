@@ -3,6 +3,7 @@
 import os,string,sys
 from array import array
 sys.path.append('.')
+from nord import units
 from nord.g2.file import Pch2File, MorphMap
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 import dxtable
@@ -102,8 +103,15 @@ def convert(fname,config):
     'FreqDetune','RateScale','Vel','AMod',
     'OutLevel','FreqCoarse','RatioFixed','FreqFine',
   ]
-  def scale100to127(x):
-    return int(0.5+127*x/99.)
+  def scale100to127(dxval):
+    return int(0.5+127*dxval/99.)
+  def g2time(dxrate,l1,l2):
+    dl = abs(l2-l1)/10.
+    dxtime = dxtable.pitcheg[dxrate][1]*dl*10
+    for i in range(len(units.g2adsrtime)):
+      if units.g2adsrtime[i] >= dxtime:
+        return i
+    return 127
   for group in groups:
     dxconv = DX7Converter()
     for i in range(len(group)):
@@ -171,14 +179,15 @@ def convert(fname,config):
           dxtable.pmodsens[dxpatch.lfo.PitchModSens][3]
       # set PitchEG parameters
       pitchegp = dxconv.pitcheg.params
-      pitchegp.Time1.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R1][1]
-      pitchegp.Level1.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L1][0]
-      pitchegp.Time2.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R2][1]
-      pitchegp.Level2.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L2][0]
-      pitchegp.Time3.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R3][1]
-      pitchegp.Level3.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L3][0]
-      pitchegp.Time4.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.R4][1]
-      pitchegp.Level4.variations[i] = dxtable.pitcheg[dxpatch.pitcheg.L4][0]
+      pitcheg = dxpatch.pitcheg
+      pitchegp.Time1.variations[i] = g2time(pitcheg.R1,pitcheg.L4,pitcheg.L1)
+      pitchegp.Level1.variations[i] = dxtable.pitcheg[pitcheg.L1][0]
+      pitchegp.Time2.variations[i] = g2time(pitcheg.R2,pitcheg.L1,pitcheg.L2)
+      pitchegp.Level2.variations[i] = dxtable.pitcheg[pitcheg.L2][0]
+      pitchegp.Time3.variations[i] = g2time(pitcheg.R3,pitcheg.L2,pitcheg.L3)
+      pitchegp.Level3.variations[i] = dxtable.pitcheg[pitcheg.L3][0]
+      pitchegp.Time4.variations[i] = g2time(pitcheg.R4,pitcheg.L3,pitcheg.L4)
+      pitchegp.Level4.variations[i] = dxtable.pitcheg[pitcheg.L4][0]
       # set Transpose
       dxconv.transpose.params.Lev.variations[i] = dxpatch.Transpose + 40
       # sync
