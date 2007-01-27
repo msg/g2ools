@@ -26,6 +26,16 @@ def handlelength(conv):
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
   length = getv(nmmp.Length)
+  if getv(nmmp.Loop) == 0 and length > 16 and length < 32:
+    seq = conv.addmodule('SeqEvent')
+    setv(g2mp.Length,16)
+    setv(g2mp.Loop,0) # Once
+    setv(seq.params.Length,length-16)
+    setv(seq.params.Loop,0) # Once
+    conv.connect(g2m.inputs.Rst,seq.inputs.Park)
+    conv.connect(g2m.outputs.Link,seq.inputs.Rst)
+    conv.connect(g2m.inputs.Clk,seq.inputs.Clk)
+    return
   if length > 16:
     clkdiv = conv.addmodule('ClkDiv')
     clkdiv.modes.DivMode.value = 0
