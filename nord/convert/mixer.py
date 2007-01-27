@@ -21,6 +21,7 @@
 #
 from nord.utils import *
 from convert import *
+from nord.g2.colors import g2conncolors
 from table import modtable
 
 class Conv3Mixer(Convert):
@@ -32,6 +33,9 @@ class Conv3Mixer(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    g2m.uprate = 1
+    for i in range(1,4):
+      getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
     setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
     setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
@@ -46,6 +50,9 @@ class Conv8Mixer(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
+    g2m.uprate = 1
+    for i in range(1,9):
+      getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
     setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
     setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
