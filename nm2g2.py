@@ -413,7 +413,8 @@ def convert(pch,config):
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
 
-  lines = ['gtools-%s converter' % (g2oolsversion),
+  lines = ['Converted by',
+           'gtools-%s' % (g2oolsversion),
            'by',
            'Matt Gerassimoff',
            'models by',
