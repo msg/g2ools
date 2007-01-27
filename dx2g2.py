@@ -132,25 +132,27 @@ def convert(fname,config):
       if wave == 0: # TR
         lfop.Phase.variations[i] = 98 # 276
         lfop.OutputType = 1 # PosInv
-        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+        dxconv.lfoselect.params.Sel.variations[i] = 0
       elif wave == 1: # SD
         lfop.Phase.variations[i] = 0
         lfop.OutputType = 0 # Pos
-        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+        dxconv.lfoselect.params.Sel.variations[i] = 0
       elif wave == 2: # SU
         lfop.Phase.variations[i] = 0
         lfop.OutputType = 1 # PosInv
-        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+        dxconv.lfoselect.params.Sel.variations[i] = 0
       elif wave == 3: # SQ
         lfop.Phase.variations[i] = 0
         lfop.OutputType = 1 # PosInv
-        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+        dxconv.lfoselect.params.Sel.variations[i] = 0
       elif wave == 4: # SI
         lfop.Phase.variations[i] = 0
         lfop.OutputType = 1 # PosInv
-        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+        dxconv.lfoselect.params.Sel.variations[i] = 0
       elif wave == 5: # SH
-        dxconv.lfoselect.params.Ctrl.variations[i] = 1
+        lfop.Phase.variations[i] = 0
+        lfop.OutputType = 1 # PosInv
+        dxconv.lfoselect.params.Sel.variations[i] = 1
 
       lfop.Rate.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][1]
       lfop.Range.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][0]
