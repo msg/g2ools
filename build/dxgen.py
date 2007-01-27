@@ -25,7 +25,7 @@ def interpolate(indexvals):
     index,val = indexval
     slope = float(val-lastval)/(index-lastindex)
     if index-lastindex>1:
-      for i in range(lastindex,index+1):
+      for i in range(lastindex+1,index+1):
         interpolated.append([i,int(lastval+slope*(i-lastindex)+0.5)])
     else:
       interpolated.append([index,val])
@@ -37,11 +37,12 @@ dxlfo = getnumbers('dxlfo.txt')
 dxlfomod = interpolate(
    [ [l[0],l[2]] for l in filter(lambda a: len(a) > 2, dxlfo[1:])])
 dxlforate = interpolate(
-   [ [l[0],l[3]] for l in filter(lambda a: len(a) > 2, dxlfo[1:])])
+   [ [l[0],l[3]] for l in filter(lambda a: len(a) > 3, dxlfo[1:])])
 dxlfodelay = getnumbers('dxlfodelay.txt')
 dxlfoattack = interpolate(
    [ l for l in filter(lambda a: len(a) > 1, dxlfodelay[1:])])
  
+print len(dxlfo),len(dxlforate),len(dxlfomod),len(dxlfoattack)
 dxlfo = [ [dxlfo[i+1][1],dxlforate[i][1],dxlfomod[i][1],dxlfoattack[i][1]]
     for i in range(len(dxlfo)-1)]
 
