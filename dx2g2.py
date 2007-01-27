@@ -16,6 +16,7 @@ class DX7Converter:
     self.lfosync = self.modulebyname('LFO Sync')
     self.lfodelay = self.modulebyname('LFO Delay')
     self.lfopitchmod = self.modulebyname('LFO PM')
+    self.lfoselect = self.modulebyname('LFO Select')
     self.lfoam = self.modulebyname('LFO AM')
     self.pitcheg = self.modulebyname('PitchEG')
     self.pmodsens = self.modulebyname('PmodSens')
@@ -125,11 +126,32 @@ def convert(fname,config):
         g2op.params.AMod.variations[i] = dxtable.amodsens[dxop.AMod][1]
       # set LFO parameters
       lfop = dxconv.lfo.params
-      lfop.Waveform.variations[i] = [1,2,2,3,0,4][dxpatch.lfo.Waveform]
-      if dxpatch.lfo.Waveform == 2:
-        lfop.OutputType.variations[i] = 5 # Bip
-      else:
-        lfop.OutputType.variations[i] = 4 # BipInv
+      # 0:TR, 1:SD, 2:SU, 3:SQ, 4:SI, 5:SH
+      wave = dxpatch.lfo.Waveform
+      lfop.Waveform.variations[i] = [1,2,2,3,0,4][wave]
+      if wave == 0: # TR
+        lfop.Phase.variations[i] = 98 # 276
+        lfop.OutputType = 1 # PosInv
+        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+      elif wave == 1: # SD
+        lfop.Phase.variations[i] = 0
+        lfop.OutputType = 0 # Pos
+        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+      elif wave == 2: # SU
+        lfop.Phase.variations[i] = 0
+        lfop.OutputType = 1 # PosInv
+        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+      elif wave == 3: # SQ
+        lfop.Phase.variations[i] = 0
+        lfop.OutputType = 1 # PosInv
+        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+      elif wave == 4: # SI
+        lfop.Phase.variations[i] = 0
+        lfop.OutputType = 1 # PosInv
+        dxconv.lfoselect.params.Ctrl.variations[i] = 0
+      elif wave == 5: # SH
+        dxconv.lfoselect.params.Ctrl.variations[i] = 1
+
       lfop.Rate.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][1]
       lfop.Range.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][0]
       lfop.RateMod.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][2]
