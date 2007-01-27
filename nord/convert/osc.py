@@ -170,10 +170,12 @@ fmmodnum = 1
 def handlefm(conv,fminput,fmparam,fmtable):
   global fmmodnum
   nmm, g2m = conv.nmmodule, conv.g2module
+  if len(nmm.inputs.FmMod.cables) == 0:
+    return fminput
   fma = getv(nmm.params.FmMod)
   if fmparam and fminput:
     setv(fmparam,fmtable[fma][0])
-  if len(nmm.inputs.FmMod.cables) and fma:
+  if fma:
     mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
     fmmodnum += 1
     conv.connect(mix21b.outputs.Out,fminput)
@@ -252,6 +254,7 @@ def handlemst(conv,fmmod,fmparam):
   if not hasfmmod and coarsefreq == 64:
     setv(g2m.params.FreqCoarse,0)
     setv(fmparam,79)
+    mst = g2m.inputs.FmMod
     return mst,fmmod,fmparam
     
   if coarsefreq != 64:
@@ -309,8 +312,10 @@ def postmst(conv,mstindex):
     return
   mstconv = mstin.net.output.module.conv
   mst = mstconv.g2module
+
   if not isnm1lfo(mstconv.nmmodule):
     return
+
   if not hasattr(mst.params,'Range'):
     return
 
@@ -680,6 +685,8 @@ def sinepostmst(conv,mstindex):
     conv.connect(pout.outputs.Out,conv.inputs[mstindex])
     conv.inputs[mstindex] = oscc.inputs.FmMod
     return
+
+  postmst(conv,mstindex)
 
 class ConvOscSineBank(Convert):
   maing2module = 'Mix8-1B'
