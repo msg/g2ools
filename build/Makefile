@@ -1,5 +1,5 @@
 
-all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py \
+all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/units.py \
 		../nord/convert/table.py ../dxtable.py
 
 ../nord/g2/modules.py: g2db.py module_table.txt param_table.txt
@@ -10,7 +10,7 @@ all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/convert/units.py \
 	./nmdb.py
 	python ../nord/nm1/modules.py >../nmdb.txt
 
-../nord/convert/units.py: unitsdb.py nm1adsrtime.txt g2adsrtime.txt \
+../nord/units.py: unitsdb.py nm1adsrtime.txt g2adsrtime.txt \
 	nm1fltfreq.txt g2fltfreq.txt nm1logictime.txt g2logictime.txt \
 	nm1levamp.txt g2levamp.txt ratios.txt g2glidetime.txt \
 	nm1smoothtime.txt

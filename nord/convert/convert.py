@@ -23,8 +23,8 @@ from nord.utils import *
 from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
 from nord.nm1.colors import nm1conncolors
+from nord.units import *
 from table import *
-from units import *
 
 # updatevals - parameters set from constructor, this changes the times
 #              based on the convertion tables in ./units.py.

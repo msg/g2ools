@@ -76,7 +76,7 @@ ratios = getnumbers('ratios.txt')
 g2glidetime = getnumbers('g2glidetime.txt')
 nm1smoothtime = getnumbers('nm1smoothtime.txt')
 
-f = open('../nord/convert/units.py','w')
+f = open('../nord/units.py','w')
 s = '''#
 # units.py - unit convertion tables and functions
 #

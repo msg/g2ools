@@ -20,8 +20,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import *
+from nord.units import *
 from convert import *
-from units import *
 
 class ConvConstant(Convert):
   maing2module = 'Constant'
