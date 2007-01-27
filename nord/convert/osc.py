@@ -479,44 +479,52 @@ class ConvSpectralOsc(Convert):
     setv(g2mp.ShapeMod,125)
     setv(g2mp.Shape,2)
 
-    constswt = self.addmodule('ConstSwT',name='Shape')
-    setv(constswt.params.BipUni,1) # Uni
-    setv(constswt.params.On,1)
-    constswt.params.On.labels = ['Shape']
-    setv(constswt.params.Lev,getv(nmmp.Shape))
-    self.params[2] = constswt.params.Lev
+    shape = self.addmodule('ConstSwT',name='Shape')
+    setv(shape.params.BipUni,1) # Uni
+    setv(shape.params.On,1)
+    shape.params.On.labels = ['Shape']
+    setv(shape.params.Lev,getv(nmmp.Shape))
+    self.params[2] = shape.params.Lev
 
-    mix11a = self.addmodule('Mix1-1A',name='ShapeMod')
-    setv(mix11a.params.ExpLin,1) # Line
-    setv(mix11a.params.On,1)
-    mix11a.params.On.labels = ['Amount']
-    setv(mix11a.params.Lev,getv(nmmp.ShapeMod))
-    self.params[7] = mix11a.params.Lev
+    shapemod = self.addmodule('Mix1-1A',name='ShapeMod')
+    setv(shapemod.params.ExpLin,1) # Line
+    setv(shapemod.params.On,1)
+    shapemod.params.On.labels = ['Amount']
+    setv(shapemod.params.Lev,getv(nmmp.ShapeMod))
+    self.params[7] = shapemod.params.Lev
 
     levmult = self.addmodule('LevMult')
     levmult2 = self.addmodule('LevMult')
 
-    mix21a = self.addmodule('Mix2-1A',name='Out')
-    setv(mix21a.params.ExpLin,1) # Lin
-    setv(mix21a.params.On1,1)
-    mix21a.params.On1.labels = ['High']
-    setv(mix21a.params.Lev1,127)
-    setv(mix21a.params.On2,1)
-    mix21a.params.On2.labels = ['Low']
-    setv(mix21a.params.Lev2,98)
+    out = self.addmodule('Mix2-1A',name='Out')
+    setv(out.params.ExpLin,1) # Lin
+    setv(out.params.On1,1)
+    out.params.On1.labels = ['High']
+    setv(out.params.Lev1,127)
+    setv(out.params.On2,1)
+    out.params.On2.labels = ['Low']
+    setv(out.params.Lev2,98)
+
+    output = self.addmodule('Mix1-1A',name='Output')
+    setv(output.params.ExpLin,1) # Line
+    setv(output.params.On,1)
+    output.params.On.labels = ['Output']
+    setv(output.params.Lev,79)
 
     self.connect(g2m.outputs.Out,levmult2.inputs.In)
-    self.connect(constswt.outputs.Out,mix11a.inputs.Chain)
-    self.connect(mix11a.outputs.Out,g2m.inputs.ShapeMod)
-    self.connect(mix11a.outputs.Out,levmult.inputs.In)
+    self.connect(shape.outputs.Out,shapemod.inputs.Chain)
+    self.connect(shapemod.outputs.Out,g2m.inputs.ShapeMod)
+    self.connect(shapemod.outputs.Out,levmult.inputs.In)
     self.connect(levmult.inputs.In,levmult.inputs.Mod)
     self.connect(levmult.outputs.Out,levmult2.inputs.Mod)
-    self.connect(levmult2.inputs.In,mix21a.inputs.In2)
-    self.connect(levmult2.outputs.Out,mix21a.inputs.In1)
-    self.connect(mix21a.inputs.In1,mix21a.inputs.Chain)
+    self.connect(levmult2.inputs.In,out.inputs.In2)
+    self.connect(levmult2.outputs.Out,out.inputs.In1)
+    self.connect(out.inputs.In1,out.inputs.Chain)
+    self.connect(out.outputs.Out,output.inputs.Chain)
+    self.connect(output.outputs.Out,output.inputs.In)
 
-    self.inputs[3] = mix11a.inputs.In
-    self.outputs[0] = mix21a.outputs.Out
+    self.inputs[3] = shapemod.inputs.In
+    self.outputs[0] = output.outputs.Out
 
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'
