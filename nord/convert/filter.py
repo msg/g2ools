@@ -300,6 +300,7 @@ class ConvEqMid(ConvFilter):
     nmmp,g2mp = nmm.params, g2m.params
     
     setv(g2mp.Active,1-getv(nmmp.Bypass))
+    setv(g2mp.Level,modtable[getv(nmmp.Level)][0])
 
 class ConvEqShelving(ConvFilter):
   maing2module = 'EqPeak'
@@ -313,4 +314,5 @@ class ConvEqShelving(ConvFilter):
     
     setv(g2mp.Bandwidth,0)
     setv(g2mp.Active,1-getv(nmmp.Bypass))
+    setv(g2mp.Level,modtable[getv(nmmp.Level)][0])
 

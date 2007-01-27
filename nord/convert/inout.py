@@ -87,7 +87,7 @@ class Conv1Output(Convert):
     setv(g2mp.On,1)
     setv(g2mp.ExpLin,2)
 
-    setv(g2mp.Lev,getv(nmmp.Level))
+    setv(g2mp.Lev,modtable[getv(nmmp.Level)][0])
     out2 = self.addmodule('2-Out')
     dest = getv(nmmp.Destination)
     setv(out2.params.Destination,dest/2)
@@ -107,7 +107,7 @@ class Conv2Output(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.Lev,getv(nmmp.Level))
+    setv(g2mp.Lev,modtable[getv(nmmp.Level)][0])
     setv(g2mp.On,1)
     out2 = self.addmodule('2-Out')
     self.connect(g2m.outputs.OutL,out2.inputs.InL)
@@ -124,7 +124,7 @@ class Conv4Output(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
-    setv(self.g2area.patch.settings.patchvol,getv(nmmp.Level))
+    #setv(self.g2area.patch.settings.patchvol,modtable[getv(nmmp.Level)][0])
 
 class ConvNoteDetect(Convert):
   maing2module = 'NoteDet'

@@ -194,6 +194,7 @@ class ConvPhaser(Convert):
     setv(g2mp.Active,1-getv(nmmp.Bypass))
     setv(g2mp.FBMod,getv(nmmp.Depth))
     setv(g2mp.Type,3)
+    setv(g2mp.Level,modtable[getv(nmmp.Level)][0])
     
     if len(nmm.inputs.FreqMod.cables):
       # add mixer
