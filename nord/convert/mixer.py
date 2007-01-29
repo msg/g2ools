@@ -36,6 +36,7 @@ class Conv3Mixer(Convert):
     g2m.uprate = 1
     for i in range(1,4):
       getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
+    g2m.outputs.Out.rate = g2conncolors.red
     setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
     setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
@@ -53,6 +54,8 @@ class Conv8Mixer(Convert):
     g2m.uprate = 1
     for i in range(1,9):
       getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
+    g2m.outputs.Out.rate = g2conncolors.red
+
     setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
     setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
     setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
