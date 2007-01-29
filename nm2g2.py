@@ -33,6 +33,7 @@ from nord.nm1.file import NM1Error
 from nord.convert import typetable,setv
 from nord.net import printnet
 from nord.convert.version import version as g2oolsversion
+from nord.utils import toascii
 
 nm2g2colors = {
   nm1cablecolors.red:    g2cablecolors.red,
@@ -430,7 +431,7 @@ def convert(pch,config):
 
   def addnamebars(lines, horiz, vert):
     for line in lines:
-      m = pch2.patch.voice.addmodule('Name',name=line)
+      m = pch2.patch.voice.addmodule('Name',name=toascii(line))
       m.horiz = horiz
       m.vert = vert
       vert += 1

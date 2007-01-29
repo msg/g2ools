@@ -24,6 +24,7 @@ from nord.g2.modules import fromname as g2name
 from nord.g2.colors import g2cablecolors
 from nord.nm1.colors import nm1conncolors
 from nord.units import *
+from nord.utils import toascii
 from table import *
 
 # updatevals - parameters set from constructor, this changes the times
@@ -52,7 +53,7 @@ class Convert:
     self.inputs = []
 
     g2m = self.g2module = g2area.addmodule(self.maing2module)
-    g2m.name = nmm.name
+    g2m.name = toascii(nmm.name)
     self.horiz = g2m.horiz = nmm.horiz
     self.height = g2m.type.height
 

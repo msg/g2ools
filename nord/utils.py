@@ -20,6 +20,19 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+# toascii remove bad characters
+def toascii(s):
+  # conversion strings for 192-255
+  s192 = 'AAAAAAACEEEEIIIIDNOOOOOOXOUUUUYpBaaaaaaaceeeeeiiiienooooo/ouuuuypy'
+  def conv(c):
+    o = ord(c)
+    if o >= 192:
+      return s192[o-192]
+    elif o < 128:
+      return c
+    return ''
+  return ''.join(map(conv, s))
+
 # setv - set all variations to val
 def setv(g2param,val):
   g2param.variations = [ val for variation in range(9) ]
