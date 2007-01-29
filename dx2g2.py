@@ -108,7 +108,7 @@ def convert(fname,config):
     return int(0.5+127*dxval/99.)
   def g2time(dxrate,l1,l2):
     dl = abs(l2-l1)/10.
-    dxtime = dxtable.pitcheg[dxrate][1]*dl*10
+    dxtime = dxtable.pitcheg[dxrate][1]*dl
     for i in range(len(units.g2adsrtime)):
       if units.g2adsrtime[i] >= dxtime:
         return i
