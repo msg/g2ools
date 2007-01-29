@@ -90,8 +90,9 @@ modules = [
     inputs=[
       InputType('Pitch',        g2conncolors.blue_red,     horiz=0,vert=3),
       InputType('PitchVar',     g2conncolors.blue_red,     horiz=0,vert=4),
-      InputType('Sync',         g2conncolors.red,          horiz=9,vert=4),
-      InputType('FmMod',        g2conncolors.red,          horiz=14,vert=4),
+      InputType('Sync',         g2conncolors.red,          horiz=0,vert=1),
+      InputType('FmMod',        g2conncolors.red,          horiz=9,vert=4),
+      InputType('ShapeMod',     g2conncolors.red,          horiz=14,vert=4),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.red,          horiz=19,vert=4),
@@ -400,6 +401,7 @@ modules = [
     ],
     outputs=[
       OutputType('Env',          g2conncolors.blue,         horiz=19,vert=4),
+      OutputType('Out',          g2conncolors.blue_red,     horiz=17,vert=4),
     ],
     params=[
       ParameterType('Attack',       parammap.EnvTime),
@@ -1762,7 +1764,7 @@ modules = [
     shortnm='OscD',
     page=PageType('Osc', 3),
     inputs=[
-
+      InputType('Pitch',        g2conncolors.blue_red,     horiz=0,vert=1),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.red,          horiz=19,vert=1),
@@ -2898,7 +2900,9 @@ modules = [
     page=PageType('In/Out', 9),
     inputs=[],
     outputs=[
-      OutputType('Gate',         g2conncolors.yellow,       horiz=19,vert=1),
+      OutputType('Gate',         g2conncolors.yellow,       horiz=13,vert=1),
+      OutputType('Vel',          g2conncolors.blue,         horiz=16,vert=1),
+      OutputType('RelVel',       g2conncolors.blue,         horiz=19,vert=1),
     ],
     params=[
       ParameterType('Note',         parammap.FreqCoarse),
@@ -2931,6 +2935,7 @@ modules = [
     page=PageType('Note', 4),
     inputs=[
       InputType('In',           g2conncolors.blue_red,     horiz=16,vert=1),
+      InputType('On',           g2conncolors.yellow_orange,horiz=0,vert=1),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.blue_red,     horiz=19,vert=1),
@@ -3403,6 +3408,7 @@ modules = [
     page=PageType('Delay', 6),
     inputs=[
       InputType('In',           g2conncolors.blue_red,     horiz=16,vert=1),
+      InputType('Clk',          g2conncolors.yellow_orange,horiz=0,vert=1),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.blue_red,     horiz=19,vert=1),
@@ -3603,7 +3609,8 @@ modules = [
       InputType('RChain',       g2conncolors.blue_red,     horiz=1,vert=1),
     ],
     outputs=[
-
+      OutputType('OutL',         g2conncolors.blue_red,     horiz=17,vert=1),
+      OutputType('OutR',         g2conncolors.blue_red,     horiz=19,vert=1),
     ],
     params=[
       ParameterType('Lev',          parammap.MixLevel),
