@@ -42,7 +42,7 @@ nm2g2colors = {
   nm1cablecolors.green:  g2cablecolors.green,
   nm1cablecolors.purple: g2cablecolors.purple,
 }
-port2cablecolors = {
+conn2cablecolors = {
   g2conncolors.red:           g2cablecolors.red,
   g2conncolors.blue:          g2cablecolors.blue,
   g2conncolors.yellow:        g2cablecolors.yellow,
@@ -198,7 +198,7 @@ def cablerecolorize(g2area,config):
   logging.info('cable recolorize:')
   for cable in g2area.cables:
     if cable.source.net.output:
-      cable.color = port2cablecolors[cable.source.net.output.rate]
+      cable.color = conn2cablecolors[cable.source.net.output.rate]
 
 def dofinalize(areaconverters,config):
   logging.info('Finalize:')
