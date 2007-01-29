@@ -138,6 +138,11 @@ class ConvVocalFilter(ConvFilter):
               'Freq','FreqMod', 'Res']
   inputmap = ['In','VowelMod','FreqMod']
   outputmap = ['Out']
+  def domodule(self):
+    ConvFilter.domodule(self)
+    nmm,g2m = self.nmmodule, self.g2module
+    nmmp,g2mp = nmm.params, g2m.params
+    setv(g2mp.Level,modtable[getv(nmmp.Level)][0])
 
 class ConvVocoder(Convert):
   maing2module = 'Vocoder'
