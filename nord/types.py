@@ -28,9 +28,11 @@ class ParameterDef(Struct):
   pass
 
 class Type:
-  def __init__(self, name, type):
+  def __init__(self, name, type, horiz=0, vert=0):
     self.name = name
     self.type = type
+    self.horiz = horiz
+    self.vert = vert
 
 class InputType(Type):
   pass

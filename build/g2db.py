@@ -122,6 +122,7 @@ modules = [
 ''')
 
 for struct in modulestructs:
+  print struct.shortnm
   s = '''    type=%s,
     height=%s,
     longnm='%s',
@@ -131,21 +132,29 @@ for struct in modulestructs:
        struct.page, struct.pageindex)
 
   if len(struct.inputs):
+    ins = []
+    for nm,t,loc in zip(struct.inputs,struct.inputtypes,struct.inputlocs):
+      h, v = map(eval,loc.split(','))
+      ins.append("      InputType(%-16sg2conncolors.%-14shoriz=%d,vert=%d)," %
+          ("'%s'," % nm,'%s,' %t,h,v))
     s += '''    inputs=[
 %s
     ],\n''' % (
-      '\n'.join(["      InputType(%-16sg2conncolors.%s)," % ("'%s'," % nm,t) 
-          for nm,t in zip(struct.inputs, struct.inputtypes) ]),
+      '\n'.join(ins),
       )
   else:
     s += '    inputs=[],\n'
 
   if len(struct.outputs):
+    outs = []
+    for nm,t,loc in zip(struct.outputs, struct.outputtypes, struct.outputlocs):
+      h,v = map(eval,loc.split(','))
+      outs.append("      OutputType(%-16sg2conncolors.%-14shoriz=%d,vert=%d),"
+          % ("'%s'," % nm,'%s,' % t, h, v))
     s += '''    outputs=[
 %s
     ],\n''' % (
-      '\n'.join(["      OutputType(%-16sg2conncolors.%s)," % ("'%s'," % nm,t) 
-          for nm,t in zip(struct.outputs, struct.outputtypes) ]),
+      '\n'.join(outs),
       )
   else:
     s += '    outputs=[],\n'
