@@ -68,6 +68,22 @@ def handlepw(conv,pw,haspw,shape,shapemod):
   setv(g2mp.Shape,pw*2)
   return pwmod
 
+pitchadjnum = 1
+def pitchadj(conv, pitchparam, pitchinput, tableentry):
+  global pitchadjnum
+  setv(pitchparam, tableentry[0])
+  if tableentry[1] == 0 and tableentry[2] == 0:
+    return pitchinput
+  adj1 = conv.addmodule('Mix2-1B',name='PitchAdj%d' % pitchadjnum)
+  pitchadjnum += 1
+  conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
+  conv.connect(adj1.inputs.In1,adj1.inputs.In2)
+  conv.connect(adj1.outputs.Out,pitchinput)
+  setv(adj1.params.Inv2, 1)
+  setv(adj1.params.Lev1, tableentry[1])
+  setv(adj1.params.Lev2, tableentry[2])
+  return adj1.inputs.Chain
+
 # handledualpitchmod -> p1,p2
 # handle pitch inputs and if necessary, create a Mix2-1B for input
 # NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
@@ -88,21 +104,14 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
     setv(modinputparam,127)
 
     mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
+    pitchmodnum += 1
     conv.connect(mix21b.outputs.Out,modinput)
 
     if pmod1 == 0 or pmod1 == 127:
       setv(mix21b.params.Lev1,pmod1)
       p1 = mix21b.inputs.In1
     elif pmod1:
-      setv(mix21b.params.Lev1,modtable[pmod1][0])
-      adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
-      conv.connect(adj1.outputs.Out,mix21b.inputs.In1)
-      conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
-      conv.connect(adj1.inputs.In1,adj1.inputs.In2)
-      setv(adj1.params.Inv2, 1)
-      setv(adj1.params.Lev1, modtable[pmod1][1])
-      setv(adj1.params.Lev2, modtable[pmod1][2])
-      p1 = adj1.inputs.Chain
+      p1 = pitchadj(conv,mix21b.params.Lev1,mix21b.inputs.In1,modtable[pmod1])
     else:
       p1 = mix21b.inputs.In1
 
@@ -110,15 +119,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
       setv(mix21b.params.Lev2,pmod2)
       p2 = mix21b.inputs.In2
     elif pmod2:
-      setv(mix21b.params.Lev2,modtable[pmod2][0])
-      adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
-      conv.connect(adj2.outputs.Out,mix21b.inputs.In2)
-      conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
-      conv.connect(adj2.inputs.In1,adj2.inputs.In2)
-      setv(adj2.params.Inv2, 1)
-      setv(adj2.params.Lev1, modtable[pmod2][1])
-      setv(adj2.params.Lev2, modtable[pmod2][2])
-      p2 = adj2.inputs.Chain
+      p2 = pitchadj(conv,mix21b.params.Lev2,mix21b.inputs.In2,modtable[pmod2])
 
     conv.params[mod1param] = mix21b.params.Lev1
     conv.params[mod2param] = mix21b.params.Lev2
@@ -128,17 +129,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
       setv(modinputparam,pmod1)
       p1 = modinput
     else:
-      setv(modinputparam,127)
-      adj1 = conv.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
-      conv.connect(adj1.outputs.Out,modinput)
-      conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
-      conv.connect(adj1.inputs.In1,adj1.inputs.In2)
-
-      setv(modinputparam,modtable[pmod1][0])
-      setv(adj1.params.Inv2, 1)
-      setv(adj1.params.Lev1,modtable[pmod1][1])
-      setv(adj1.params.Lev2,modtable[pmod1][2])
-      p1 = adj1.inputs.Chain
+      p1 = pitchadj(conv,modinputparam,modinput,modtable[pmod1])
 
     conv.params[mod1param] = modinputparam
 
@@ -147,23 +138,10 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
       setv(modinputparam,pmod2)
       p2 = modinput
     else:
-      setv(modinputparam,127)
-      adj2 = conv.addmodule('Mix2-1B',name='PitchAdj2-%d' % pitchmodnum)
-      conv.connect(adj2.outputs.Out,modinput)
-      conv.connect(adj2.inputs.Chain,adj2.inputs.In1)
-      conv.connect(adj2.inputs.In1,adj2.inputs.In2)
-
-      setv(modinputparam,modtable[pmod2][0])
-      setv(adj2.params.Inv2, 1)
-      setv(adj2.params.Lev1,modtable[pmod2][1])
-      setv(adj2.params.Lev2,modtable[pmod2][2])
-
-      p2 = adj2.inputs.Chain
+      p2 = pitchadj(conv,modinputparam,modinput,modtable[pmod2])
 
     conv.params[mod2param] = modinputparam
 
-  if mix21b or adj1 or adj2:
-    pitchmodnum += 1
   return p1, p2
 
 fmmodnum = 1
@@ -176,6 +154,8 @@ def handlefm(conv,fminput,fmparam,fmtable):
   if fmparam and fminput:
     setv(fmparam,fmtable[fma][0])
   if fma:
+    if fmtable[fma][1] == 0 and fmtable[fma][2] == 0:
+      return fminput
     mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
     fmmodnum += 1
     conv.connect(mix21b.outputs.Out,fminput)
