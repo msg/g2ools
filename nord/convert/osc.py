@@ -61,11 +61,13 @@ def handlepw(conv,pw,haspw,shape,shapemod):
     if shape > -1:
       conv.params[shape] = constswt.params.Lev
     return mix21b.inputs.In1
-  if pw < 64:
-    pw = 64-pw
   else:
-    pw -= 64
-  setv(g2mp.Shape,pw*2)
+    constswt = conv.addmodule('ConstSwT',name='Shape')
+    setv(constswt.params.On,1)
+    constswt.params.On.labels = ['Shape']
+    setv(constswt.params.Lev,getv(nmmp.PulseWidth))
+    setv(g2mp.ShapeMod,125)
+    conv.connect(constswt.outputs.Out,g2m.inputs.ShapeMod)
   return pwmod
 
 pitchadjnum = 1
