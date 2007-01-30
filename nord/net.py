@@ -64,17 +64,18 @@ def addnet(netlist, source, dest):
 
     netlist.remove(dest.net)
 
+    if dest.net.output:
+      source.net.output = dest.net.output
+      source.net.output.net = source.net
+
     source.net.inputs += dest.net.inputs
     for input in dest.net.inputs:
       #source.net.inputs.append(input)
       input.net = source.net
 
-    if dest.net.output:
-      source.net.output = dest.net.output
-      source.net.output.net = source.net
-
     #print ' combine',
     #printnet(source.net)
+    #print
     return
 
   found = 0
