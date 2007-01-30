@@ -61,7 +61,7 @@ def handlepw(conv,pw,haspw,shape,shapemod):
     if shape > -1:
       conv.params[shape] = constswt.params.Lev
     return mix21b.inputs.In1
-  else:
+  elif haspw:
     constswt = conv.addmodule('ConstSwT',name='Shape')
     setv(constswt.params.On,1)
     constswt.params.On.labels = ['Shape']
