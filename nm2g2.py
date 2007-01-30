@@ -118,7 +118,7 @@ def doprecables(converters, config):
 
 def docables(nmarea, g2area, converters, config):
   # now do the cables
-  logging.info('Cables:')
+  logging.info('cables:')
   for cable in nmarea.cables:
     source = cable.source
     g2source = None
@@ -150,7 +150,7 @@ def douprate(g2area,config):
   # now parse the entire netlist of the area and .uprate=1 all
   # modules with blue_red and yello_orange inputs connected to red outputs.
   # scan module list until we done change any modules
-  logging.info('Uprate:')
+  logging.info('uprate:')
   done = 0
   while not done:
     modified = 0
@@ -201,6 +201,12 @@ def cablerecolorize(g2area,config):
     if cable.source.net.output:
       cable.color = conn2cablecolors[cable.source.net.output.rate]
 
+def docableshorten(g2area,config):
+  if not config.shorten:
+    return
+  logging.info('cable shorten:')
+  g2area.shortencables()
+
 def dofinalize(areaconverters,config):
   logging.info('Finalize:')
   for areanm in 'voice','fx':
@@ -210,59 +216,7 @@ def dofinalize(areaconverters,config):
           conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
       conv.finalize()
 
-def convert(pch,config):
-  #   loop through each module
-  #     determine and store separation from module above >= 0
-  #     if mod in convertion table
-  #       call convertion table module function
-  #   loop through each cable
-  #     if source and dest in convertion table
-  #       create new connection
-  #   update midi controller assignments
-  #   update knob assignments (on pags A1:1, A1:2 and A1:3)
-  #   update morph assignments
-  #   reorder modules top to bottom, left to right
-  #   relocate modules top to bottom, left to right based on separation
-  #   add name bar with my name and convertion info
-  #   add name bar with errors/comments etc.
-  #   save g2 file
-
-  # other ideas:
-  # create patch equal function
-  # create patch merge function that updates variations
-  #   of one patch from another.
-  pch2 = Pch2File('initpatch.pch2')
-  nmpatch = pch.patch
-  g2patch = pch2.patch
-  g2patch.voice.keyboard = None
-  g2patch.fx.keyboard = None
-
-  setv(g2patch.settings.patchvol,127)
-  for color in ['red','blue','yellow','green','purple']:
-    setattr(g2patch.description,color,getattr(nmpatch.header,color))
-  if nmpatch.header.voices > 1:
-    g2patch.description.monopoly = 0
-    g2patch.description.voicecnt = nmpatch.header.voices - 1
-  setv(g2patch.settings.glide,nmpatch.header.porta)
-  setv(g2patch.settings.glidetime,nmpatch.header.portatime)
-  setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
-
-  areaconverters = { }
-  for areanm in 'voice','fx':
-    nmarea = getattr(nmpatch,areanm)
-    g2area = getattr(g2patch,areanm)
-    logging.info('--- area %s: ---' % areanm)
-
-    # build converters for all NM1 modules
-    converters = areaconverters[areanm] = doconverters(nmarea,g2area,config)
-    domodules(converters,config)              # do the modules
-    docolorizemultis(converters,config)       # colorize multi module setups
-    doreposition(converters,config)           # repostion all modules
-    doprecables(converters,config)            # precable processing
-    docables(nmarea,g2area,converters,config) # connect cables
-    douprate(g2area,config)                   # uprate necessary modules
-    cablerecolorize(g2area,config)            # recolor cables based on output
-
+def domorphsknobsmidiccs(nmpatch,g2patch,config):
   # handle Morphs
   #  morphs[x].ctrl.midicc
   #    1: Wheel -> Wheel (morph 0)
@@ -347,8 +301,6 @@ def convert(pch,config):
     for variation in range(1,9):
       g2morph.maps[variation]=g2morph.maps[0][:]
       
-  # add parameters to morphs
-
   # handle Knobs
   logging.info('knobs:')
   knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
@@ -402,6 +354,7 @@ def convert(pch,config):
       m.type = 2 # system
     g2patch.ctrls.append(m)
 
+def docurrentnotes(nmpatch,g2patch,config):
   # handle CurrentNotes
   logging.info('currentnotes:')
   #g2patch.lastnote = nmpatch.lastnote
@@ -409,11 +362,7 @@ def convert(pch,config):
   for note in nmpatch.notes:
     g2patch.notes.append(note)
 
-  dofinalize(areaconverters,config)
-
-  # handle text pad
-  pch2.patch.textpad = pch.patch.textpad
-
+def dotitleblock(pch,pch2,config):
   lines = ['Converted by',
            'gtools-%s' % (g2oolsversion),
            'by',
@@ -442,6 +391,70 @@ def convert(pch,config):
   vert = addnamebars(lines,0,vert+1)
   vert = addnamebars(['All rights','reserved'],0,vert+1)
 
+def convert(pch,config):
+  #   loop through each module
+  #     determine and store separation from module above >= 0
+  #     if mod in convertion table
+  #       call convertion table module function
+  #   loop through each cable
+  #     if source and dest in convertion table
+  #       create new connection
+  #   update midi controller assignments
+  #   update knob assignments (on pags A1:1, A1:2 and A1:3)
+  #   update morph assignments
+  #   reorder modules top to bottom, left to right
+  #   relocate modules top to bottom, left to right based on separation
+  #   add name bar with my name and convertion info
+  #   add name bar with errors/comments etc.
+  #   save g2 file
+
+  # other ideas:
+  # create patch equal function
+  # create patch merge function that updates variations
+  #   of one patch from another.
+  pch2 = Pch2File('initpatch.pch2')
+  nmpatch = pch.patch
+  g2patch = pch2.patch
+  g2patch.voice.keyboard = None
+  g2patch.fx.keyboard = None
+
+  setv(g2patch.settings.patchvol,127)
+  for color in ['red','blue','yellow','green','purple']:
+    setattr(g2patch.description,color,getattr(nmpatch.header,color))
+  if nmpatch.header.voices > 1:
+    g2patch.description.monopoly = 0
+    g2patch.description.voicecnt = nmpatch.header.voices - 1
+  setv(g2patch.settings.glide,nmpatch.header.porta)
+  setv(g2patch.settings.glidetime,nmpatch.header.portatime)
+  setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
+
+  areaconverters = { }
+  for areanm in 'voice','fx':
+    nmarea = getattr(nmpatch,areanm)
+    g2area = getattr(g2patch,areanm)
+    logging.info('--- area %s: ---' % areanm)
+
+    # build converters for all NM1 modules
+    converters = areaconverters[areanm] = doconverters(nmarea,g2area,config)
+    domodules(converters,config)              # do the modules
+    docolorizemultis(converters,config)       # colorize multi module setups
+    doreposition(converters,config)           # repostion all modules
+    doprecables(converters,config)            # precable processing
+    docables(nmarea,g2area,converters,config) # connect cables
+    douprate(g2area,config)                   # uprate necessary modules
+    docableshorten(g2area,config)             # shorten up cables
+    cablerecolorize(g2area,config)            # recolor cables based on output
+
+  domorphsknobsmidiccs(nmpatch,g2patch,config)
+  docurrentnotes(nmpatch,g2patch,config)
+  dofinalize(areaconverters,config)
+
+
+  # handle text pad
+  pch2.patch.textpad = pch.patch.textpad
+
+  dotitleblock(pch,pch2,config)
+
   logging.info('Writing patch "%s2"' % (pch.fname))
   pch2.write(pch.fname+'2')
   
@@ -459,19 +472,20 @@ def usage(prog):
   print '\t-k --keepold\tDo not replace existing .pch2 files'
   print '\t-l --low\tLower resource usage'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
+  print '\t-s --shorten\tShorten cable connections'
   print '\t-v --verbosity\tSet converter verbosity level 0-4'
   
 def main(argv):
   prog = argv.pop(0)
   try:
-    opts, args = getopt.getopt(argv,'adhlrkv:',
-        ['all','debug','help','keepold','low','recursive','verbosity='])
+    opts, args = getopt.getopt(argv,'adhlkrsv:',
+        ['all','debug','help','keepold','low','recursive','shorten','verbosity='])
   except getopt.GetoptError:
     usage(prog)
     sys.exit(2)
 
   config = Config(debug=False,lowresource=False,recursive=False,
-      keepold=False,allfiles=False,verbosity=logging.INFO)
+      keepold=False,allfiles=False,shorten=False,verbosity=logging.INFO)
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
@@ -485,6 +499,8 @@ def main(argv):
       config.recursive = True
     if o in ('-k','--keepold'):
       config.keepold = True
+    if o in ('-s','--shorten'):
+      config.shorten = True
     if o in ('-v','--verbosity'):
       print o,a
       config.verbosity = [

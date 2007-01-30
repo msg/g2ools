@@ -174,6 +174,8 @@ class Area:
     mindist = 1000000
 
     #print 'removeconnector %s:%s' % (connector.module.name,connector.type.name)
+    #print 'before remove',
+    #printnet(connector.net)
     while len(connector.cables):
       cable = connector.cables[0]
       source,dest = cable.source,cable.dest
@@ -213,9 +215,46 @@ class Area:
   # quick connection length calculation (returns square distance)
   def connectionlength(self, start, end):
     # horiz coordinates about 20 times bigger.
-    dh = end.module.horiz - start.module.horiz
-    dv = end.module.vert - start.module.vert
-    return (dh*20)**2+dv**2
+    sm,em=start.module,end.module
+    dh = (19*em.horiz+end.type.horiz)-(19*sm.horiz+start.type.horiz)
+    dv = (em.vert+end.type.vert)-(sm.vert+start.type.vert)
+    return (dh**2)+(dv**2)
+
+  def shortencables(self):
+    netlist = self.netlist[:]
+    # remove all cables
+    cables = self.cables[:]
+    while len(cables):
+      cable = cables.pop(0)
+      self.disconnect(cable)
+
+    def findclosest(g2area,fromlist,tolist):
+      mincablelen = 1000000
+      mincable = None
+      for fromconn in fromlist:
+        for toconn in tolist:
+          cablelen = g2area.connectionlength(fromconn,toconn)
+          if cablelen < mincablelen:
+            mincablelen = cablelen
+            mincable = [fromconn,toconn]
+      return mincable
+
+    # on each net, successively connect closet connector
+    for net in netlist:
+      inputs = net.inputs
+      if net.output:
+        fromconn, toconn = findclosest(self,[net.output],inputs)
+      else:
+        conn = inputs.pop(0)
+        fromconn, toconn = findclosest(self,[conn],inputs)
+      self.connect(fromconn,toconn,fromconn.rate)
+      inputs.remove(toconn)
+      connected = [fromconn,toconn]
+      while len(inputs):
+        fromconn, toconn = findclosest(self,connected,inputs)
+        self.connect(fromconn,toconn,fromconn.rate)
+        inputs.remove(toconn)
+        connected.append(toconn)
 
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch:
