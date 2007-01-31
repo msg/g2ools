@@ -1,7 +1,7 @@
 
 			 g2ools - Nord Modular G2 Tools
 
-What is it?
+Description:
 
 g2ools is a set of python applications and libraries to handle the Nord
 Modular G2 synthesizer.  It allows a person to write simple tools to process
@@ -20,17 +20,29 @@ source code to the applications and libraries.
 
 nm2g2.py
 
-  nm2g2.py is a converter from Clavia's original Nord Modular (nm1) patch file
+nm2g2.py is a converter from Clavia's original Nord Modular (nm1) patch file
 to the Nord Modular G2 (g2) patch file.  It can convert whole directories and
 currently is used to converter the Nord Modular Patch Collection consisting
 of almost 30000 patches.  Many patches work and some do not.  You're success
 will vary depending on the complexity of the original patch and the
 differences between the two synthesizers.
 
-How do I install g2ools?
+dx2g2.py
 
+dx2g2.py converts DX7 syx files into G2 patch files containing 8 DX7 patches
+each.  The operators are converted exactly as the G2 contains 2 modules:
+DXRouter and Operator.  The is extra circuitry for the LFO, PitchEG and
+transpose.  The LFO and PitchEG are modeled as closely as possible (and may
+get better) but there are differences.  The LFO rates are different between
+the DX7 and G2 so the closests match is used.  The PitchEG rate parameter
+is constant reguardless of the levels used.  This requires determining a
+normalized time for the rate and caculating the actual time to go from one
+level to the next.  Then the G2's envelope time is set to the closest match.
 
-How do I run the converter?
+Installation:
+
+Installation is a matter of decompressing the zip file into it's directory
+structure stored in the zip file.
 
 Linux:
 
@@ -44,5 +56,13 @@ http://www.python.org
 
 Windows:
 
-There is a nm2g2.exe that should run on any Windows XP machine.
+There is a nm2g2.exe and dx2g2.exe that should run on any Windows XP machine
+without the need to install python.
+
+Running:
+
+Because the programs require the python modules stored in the <release>/nord
+directory and the initial patches stored in the <release>/ directory, the
+converters must be run within the directory.  This may be fixed in a future
+release but currently this is how it works.
 
