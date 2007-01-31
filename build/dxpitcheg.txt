@@ -1,4 +1,4 @@
-dxlev	g2lev	dxtime	g2time
+dxlev	g2lev	dxtime
 0	-64	0
 1	-58	6
 2		12
