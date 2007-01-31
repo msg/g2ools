@@ -531,7 +531,11 @@ def main(argv):
 
   failedpatches = []
   while len(args):
-    patchlist = glob(args.pop(0))
+    arg = args.pop(0)
+    patchlist = glob(arg)
+    if len(patchlist) == 0:
+      failedpatches.append(arg)
+      continue
     for fname in patchlist:
       if os.path.isdir(fname) and config.recursive:
         for root,dirs,files in os.walk(fname):
