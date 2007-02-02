@@ -226,6 +226,7 @@ class Area:
     cables = self.cables[:]
     while len(cables):
       cable = cables.pop(0)
+      cable.source.net.color = cable.color
       self.disconnect(cable)
 
     def findclosest(g2area,fromlist,tolist):
@@ -247,12 +248,12 @@ class Area:
       else:
         conn = inputs.pop(0)
         fromconn, toconn = findclosest(self,[conn],inputs)
-      self.connect(fromconn,toconn,fromconn.rate)
+      self.connect(fromconn,toconn,net.color)
       inputs.remove(toconn)
       connected = [fromconn,toconn]
       while len(inputs):
         fromconn, toconn = findclosest(self,connected,inputs)
-        self.connect(fromconn,toconn,fromconn.rate)
+        self.connect(fromconn,toconn,net.color)
         inputs.remove(toconn)
         connected.append(toconn)
 

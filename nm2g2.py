@@ -441,8 +441,8 @@ def convert(pch,config):
     doreposition(converters,config)           # repostion all modules
     doprecables(converters,config)            # precable processing
     docables(nmarea,g2area,converters,config) # connect cables
-    docableshorten(g2area,config)             # shorten up cables
     douprate(g2area,config)                   # uprate necessary modules
+    docableshorten(g2area,config)             # shorten up cables
     cablerecolorize(g2area,config)            # recolor cables based on output
 
   domorphsknobsmidiccs(nmpatch,g2patch,config)
