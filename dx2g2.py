@@ -115,7 +115,7 @@ def convert(fname,config):
 
   def g2time(dxrate,l1,l2):
     dl = abs(dxtable.pitcheg[l2]-dxtable.pitcheg[l1])/10.
-    dxtime = math.exp((dxrate - 70.337897) / -25.580953) * dl * 1500.0
+    dxtime = math.exp((dxrate - 70.337897) / -25.580953) * dl * 100.0
     mintime = abs(units.g2adsrtime[0]-dxtime)
     minval = 0
     for i in range(1,len(units.g2adsrtime)):
@@ -131,7 +131,7 @@ def convert(fname,config):
     dxconv = DX7Converter()
     for i in range(len(group)):
       dxpatch = group[i]
-      nm = '%2d. %s' % ((dxpatch.number&7)+1, dxpatch.Name)
+      nm = '%2d. %s' % (i+1, dxpatch.Name)
       print nm
       dxconv.pch2.patch.voice.addmodule('Name',name=nm,
           horiz=0,vert=i,color=dxpatch.Color)
