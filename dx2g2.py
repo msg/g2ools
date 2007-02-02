@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-import os,string,sys
+import os,string,sys,math
 from array import array
 sys.path.append('.')
 from nord import units
-from nord.g2.file import Pch2File, MorphMap
+from nord.g2.file import Pch2File, MorphMap, crc
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 from nord.convert.version import version as g2oolsversion
 import dxtable
@@ -50,6 +50,7 @@ class DX7Patch:
 
 def parsedx7(data):
   x = array('B',data)
+  acrc = crc(data[:-10])
   patch = DX7Patch()
   for i in range(6):
     op = patch.operators[5-i]
@@ -71,6 +72,11 @@ def parsedx7(data):
   lfo.Rate,lfo.Delay,lfo.PitchMod,lfo.AmMod = x[:4]; x = x[4:]
   c = x.pop(0); lfo.PitchModSens,lfo.Waveform,lfo.Sync = c>>4,(c>>1)&0x7,c&1
   patch.Transpose = x.pop(0)
+  if acrc in dxtable.factorycrcs:
+    # show factory names in different color
+    patch.Color = g2modulecolors.red3
+  else:
+    patch.Color = g2modulecolors.grey
   patch.Name = x.tostring()
   return patch
   
@@ -106,20 +112,29 @@ def convert(fname,config):
   ]
   def scale100to127(dxval):
     return int(0.5+127*dxval/99.)
+
   def g2time(dxrate,l1,l2):
-    dl = abs(l2-l1)/10.
-    dxtime = dxtable.pitcheg[dxrate][1]*dl
-    for i in range(len(units.g2adsrtime)):
-      if units.g2adsrtime[i] >= dxtime:
-        return i
-    return 127
+    dl = abs(dxtable.pitcheg[l2]-dxtable.pitcheg[l1])/10.
+    dxtime = math.exp((dxrate - 70.337897) / -25.580953) * dl * 1500.0
+    mintime = abs(units.g2adsrtime[0]-dxtime)
+    minval = 0
+    for i in range(1,len(units.g2adsrtime)):
+      if abs(units.g2adsrtime[i]-dxtime) < mintime:
+        mintime = abs(units.g2adsrtime[0]-dxtime)
+        minval = i
+    return minval
+
+  def g2pitch(dxlevel):
+    return int(dxlevel*1.28)
+
   for group in groups:
     dxconv = DX7Converter()
     for i in range(len(group)):
       dxpatch = group[i]
-      nm = '%2d. %s' % (dxpatch.number, dxpatch.Name)
+      nm = '%2d. %s' % ((dxpatch.number&7)+1, dxpatch.Name)
       print nm
-      dxconv.pch2.patch.voice.addmodule('Name',name=nm,horiz=0,vert=i)
+      dxconv.pch2.patch.voice.addmodule('Name',name=nm,
+          horiz=0,vert=i,color=dxpatch.Color)
       # set DXRouter stuff
       dxconv.dxrouter.params.Algorithm.variations[i] = dxpatch.Algorithm
       dxconv.dxrouter.params.Feedback.variations[i] = dxpatch.Feedback
@@ -182,13 +197,13 @@ def convert(fname,config):
       pitchegp = dxconv.pitcheg.params
       pitcheg = dxpatch.pitcheg
       pitchegp.Time1.variations[i] = g2time(pitcheg.R1,pitcheg.L4,pitcheg.L1)
-      pitchegp.Level1.variations[i] = dxtable.pitcheg[pitcheg.L1][0]
+      pitchegp.Level1.variations[i] = g2pitch(pitcheg.L1)
       pitchegp.Time2.variations[i] = g2time(pitcheg.R2,pitcheg.L1,pitcheg.L2)
-      pitchegp.Level2.variations[i] = dxtable.pitcheg[pitcheg.L2][0]
+      pitchegp.Level2.variations[i] = g2pitch(pitcheg.L2)
       pitchegp.Time3.variations[i] = g2time(pitcheg.R3,pitcheg.L2,pitcheg.L3)
-      pitchegp.Level3.variations[i] = dxtable.pitcheg[pitcheg.L3][0]
+      pitchegp.Level3.variations[i] = g2pitch(pitcheg.L3)
       pitchegp.Time4.variations[i] = g2time(pitcheg.R4,pitcheg.L3,pitcheg.L4)
-      pitchegp.Level4.variations[i] = dxtable.pitcheg[pitcheg.L4][0]
+      pitchegp.Level4.variations[i] = g2pitch(pitcheg.L4)
       # set Transpose
       dxconv.transpose.params.Lev.variations[i] = dxpatch.Transpose + 40
       # sync

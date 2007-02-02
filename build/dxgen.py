@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import string
+import dxian
 
 def getnumbers(fname):
   lines = map(string.strip, open(fname).readlines())
@@ -46,15 +47,15 @@ print len(dxlfo),len(dxlforate),len(dxlfomod),len(dxlfoattack)
 dxlfo = [ [dxlfo[i+1][1],dxlforate[i][1],dxlfomod[i][1],dxlfoattack[i][1]]
     for i in range(len(dxlfo)-1)]
 
-dxpitchegrate = getnumbers('dxpitchegrate.txt')[1:]
-dxpitcheg = getnumbers('dxpitcheg.txt')
-dxpitcheglev = interpolate(
-   [ [l[0],l[1]] for l in filter(lambda a: len(a)>1 and a[1], dxpitcheg[1:])])
-dxpitchegtime = interpolate(
-   [ [l[0],l[2]] for l in filter(lambda a: len(a)>2 and a[2]!='', dxpitcheg[1:])])
-print len(dxpitcheglev),len(dxpitchegtime)
-dxpitcheg = [
-  [dxpitcheglev[i][1]+64,dxpitchegrate[i][0]] for i in range(len(dxpitcheglev))]
+#dxpitchegrate = getnumbers('dxpitchegrate.txt')[1:]
+#dxpitcheg = getnumbers('dxpitcheg.txt')
+#dxpitcheglev = interpolate(
+#   [ [l[0],l[1]] for l in filter(lambda a: len(a)>1 and a[1], dxpitcheg[1:])])
+#dxpitchegtime = interpolate(
+#   [ [l[0],l[2]] for l in filter(lambda a: len(a)>2 and a[2]!='', dxpitcheg[1:])])
+#print len(dxpitcheglev),len(dxpitchegtime)
+#dxpitcheg = [
+#  [dxpitcheglev[i][1]+64,dxpitchegrate[i][0]] for i in range(len(dxpitcheglev))]
 dxpmodsens = getnumbers('dxpmodsens.txt')[1:]
 
 f=open('../dxtable.py','w')
@@ -101,12 +102,12 @@ for i in range(len(dxlfo)):
 f.write('''
 ]
 
-pitcheg = [ # [lev,rate10]
+pitcheg = [ # offset
  ''')
-for i in range(len(dxpitcheg)):
-  if i and i % 4 == 0:
+for i in range(len(dxian.DXpitchLevel)):
+  if i and i % 5 == 0:
     f.write('\n ')
-  f.write(' [%3d,%4d],' % tuple(dxpitcheg[i]))
+  f.write(' %10.6f,' % dxian.DXpitchLevel[i])
 f.write('''
 ]
 
@@ -116,5 +117,14 @@ for i in range(len(dxpmodsens)):
   if i and i % 2 == 0:
     f.write('\n ')
   f.write(' [%3d,%3d,%3d,%3d,%3d],' % tuple(dxpmodsens[i]))
+f.write('''
+]
+
+factorycrcs = [ # crc
+ ''')
+for i in range(len(dxian.crclist)):
+  if i and i % 8 == 0:
+    f.write('\n ')
+  f.write(' 0x%04x,' % dxian.crclist[i])
 
 f.write('\n]\n')
