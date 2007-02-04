@@ -102,12 +102,21 @@ for i in range(len(dxlfo)):
 f.write('''
 ]
 
-pitcheg = [ # offset
+pitcheglevs = [ # levels
  ''')
 for i in range(len(dxian.DXpitchLevel)):
   if i and i % 5 == 0:
     f.write('\n ')
   f.write(' %10.6f,' % dxian.DXpitchLevel[i])
+f.write('''
+]
+
+pitchegrates = [ # times
+ ''')
+for i in range(len(dxian.rates10)):
+  if i and i % 5 == 0:
+    f.write('\n ')
+  f.write(' %10.6f,' % dxian.rates10[i])
 f.write('''
 ]
 

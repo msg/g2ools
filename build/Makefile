@@ -22,5 +22,5 @@ all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/units.py \
 	./gentab.py
 
 ../dxtable.py: dxgen.py dxlfo.txt dxamodsens.txt dxlfodelay.txt dxpitcheg.txt \
-		dxpmodsens.txt
+		dxpmodsens.txt dxian.py
 	./dxgen.py

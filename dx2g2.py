@@ -114,13 +114,13 @@ def convert(fname,config):
     return int(0.5+127*dxval/99.)
 
   def g2time(dxrate,l1,l2):
-    dl = abs(dxtable.pitcheg[l2]-dxtable.pitcheg[l1])/10.
-    dxtime = math.exp((dxrate - 70.337897) / -25.580953) * dl * 100.0
+    dl = abs(dxtable.pitcheglevs[l2]-dxtable.pitcheglevs[l1])/3.75
+    dxtime = dxtable.pitchegrates[99-dxrate] * dl
     mintime = abs(units.g2adsrtime[0]-dxtime)
     minval = 0
     for i in range(1,len(units.g2adsrtime)):
       if abs(units.g2adsrtime[i]-dxtime) < mintime:
-        mintime = abs(units.g2adsrtime[0]-dxtime)
+        mintime = abs(units.g2adsrtime[i]-dxtime)
         minval = i
     return minval
 
