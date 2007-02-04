@@ -148,8 +148,8 @@ def convert(fname,config):
           #print ' ',paramnm, dxparam
           g2param.variations[i] = dxparam
         g2op.params.AMod.variations[i] = dxtable.amodsens[dxop.AMod][1]
-        if dxop.RatioFixed == 0:
-          g2op.params.Kbt.variations[i] = 1
+        g2op.params.Kbt.variations[i] = 1 - dxop.RatioFixed
+
       # set LFO parameters
       lfop = dxconv.lfo.params
       # 0:TR, 1:SD, 2:SU, 3:SQ, 4:SI, 5:SH
