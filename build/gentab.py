@@ -143,9 +143,9 @@ f.write('''
 ]
 
 lphpfreq = [
- ''')
+''')
 for i in range(len(lphpfreq)):
-  if i and i % 16 == 0:
+  if i and i % 4 == 0:
     f.write('\n')
   f.write(' [%3d,%3d],' % (lphpfreq[i][1],lphpfreq[i][3]))
 
