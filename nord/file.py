@@ -207,6 +207,7 @@ class Area:
     #print 'after remove',
     #printnet(minconn.net)
     #print
+    return minconn
 
   # quick cable length calculation
   def cablelength(self, cable):
