@@ -89,15 +89,17 @@ def docolorizemultis(converters, config):
         mod.color = modcolors[curr]
       curr = (curr+1)%len(modcolors)
 
+
 def doreposition(converters, config):
   logging.info('reposition:')
-  # reposition modules
-  locsorted = converters[:]
-  def loccmp(a, b):
+
+  # location compare by horiz, then vert
+  def locationcmp(a, b):
     if a.horiz == b.horiz:
       return cmp(a.nmmodule.vert, b.nmmodule.vert)
     return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
-  locsorted.sort(loccmp)
+  locsorted = converters[:]
+  locsorted.sort(locationcmp)
 
   if len(locsorted):
     locsorted[0].reposition(None)
@@ -195,6 +197,75 @@ def douprate(g2area,config):
     if not modified:
       done = 1
 
+def dologiccombine(g2area,config):
+  # find all Gate modules
+  # sort and create a 2d array gates[col][index]
+  # group gates in pairs, ignore last one if odd numbered
+  # for each pair:
+  #   move upper gate connections to left
+  #   move lower gate connections to right
+  # find all Invert modules
+  # sort and create a 2d array inverters[col][index]
+  # group inverters in pairs, ignore last one if odd numbered
+  # for each pair:
+  #   move upper inverter connections to left
+  #   move lower inverter connections to right
+  # 'Gate','Invert'
+
+  if not config.logiccombine:
+    return
+
+  def locationcmp(a, b):
+    if a.horiz == b.horiz:
+      return cmp(a.vert,b.vert)
+    return cmp(a.horiz,b.horiz)
+  
+  def makepairs(shortnm):
+    mods = [ m for m in g2area.modules if m.type.shortnm == shortnm ]
+    modcols = {}
+    for mod in mods:
+      if not modcols.has_key(mod.horiz):
+        modcols[mod.horiz] = []
+      modcols[mod.horiz].append(mod)
+    colpairs = []
+    for col in modcols.keys():
+      mods = modcols[col]
+      mods.sort(locationcmp)
+      if len(mods) % 2:
+        oddmod = mods[-1]
+      else:
+        oddmod = None
+      colpairs.append([zip(mods[::2],mods[1::2]),oddmod])
+    return colpairs
+
+  def moveconnector(g2area,fromconn,toconn):
+    minconn = g2area.removeconnector(fromconn)
+    if minconn.direction:
+      fromconn = minconn
+    else:
+      fromconn,toconn = toconn,minconn
+    g2area.connect(fromconn,toconn,g2cablecolors.yellow)
+
+  logging.info('logic combine:')
+
+  for gatecol,oddmod in makepairs('Gate'):
+    for odd,even in gatecol:
+      moveconnector(g2area,odd.inputs.In2_1,odd.inputs.In1_1)
+      moveconnector(g2area,odd.inputs.In2_2,odd.inputs.In1_2)
+      moveconnector(g2area,odd.outputs.Out2,odd.outputs.Out1)
+      moveconnector(g2area,even.inputs.In2_1,odd.inputs.In2_1)
+      moveconnector(g2area,even.inputs.In2_2,odd.inputs.In2_2)
+      moveconnector(g2area,even.outputs.Out2,odd.outputs.Out2)
+      g2area.modules.remove(even)
+
+  for invertercol,oddmod in makepairs('Invert'):
+    for odd,even in invertercol:
+      moveconnector(g2area,odd.inputs.In2,odd.inputs.In1)
+      moveconnector(g2area,odd.outputs.Out2,odd.outputs.Out1)
+      moveconnector(g2area,even.inputs.In2,odd.inputs.In2)
+      moveconnector(g2area,even.outputs.Out2,odd.outputs.Out2)
+      g2area.modules.remove(even)
+
 def cablerecolorize(g2area,config):
   logging.info('cable recolorize:')
   for cable in g2area.cables:
@@ -206,15 +277,6 @@ def docableshorten(g2area,config):
     return
   logging.info('cable shorten:')
   g2area.shortencables()
-
-def dofinalize(areaconverters,config):
-  logging.info('Finalize:')
-  for areanm in 'voice','fx':
-    logging.info('--- area %s: ---' % areanm)
-    for conv in areaconverters[areanm]:
-      logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
-      conv.finalize()
 
 def domorphsknobsmidiccs(nmpatch,g2patch,config):
   # handle Morphs
@@ -362,6 +424,15 @@ def docurrentnotes(nmpatch,g2patch,config):
   for note in nmpatch.notes:
     g2patch.notes.append(note)
 
+def dofinalize(areaconverters,config):
+  logging.info('Finalize:')
+  for areanm in 'voice','fx':
+    logging.info('--- area %s: ---' % areanm)
+    for conv in areaconverters[areanm]:
+      logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
+      conv.finalize()
+
 def dotitleblock(pch,pch2,config):
   lines = ['Converted by',
            'gtools-%s' % (g2oolsversion),
@@ -442,6 +513,7 @@ def convert(pch,config):
     doprecables(converters,config)            # precable processing
     docables(nmarea,g2area,converters,config) # connect cables
     douprate(g2area,config)                   # uprate necessary modules
+    dologiccombine(g2area,config)             # combine logic modules
     docableshorten(g2area,config)             # shorten up cables
     cablerecolorize(g2area,config)            # recolor cables based on output
 
@@ -460,8 +532,14 @@ def convert(pch,config):
   
 
 class Config:
-  def __init__(self, **kw):
-    self.__dict__ = kw
+  def __init__(self):
+    self.debug=False
+    self.logiccombine=False
+    self.recursive=False,
+    self.keepold=False
+    self.allfiles=False
+    self.shorten=False
+    self.verbosity=logging.INFO
 
 def usage(prog):
   print 'usage: nm2g2 <flags> <.pch files>'
@@ -470,7 +548,7 @@ def usage(prog):
   print '\t-d --debug\tDo not catch exceptions to debug.'
   print '\t-h --help\tPrint this message'
   print '\t-k --keepold\tDo not replace existing .pch2 files'
-  print '\t-l --low\tLower resource usage'
+  print '\t-l --logiccombine\tCombine logic modules'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
   print '\t-s --shorten\tShorten cable connections'
   print '\t-v --verbosity\tSet converter verbosity level 0-4'
@@ -484,8 +562,7 @@ def main(argv):
     usage(prog)
     sys.exit(2)
 
-  config = Config(debug=False,lowresource=False,recursive=False,
-      keepold=False,allfiles=False,shorten=False,verbosity=logging.INFO)
+  config = Config()
   for o, a in opts:
     if o in ('-h','--help'):
       usage(prog)
@@ -493,8 +570,8 @@ def main(argv):
       config.allfiles = True
     if o in ('-d','--debug'):
       config.debug = True
-    if o in ('-l','--low'):
-      config.lowresource = True
+    if o in ('-l','--logiccombine'):
+      config.logiccombine = True
     if o in ('-r','--recursive'):
       config.recursive = True
     if o in ('-k','--keepold'):
@@ -507,7 +584,9 @@ def main(argv):
           logging.DEBUG,logging.INFO,logging.WARNING,
           logging.ERROR,logging.CRITICAL ][int(a)]
 
-  logging.basicConfig(level=config.verbosity,format='%(message)s')
+  logging.basicConfig(format='%(message)s')
+  log = logging.getLogger('')
+  log.setLevel(config.verbosity)
   #console = logging.StreamHandler()
   #console.setLevel(logging.DEBUG)
   #logging.getLogger('').addHandler(console)
