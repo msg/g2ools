@@ -250,6 +250,8 @@ def dologiccombine(g2area,config):
 
   for gatecol,oddmod in makepairs('Gate'):
     for odd,even in gatecol:
+      odd.modes[0].value = odd.modes[1].value
+      odd.modes[1].value = even.modes[1].value
       moveconnector(g2area,odd.inputs.In2_1,odd.inputs.In1_1)
       moveconnector(g2area,odd.inputs.In2_2,odd.inputs.In1_2)
       moveconnector(g2area,odd.outputs.Out2,odd.outputs.Out1)
@@ -538,7 +540,7 @@ class Config:
     self.recursive=False,
     self.keepold=False
     self.allfiles=False
-    self.shorten=False
+    self.shorten=True
     self.verbosity=logging.INFO
 
 def usage(prog):
@@ -550,14 +552,15 @@ def usage(prog):
   print '\t-k --keepold\tDo not replace existing .pch2 files'
   print '\t-l --logiccombine\tCombine logic modules'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
-  print '\t-s --shorten\tShorten cable connections'
+  print '\t-s --shorten\tTurn off shorten cable connections'
   print '\t-v --verbosity\tSet converter verbosity level 0-4'
   
 def main(argv):
   prog = argv.pop(0)
   try:
     opts, args = getopt.getopt(argv,'adhlkrsv:',
-        ['all','debug','help','keepold','low','recursive','shorten','verbosity='])
+        ['all','debug','help','keepold','logiccombine','recursive',
+         'noshorten','verbosity='])
   except getopt.GetoptError:
     usage(prog)
     sys.exit(2)
@@ -576,8 +579,8 @@ def main(argv):
       config.recursive = True
     if o in ('-k','--keepold'):
       config.keepold = True
-    if o in ('-s','--shorten'):
-      config.shorten = True
+    if o in ('-s','--noshorten'):
+      config.shorten = False
     if o in ('-v','--verbosity'):
       print o,a
       config.verbosity = [
