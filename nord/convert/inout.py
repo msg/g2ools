@@ -78,44 +78,72 @@ class ConvPolyAreaIn(Convert):
 class Conv1Output(Convert):
   maing2module = 'Mix1-1A'
   parammap = [None,None,None] # Level,Destination,Mute
-  inputmap = ['In']
+  inputmap = [None]
+
+  def __init__(self, nmarea, g2area, nmmodule, config):
+    lev = nmmodule.params.Level
+    if getv(lev) == 127 and not lev.knob and not lev.morph and not lev.ctrl:
+      self.maing2module = '2-Out'
+    else:
+      self.inputmap = ['In']
+    Convert.__init__(self, nmarea, g2area, nmmodule, config)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.On,1)
-    setv(g2mp.ExpLin,2)
+    if self.maing2module == 'Mix1-1A':
+      setv(g2mp.On,1)
+      setv(g2mp.ExpLin,2)
+      setv(g2mp.Lev,modtable[getv(nmmp.Level)][0])
+      out2 = self.addmodule('2-Out')
+      lev = g2m.params.Lev
+    else:
+      out2 = g2m
+      lev = None
 
-    setv(g2mp.Lev,modtable[getv(nmmp.Level)][0])
-    out2 = self.addmodule('2-Out')
     dest = getv(nmmp.Destination)
     setv(out2.params.Destination,dest/2)
     setv(out2.params.Active,1-getv(nmmp.Mute))
 
     inp = [out2.inputs.InL,out2.inputs.InR][dest%2]
-    self.connect(g2m.outputs.Out,inp)
+    if self.maing2module == 'Mix1-1A':
+      self.connect(g2m.outputs.Out,inp)
+    else:
+      self.input = inp
 
-    self.params = [g2m.params.Lev,out2.params.Destination,out2.params.Active]
+    self.params = [lev,out2.params.Destination,out2.params.Active]
 
 class Conv2Output(Convert):
   maing2module = 'Mix1-1S'
   parammap = [None,None,None] # Level,Destination,Mute
   inputmap = ['InL','InR']
 
+  def __init__(self, nmarea, g2area, nmmodule, config):
+    lev = nmmodule.params.Level
+    if getv(lev) == 127 and not lev.knob and not lev.morph and not lev.ctrl:
+      self.maing2module = '2-Out'
+    Convert.__init__(self, nmarea, g2area, nmmodule, config)
+
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    setv(g2mp.Lev,modtable[getv(nmmp.Level)][0])
-    setv(g2mp.On,1)
-    out2 = self.addmodule('2-Out')
-    self.connect(g2m.outputs.OutL,out2.inputs.InL)
-    self.connect(g2m.outputs.OutR,out2.inputs.InR)
+    if self.maing2module == 'Mix1-1S':
+      setv(g2mp.Lev,modtable[getv(nmmp.Level)][0])
+      setv(g2mp.On,1)
+      out2 = self.addmodule('2-Out')
+      self.connect(g2m.outputs.OutL,out2.inputs.InL)
+      self.connect(g2m.outputs.OutR,out2.inputs.InR)
+      lev = g2mp.Lev
+    else:
+      out2 = g2m
+      lev = None
+
     setv(out2.params.Destination,getv(nmmp.Destination))
     setv(out2.params.Active,1-getv(nmmp.Mute))
 
-    self.params = [g2mp.Lev,out2.params.Destination,out2.params.Active]
+    self.params = [lev,out2.params.Destination,out2.params.Active]
 
 class Conv4Output(Convert):
   maing2module = '4-Out'
