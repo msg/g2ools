@@ -106,10 +106,13 @@ class ConvClkDivFix(Convert):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    clks = [[5,'16',0],[7,'T8',1],[11,'8',2]]
+    oclks = [[5,'16',0],[7,'T8',1],[11,'8',2]]
+    clks = oclks[:]
     clk = clks.pop(0)
     while len(getattr(nmm.outputs,clk[1]).cables) == 0:
       clk = clk.pop(0)
+    if len(clks) == 0:
+      clk = oclks[0]
 
     g2m.modes.DivMode.value = 1
     setv(g2mp.Divider,clk[0])
