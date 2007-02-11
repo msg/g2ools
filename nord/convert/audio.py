@@ -41,24 +41,40 @@ class ConvOverdrive(Convert):
     setv(g2mp.Shape,1) # Sym
     setv(g2mp.ClipLevMod,91)
 
-    modin = self.addmodule('Mix1-1A',name='Mod In')
-    setv(modin.params.On,1)
-    modin.params.On.labels = ['Mod']
-    setv(modin.params.ExpLin,1) # Lin
-    setv(modin.params.Lev,getv(nmmp.OverdriveMod))
-    self.params[0] = modin.params.Lev
+    if len(nmm.inputs.OverdriveMod.cables) != 0:
+      modin = self.addmodule('Mix1-1A',name='Mod In')
+      setv(modin.params.On,1)
+      modin.params.On.labels = ['Mod']
+      setv(modin.params.ExpLin,1) # Lin
+      setv(modin.params.Lev,getv(nmmp.OverdriveMod))
+      self.params[0] = modin.params.Lev
+      modout = modin.outputs.Out
+      modlev = modin.params.Lev
+      self.inputs[1] = modin.inputs.In
+    else:
+      modout = None
+      modlev = None
 
-    overdrive = self.addmodule('ConstSwT',name='Overdrive')
-    setv(overdrive.params.On,1)
-    overdrive.params.On.labels = ['Drive']
-    setv(overdrive.params.BipUni,1) # Uni
-    setv(overdrive.params.Lev,getv(nmmp.Overdrive))
-    self.connect(overdrive.outputs.Out,modin.inputs.Chain)
-    self.params[1] = overdrive.params.Lev
+    if not modout or getv(nmmp.Overdrive) != 0 or \
+       nmmp.Overdrive.knob or nmmp.Overdrive.morph or nmmp.Overdrive.ctrl:
+      overdrive = self.addmodule('ConstSwT',name='Overdrive')
+      setv(overdrive.params.On,1)
+      overdrive.params.On.labels = ['Drive']
+      setv(overdrive.params.BipUni,1) # Uni
+      setv(overdrive.params.Lev,getv(nmmp.Overdrive))
+      if modout:
+        self.connect(overdrive.outputs.Out,modin.inputs.Chain)
+      else:
+        modout = overdrive.outputs.Out
+      overdrivelev = overdrive.params.Lev
+      self.params[1] = overdrive.params.Lev
+    else:
+      overdrivelev = None
     
+    print ' modout=',modout
     shpstatic = self.addmodule('ShpStatic',name='')
     setv(shpstatic.params.Mode,0) # Inv x3
-    self.connect(modin.outputs.Out,shpstatic.inputs.In)
+    self.connect(modout,shpstatic.inputs.In)
     self.connect(shpstatic.outputs.Out,g2m.inputs.Mod)
 
     levmult = self.addmodule('LevMult',name='')
@@ -107,8 +123,7 @@ class ConvOverdrive(Convert):
     self.connect(xfade.inputs.In1,out.inputs.In1)
     self.connect(mix21b2.outputs.Out,out.inputs.In2)
 
-    self.params = [ modin.params.Lev, overdrive.params.Lev ]
-    self.inputs[1] = modin.inputs.In
+    self.params = [ modlev, overdrivelev ]
     self.outputs[0] = out.outputs.Out
 
 class ConvWaveWrap(Convert):
