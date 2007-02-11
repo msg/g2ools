@@ -157,22 +157,38 @@ class Conv4_1Switch(Convert):
   inputmap = ['In1','In2','In3','In4']
   outputmap = ['Out']
 
+  def __init__(self, nmarea, g2area, nmmodule, config):
+    # if no morph, knob or midi cc on Sel, use Mix4-1C
+    if not nmmodule.params.Sel.knob or \
+       not nmmodule.params.Sel.morph or \
+       not nmmodule.params.Sel.midicc:
+      self.maing2module = 'Mix4-1C'
+      self.parammap[0] = None
+    Convert.__init__(self, nmarea, g2area, nmmodule, config)
+
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    # add a LevAmp and reorient inputs
-    for i in range(1,5):
-      level = getv(getattr(nmmp,'Level%d' % i))
-      if level == 0 or level == 127:
-        continue
-      if len(nmm.inputs[i-1].cables):
-        mix11a = self.addmodule('Mix1-1A')
-        self.connect(mix11a.outputs.Out,getattr(g2m.inputs,'In%d' % i))
-        setv(mix11a.params.On,1)
-        setv(mix11a.params.Lev,modtable[level][0])
-        self.params[i] = mix11a.params.Lev
-        self.inputs[i-1] = mix11a.inputs.In
+    if self.maing2module == 'Sw4-1':
+      # add a LevAmp and reorient inputs
+      for i in range(1,5):
+        level = getv(getattr(nmmp,'Level%d' % i))
+        if level == 0 or level == 127:
+          continue
+        if len(nmm.inputs[i-1].cables):
+          mix11a = self.addmodule('Mix1-1A')
+          self.connect(mix11a.outputs.Out,getattr(g2m.inputs,'In%d' % i))
+          setv(mix11a.params.On,1)
+          setv(mix11a.params.Lev,modtable[level][0])
+          self.params[i] = mix11a.params.Lev
+          self.inputs[i-1] = mix11a.inputs.In
+    else:
+      sel = getv(nmmp.Sel)
+      for i in range(1,5):
+        level = getv(getattr(nmmp,'Level%d' % i))
+        setv(getattr(g2mp,'Lev%d' % i),modtable[level][0])
+        setv(getattr(g2mp,'On%d' % i),sel == i-1)
 
 class Conv1_4Switch(Convert):
   maing2module = 'Sw1-4'

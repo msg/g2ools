@@ -594,17 +594,19 @@ def convert(pch,config):
 
 class Config:
   def __init__(self):
+    self.adsrforad=False
+    self.allfiles=False
     self.debug=False
+    self.keepold=False
     self.logiccombine=False
     self.recursive=False,
-    self.keepold=False
-    self.allfiles=False
     self.shorten=True
     self.verbosity=logging.INFO
 
 def usage(prog):
   print 'usage: nm2g2 <flags> <.pch files>'
   print '\t<flags>'
+  print '\t-A --adsrforad\tUse ADSR as replacement for AD'
   print '\t-a --allfiles\tProcess all files (not just extension .pch)'
   print '\t-d --debug\tDo not catch exceptions to debug.'
   print '\t-h --help\tPrint this message'
@@ -617,8 +619,8 @@ def usage(prog):
 def main(argv):
   prog = argv.pop(0)
   try:
-    opts, args = getopt.getopt(argv,'adhlkrsv:',
-        ['all','debug','help','keepold','logiccombine','recursive',
+    opts, args = getopt.getopt(argv,'aAdhlkrsv:',
+        ['all','adsrforad','debug','help','keepold','logiccombine','recursive',
          'noshorten','verbosity='])
   except getopt.GetoptError:
     usage(prog)
@@ -630,6 +632,8 @@ def main(argv):
       usage(prog)
     if o in ('-a','--all-files'):
       config.allfiles = True
+    if o in ('-A','--adsrforad'):
+      config.adsrforad = True
     if o in ('-d','--debug'):
       config.debug = True
     if o in ('-l','--logiccombine'):

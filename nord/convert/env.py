@@ -59,12 +59,22 @@ class ConvAD_Env(Convert):
   inputmap = ['Gate','In','AM']
   outputmap = ['Env','Out']
 
+  def __init__(self, nmarea, g2area, nmmodule, config):
+    if config.adsrforad:
+      self.maing2module = 'EnvADSR'
+      self.parammap[-1][0] = 'NR'
+    Convert.__init__(self, nmarea, g2area, nmmodule, config)
+
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special parameters
     updatevals(g2mp,['Attack','Release'],nm1adsrtime,g2adsrtime)
+    if self.config.adsrforad:
+      print g2m.type.shortnm
+      setv(g2mp.Sustain,0)
+      setv(g2mp.Decay,getv(g2mp.Release))
 
 class ConvMod_Env(Convert):
   maing2module = 'ModADSR'
