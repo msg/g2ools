@@ -220,10 +220,52 @@ def dologiccombine(g2area,config):
       return cmp(a.vert,b.vert)
     return cmp(a.horiz,b.horiz)
   
-  def makepairs(shortnm):
+  def gateused(gate,num):
+    if num == 1:
+      return len(gate.inputs.In1_1.cables) != 0 or \
+             len(gate.inputs.In1_2.cables) != 0 or \
+             len(gate.outputs.Out1.cables) != 0
+    elif num == 2:
+      return len(gate.inputs.In2_1.cables) != 0 or \
+             len(gate.inputs.In2_2.cables) != 0 or \
+             len(gate.outputs.Out2.cables) != 0
+    return False
+
+  def freegate(gate):
+    if not gateused(gate,1):   return 1
+    elif not gateused(gate,2): return 2
+    else:                      return 0
+
+  def usedgate(gate):
+    if gateused(gate,1):   return 1
+    elif gateused(gate,2): return 2
+    else:                  return 0
+
+  def invertused(invert,num):
+    if num == 1:
+      return len(invert.inputs.In1.cables) != 0 or \
+             len(invert.outputs.Out1.cables) != 0
+    elif num == 2:
+      return len(invert.inputs.In2.cables) != 0 or \
+             len(invert.outputs.Out2.cables) != 0
+    return 0
+
+  def freeinvert(invert):
+    if not invertused(invert,1):   return 1
+    elif not invertused(invert,2): return 2
+    else:                          return 0
+
+  def usedinvert(invert):
+    if invertused(invert,1):   return 1
+    elif invertused(invert,2): return 2
+    else:                      return 0
+
+  def makepairs(shortnm,freelogic):
     mods = [ m for m in g2area.modules if m.type.shortnm == shortnm ]
     modcols = {}
     for mod in mods:
+      if freelogic(mod) == 0:
+        continue
       if not modcols.has_key(mod.horiz):
         modcols[mod.horiz] = []
       modcols[mod.horiz].append(mod)
@@ -238,7 +280,9 @@ def dologiccombine(g2area,config):
       colpairs.append([zip(mods[::2],mods[1::2]),oddmod])
     return colpairs
 
-  def moveconnector(g2area,fromconn,toconn):
+  def movecable(g2area,fromconn,toconn):
+    if len(fromconn.cables) == 0:
+      return
     minconn = g2area.removeconnector(fromconn)
     if minconn.direction:
       fromconn = minconn
@@ -248,24 +292,39 @@ def dologiccombine(g2area,config):
 
   logging.info('logic combine:')
 
-  for gatecol,oddmod in makepairs('Gate'):
+  for gatecol,oddmod in makepairs('Gate',freegate):
     for odd,even in gatecol:
+      logging.debug('Gate combine: %s(%d,%d) and %s(%d,%d)' %
+        (odd.name,odd.horiz,odd.vert,even.name,even.horiz,even.vert))
       odd.modes[0].value = odd.modes[1].value
       odd.modes[1].value = even.modes[1].value
-      moveconnector(g2area,odd.inputs.In2_1,odd.inputs.In1_1)
-      moveconnector(g2area,odd.inputs.In2_2,odd.inputs.In1_2)
-      moveconnector(g2area,odd.outputs.Out2,odd.outputs.Out1)
-      moveconnector(g2area,even.inputs.In2_1,odd.inputs.In2_1)
-      moveconnector(g2area,even.inputs.In2_2,odd.inputs.In2_2)
-      moveconnector(g2area,even.outputs.Out2,odd.outputs.Out2)
+      if freegate(odd) == 1:
+        movecable(g2area,odd.inputs.In2_1,odd.inputs.In1_1)
+        movecable(g2area,odd.inputs.In2_2,odd.inputs.In1_2)
+        movecable(g2area,odd.outputs.Out2,odd.outputs.Out1)
+      if usedgate(even) == 1:
+        movecable(g2area,even.inputs.In1_1,odd.inputs.In1_1)
+        movecable(g2area,even.inputs.In1_2,odd.inputs.In1_2)
+        movecable(g2area,even.outputs.Out1,odd.outputs.Out1)
+      elif usedgate(even) == 2:
+        movecable(g2area,even.inputs.In2_1,odd.inputs.In2_1)
+        movecable(g2area,even.inputs.In2_2,odd.inputs.In2_2)
+        movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
       g2area.modules.remove(even)
 
-  for invertercol,oddmod in makepairs('Invert'):
+  for invertercol,oddmod in makepairs('Invert',freeinvert):
     for odd,even in invertercol:
-      moveconnector(g2area,odd.inputs.In2,odd.inputs.In1)
-      moveconnector(g2area,odd.outputs.Out2,odd.outputs.Out1)
-      moveconnector(g2area,even.inputs.In2,odd.inputs.In2)
-      moveconnector(g2area,even.outputs.Out2,odd.outputs.Out2)
+      logging.debug('Invert combine: %s(%d,%d) and %s(%d,%d)' %
+        (odd.name,odd.horiz,odd.vert,even.name,even.horiz,even.vert))
+      if freeinvert(odd) == 1:
+        movecable(g2area,odd.inputs.In2,odd.inputs.In1)
+        movecable(g2area,odd.outputs.Out2,odd.outputs.Out1)
+      if usedinvert(even) == 1:
+        movecable(g2area,even.inputs.In1,odd.inputs.In2)
+        movecable(g2area,even.outputs.Out1,odd.outputs.Out2)
+      elif usedinvert(even) == 2:
+        movecable(g2area,even.inputs.In2,odd.inputs.In2)
+        movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
       g2area.modules.remove(even)
 
 def cablerecolorize(g2area,config):
@@ -514,9 +573,9 @@ def convert(pch,config):
     doreposition(converters,config)           # repostion all modules
     doprecables(converters,config)            # precable processing
     docables(nmarea,g2area,converters,config) # connect cables
-    douprate(g2area,config)                   # uprate necessary modules
     dologiccombine(g2area,config)             # combine logic modules
     docableshorten(g2area,config)             # shorten up cables
+    douprate(g2area,config)                   # uprate necessary modules
     cablerecolorize(g2area,config)            # recolor cables based on output
 
   domorphsknobsmidiccs(nmpatch,g2patch,config)
@@ -552,7 +611,7 @@ def usage(prog):
   print '\t-k --keepold\tDo not replace existing .pch2 files'
   print '\t-l --logiccombine\tCombine logic modules'
   print '\t-r --recursive\tOn directory arguments convert all .pch files'
-  print '\t-s --shorten\tTurn off shorten cable connections'
+  print '\t-s --noshorten\tTurn off shorten cable connections'
   print '\t-v --verbosity\tSet converter verbosity level 0-4'
   
 def main(argv):
@@ -583,9 +642,16 @@ def main(argv):
       config.shorten = False
     if o in ('-v','--verbosity'):
       print o,a
+      v = int(a)
+      if v < 0: v = 0
+      elif v > 4: v = 4
       config.verbosity = [
-          logging.DEBUG,logging.INFO,logging.WARNING,
-          logging.ERROR,logging.CRITICAL ][int(a)]
+          logging.ERROR,
+          logging.WARNING,
+          logging.CRITICAL,
+          logging.INFO,
+          logging.DEBUG,
+      ][v]
 
   logging.basicConfig(format='%(message)s')
   log = logging.getLogger('')
