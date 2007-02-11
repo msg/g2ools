@@ -22,6 +22,7 @@
 from nord.utils import *
 from nord.units import *
 from convert import *
+from nord.g2.colors import g2conncolors
 
 class ConvPosEdgeDly(Convert):
   maing2module = 'Delay'
@@ -72,10 +73,17 @@ class ConvCompareLev(Convert):
   inputmap = ['In']
   outputmap = ['Out']
 
+  def domodule(self):
+    self.g2module.inputs.In.rate = g2conncolors.blue
+
 class ConvCompareAB(Convert):
   maing2module = 'CompSig'
   inputmap = ['A','B']
   outputmap = ['Out']
+
+  def domodule(self):
+    self.g2module.inputs.A.rate = g2conncolors.blue
+    self.g2module.inputs.B.rate = g2conncolors.blue
 
 class ConvClkDiv(Convert):
   maing2module = 'ClkDiv'
