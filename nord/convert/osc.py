@@ -66,6 +66,7 @@ def handlepw(conv,pw,haspw,shape,shapemod):
     setv(constswt.params.On,1)
     constswt.params.On.labels = ['Shape']
     setv(constswt.params.Lev,getv(nmmp.PulseWidth))
+    setv(g2mp.Shape,0)
     setv(g2mp.ShapeMod,126)
     conv.connect(constswt.outputs.Out,g2m.inputs.ShapeMod)
   return pwmod
