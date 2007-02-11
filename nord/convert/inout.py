@@ -110,7 +110,7 @@ class Conv1Output(Convert):
     if self.maing2module == 'Mix1-1A':
       self.connect(g2m.outputs.Out,inp)
     else:
-      self.input = inp
+      self.inputs = [inp]
 
     self.params = [lev,out2.params.Destination,out2.params.Active]
 

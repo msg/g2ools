@@ -145,8 +145,8 @@ def docables(nmarea, g2area, converters, config):
         color = g2cablecolors.purple
       else:
         color = source.net.output.type.type
-      g2area.connect(g2source,g2dest,color)
       logging.debug(s)
+      g2area.connect(g2source,g2dest,color)
 
 def douprate(g2area,config):
   # now parse the entire netlist of the area and .uprate=1 all
