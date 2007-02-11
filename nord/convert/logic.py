@@ -108,9 +108,10 @@ class ConvClkDivFix(Convert):
 
     oclks = [[5,'16',0],[7,'T8',1],[11,'8',2]]
     clks = oclks[:]
-    clk = clks.pop(0)
-    while len(getattr(nmm.outputs,clk[1]).cables) == 0:
-      clk = clk.pop(0)
+    while len(clks):
+      clk = clks.pop(0)
+      if len(getattr(nmm.outputs,clk[1]).cables) != 0:
+        break
     if len(clks) == 0:
       clk = oclks[0]
 
