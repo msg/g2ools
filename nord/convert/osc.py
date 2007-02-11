@@ -290,7 +290,7 @@ def postmst(conv,mstindex):
   mstin = nmm.inputs.Mst
   if not len(mstin.cables):
     return
-  if mstin.net.output.rate != nm1conncolors.slave:
+  if not mstin.net.output or mstin.net.output.rate != nm1conncolors.slave:
     return
   mstconv = mstin.net.output.module.conv
   mst = mstconv.g2module
@@ -699,7 +699,7 @@ class ConvOscSineBank(Convert):
     else:
       osctype = 'OscD'
     oscs = []
-    for i in range(1,7): # 6 Sine Osc
+    for i in range(6,0,-1): # 6 Sine Osc
       # if osc muted, don't addit
       if getv(getattr(nmmp,'Osc%dMute'%i))==0:
         if len(getattr(nmm.inputs,'Osc%dAm'%i).cables) == 0 and \
