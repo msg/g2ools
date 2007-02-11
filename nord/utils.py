@@ -23,13 +23,16 @@
 # toascii remove bad characters
 def toascii(s):
   # conversion strings for 192-255
-  s192 = 'AAAAAAACEEEEIIIIDNOOOOOOXOUUUUYpBaaaaaaaceeeeeiiiienooooo/ouuuuypy'
+  s161 = '!cL#Y|S"Ca<^-R-o+23\'uP.10>%%%?' \
+         'AAAAAAACEEEEIIIIDNOOOOOOXOUUUUYpBaaaaaaaceeeeeiiiienooooo/ouuuuypy'
   def conv(c):
     o = ord(c)
-    if o >= 192:
-      return s192[o-192]
-    elif o < 128:
+    if o < 128:
       return c
+    elif o < 161:
+      return chr(c-64)
+    else:
+      return s161[o-161]
     return ''
   return ''.join(map(conv, s))
 
