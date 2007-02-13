@@ -657,7 +657,6 @@ def main(argv):
           logging.DEBUG,
       ][v]
 
-  logging.basicConfig(format='%(message)s')
   log = logging.getLogger('')
   log.setLevel(config.verbosity)
   #console = logging.StreamHandler()
@@ -725,4 +724,5 @@ if __name__ == '__main__':
     psyco.full()
   except ImportError:
     pass
+  logging.basicConfig(format='%(message)s')
   main(sys.argv)
