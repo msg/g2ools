@@ -31,9 +31,8 @@ def printpatch(patch):
     print ' modules:'
     for module in area.modules:
       mtype = module.type
-      print '  %s: %d "%s" type=%d loc=(%d,%d) ht=%d' % (mtype.shortnm,
-          module.index, module.name, module.type.type,
-          module.horiz, module.vert, mtype.height)
+      print '  %s: %d "%s" (%d,%d)' % (mtype.shortnm,
+          module.index, module.name, module.horiz, module.vert)
 
       for param in range(len(mtype.params)):
         print '   %s(%d): %d' % (mtype.params[param].name,
@@ -84,7 +83,11 @@ def printpatch(patch):
     
   print 'morphs:'
   for morph in patch.morphs:
-    print ' %d: %d %s' % (morph.index, morph.knob,
+    if morph.knob:
+      knob = morph.knob.knob
+    else:
+      knob = 0
+    print ' %d: %d %s' % (morph.index, knob,
         ['none','vel','note'][morph.keyassign])
     for map in morph.maps:
       print '  %s:%s range %d' % (map.param.module.name,map.param.type.name,
