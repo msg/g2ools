@@ -676,7 +676,6 @@ def main(argv):
       except KeyboardInterrupt:
         sys.exit(1)
       except Exception, e:
-        print '%r' % e
         return fname
     return ''
 

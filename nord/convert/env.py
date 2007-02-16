@@ -29,7 +29,7 @@ def handleretrig(conv):
     flipflop = conv.addmodule('FlipFlop')
     gate = conv.addmodule('Gate')
     gate.modes.GateMode2.value = 1
-    conv.connect(flipflop.outputs.Q,flipflop.inputs.Res)
+    conv.connect(flipflop.outputs.Q,flipflop.inputs.Rst)
     conv.connect(flipflop.outputs.NotQ,gate.inputs.In1_1)
     conv.connect(gate.outputs.Out1,conv.g2module.inputs.Gate)
     conv.connect(gate.inputs.In2_1,gate.inputs.In2_2)

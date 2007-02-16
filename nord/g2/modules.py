@@ -1702,7 +1702,7 @@ modules = [
     inputs=[
       InputType('Clk',          g2conncolors.yellow_orange,horiz=8,vert=1),
       InputType('In',           g2conncolors.yellow_orange,horiz=11,vert=0),
-      InputType('Res',          g2conncolors.yellow_orange,horiz=5,vert=1),
+      InputType('Rst',          g2conncolors.yellow_orange,horiz=5,vert=1),
     ],
     outputs=[
       OutputType('NotQ',         g2conncolors.yellow_orange,horiz=17,vert=1),
