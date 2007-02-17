@@ -453,18 +453,20 @@ def domorphsknobsmidiccs(nmpatch,g2patch,config):
   
   # handle Midi CCs
   logging.info('MIDI CCs:')
-  reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97,121,123 ]
+  reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97]+range(120,128)
   from nord.g2.file import Ctrl
   for ctrl in nmpatch.ctrls:
     if ctrl.midicc in reservedmidiccs:
+      logging.warning(' CC%d: cannot be used (reserved)' % ctrl.midicc)
       continue
     m = Ctrl()
     m.midicc = ctrl.midicc
+    param = ctrl.param
     if hasattr(ctrl.param,'module'): # module parameter
-      s = ' CC%d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,
-        ctrl.param.type.name)
-      index = ctrl.param.index
-      conv = ctrl.param.module.conv
+      s = ' CC%d: %s(%d,%d):%s' % (ctrl.midicc,param.module.name,
+        param.module.horiz, param.module.vert, param.type.name)
+      index = param.index
+      conv = param.module.conv
       if index < len(conv.params) and conv.params[index]:
         m.param = conv.params[index]
         m.type = conv.g2module.area.index
