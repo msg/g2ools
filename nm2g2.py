@@ -619,7 +619,7 @@ def usage(prog):
   print '\t-v --verbosity\tSet converter verbosity level 0-4'
   
 def main(argv):
-  prog = argv.pop(0)
+  lsprog = argv.pop(0)
   try:
     opts, args = getopt.getopt(argv,'aAdhlkrsv:',
         ['all','adsrforad','debug','help','keepold','logiccombine','recursive',
@@ -647,7 +647,6 @@ def main(argv):
     if o in ('-s','--noshorten'):
       config.shorten = False
     if o in ('-v','--verbosity'):
-      print o,a
       v = int(a)
       if v < 0: v = 0
       elif v > 4: v = 4

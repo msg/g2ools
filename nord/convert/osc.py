@@ -30,6 +30,10 @@ def handlepw(conv,pw,haspw,shape,shapemod):
   nmmp,g2mp = nmm.params,g2m.params
   # add mix2-1b so input can be doubled/inverted
   pwmod = None
+  if haspw:
+    pw = getv(nmmp.PulseWidth)
+  else:
+    pw = 0
   if len(nmm.inputs.PwMod.cables):
     clip = conv.addmodule('Clip',name='PWLimit')
     setv(clip.params.Shape,1) # Sym
@@ -37,17 +41,17 @@ def handlepw(conv,pw,haspw,shape,shapemod):
     setv(mix11a.params.ExpLin, 1) # Lin
     setv(mix11a.params.On,1)
     mix11a.params.On.labels = ['Mod']
-    if haspw:
+    if haspw and pw != 64:
       constswt = conv.addmodule('ConstSwT',name='Shape')
       setv(constswt.params.On,1)
       constswt.params.On.labels = ['Shape']
     mix21b = conv.addmodule('Mix2-1B',name='ModIn')
     conv.connect(clip.outputs.Out,g2m.inputs.ShapeMod)
     conv.connect(mix11a.outputs.Out,clip.inputs.In)
-    if haspw:
+    if haspw and pw != 64:
       conv.connect(constswt.outputs.Out,mix11a.inputs.Chain)
       conv.connect(mix21b.outputs.Out,mix11a.inputs.In)
-      setv(constswt.params.Lev,getv(nmmp.PulseWidth))
+      setv(constswt.params.Lev,pw)
     else:
       conv.connect(mix21b.outputs.Out,mix11a.inputs.In)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
@@ -58,14 +62,14 @@ def handlepw(conv,pw,haspw,shape,shapemod):
     setv(g2mp.ShapeMod,127)
     setv(mix11a.params.Lev,getv(nmmp.PwMod))
     conv.params[shapemod] = mix11a.params.Lev
-    if shape > -1:
+    if shape > -1 and pw != 64:
       conv.params[shape] = constswt.params.Lev
     return mix21b.inputs.In1
-  elif haspw:
+  elif haspw and pw != 64:
     constswt = conv.addmodule('ConstSwT',name='Shape')
     setv(constswt.params.On,1)
     constswt.params.On.labels = ['Shape']
-    setv(constswt.params.Lev,getv(nmmp.PulseWidth))
+    setv(constswt.params.Lev,pw)
     setv(g2mp.Shape,0)
     setv(g2mp.ShapeMod,126)
     conv.connect(constswt.outputs.Out,g2m.inputs.ShapeMod)

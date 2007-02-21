@@ -71,7 +71,6 @@ class ConvOverdrive(Convert):
     else:
       overdrivelev = None
     
-    print ' modout=',modout
     shpstatic = self.addmodule('ShpStatic',name='')
     setv(shpstatic.params.Mode,0) # Inv x3
     self.connect(modout,shpstatic.inputs.In)
