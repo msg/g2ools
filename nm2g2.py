@@ -623,8 +623,8 @@ nm2g2_options = [
 
 def main(argv):
   global nm2g2_options
-  parser = OptionParser("usage: %prog [options] arg",option_list=nm2g2_options)
 
+  parser = OptionParser("usage: %prog [options] arg",option_list=nm2g2_options)
   (options, args) = parser.parse_args(argv)
   verbosity = [
       logging.ERROR,
