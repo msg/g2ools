@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os,string,sys,math
+from optparse import OptionParser,make_option
 from array import array
 sys.path.append('.')
 from nord import units
@@ -80,7 +81,7 @@ def parsedx7(data):
   patch.Name = x.tostring()
   return patch
   
-def convert(fname,config):
+def convert(fname,options):
   f = open(fname,'rb')
   data = f.read()
   voice1 = '\xf0\x43\x00\x00\x01\x1b'
@@ -244,45 +245,36 @@ def convert(fname,config):
     dxconv.pch2.write(outname+'b%d.pch2' % bank)
     bank += 1
 
-class Config:
-  def __init__(self, **kw):
-    self.__dict__ = kw
-
 def usage(prog):
   print 'usage: dx2g2 <flags> <.syx files>'
   print '\t<flags>'
   print '\t-d --debug\tDebug program'
   print '\t-h --help\tPrint this message'
   print '\t-r --recursive\tOn directory arguments convert all .syx files'
-  
+
+dx2g2_options = [
+  make_option('-d', '--debug', action='store_true',
+      dest='debug', default=False,
+      help='Allow exceptions to terminate application'),
+  make_option('-r', '--recursive', action='store_true',
+      dest='recursive', default=False,
+      help='On dir arguments, convert all .pch files'),
+]
+
 def main(argv):
-  import getopt
   from glob import glob
+  global dx2g2_options
 
-  prog = argv.pop(0)
-  try:
-    opts, args = getopt.getopt(argv,'ahdr',
-        ['debug','help','recursive'])
-  except getopt.GetoptError:
-    usage(prog)
-    sys.exit(2)
+  parser = OptionParser("usage: %prog [options] arg",option_list=dx2g2_options)
+  (options, args) = parser.parse_args(argv)
 
-  config = Config(debug=False,recursive=False)
-  for o, a in opts:
-    if o in ('-h','--help'):
-      usage(prog)
-    if o in ('-d','--debug'):
-      config.debug = True
-    if o in ('-r','--recursive'):
-      config.recursive = True
-
-  def doconvert(fname,config):
+  def doconvert(fname,options):
     # general algorithm for converter:
-    if config.debug:
-      convert(fname,config) # allow exception thru if debugging
+    if options.debug:
+      convert(fname,options) # allow exception thru if debugging
     else:
       try:
-        convert(fname,config)
+        convert(fname,options)
       except KeyboardInterrupt:
         sys.exit(1)
       except Exception, e:
@@ -294,7 +286,7 @@ def main(argv):
   while len(args):
     patchlist = glob(args.pop(0))
     for fname in patchlist:
-      if os.path.isdir(fname) and config.recursive:
+      if os.path.isdir(fname) and options.recursive:
         for root,dirs,files in os.walk(fname):
           for f in files:
             fname = os.path.join(root,f)
@@ -303,13 +295,13 @@ def main(argv):
               testname = fname
               if fname[-4:].lower() != '.syx':
                 testname = fname+'.syx'
-              failed = doconvert(fname,config)
+              failed = doconvert(fname,options)
               if failed:
                 failedpatches.append(failed)
               print '-' * 20
       else:
         print '"%s"' % fname
-        failed = doconvert(fname,config)
+        failed = doconvert(fname,options)
         if failed:
           failedpatches.append(failed)
         print '-' * 20
