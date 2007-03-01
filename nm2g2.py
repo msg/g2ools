@@ -623,7 +623,6 @@ nm2g2_options = [
 
 def main(argv):
   global nm2g2_options
-  prog = argv.pop(0)
   parser = OptionParser("usage: %prog [options] arg",option_list=nm2g2_options)
 
   (options, args) = parser.parse_args(argv)
