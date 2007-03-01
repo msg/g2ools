@@ -157,14 +157,14 @@ class Conv4_1Switch(Convert):
   inputmap = ['In1','In2','In3','In4']
   outputmap = ['Out']
 
-  def __init__(self, nmarea, g2area, nmmodule, config):
+  def __init__(self, nmarea, g2area, nmmodule, options):
     # if no morph, knob or midi cc on Sel, use Mix4-1C
     if not nmmodule.params.Sel.knob or \
        not nmmodule.params.Sel.morph or \
        not nmmodule.params.Sel.ctrl:
       self.maing2module = 'Mix4-1C'
       self.parammap[0] = None
-    Convert.__init__(self, nmarea, g2area, nmmodule, config)
+    Convert.__init__(self, nmarea, g2area, nmmodule, options)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module

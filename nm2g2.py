@@ -20,7 +20,8 @@
 #
 
 import logging
-import getopt, os, sys
+import os, sys
+from optparse import OptionParser,make_option
 from glob import glob
 from exceptions import KeyboardInterrupt
 sys.path.append('.')
@@ -52,13 +53,13 @@ conn2cablecolors = {
   g2conncolors.yellow_orange: g2cablecolors.yellow,
 }
 
-def doconverters(nmarea,g2area,config):
+def doconverters(nmarea,g2area,options):
   converters = []
   for module in nmarea.modules:
     if module.type.type in typetable:
       logging.debug('%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
           module.type.type,module.type.type))
-      conv = typetable[module.type.type](nmarea,g2area,module,config)
+      conv = typetable[module.type.type](nmarea,g2area,module,options)
       converters.append(conv)
       #g2module = conv.g2module
       #print '%s (%d,%d)' % (g2module.type.shortnm,
@@ -68,7 +69,7 @@ def doconverters(nmarea,g2area,config):
           module.type.shortnm, module.type.type, module.type.type))
   return converters
 
-def domodules(converters, config):
+def domodules(converters, options):
   logging.info('domodule:')
   for conv in converters:
     logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
@@ -76,7 +77,7 @@ def domodules(converters, config):
     conv.domodule()
 
 
-def docolorizemultis(converters, config):
+def docolorizemultis(converters, options):
   modcolors = [
       g2modulecolors.yellow2,g2modulecolors.green2,
       g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1]
@@ -90,7 +91,7 @@ def docolorizemultis(converters, config):
       curr = (curr+1)%len(modcolors)
 
 
-def doreposition(converters, config):
+def doreposition(converters, options):
   logging.info('reposition:')
 
   # location compare by horiz, then vert
@@ -111,14 +112,14 @@ def doreposition(converters, config):
       else:
         cb.reposition(None)
 
-def doprecables(converters, config):
+def doprecables(converters, options):
   logging.info('precables:')
   for conv in converters:
     logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
         conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
     conv.precables()
 
-def docables(nmarea, g2area, converters, config):
+def docables(nmarea, g2area, converters, options):
   # now do the cables
   logging.info('cables:')
   for cable in nmarea.cables:
@@ -148,7 +149,7 @@ def docables(nmarea, g2area, converters, config):
       logging.debug(s)
       g2area.connect(g2source,g2dest,color)
 
-def douprate(g2area,config):
+def douprate(g2area,options):
   # now parse the entire netlist of the area and .uprate=1 all
   # modules with blue_red and yello_orange inputs connected to red outputs.
   # scan module list until we done change any modules
@@ -197,7 +198,7 @@ def douprate(g2area,config):
     if not modified:
       done = 1
 
-def dologiccombine(g2area,config):
+def dologiccombine(g2area,options):
   # find all Gate modules
   # sort and create a 2d array gates[col][index]
   # group gates in pairs, ignore last one if odd numbered
@@ -212,7 +213,7 @@ def dologiccombine(g2area,config):
   #   move lower inverter connections to right
   # 'Gate','Invert'
 
-  if not config.logiccombine:
+  if not options.logiccombine:
     return
 
   def locationcmp(a, b):
@@ -327,19 +328,19 @@ def dologiccombine(g2area,config):
         movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
       g2area.modules.remove(even)
 
-def cablerecolorize(g2area,config):
+def cablerecolorize(g2area,options):
   logging.info('cable recolorize:')
   for cable in g2area.cables:
     if cable.source.net.output:
       cable.color = conn2cablecolors[cable.source.net.output.rate]
 
-def docableshorten(g2area,config):
-  if not config.shorten:
+def docableshorten(g2area,options):
+  if not options.shorten:
     return
   logging.info('cable shorten:')
   g2area.shortencables()
 
-def domorphsknobsmidiccs(nmpatch,g2patch,config):
+def domorphsknobsmidiccs(nmpatch,g2patch,options):
   # handle Morphs
   #  morphs[x].ctrl.midicc
   #    1: Wheel -> Wheel (morph 0)
@@ -479,7 +480,7 @@ def domorphsknobsmidiccs(nmpatch,g2patch,config):
       m.type = 2 # system
     g2patch.ctrls.append(m)
 
-def docurrentnotes(nmpatch,g2patch,config):
+def docurrentnotes(nmpatch,g2patch,options):
   # handle CurrentNotes
   logging.info('currentnotes:')
   #g2patch.lastnote = nmpatch.lastnote
@@ -487,7 +488,7 @@ def docurrentnotes(nmpatch,g2patch,config):
   for note in nmpatch.notes:
     g2patch.notes.append(note)
 
-def dofinalize(areaconverters,config):
+def dofinalize(areaconverters,options):
   logging.info('Finalize:')
   for areanm in 'voice','fx':
     logging.info('--- area %s: ---' % areanm)
@@ -496,7 +497,7 @@ def dofinalize(areaconverters,config):
           conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
       conv.finalize()
 
-def dotitleblock(pch,pch2,config):
+def dotitleblock(pch,pch2,options):
   lines = ['Converted by',
            'gtools-%s' % (g2oolsversion),
            'by',
@@ -525,7 +526,7 @@ def dotitleblock(pch,pch2,config):
   vert = addnamebars(lines,0,vert+1)
   vert = addnamebars(['All rights','reserved'],0,vert+1)
 
-def convert(pch,config):
+def convert(pch,options):
   #   loop through each module
   #     determine and store separation from module above >= 0
   #     if mod in convertion table
@@ -569,111 +570,84 @@ def convert(pch,config):
     logging.info('--- area %s: ---' % areanm)
 
     # build converters for all NM1 modules
-    converters = areaconverters[areanm] = doconverters(nmarea,g2area,config)
-    domodules(converters,config)              # do the modules
-    docolorizemultis(converters,config)       # colorize multi module setups
-    doreposition(converters,config)           # repostion all modules
-    doprecables(converters,config)            # precable processing
-    docables(nmarea,g2area,converters,config) # connect cables
-    dologiccombine(g2area,config)             # combine logic modules
-    docableshorten(g2area,config)             # shorten up cables
-    douprate(g2area,config)                   # uprate necessary modules
-    cablerecolorize(g2area,config)            # recolor cables based on output
+    converters = areaconverters[areanm] = doconverters(nmarea,g2area,options)
+    domodules(converters,options)              # do the modules
+    docolorizemultis(converters,options)       # colorize multi module setups
+    doreposition(converters,options)           # repostion all modules
+    doprecables(converters,options)            # precable processing
+    docables(nmarea,g2area,converters,options) # connect cables
+    dologiccombine(g2area,options)             # combine logic modules
+    docableshorten(g2area,options)             # shorten up cables
+    douprate(g2area,options)                   # uprate necessary modules
+    cablerecolorize(g2area,options)            # recolor cables based on output
 
-  domorphsknobsmidiccs(nmpatch,g2patch,config)
-  docurrentnotes(nmpatch,g2patch,config)
-  dofinalize(areaconverters,config)
+  domorphsknobsmidiccs(nmpatch,g2patch,options)
+  docurrentnotes(nmpatch,g2patch,options)
+  dofinalize(areaconverters,options)
 
 
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
 
-  dotitleblock(pch,pch2,config)
+  dotitleblock(pch,pch2,options)
 
   logging.info('Writing patch "%s2"' % (pch.fname))
   pch2.write(pch.fname+'2')
   
+nm2g2_options = [
+  make_option('-a', '--all-files', action='store_true',
+      dest='allfiles', default=False,
+      help='Process all files (not just *.pch)'),
+  make_option('-A', '--adsr-for-ad', action='store_true',
+      dest='adsrforad', default=False,
+      help='Replace AD modules with ADSR modules'),
+  make_option('-d', '--debug', action='store_true',
+      dest='debug', default=False,
+      help='Allow exceptions to terminate application'),
+  make_option('-k', '--keep-old', action='store_true',
+      dest='keepold', default=False,
+      help='If .pch2 file exists, do not replace it'),
+  make_option('-l', '--no-logic-combine', action='store_false',
+      dest='logiccombine', default=True,
+      help='Do not combine logic and inverter modules'),
+  make_option('-r', '--recursive', action='store_true',
+      dest='recursive', default=False,
+      help='On dir arguments, convert all .pch files'),
+  make_option('-s', '--no-shorten', action='store_false',
+      dest='shorten', default=True,
+      help='Turn off shorten cable connections'),
+  make_option('-v', '--verbose', action='store',
+      dest='verbosity', default='3', choices=map(str,range(5)),
+      help='Set converter verbosity level 0-4'),
+]
 
-class Config:
-  def __init__(self):
-    self.adsrforad=False
-    self.allfiles=False
-    self.debug=False
-    self.keepold=False
-    self.logiccombine=False
-    self.recursive=False,
-    self.shorten=True
-    self.verbosity=logging.INFO
-
-def usage(prog):
-  print 'usage: nm2g2 <flags> <.pch files>'
-  print '\t<flags>'
-  print '\t-A --adsrforad\tUse ADSR as replacement for AD'
-  print '\t-a --allfiles\tProcess all files (not just extension .pch)'
-  print '\t-d --debug\tDo not catch exceptions to debug.'
-  print '\t-h --help\tPrint this message'
-  print '\t-k --keepold\tDo not replace existing .pch2 files'
-  print '\t-l --logiccombine\tCombine logic modules'
-  print '\t-r --recursive\tOn directory arguments convert all .pch files'
-  print '\t-s --noshorten\tTurn off shorten cable connections'
-  print '\t-v --verbosity\tSet converter verbosity level 0-4'
-  
 def main(argv):
-  lsprog = argv.pop(0)
-  try:
-    opts, args = getopt.getopt(argv,'aAdhlkrsv:',
-        ['all','adsrforad','debug','help','keepold','logiccombine','recursive',
-         'noshorten','verbosity='])
-  except getopt.GetoptError:
-    usage(prog)
-    sys.exit(2)
+  global nm2g2_options
+  prog = argv.pop(0)
+  parser = OptionParser("usage: %prog [options] arg",option_list=nm2g2_options)
 
-  config = Config()
-  for o, a in opts:
-    if o in ('-h','--help'):
-      usage(prog)
-    if o in ('-a','--all-files'):
-      config.allfiles = True
-    if o in ('-A','--adsrforad'):
-      config.adsrforad = True
-    if o in ('-d','--debug'):
-      config.debug = True
-    if o in ('-l','--logiccombine'):
-      config.logiccombine = True
-    if o in ('-r','--recursive'):
-      config.recursive = True
-    if o in ('-k','--keepold'):
-      config.keepold = True
-    if o in ('-s','--noshorten'):
-      config.shorten = False
-    if o in ('-v','--verbosity'):
-      v = int(a)
-      if v < 0: v = 0
-      elif v > 4: v = 4
-      config.verbosity = [
-          logging.ERROR,
-          logging.WARNING,
-          logging.CRITICAL,
-          logging.INFO,
-          logging.DEBUG,
-      ][v]
+  (options, args) = parser.parse_args(argv)
+  verbosity = [
+      logging.ERROR,
+      logging.WARNING,
+      logging.CRITICAL,
+      logging.INFO,
+      logging.DEBUG,
+  ][int(options.verbosity)]
 
   log = logging.getLogger('')
-  log.setLevel(config.verbosity)
-  #console = logging.StreamHandler()
-  #console.setLevel(logging.DEBUG)
-  #logging.getLogger('').addHandler(console)
+  log.setLevel(verbosity)
 
-  def doconvert(fname,config):
+  def doconvert(fname,options):
     # general algorithm for converter:
-    if config.debug:
+    if options.debug:
       try:
-        convert(PchFile(fname),config) # allow exception thru if debugging
+        convert(PchFile(fname),options) # allow exception thru if debugging
       except NM1Error, s:
         logging.error(s)
     else:
       try:
-        convert(PchFile(fname),config)
+        convert(PchFile(fname),options)
       except KeyboardInterrupt:
         sys.exit(1)
       except Exception, e:
@@ -688,26 +662,26 @@ def main(argv):
       failedpatches.append(arg)
       continue
     for fname in patchlist:
-      if os.path.isdir(fname) and config.recursive:
+      if os.path.isdir(fname) and options.recursive:
         for root,dirs,files in os.walk(fname):
           for f in files:
             fname = os.path.join(root,f)
             if fname[-5:].lower() == '.pch2':
               continue
-            if fname[-4:].lower() == '.pch' or config.allfiles:
-              logging.info('"%s"' % fname)
+            if fname[-4:].lower() == '.pch' or options.allfiles:
               testname = fname
               if fname[-4:].lower() != '.pch':
                 testname = fname+'.pch'
-              if config.keepold and os.path.exists(testname+'2'):
+              if options.keepold and os.path.exists(testname+'2'):
                 continue
-              failed = doconvert(fname,config)
+              logging.critical('"%s"' % fname)
+              failed = doconvert(fname,options)
               if failed:
                 failedpatches.append(failed)
               logging.info('-' * 20)
       else:
-        logging.info('"%s"' % fname)
-        failed = doconvert(fname,config)
+        logging.critical('"%s"' % fname)
+        failed = doconvert(fname,options)
         if failed:
           failedpatches.append(failed)
         logging.info('-' * 20)

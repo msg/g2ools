@@ -36,11 +36,11 @@ def updatevals(g2mp,params,nm1tab,g2tab):
     setv(getattr(g2mp,param),newmidival)
 
 class Convert:
-  def __init__(self, nmarea, g2area, nmmodule, config):
+  def __init__(self, nmarea, g2area, nmmodule, options):
     self.nmarea = nmarea
     self.g2area = g2area
     nmm = self.nmmodule = nmmodule
-    self.config = config
+    self.options = options
     # use for cabling
     for output in nmmodule.outputs:
       output.conv = self 

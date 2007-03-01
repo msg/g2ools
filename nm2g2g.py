@@ -20,36 +20,46 @@
 #
 
 import sys
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt4.Qt import *
 
 from nm2g2g_ui import Ui_NM2G2G
 
-class LogStream:
-  def __init__(self, parent):
-    self.parent = parent
-
-  def write(self, s):
-    self.parent.emit(SIGNAL('write'), s)
-
-  def flush(self):
-    pass
-
+sys.setcheckinterval(10)
 
 class ConvertThread(QThread):
-  def __init__(self,textedit):
+  def __init__(self,main):
     QThread.__init__(self)
-    self.stream = LogStream(self)
+    self.main = main
+    self.connect(self, SIGNAL('write'), self.main.write)
 
   def run(self):
+    self.str = ''
     script=open('nm2g2.py').read()
     globs = globals()
     exec 'from nm2g2 import *' in globs
     logging = globs['logging']
-    logging.basicConfig(stream=self.stream, format='%(message)s')
-    main(['nm2g2.py','-r']+self.files)
-    logging.info('Convertion finished.')
+    logging.basicConfig(stream=self, format='%(message)s')
+    main(['nm2g2.py','-v0','-r']+self.files)
+    logging.critical('Convertion finished.')
+    self.exit(0)
   
+  def write(self, s):
+    #c = s.find(':')
+    #if c < 0:
+    #  pass
+    #elif '---' == s[:3]:
+    #  s = '<b>'+s+'</b>'
+    #elif 'Writing Patch' == s[:13]:
+    #  s = s[:13]+' <b>'+s[15:]+'</b>'
+    #else:
+    #  s = '<b>'+s[:c+1]+'</b>'+s[c+1:]
+    #s += '<br>'
+    self.str += s
+
+  def flush(self):
+    self.emit(SIGNAL('write'), self.str)
+    self.str = ''
+
 class CheckableDirModel(QDirModel):
   def __init__(self, *args):
     self.checkmap = {}
@@ -99,8 +109,8 @@ class NM2G2G(QMainWindow):
     tree.setRootIndex(self.dirmodel.index(QDir.currentPath()))
     tree.resizeColumnToContents(0)
 
-    self.convert = ConvertThread(self.ui.textEdit)
-    self.connect(self.convert, SIGNAL('write'), self.write)
+    self.guimutex = QMutex()
+    self.convert = ConvertThread(self)
 
   @pyqtSignature('bool')
   def on_action_Quit_triggered(self, checked):
@@ -111,10 +121,12 @@ class NM2G2G(QMainWindow):
     cm = self.dirmodel.checkmap
     files = [ str(k) for k in self.dirmodel.checkmap.keys() if cm[k] ]
     files.sort()
+    self.ui.textEdit.document().clear()
     self.convert.files = files
     self.convert.start()
 
   def write(self, s):
+    #self.ui.textEdit.insertHtml(s)
     self.ui.textEdit.insertPlainText(s)
     self.ui.textEdit.ensureCursorVisible()
     

@@ -80,13 +80,13 @@ class Conv1Output(Convert):
   parammap = [None,None,None] # Level,Destination,Mute
   inputmap = [None]
 
-  def __init__(self, nmarea, g2area, nmmodule, config):
+  def __init__(self, nmarea, g2area, nmmodule, options):
     lev = nmmodule.params.Level
     if getv(lev) == 127 and not lev.knob and not lev.morph and not lev.ctrl:
       self.maing2module = '2-Out'
     else:
       self.inputmap = ['In']
-    Convert.__init__(self, nmarea, g2area, nmmodule, config)
+    Convert.__init__(self, nmarea, g2area, nmmodule, options)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
@@ -119,11 +119,11 @@ class Conv2Output(Convert):
   parammap = [None,None,None] # Level,Destination,Mute
   inputmap = ['InL','InR']
 
-  def __init__(self, nmarea, g2area, nmmodule, config):
+  def __init__(self, nmarea, g2area, nmmodule, options):
     lev = nmmodule.params.Level
     if getv(lev) == 127 and not lev.knob and not lev.morph and not lev.ctrl:
       self.maing2module = '2-Out'
-    Convert.__init__(self, nmarea, g2area, nmmodule, config)
+    Convert.__init__(self, nmarea, g2area, nmmodule, options)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
