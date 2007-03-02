@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import logging
 import os,string,sys,math
 from optparse import OptionParser,make_option
 from array import array
@@ -93,9 +94,9 @@ def convert(fname,options):
       break
     esx = data.find('\xf7',syx)
     if data[syx:syx+len(voice1)] == voice1:
-      print fname, '1 voice'
+      logging.info('%s 1 voice' % fname)
     elif data[syx:syx+len(voice32)] == voice32:
-      print fname, '32 voice'
+      logging.info('%s 32 voices' % fname)
       v32data = data[syx+len(voice32):esx]
       for i in range(len(v32data)/128):
         patch = parsedx7(v32data[i*128:i*128+128])
@@ -133,7 +134,7 @@ def convert(fname,options):
     for i in range(len(group)):
       dxpatch = group[i]
       nm = '%2d. %s' % (i+1, dxpatch.Name)
-      print nm
+      logging.info(nm)
       dxconv.pch2.patch.voice.addmodule('Name',name=nm,
           horiz=0,vert=i,color=dxpatch.Color)
       # set DXRouter stuff
@@ -245,13 +246,6 @@ def convert(fname,options):
     dxconv.pch2.write(outname+'b%d.pch2' % bank)
     bank += 1
 
-def usage(prog):
-  print 'usage: dx2g2 <flags> <.syx files>'
-  print '\t<flags>'
-  print '\t-d --debug\tDebug program'
-  print '\t-h --help\tPrint this message'
-  print '\t-r --recursive\tOn directory arguments convert all .syx files'
-
 dx2g2_options = [
   make_option('-d', '--debug', action='store_true',
       dest='debug', default=False,
@@ -259,6 +253,9 @@ dx2g2_options = [
   make_option('-r', '--recursive', action='store_true',
       dest='recursive', default=False,
       help='On dir arguments, convert all .pch files'),
+  make_option('-v', '--verbose', action='store',
+      dest='verbosity', default='3', choices=map(str,range(5)),
+      help='Set converter verbosity level 0-4'),
 ]
 
 def main(argv):
@@ -267,6 +264,16 @@ def main(argv):
 
   parser = OptionParser("usage: %prog [options] arg",option_list=dx2g2_options)
   (options, args) = parser.parse_args(argv)
+  verbosity = [
+      logging.ERROR,
+      logging.WARNING,
+      logging.CRITICAL,
+      logging.INFO,
+      logging.DEBUG,
+  ][int(options.verbosity)]
+
+  log = logging.getLogger('')
+  log.setLevel(verbosity)
 
   def doconvert(fname,options):
     # general algorithm for converter:
@@ -278,7 +285,7 @@ def main(argv):
       except KeyboardInterrupt:
         sys.exit(1)
       except Exception, e:
-        print '%r' % e
+        logging.error('%r' % e)
         return fname
     return ''
 
@@ -291,26 +298,27 @@ def main(argv):
           for f in files:
             fname = os.path.join(root,f)
             if fname[-4:].lower() == '.syx':
-              print '"%s"' % fname
+	      logging.critical('"%s"' % fname)
               testname = fname
               if fname[-4:].lower() != '.syx':
                 testname = fname+'.syx'
               failed = doconvert(fname,options)
               if failed:
                 failedpatches.append(failed)
-              print '-' * 20
+	      logging.info('-' * 20)
       else:
-        print '"%s"' % fname
+        logging.critical('"%s"' % fname)
         failed = doconvert(fname,options)
         if failed:
           failedpatches.append(failed)
-        print '-' * 20
+        logging.info('-' * 20)
 
   if len(failedpatches):
     f=open('failedpatches.txt','w')
     s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
     f.write(s)
-    print s
+    logging.warning(s)
 
 if __name__ == '__main__':
+  logging.basicConfig(format='%(message)s')
   main(sys.argv)
