@@ -626,6 +626,7 @@ def main(argv):
 
   parser = OptionParser("usage: %prog [options] arg",option_list=nm2g2_options)
   (options, args) = parser.parse_args(argv)
+  args.pop(0)
   verbosity = [
       logging.ERROR,
       logging.WARNING,
