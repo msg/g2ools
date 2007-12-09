@@ -624,7 +624,9 @@ nm2g2_options = [
 def main(argv):
   global nm2g2_options
 
-  parser = OptionParser("usage: %prog [options] arg",option_list=nm2g2_options)
+  logging.basicConfig(format='%(message)s')
+
+  parser = OptionParser("usage: %prog [options] <pch-files-or-dirs>",option_list=nm2g2_options)
   (options, args) = parser.parse_args(argv)
   args.pop(0)
   verbosity = [
@@ -698,5 +700,4 @@ if __name__ == '__main__':
     psyco.full()
   except ImportError:
     pass
-  logging.basicConfig(format='%(message)s')
   main(sys.argv)
