@@ -31,6 +31,40 @@ class Net:
     self.output = output
     self.inputs = inputs
 
+def combinenet(netlist, source, dest):
+  if source.net.output and dest.net.output and (
+      source.net.output != dest.net.output): # shouldn't happen
+    print 'source',
+    printnet(source.net)
+    print 'dest',
+    printnet(dest.net)
+    raise NetError(
+      'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
+      source.module.type.shortnm, source.type.name,
+      dest.net.output.module.type.shortnm, dest.net.output.type.name))
+
+  #print 'Combine:'
+  #print ' source',
+  #printnet(source.net)
+  #print ' dest',
+  #printnet(dest.net)
+
+  netlist.remove(dest.net)
+
+  if dest.net.output:
+    source.net.output = dest.net.output
+    source.net.output.net = source.net
+
+  source.net.inputs += dest.net.inputs
+  for input in dest.net.inputs:
+    #source.net.inputs.append(input)
+    input.net = source.net
+
+  #print ' combine',
+  #printnet(source.net)
+  #print
+  return
+
 # addnet - update the netlist adding source and dest
 def addnet(netlist, source, dest):
   if source.net and dest.net and source.net == dest.net:
@@ -45,59 +79,27 @@ def addnet(netlist, source, dest):
     return
 
   if source.net and dest.net: # two separate nets need to be combined
-    if source.net.output and dest.net.output and (
-        source.net.output != dest.net.output): # shouldn't happen
-      print 'source',
-      printnet(source.net)
-      print 'dest',
-      printnet(dest.net)
-      raise NetError(
-        'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
-        source.module.type.shortnm, source.type.name,
-        dest.net.output.module.type.shortnm, dest.net.output.type.name))
-
-    #print 'Combine:'
-    #print ' source',
-    #printnet(source.net)
-    #print ' dest',
-    #printnet(dest.net)
-
-    netlist.remove(dest.net)
-
-    if dest.net.output:
-      source.net.output = dest.net.output
-      source.net.output.net = source.net
-
-    source.net.inputs += dest.net.inputs
-    for input in dest.net.inputs:
-      #source.net.inputs.append(input)
-      input.net = source.net
-
-    #print ' combine',
-    #printnet(source.net)
-    #print
+    combinenet(netlist, source, dest)
     return
 
-  found = 0
-  for net in netlist:
-    if source == net.output or source in net.inputs or dest in net.inputs:
-      found = 1
-      if not dest in net.inputs: # just in case two connections are made
-        net.inputs.append(dest)
-
-      if source.direction:
-        if net.output and source != net.output:
-          raise NetError(
-            'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
-            source.module.type.shortnm, source.type.name,
-            net.output.module.type.shortnm, net.output.type.name))
-        net.output = source
-      elif not source in net.inputs: # just in case two connections are made
-        net.inputs.append(source)
-      break
+  net = None
+  if source.net:
+    net = source.net
+    net.inputs.append(dest)
+  elif dest.net:
+    net = dest.net
+    if source.direction:
+      if net.output and source != net.output:
+	raise NetError(
+	  'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
+	  source.module.type.shortnm, source.type.name,
+	  net.output.module.type.shortnm, net.output.type.name))
+      net.output = source
+    else:
+      net.inputs.append(source)
 
   # add new net if one not found
-  if found == 0:
+  if not net:
     if source.direction:
       net = Net(source,[dest])
     else:
