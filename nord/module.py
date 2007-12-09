@@ -61,22 +61,26 @@ def sattr(obj,nm,val):
   setattr(obj,nm,val)
 
 class Array(list):
-  pass
+  def add(self, nm, obj):
+    sattr(self, nm, obj)
+    self.append(obj)
 
 class Module:
+  Groups = [ ['inputs', Input ], ['outputs', Output ],
+	     ['params', Param ], ['modes', Mode ] ]
+
   def __init__(self, type, area, **kw):
     self.type = type
     self.area = area
     self.__dict__.update(kw)
     self.name = ''
-    entries = [ ['inputs', Input ], ['outputs', Output ],
-                ['params', Param ], ['modes', Mode ] ]
-    for nm,cls in entries:
+    for nm,cls in Module.Groups:
       sattr(self, nm, Array())
+      a = getattr(self,nm)
       t = getattr(type,nm)
       for i in range(len(t)):
         o = cls(self,t[i],i)
-        a = getattr(self,nm)
-        a.append(o)
-        sattr(a,t[i].name,o)
+	a.add(t[i].name,o)
+    if type.type == 121: # SeqNote mag/octave additions
+      self.editmodes=[0,1,1,0,1,5]
 
