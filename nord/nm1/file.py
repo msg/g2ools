@@ -305,7 +305,7 @@ class PchFile:
     data = open(fname).read(1024)
     if data.find('Nord Modular patch') < 0:
       raise NM1Error('NM1File: %s not valid .pch file' % fname)
-    lines = map(string.strip, open(fname).readlines())
+    lines = filter(lambda s: s!='', map(string.strip, open(fname).readlines()))
     if not len(lines):
       raise NM1Error('NM1File: no valid data: not parsing')
     if lines[0] != '[Header]':
