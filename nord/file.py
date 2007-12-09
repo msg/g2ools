@@ -70,12 +70,6 @@ class Knob:
 class Ctrl:
   pass
 
-# holder object for Performances (currently unused)
-#   - when then additional section is parsed/formatted for .prf2
-#     files, it will be.
-class Performance:
-  pass
-
 # holder object for patch voice and fx area data (modules, cables, etc..)
 class Area:
   def __init__(self,patch,index):
@@ -86,9 +80,9 @@ class Area:
     self.netlist = []
 
   def findmodule(self, index):
-    for i in range(len(self.modules)):
-      if self.modules[i].index == index:
-        return self.modules[i]
+    for module in self.modules:
+      if module.index == index:
+        return module
     return None
 
   def addmodule(self, shortnm, **kw):
@@ -267,4 +261,9 @@ class Patch:
     self.ctrls = []
     self.lastnote = None
     self.notes = []
+
+# holder object for Performances
+class Performance:
+  def __init__(self,fromname):
+    self.patches = [ Patch(fromname) for slot in range(4) ]
 
