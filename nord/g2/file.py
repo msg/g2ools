@@ -44,6 +44,51 @@ def crc16(val, icrc):
 def crc(s):
   return  reduce(lambda a,b: crc16(ord(b),a),s,0) & 0xffff
 
+# calculated via:
+# ./pycrc.py --model zmodem --algorithm table-driven --table-idx-width 8 \
+#     --generate c -o crc.c
+crctab = [
+  0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
+  0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
+  0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
+  0x9339, 0x8318, 0xb37b, 0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de,
+  0x2462, 0x3443, 0x0420, 0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485,
+  0xa56a, 0xb54b, 0x8528, 0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d,
+  0x3653, 0x2672, 0x1611, 0x0630, 0x76d7, 0x66f6, 0x5695, 0x46b4,
+  0xb75b, 0xa77a, 0x9719, 0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc,
+  0x48c4, 0x58e5, 0x6886, 0x78a7, 0x0840, 0x1861, 0x2802, 0x3823,
+  0xc9cc, 0xd9ed, 0xe98e, 0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b,
+  0x5af5, 0x4ad4, 0x7ab7, 0x6a96, 0x1a71, 0x0a50, 0x3a33, 0x2a12,
+  0xdbfd, 0xcbdc, 0xfbbf, 0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a,
+  0x6ca6, 0x7c87, 0x4ce4, 0x5cc5, 0x2c22, 0x3c03, 0x0c60, 0x1c41,
+  0xedae, 0xfd8f, 0xcdec, 0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49,
+  0x7e97, 0x6eb6, 0x5ed5, 0x4ef4, 0x3e13, 0x2e32, 0x1e51, 0x0e70,
+  0xff9f, 0xefbe, 0xdfdd, 0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78,
+  0x9188, 0x81a9, 0xb1ca, 0xa1eb, 0xd10c, 0xc12d, 0xf14e, 0xe16f,
+  0x1080, 0x00a1, 0x30c2, 0x20e3, 0x5004, 0x4025, 0x7046, 0x6067,
+  0x83b9, 0x9398, 0xa3fb, 0xb3da, 0xc33d, 0xd31c, 0xe37f, 0xf35e,
+  0x02b1, 0x1290, 0x22f3, 0x32d2, 0x4235, 0x5214, 0x6277, 0x7256,
+  0xb5ea, 0xa5cb, 0x95a8, 0x8589, 0xf56e, 0xe54f, 0xd52c, 0xc50d,
+  0x34e2, 0x24c3, 0x14a0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
+  0xa7db, 0xb7fa, 0x8799, 0x97b8, 0xe75f, 0xf77e, 0xc71d, 0xd73c,
+  0x26d3, 0x36f2, 0x0691, 0x16b0, 0x6657, 0x7676, 0x4615, 0x5634,
+  0xd94c, 0xc96d, 0xf90e, 0xe92f, 0x99c8, 0x89e9, 0xb98a, 0xa9ab,
+  0x5844, 0x4865, 0x7806, 0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3,
+  0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e, 0x8bf9, 0x9bd8, 0xabbb, 0xbb9a,
+  0x4a75, 0x5a54, 0x6a37, 0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92,
+  0xfd2e, 0xed0f, 0xdd6c, 0xcd4d, 0xbdaa, 0xad8b, 0x9de8, 0x8dc9,
+  0x7c26, 0x6c07, 0x5c64, 0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1,
+  0xef1f, 0xff3e, 0xcf5d, 0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8,
+  0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
+]
+
+def crc(s):
+  #crc = 0
+  #for c in s:
+  #  crc = (crctab[((crc>>8)^c)&0xff] ^ (crc << 8)) & 0xffff
+  #return crc
+  return reduce(lambda crc,c: (crctab[((crc>>8)^ord(c))&0xff]^(crc << 8)),s,0)&0xffff
+
 # number format for getbits() and setbits()
 # b       b       b       b
 # 0       1       2       3
@@ -62,9 +107,8 @@ def getbits(bit,nbits,data,signed=0):
     return (x >> p) & ~(~0<<n)
   # grab 32-bits starting with the byte that contains bit
   byte = bit>>3
-  s = data[byte:byte+4]
   # align size to a 32-bit word
-  long = struct.unpack('>L',s+'\x00'*(4-len(s)))[0]
+  long = struct.unpack('>L',(data[byte:byte+4]+'\x00'*4)[:4])[0]
   val = getbits(long,32-(bit&7)-nbits,nbits)
   if signed and (val>>(nbits-1)):
     val |= ~0 << nbits
@@ -78,22 +122,15 @@ def setbits(bit,nbits,data,value,debug=0):
   # grab 32-bits starting with the byte that contains bit
   byte = bit>>3
   last = (bit+nbits+7)>>3
-  s = data[byte:byte+4].tostring()
+  s = (data[byte:byte+6].tostring()+'\x00'*4)[:4]
   # align size to a 32-bit word
-  s += '\x00' * (4-len(s))
-  long = struct.unpack('>L',s)[0]
-  long = setbits(long,32-(bit&7)-nbits,nbits,value)
+  long = setbits(struct.unpack('>L',s)[0],32-(bit&7)-nbits,nbits,value)
   # readjust array to fit (bits+nbits)/8 bytes
   a = array('B',struct.pack('>L',long)[:last-byte])
-  if debug:
-    print 'bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d' % (
-      bit,nbits,byte,last,last-byte,len(data),len(a))
-  if last > len(data):
-    data.extend([ 0 ] * (last-len(data)))
-  #print data
+  #print 'bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d' % (
+  #   bit,nbits,byte,last,last-byte,len(data),len(a))
   data[byte:last] = a
-  if debug:
-    print data
+  #print data
   return bit+nbits
 
 NVARIATIONS = 9 # 1-8, init
@@ -117,9 +154,11 @@ class Struct:
 # Section - generic class that represents a section of .pch2 file.
 #   all sections contain parse() and format() methods.
 class Section(Struct):
-  pass
+  def __init__(self, **kw):
+    Struct.__init__(self, **kw)
+    self.data = array('B',[0]*(64<<10))
 
-# holder object for patch description
+# holder object for patch/performance description
 class Description:
   pass
 
@@ -144,7 +183,7 @@ class PatchDescription(Section):
     bit,desc.category  = getbits(bit,8,data)
 
   def format(self, patch):
-    data = array('B',[])
+    data = self.data
     desc = patch.description
 
     bit = setbits(7*8,5,data,desc.reserved)
@@ -163,7 +202,8 @@ class PatchDescription(Section):
     bit = setbits(bit,8,data,desc.category)
     bit = setbits(bit,8,data,0)
 
-    return data.tostring()
+    last = (bit+7)>>3
+    return data[:last].tostring()
 
 # ModuleList - section object for parse/format 
 class ModuleList(Section):
@@ -229,7 +269,7 @@ class ModuleList(Section):
       module.leds = 0
 
   def format(self, patch):
-    data = array('B',[])
+    data = self.data
 
     if self.area:
       area = patch.voice
@@ -260,7 +300,7 @@ class ModuleList(Section):
       for mode in range(nmodes):
         bit = setbits(bit,6,data,area.modules[i].modes[mode].value)
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # CurrentNote - section object for parse/format
 class CurrentNote(Section):
@@ -277,7 +317,7 @@ class CurrentNote(Section):
       bit, notes[i].release = getbits(bit,7,data)
 
   def format(self, patch):
-    data = array('B',[])
+    data = self.data
     if len(patch.notes):
       if not patch.lastnote:
         bit = setbits(0,7,data,64)
@@ -292,7 +332,7 @@ class CurrentNote(Section):
         bit = setbits(bit,7,data,note.note)
         bit = setbits(bit,7,data,note.attack)
         bit = setbits(bit,7,data,note.release)
-      return data.tostring()
+      return data[:(bit+7)>>3].tostring()
     else:
       return '\x80\x00\x00\x20\x00\x00'  # normal default
 
@@ -360,7 +400,7 @@ class CableList(Section):
         addnet(area.netlist, c.source, c.dest)
 
   def format(self, patch):
-    data = array('B',[])
+    data = self.data
     bit  = setbits(0,2,data,self.area)
 
     if self.area:
@@ -379,7 +419,7 @@ class CableList(Section):
       bit = setbits(bit,8,data,c.dest.module.index)
       bit = setbits(bit,6,data,c.dest.index)
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # holder object for module parameters/settings
 class Parameter:
@@ -490,7 +530,7 @@ class PatchSettings(Section):
       bit,settings.sustain.variations[variation]     = getbits(bit,7,data)
 
   def format(self, patch):
-    data       = array('B',[])
+    data = self.data
     settings   = patch.settings
 
     bit = setbits(0,2,data,self.area)
@@ -558,7 +598,7 @@ class PatchSettings(Section):
       bit = setbits(bit,7,data,settings.octaveshift.variations[variation])
       bit = setbits(bit,7,data,settings.sustain.variations[variation])
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # ModuleParameters - section object for parse/format 
 class ModuleParameters(Section):
@@ -589,7 +629,7 @@ class ModuleParameters(Section):
             bit,junk = getbits(bit,7,data)
             
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     if self.area:
       area = patch.voice
@@ -606,7 +646,7 @@ class ModuleParameters(Section):
     bit = setbits(bit,8,data,len(modules))
     if not len(modules):
       bit = setbits(bit,8,data,0) # 0 variations
-      return data.tostring()
+      return data[:(bit+7)>>3].tostring()
     bit = setbits(bit,8,data,NVARIATIONS)
 
     for i in range(len(modules)):
@@ -623,7 +663,7 @@ class ModuleParameters(Section):
         for param in range(len(params)):
           bit = setbits(bit,7,data,params[param].variations[variation])
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # MorphParameters - section object for parse/format 
 class MorphParameters(Section):
@@ -659,7 +699,7 @@ class MorphParameters(Section):
       bit,reserved = getbits(bit,4,data) # always 0
 
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     bit = setbits(0,8,data,NVARIATIONS)
     bit = setbits(bit,4,data,NMORPHS)
@@ -690,7 +730,7 @@ class MorphParameters(Section):
       bit += 4
       #bit = setbits(bit,4,data,0) # always 0
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # KnobAssignments - section object for parse/format 
 class KnobAssignments(Section):
@@ -717,7 +757,7 @@ class KnobAssignments(Section):
         k.param.knob = k
 
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     bit = setbits(0,16,data,NKNOBS)
 
@@ -735,7 +775,7 @@ class KnobAssignments(Section):
         bit = setbits(bit,2,data,k.isled)
         bit = setbits(bit,7,data,param)
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # CtrlMap - section object for parse/format 
 class CtrlAssignments(Section):
@@ -758,7 +798,7 @@ class CtrlAssignments(Section):
       m.param.ctrl = m
 
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     bit = setbits(0,7,data,len(patch.ctrls))
 
@@ -773,7 +813,7 @@ class CtrlAssignments(Section):
       bit = setbits(bit,8,data,index)
       bit = setbits(bit,7,data,param)
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # MorphLabels - section object for parse/format 
 class MorphLabels(Section):
@@ -805,7 +845,7 @@ class MorphLabels(Section):
       patch.settings.morphs[i].label = s
 
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     bit = setbits(  0,2,data,2)    # 0=fx,1=voice,2=morph
 
@@ -824,7 +864,7 @@ class MorphLabels(Section):
     for c in t:
       bit = setbits(bit,8,data,ord(c))
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # ParameterLabels - section object for parse/format 
 class ParameterLabels(Section):
@@ -852,12 +892,15 @@ class ParameterLabels(Section):
       m = area.findmodule(index)
 
       bit,modlen   = getbits(bit,8,data)
-      if m.type == 121: # SeqNote
+      if m.type.type == 121: # SeqNote
         # extra editor parameters 
-        m.editparams = []
+	# [0, 1, mag, 0, 1, octave]
+	# view: 0=3-octaves,1=2-octaves,2=1-octave
+	# octave: 0-9 (c0-c9)
+        m.editmodes = []
         for i in range(modlen):
           bit,c = getbits(bit,8,data)
-          m.editparams.append(c)
+          m.editmodes.append(c)
         continue
       while modlen > 0:
         bit,str      = getbits(bit,8,data) 
@@ -885,7 +928,7 @@ class ParameterLabels(Section):
         #print index, paramlen, param, p.labels
 
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     if self.area:
       area = patch.voice
@@ -901,7 +944,7 @@ class ParameterLabels(Section):
           if hasattr(m.params[j],'labels'):
             modules.append(m)
             break
-      elif hasattr(m,'editparams'):
+      elif hasattr(m,'editmodes'):
         modules.append(m)
 
     bit = setbits(0,2,data, self.area) # 0=fx,1=voice,2=morph
@@ -911,8 +954,8 @@ class ParameterLabels(Section):
 
       m = modules[mod]
 
-      if m.type == 121: # SeqNote
-        for ep in m.editparams:
+      if m.type.type == 121: # SeqNote
+        for ep in m.editmodes:
           t += chr(ep)
       else:
         # build up the labels and then write them
@@ -940,7 +983,7 @@ class ParameterLabels(Section):
     for c in t:
       bit = setbits(bit,8,data,ord(c))
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # ModuleNames - section object for parse/format 
 class ModuleNames(Section):
@@ -968,7 +1011,7 @@ class ModuleNames(Section):
       names = names[null+1:]
 
   def format(self, patch):
-    data  = array('B',[])
+    data = self.data
 
     bit = setbits(0,2,data,self.area)
     bit = setbits(bit,6,data,self.unk1) # unknown, see if zero works
@@ -988,7 +1031,7 @@ class ModuleNames(Section):
       for c in nm:
         bit = setbits(bit,8,data,ord(c))
 
-    return data.tostring()
+    return data[:(bit+7)>>3].tostring()
 
 # TextPad - section object for parse/format 
 class TextPad(Section):
@@ -1003,7 +1046,7 @@ class TextPad(Section):
 #   just by handling the performance sections (and perhaps others)
 #   and parsing all 4 patches within the .prf2 file.
 class Pch2File:
-  sectiontypes = [
+  patchsections = [
     PatchDescription(type=0x21),
     ModuleList(type=0x4a,area=1),
     ModuleList(type=0x4a,area=0),
@@ -1024,57 +1067,113 @@ class Pch2File:
     TextPad(type=0x6f),
   ]
   standardtxthdr = '''Version=Nord Modular G2 File Format 1\r
-Type=Patch\r
+Type=%s\r
 Version=23\r
 Info=BUILD 266\r
 \0'''
   standardbinhdr = 23
   def __init__(self, fname=None):
+    self.type = 'Patch'
     self.patch = Patch(fromname)
     if fname:
       self.read(fname)
 
+  def parsepatch(self, patch, data, off):
+    for section in Pch2File.patchsections:
+      id,l = struct.unpack('>BH',data[off:off+3])
+      off += 3
+      #nm = section.__class__.__name__
+      #print '0x%02x %-25s addr:0x%04x len:%d' % (id,nm,off,l)
+      section.parse(self.patch, data[off:off+l])
+      off += l
+    return off
+
+  def parse(self, data, off):
+    return self.parsepatch(self.patch, data, off)
+
   # read - this is where the rubber meets the road.  it start here....
   def read(self, fname):
     self.fname = fname
-    bindata = open(fname,'rb').read()
-    data = bindata[:]
+    data = open(fname,'rb').read()
     null = data.find('\0')
     if null < 0:
       raise 'Invalid G2File "%s"' % fname
-    self.txthdr,data = data[:null],data[null+1:]
-    self.binhdr,data = struct.unpack('BB',data[:2]),data[2:]
+    self.txthdr = data[:null]
+    off = null+1
+    self.binhdr = struct.unpack('BB',data[off:off+2])
+    off += 2
+    off = self.parse(data, off)
 
-    #print self.txthdr
-    #print self.binhdr
-
-    off = null + 2
-    for section in self.sectiontypes:
-      id,l = struct.unpack('>BH',data[:3])
-      #nm = section.__class__.__name__
-      #print '0x%02x %-25s addr:0x%04x len:%d' % (id,nm,off,l)
-      section.parse(self.patch, data[3:3+l])
-      off += 3+l
-      data = data[3+l:]
-
-    ecrc = struct.unpack('>H',data)[0]
-    acrc = crc(bindata[null+1:-2])
+    ecrc = struct.unpack('>H',data[off:])[0]
+    acrc = crc(data[null+1:-2])
     if ecrc != acrc:
-      print 'Bad CRC expected=0x%04x actual=0x%02x' % ecrc, acrc
+      print 'Bad CRC'
+
+  def formatpatch(self, patch):
+    s = ''
+    for section in Pch2File.patchsections:
+      f = section.format(self.patch)
+      #nm = section.__class__.__name__
+      #print '0x%02x %-25s             len:%d' % (section.type,nm,len(f))
+      s += struct.pack('>BH',section.type,len(f)) + f
+    return s
+
+  def format(self):
+    return self.formatpatch(self.patch)
 
   # write - this looks a lot easier then read ehhhh???
   def write(self, fname=None):
     out = open(fname,'wb')
-    out.write(self.standardtxthdr)
-    s = struct.pack('BB',self.standardbinhdr,0)
-    for section in self.sectiontypes:
-      f = section.format(self.patch)
-      nm = section.__class__.__name__
+    out.write(Pch2File.standardtxthdr % self.type)
+    s = struct.pack('BB',Pch2File.standardbinhdr,0)
+    s += self.format()
+    out.write(s)
+    out.write(struct.pack('>H',crc(s)))
+
+class PerformanceDescription(Struct):
+  def parse(self, perf, data):
+    desc = perf.description = Description()
+
+class Prf2File(Pch2File):
+  performancesections = [
+    PerformanceDescription(type=0x11)
+  ]
+  def __init__(self, fname=None):
+    self.type = 'Performance'
+    self.performance = Performance(fromname)
+    if fname:
+      self.read(fname)
+
+  def parseperformance(self, data, off):
+    for section in Prf2File.performancesections:
+      id,l = struct.unpack('>BH',data[off:off+3])
+      off += 3
+      #nm = section.__class__.__name__
+      #print '0x%02x %-25s addr:0x%04x len:%d' % (id,nm,off,l)
+      section.parse(self.performance, data[off:off+l])
+      off += l
+    return off
+
+  def parse(self, data, off):
+    off = self.parseperformance(data, off)
+    for i in range(4):
+      off = self.parsepatch(self.performance.patch[i], data, off)
+    return off
+
+  def formatperformance(self):
+    s = ''
+    for section in Prf2File.performancesections:
+      f = section.format(self.performance)
+      #nm = section.__class__.__name__
       #print '0x%02x %-25s             len:%d' % (section.type,nm,len(f))
       s += struct.pack('>BH',section.type,len(f)) + f
-    ccrc = crc(s)
-    s += struct.pack('>H',ccrc)
-    out.write(s)
+    return s
+
+  def format(self):
+    s = self.formatperformance()
+    for i in range(4):
+      s += self.formatpatch(self.performance.patch[i])
+    return s
 
 # this is what comes out the other end:
 #   pch2 = Pch2File('test.pch2')
