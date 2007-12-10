@@ -585,13 +585,12 @@ def convert(pch,options):
   docurrentnotes(nmpatch,g2patch,options)
   dofinalize(areaconverters,options)
 
-
   # handle text pad
   pch2.patch.textpad = pch.patch.textpad
 
   dotitleblock(pch,pch2,options)
 
-  logging.info('Writing patch "%s2"' % (pch.fname))
+  logging.warning('Writing patch "%s2"' % (pch.fname))
   pch2.write(pch.fname+'2')
   
 nm2g2_options = [
@@ -617,7 +616,7 @@ nm2g2_options = [
       dest='shorten', default=True,
       help='Turn off shorten cable connections'),
   make_option('-v', '--verbose', action='store',
-      dest='verbosity', default='3', choices=map(str,range(5)),
+      dest='verbosity', default='2', choices=map(str,range(5)),
       help='Set converter verbosity level 0-4'),
 ]
 
@@ -630,9 +629,9 @@ def main(argv):
   (options, args) = parser.parse_args(argv)
   args.pop(0)
   verbosity = [
+      logging.CRITICAL,
       logging.ERROR,
       logging.WARNING,
-      logging.CRITICAL,
       logging.INFO,
       logging.DEBUG,
   ][int(options.verbosity)]
@@ -642,18 +641,15 @@ def main(argv):
 
   def doconvert(fname,options):
     # general algorithm for converter:
-    if options.debug:
-      try:
-        convert(PchFile(fname),options) # allow exception thru if debugging
-      except NM1Error, s:
-        logging.error(s)
-    else:
-      try:
-        convert(PchFile(fname),options)
-      except KeyboardInterrupt:
-        sys.exit(1)
-      except Exception, e:
-        return fname
+    try:
+      convert(PchFile(fname),options)
+    except KeyboardInterrupt:
+      sys.exit(1)
+    except NM1Error, s:
+      logging.error(s)
+      return fname
+    except Exception, e:
+      return fname
     return ''
 
   failedpatches = []
