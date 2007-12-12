@@ -36,6 +36,11 @@ def updatevals(g2mp,params,nm1tab,g2tab):
     setv(getattr(g2mp,param),newmidival)
 
 class Convert:
+
+  parammap = []
+  inputmap = []
+  outputmap = []
+
   def __init__(self, nmarea, g2area, nmmodule, options):
     self.nmarea = nmarea
     self.g2area = g2area
@@ -57,28 +62,31 @@ class Convert:
     self.horiz = g2m.horiz = nmm.horiz
     self.height = g2m.type.height
 
-    if hasattr(self,'parammap'):
-      for param in self.parammap:
-        if type(param) == type(''):
-          setv(getattr(g2m.params,param),getv(getattr(nmm.params,param)))
-          self.params.append(getattr(g2m.params,param))
-        elif type(param) == type([]):
-          setv(getattr(g2m.params,param[0]),getv(getattr(nmm.params,param[1])))
-          self.params.append(getattr(g2m.params,param[0]))
-        else:
-          self.params.append(param) # None: placeholder for other parameters
+    self.params = [ None ] * len(self.parammap)
+    for i in range(len(self.parammap)):
+      param = self.parammap[i]
+      if type(param) == type(''):
+	setv(getattr(g2m.params,param),getv(getattr(nmm.params,param)))
+	self.params[i] = getattr(g2m.params,param)
+      elif type(param) == type([]):
+	setv(getattr(g2m.params,param[0]),getv(getattr(nmm.params,param[1])))
+	self.params[i] = getattr(g2m.params,param[0])
+      else:
+	self.params[i] = param # None: placeholder for other parameters
 
-    if hasattr(self,'inputmap'):
-      for input in self.inputmap:
-        if input:
-          input = getattr(g2m.inputs,input)
-        self.inputs.append(input)
+    self.inputs = [ None ] * len(self.inputmap)
+    for i in range(len(self.inputmap)):
+      input = self.inputmap[i]
+      if input:
+	input = getattr(g2m.inputs,input)
+      self.inputs[i] = input
           
-    if hasattr(self,'outputmap'):
-      for output in self.outputmap:
-        if output:
-          output = getattr(g2m.outputs,output)
-        self.outputs.append(output)
+    self.outputs = [ None ] * len(self.outputmap)
+    for i in range(len(self.outputmap)):
+      output = self.outputmap[i]
+      if output:
+	output = getattr(g2m.outputs,output)
+      self.outputs[i] = output
 
   def addmodule(self, shortnm, **kw):
     mod = self.g2area.addmodule(shortnm, **kw)
@@ -88,6 +96,17 @@ class Convert:
     self.g2modules.append(mod)
     return mod
   
+  def delmodule(self, module):
+    def byvert(a, b):
+      return cmp(a.vert, b.vert)
+    self.g2area.delmodule(module)
+    self.g2modules.remove(module)
+    # update vertical position of all modules with the one removed
+    self.g2modules.sort(byvert)
+    for i in range(1,len(self.g2modules)):
+      above = self.g2modules[i-1]
+      self.g2modules[i].vert = above.vert + above.height
+
   def connect(self, source, dest):
     self.g2area.connect(source,dest,g2cablecolors.blue) # change color later
 
