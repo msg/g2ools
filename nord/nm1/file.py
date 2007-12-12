@@ -124,8 +124,9 @@ class CableDump(Section):
       area = self.patch.fx
     area.cables = []
     area.netlist = []
-    for line in self.lines:
-      color,dmod,dconn,ddir,smod,sconn,sdir = map(int, line.split())
+    area.cables = [ None ] * len(self.lines)
+    for i in range(len(self.lines)):
+      color,dmod,dconn,ddir,smod,sconn,sdir = map(int, lines[i].split())
       dmodule = area.findmodule(dmod)
       smodule = area.findmodule(smod)
       if ddir:
@@ -142,7 +143,7 @@ class CableDump(Section):
         dest,source = source,dest
 
       c = Cable(area)
-      area.cables.append(c)
+      area.cables[i] = c
       c.color,c.source,c.dest = color,source,dest
 
       source.cables.append(c)
