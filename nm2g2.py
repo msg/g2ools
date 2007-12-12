@@ -20,7 +20,7 @@
 #
 
 import logging
-import os, sys
+import os, sys, traceback
 from optparse import OptionParser,make_option
 from glob import glob
 from exceptions import KeyboardInterrupt
@@ -427,7 +427,8 @@ def domorphsknobsmidiccs(nmpatch,g2patch,options):
       
   # handle Knobs
   logging.info('knobs:')
-  knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
+  #knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
+  knobmap = [0,8,16,1,9,17,2,10,18,3,11,19,4,12,20,5,13,21]
   for knob in nmpatch.knobs:
     if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
       continue
@@ -590,7 +591,7 @@ def convert(pch,options):
 
   dotitleblock(pch,pch2,options)
 
-  logging.warning('Writing patch "%s2"' % (pch.fname))
+  logging.info('Writing patch "%s2"' % (pch.fname))
   pch2.write(pch.fname+'2')
   
 nm2g2_options = [
@@ -623,8 +624,6 @@ nm2g2_options = [
 def main(argv):
   global nm2g2_options
 
-  logging.basicConfig(format='%(message)s')
-
   parser = OptionParser("usage: %prog [options] <pch-files-or-dirs>",option_list=nm2g2_options)
   (options, args) = parser.parse_args(argv)
   args.pop(0)
@@ -647,9 +646,9 @@ def main(argv):
       sys.exit(1)
     except NM1Error, s:
       logging.error(s)
-      return fname
+      return '%s\n%s' % (fname, s)
     except Exception, e:
-      return fname
+      return '%s\n%s' % (fname, traceback.format_execption())
     return ''
 
   failedpatches = []
@@ -696,4 +695,7 @@ if __name__ == '__main__':
     psyco.full()
   except ImportError:
     pass
+
+  logging.basicConfig(format='%(message)s')
+
   main(sys.argv)
