@@ -85,8 +85,9 @@ class Area:
         return module
     return None
 
+  modmembers = [ 'name','index','color','horiz','vert','uprate','leds' ]
+
   def addmodule(self, shortnm, **kw):
-    members = [ 'name','index','color','horiz','vert','uprate','leds' ]
     # get next available index
     type = self.patch.fromname[shortnm]
     indexes = [ m.index for m in self.modules ]
@@ -102,11 +103,15 @@ class Area:
       m.vert = 0
       m.uprate = 0
       m.leds = 0
-      for member in members:
+      for member in Area.members:
         if kw.has_key(member):
           setattr(m,member,kw[member])
       self.modules.append(m)
       return m
+
+  def delmodule(self, module):
+    self.modules.remove(module)
+
 
   # connect input/output to input
   def connect(self, source, dest, color):
