@@ -21,8 +21,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from nord.g2 import modules as g2mods
-
 class Member:
   def __init__(self, module, type, index):
     self.module = module
@@ -61,26 +59,28 @@ def sattr(obj,nm,val):
   setattr(obj,nm,val)
 
 class Array(list):
-  def add(self, nm, obj):
-    sattr(self, nm, obj)
-    self.append(obj)
+  def add(self, nm, obj, index):
+    setattr(self, nm, obj)
+    self[index] = obj
+    #self.append(obj)
 
 class Module:
   Groups = [ ['inputs', Input ], ['outputs', Output ],
 	     ['params', Param ], ['modes', Mode ] ]
 
   def __init__(self, type, area, **kw):
+    self.name = ''
     self.type = type
     self.area = area
     self.__dict__.update(kw)
-    self.name = ''
     for nm,cls in Module.Groups:
-      sattr(self, nm, Array())
-      a = getattr(self,nm)
+      a = Array()
+      setattr(self, nm, a)
       t = getattr(type,nm)
+      a += [ None ] * len(t)
       for i in range(len(t)):
         o = cls(self,t[i],i)
-	a.add(t[i].name,o)
+	a.add(t[i].name,o, i)
     if type.type == 121: # SeqNote mag/octave additions
       self.editmodes=[0,1,1,0,1,5]
 
