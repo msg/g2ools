@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-import os,string,sys,math
+import os,string,sys,math,traceback
 from optparse import OptionParser,make_option
 from array import array
 sys.path.append('.')
@@ -286,8 +286,8 @@ def main(argv):
       except KeyboardInterrupt:
         sys.exit(1)
       except Exception, e:
-        logging.error('%r' % e)
-        return fname
+        logging.error(traceback.format_execption())
+        return '%s\n%s' % (fname, traceback.format_execption())
     return ''
 
   failedpatches = []
