@@ -28,6 +28,7 @@ from modules import fromname
 from nord.file import *
 import modules
 
+
 # calculate crc of 1 char
 def crc16(val, icrc):
   k = (((icrc>>8)^val)&0xff)<<8
@@ -122,7 +123,7 @@ def setbits(bit,nbits,data,value,debug=0):
   # grab 32-bits starting with the byte that contains bit
   byte = bit>>3
   last = (bit+nbits+7)>>3
-  s = (data[byte:byte+6].tostring()+'\x00'*4)[:4]
+  s = data[byte:byte+4].tostring()
   # align size to a 32-bit word
   long = setbits(struct.unpack('>L',s)[0],32-(bit&7)-nbits,nbits,value)
   # readjust array to fit (bits+nbits)/8 bytes
@@ -132,6 +133,11 @@ def setbits(bit,nbits,data,value,debug=0):
   data[byte:last] = a
   #print data
   return bit+nbits
+
+try:
+  from nord.g2.bits import crc,setbits,getbits
+except:
+  pass
 
 NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
@@ -216,11 +222,12 @@ class ModuleList(Section):
     else:
       area = patch.fx
 
+    area.modules = [ None ] * modulecnt
     for i in range(modulecnt):
       #m = area.modules[i]
       bit,type       = getbits(bit,8,data)
       m = Module(modules.fromtype[type],area)
-      area.modules.append(m)
+      area.modules[i] = m
       #m.type = modules.fromtype[type] # use type object instead of number
       bit,m.index    = getbits(bit,8,data)
       bit,m.horiz    = getbits(bit,7,data)
@@ -256,14 +263,14 @@ class ModuleList(Section):
   # make sure leds bit is set for specific modules
   # - some earlier generated .pch2 files where different
   #   these were emperically determined.
+  ledtypes = [
+    3, 4, 17, 38, 42, 48, 50, 57, 59, 60, 68, 69,
+    71, 75, 76, 81, 82, 83, 85,
+    105, 108, 112, 115, 141, 142, 143, 147, 148, 149, 150,
+    156, 157, 170, 171, 178, 188, 189, 198, 199, 208,
+  ]
   def fixleds(self, module):
-    types = [
-      3, 4, 17, 38, 42, 48, 50, 57, 59, 60, 68, 69,
-      71, 75, 76, 81, 82, 83, 85,
-      105, 108, 112, 115, 141, 142, 143, 147, 148, 149, 150,
-      156, 157, 170, 171, 178, 188, 189, 198, 199, 208,
-    ]
-    if module.type in types:
+    if module.type in ModuleList.ledtypes:
       module.leds = 1
     else:
       module.leds = 0
@@ -368,6 +375,7 @@ class CableList(Section):
     else:
       area = patch.fx
 
+    area.cables = [ None ] * cablecnt
     for i in range(cablecnt):
       c = Cable(area)
       bit,c.color = getbits(bit,3,data)
@@ -386,7 +394,7 @@ class CableList(Section):
             invalid, smodule.type.shortnm, smodule.index, sconn, dir,
             dmodule.type.shortnm, dmodule.index, dconn)
       else:
-        area.cables.append(c)
+        area.cables[i] = c
 
         if dir == 1:
           c.source = smodule.outputs[sconn]
@@ -670,7 +678,8 @@ class MorphParameters(Section):
   def parse(self, patch, data):
     bit,nvariations = getbits(0,8,data)
     bit,nmorphs     = getbits(bit,4,data)
-    bit,reserved    = getbits(bit,20,data) # always 0
+    bit,reserved    = getbits(bit,10,data) # always 0
+    bit,reserved    = getbits(bit,10,data) # always 0
 
     # variations seem to be 9 bytes with first nibble variation # from 0 ~ 8
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
@@ -703,7 +712,8 @@ class MorphParameters(Section):
 
     bit = setbits(0,8,data,NVARIATIONS)
     bit = setbits(bit,4,data,NMORPHS)
-    bit = setbits(bit,20,data,0) # always 0
+    bit = setbits(bit,10,data,0) # always 0
+    bit = setbits(bit,10,data,0) # always 0
 
     # variations seem to be 9 bytes with first nibble variation # from 0 ~ 8
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
@@ -715,7 +725,7 @@ class MorphParameters(Section):
 
       # collect all params of this variation into 1 array
       mparams = []
-      for morph in range(NMORPHS):
+      for morph in range(len(morphs)):
         mparams.extend(morphs[morph].maps[variation])
 
       bit = setbits(bit,8,data,len(mparams))
@@ -727,9 +737,9 @@ class MorphParameters(Section):
         bit = setbits(bit,4,data,mparam.morph.index)
         bit = setbits(bit,8,data,mparam.range)
 
-      bit += 4
-      #bit = setbits(bit,4,data,0) # always 0
+      bit = setbits(bit,4,data,0) # always 0
 
+    bit -= 4
     return data[:(bit+7)>>3].tostring()
 
 # KnobAssignments - section object for parse/format 
@@ -944,7 +954,7 @@ class ParameterLabels(Section):
           if hasattr(m.params[j],'labels'):
             modules.append(m)
             break
-      elif hasattr(m,'editmodes'):
+      if hasattr(m,'editmodes'):
         modules.append(m)
 
     bit = setbits(0,2,data, self.area) # 0=fx,1=voice,2=morph
@@ -954,12 +964,12 @@ class ParameterLabels(Section):
 
       m = modules[mod]
 
+      s = ''
       if m.type.type == 121: # SeqNote
         for ep in m.editmodes:
-          t += chr(ep)
+          s += chr(ep)
       else:
         # build up the labels and then write them
-        s = ''
         pc = 0
         for i in range(len(m.params)):
           param = m.params[i]
@@ -1114,7 +1124,8 @@ Info=BUILD 266\r
     for section in Pch2File.patchsections:
       f = section.format(self.patch)
       #nm = section.__class__.__name__
-      #print '0x%02x %-25s             len:%d' % (section.type,nm,len(f))
+      #print '0x%02x %-25s             len:0x%04x total: 0x%04x' % (
+      #   section.type,nm,len(f),len(s))
       s += struct.pack('>BH',section.type,len(f)) + f
     return s
 
