@@ -517,7 +517,8 @@ class ConvFormantOsc(Convert):
   maing2module = 'OscC'
   parammap = ['FreqCoarse','FreqFine','Kbt',['Active','Mute'],None,None,None]
   inputmap = [None,None,None]
-
+  oscmodnms = ['Invert','RndClkB','EqPeak','Mix4-1A',
+               'ConstSwT','NoteQuant','LevAmp']
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
@@ -530,11 +531,11 @@ class ConvFormantOsc(Convert):
     p1,p2 = handledualpitchmod(self,g2m.inputs.PitchVar,g2m.params.PitchMod,5,6)
     self.inputs[:2] = p1,p2
 
-    modules =[]
-    for modnm in ['Invert','RndClkB','EqPeak','Mix4-1A',
-                  'ConstSwT','NoteQuant','LevAmp']:
+    modules = [ None ] * len(ConvFormantOsc.oscmodnms)
+    for i in range(len(ConvFormantOsc.oscmodnms)):
+      modnm = ConvFormantOsc.oscmodnms[i]
       mod = self.addmodule(modnm,name=modnm)
-      modules.append(mod)
+      modules[i] = mod
 
     inv,rndclkb,eqpeak,mix41a,constswt,notequant,levamp = modules
     self.connect(g2m.outputs.Out,inv.inputs.In2)
