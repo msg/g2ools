@@ -34,7 +34,7 @@ class NM1Error(Exception):
   def __str__(self):
     return repr(self.value)
 
-class Section:
+class Section(object):
   def __init__(self, patch, lines):
     self.patch = patch
     self.lines = lines
@@ -194,7 +194,7 @@ class CustomDump(Section):
       for i in range(len(module.modes)):
         module.modes[i].value = values[i]
 
-class Morph:
+class Morph(object):
   def __init__(self,index):
     self.maps = []
     self.index = index
@@ -285,12 +285,12 @@ class Notes(Section):
 
 class NM1Patch(Patch):
   def __init__(self,fromname):
-    Patch.__init__(self,fromname)
+    super(NM1Patch,self).__init__(fromname)
     self.morphs = [ Morph(i+1) for i in range(NMORPHS) ]
     self.knobs = []
     self.textpad = ''
 
-class PchFile:
+class PchFile(object):
   def __init__(self, fname=None):
     self.patch = NM1Patch(fromname)
     if fname:

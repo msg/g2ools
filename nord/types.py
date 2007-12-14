@@ -19,15 +19,16 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+from nord.module import Input, Output, Param, Mode, Module
 
-class Struct:
+class Struct(object):
   def __init__(self, **kw):
     self.__dict__ = kw
 
-class ParameterDef(Struct):
+class ParamDef(Struct):
   pass
 
-class Type:
+class Type(object):
   def __init__(self, name, type, horiz=0, vert=0):
     self.name = name
     self.type = type
@@ -35,24 +36,25 @@ class Type:
     self.vert = vert
 
 class InputType(Type):
-  pass
+  cls = Input
 
 class OutputType(Type):
-  pass
+  cls = Output
 
-class ParameterType:
+class ParamType(object):
+  cls = Param
   def __init__(self, name, type, labels=[]):
     self.name = name
     self.type = type
     self.labels = labels
 
 class ModeType(Type):
-  pass
+  cls = Mode
 
-class PageType:
+class PageType(object):
   def __init__(self, page, index):
     self.page = page
     self.index = index
 
 class ModuleType(Struct):
-  pass
+  cls = Module

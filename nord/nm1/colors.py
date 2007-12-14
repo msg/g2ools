@@ -19,7 +19,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-class nm1cablecolors:
+class nm1cablecolors(object):
   red = 0
   blue = 1
   yellow = 2
@@ -28,7 +28,7 @@ class nm1cablecolors:
   purple = 5
   white = 6
 
-class nm1conncolors:
+class nm1conncolors(object):
   audio = 0
   control = 1
   logic = 2

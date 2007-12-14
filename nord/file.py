@@ -50,28 +50,28 @@ def hexdump(bytes,addr=0,size=1):
       ''.join([out(ord(byte)) for byte in bytes[off:off+16]])))
   return '\n'.join(s)
 
-class Note:
+class Note(object):
   pass
 
 # holder object for patch cables
-class Cable:
+class Cable(object):
   def __init__(self, area):
     self.area = area
 
 # holder object for patch morph parameters
-class MorphMap:
+class MorphMap(object):
   pass
 
 # holder object of patch knob settings
-class Knob:
+class Knob(object):
   pass
 
 # holder object of patch midi assignments
-class Ctrl:
+class Ctrl(object):
   pass
 
 # holder object for patch voice and fx area data (modules, cables, etc..)
-class Area:
+class Area(object):
   def __init__(self,patch,index):
     self.patch = patch
     self.index = index
@@ -103,7 +103,7 @@ class Area:
       m.vert = 0
       m.uprate = 0
       m.leds = 0
-      for member in Area.members:
+      for member in Area.modmembers:
         if kw.has_key(member):
           setattr(m,member,kw[member])
       self.modules.append(m)
@@ -258,7 +258,7 @@ class Area:
         connected.append(toconn)
 
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
-class Patch:
+class Patch(object):
   def __init__(self,fromname):
     self.fx = Area(self,0)
     self.voice = Area(self,1)
@@ -268,7 +268,7 @@ class Patch:
     self.notes = []
 
 # holder object for Performances
-class Performance:
+class Performance(object):
   def __init__(self,fromname):
     self.patches = [ Patch(fromname) for slot in range(4) ]
 

@@ -19,7 +19,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-class g2modulecolors:
+class g2modulecolors(object):
   grey     =  0
   red1     =  6
   red2     = 13
@@ -46,7 +46,7 @@ class g2modulecolors:
   magenta3 = 23
   magenta4 = 24
 
-class g2cablecolors:
+class g2cablecolors(object):
   red = 0
   blue = 1
   yellow = 2
@@ -55,7 +55,7 @@ class g2cablecolors:
   purple = 5
   white = 6
 
-class g2conncolors:
+class g2conncolors(object):
   red = 0
   blue = 1
   yellow = 2

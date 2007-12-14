@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-class Member:
+class Member(object):
   def __init__(self, module, type, index):
     self.module = module
     self.type = type
@@ -29,7 +29,7 @@ class Member:
 
 class IOMember(Member):
   def __init__(self, module, type, index):
-    Member.__init__(self, module, type, index)
+    super(IOMember,self).__init__(module, type, index)
     self.rate = type.type
     self.cables = []
     self.net = None
@@ -42,7 +42,7 @@ class Output(IOMember):
 
 class Param(Member):
   def __init__(self, module, type, index):
-    Member.__init__(self, module, type, index)
+    super(Param, self).__init__(module, type, index)
     self.variations = [ type.type.default for variation in range(9) ]
     self.knob = None
     self.ctrl = None
@@ -50,7 +50,7 @@ class Param(Member):
 
 class Mode(Member):
   def __init__(self, module, type, index):
-    Member.__init__(self, module, type, index)
+    super(Mode,self).__init__(module, type, index)
     self.value = type.type.default
 
 def sattr(obj,nm,val):
@@ -64,7 +64,7 @@ class Array(list):
     self[index] = obj
     #self.append(obj)
 
-class Module:
+class Module(object):
   Groups = [ ['inputs', Input ], ['outputs', Output ],
 	     ['params', Param ], ['modes', Mode ] ]
 

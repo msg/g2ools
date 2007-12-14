@@ -153,7 +153,7 @@ class NordG2Error(Exception):
 # Struct - generic class for creating named variables in objects
 # i.e. s = Struct(one=1,two=2,three=3,...)
 #      contains: s.one, s.two, s.three
-class Struct:
+class Struct(object):
   def __init__(self, **kw):
     self.__dict__ = kw
 
@@ -161,11 +161,11 @@ class Struct:
 #   all sections contain parse() and format() methods.
 class Section(Struct):
   def __init__(self, **kw):
-    Struct.__init__(self, **kw)
+    super(Section,self).__init__(**kw)
     self.data = array('B',[0]*(64<<10))
 
 # holder object for patch/performance description
-class Description:
+class Description(object):
   pass
 
 # PatchDescription - section object for parse/format 
@@ -430,7 +430,7 @@ class CableList(Section):
     return data[:(bit+7)>>3].tostring()
 
 # holder object for module parameters/settings
-class Parameter:
+class Parameter(object):
   def __init__(self,default=0):
     self.variations = [default]*NVARIATIONS
     self.knob = None
@@ -438,7 +438,7 @@ class Parameter:
     self.ctrl = None
 
 # holder object for morph settings
-class Morph:
+class Morph(object):
   def __init__(self,index):
     self.dials = Parameter(0)
     self.modes = Parameter(1)
@@ -448,7 +448,7 @@ class Morph:
     self.ctrl = None
 
 # holder for patch settings
-class Settings:
+class Settings(object):
   def __init__(self):
     self.patchvol    = Parameter()
     self.activemuted = Parameter()
@@ -1055,7 +1055,7 @@ class TextPad(Section):
 #   this may become generic G2 file for .pch2 and .prf2 files
 #   just by handling the performance sections (and perhaps others)
 #   and parsing all 4 patches within the .prf2 file.
-class Pch2File:
+class Pch2File(object):
   patchsections = [
     PatchDescription(type=0x21),
     ModuleList(type=0x4a,area=1),

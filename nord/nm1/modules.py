@@ -48,8 +48,8 @@ modules = [
     ],
     outputs=[],
     params=[
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -69,24 +69,24 @@ modules = [
     ],
     outputs=[],
     params=[
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Destination',
-        ParameterDef(  
+      ParamType('Destination',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='2destination'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -105,24 +105,24 @@ modules = [
     ],
     outputs=[],
     params=[
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Destination',
-        ParameterDef(  
+      ParamType('Destination',
+        ParamDef(  
           default=0,
           low=0,
           high=5,
           comment='1destination'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -148,80 +148,80 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('PulseWidth',
-        ParameterDef(  
+      ParamType('PulseWidth',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='pulsewidth'
         ),
       ),
-      ParameterType('Waveform',
-        ParameterDef(  
+      ParamType('Waveform',
+        ParamDef(  
           default=0,
           low=0,
           high=3,
           comment='waveform1'
         ),
       ),
-      ParameterType('PitchMod1',
-        ParameterDef(  
+      ParamType('PitchMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PitchMod2',
-        ParameterDef(  
+      ParamType('PitchMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PwMod',
-        ParameterDef(  
+      ParamType('PwMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -231,7 +231,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -255,72 +255,72 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('Waveform',
-        ParameterDef(  
+      ParamType('Waveform',
+        ParamDef(  
           default=0,
           low=0,
           high=3,
           comment='waveform1'
         ),
       ),
-      ParameterType('PitchMod1',
-        ParameterDef(  
+      ParamType('PitchMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PitchMod2',
-        ParameterDef(  
+      ParamType('PitchMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PwMod',
-        ParameterDef(  
+      ParamType('PwMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='pulsewidth'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -330,7 +330,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -353,48 +353,48 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('FreqMod',
-        ParameterDef(  
+      ParamType('FreqMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -404,7 +404,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -425,40 +425,40 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('DetuneCoarse',
-        ParameterDef(  
+      ParamType('DetuneCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('DetuneFine',
-        ParameterDef(  
+      ParamType('DetuneFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('PulseWidth',
-        ParameterDef(  
+      ParamType('PulseWidth',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='pulsewidth'
         ),
       ),
-      ParameterType('PwMod',
-        ParameterDef(  
+      ParamType('PwMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -468,7 +468,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=2,
           default=2,
           high=0,
@@ -489,32 +489,32 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('DetuneCoarse',
-        ParameterDef(  
+      ParamType('DetuneCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('DetuneFine',
-        ParameterDef(  
+      ParamType('DetuneFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -524,7 +524,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=2,
           default=2,
           high=0,
@@ -545,32 +545,32 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('DetuneCoarse',
-        ParameterDef(  
+      ParamType('DetuneCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('DetuneFine',
-        ParameterDef(  
+      ParamType('DetuneFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -580,7 +580,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=2,
           default=2,
           high=0,
@@ -602,32 +602,32 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('DetuneCoarse',
-        ParameterDef(  
+      ParamType('DetuneCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('DetuneFine',
-        ParameterDef(  
+      ParamType('DetuneFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -637,7 +637,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=2,
           default=2,
           high=0,
@@ -660,40 +660,40 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('DetuneCoarse',
-        ParameterDef(  
+      ParamType('DetuneCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('DetuneFine',
-        ParameterDef(  
+      ParamType('DetuneFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Waveform',
-        ParameterDef(  
+      ParamType('Waveform',
+        ParamDef(  
           default=0,
           low=0,
           high=3,
           comment=''
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -703,7 +703,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=2,
           default=2,
           high=0,
@@ -727,168 +727,168 @@ modules = [
       OutputType('Gclk',         nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Note1',
-        ParameterDef(  
+      ParamType('Note1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note2',
-        ParameterDef(  
+      ParamType('Note2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note3',
-        ParameterDef(  
+      ParamType('Note3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note4',
-        ParameterDef(  
+      ParamType('Note4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note5',
-        ParameterDef(  
+      ParamType('Note5',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note6',
-        ParameterDef(  
+      ParamType('Note6',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note7',
-        ParameterDef(  
+      ParamType('Note7',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note8',
-        ParameterDef(  
+      ParamType('Note8',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note9',
-        ParameterDef(  
+      ParamType('Note9',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note10',
-        ParameterDef(  
+      ParamType('Note10',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note11',
-        ParameterDef(  
+      ParamType('Note11',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note12',
-        ParameterDef(  
+      ParamType('Note12',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note13',
-        ParameterDef(  
+      ParamType('Note13',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note14',
-        ParameterDef(  
+      ParamType('Note14',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note15',
-        ParameterDef(  
+      ParamType('Note15',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Note16',
-        ParameterDef(  
+      ParamType('Note16',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Length',
-        ParameterDef(  
+      ParamType('Length',
+        ParamDef(  
           default=0,
           low=0,
           high=15,
           comment=''
         ),
       ),
-      ParameterType('EditPosition',
-        ParameterDef(  
+      ParamType('EditPosition',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='editpos'
         ),
       ),
-      ParameterType('Record',
-        ParameterDef(  
+      ParamType('Record',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Pause',
-        ParameterDef(  
+      ParamType('Pause',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Loop',
-        ParameterDef(  
+      ParamType('Loop',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -910,8 +910,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -936,288 +936,288 @@ modules = [
       OutputType('Link',         nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Length',
-        ParameterDef(  
+      ParamType('Length',
+        ParamDef(  
           default=0,
           low=0,
           high=15,
           comment=''
         ),
       ),
-      ParameterType('Loop',
-        ParameterDef(  
+      ParamType('Loop',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Gate1',
-        ParameterDef(  
+      ParamType('Gate1',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Gate2',
-        ParameterDef(  
+      ParamType('Gate2',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step1',
-        ParameterDef(  
+      ParamType('Seq1Step1',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step2',
-        ParameterDef(  
+      ParamType('Seq1Step2',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step3',
-        ParameterDef(  
+      ParamType('Seq1Step3',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step4',
-        ParameterDef(  
+      ParamType('Seq1Step4',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step5',
-        ParameterDef(  
+      ParamType('Seq1Step5',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step6',
-        ParameterDef(  
+      ParamType('Seq1Step6',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step7',
-        ParameterDef(  
+      ParamType('Seq1Step7',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step8',
-        ParameterDef(  
+      ParamType('Seq1Step8',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step9',
-        ParameterDef(  
+      ParamType('Seq1Step9',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step10',
-        ParameterDef(  
+      ParamType('Seq1Step10',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step11',
-        ParameterDef(  
+      ParamType('Seq1Step11',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step12',
-        ParameterDef(  
+      ParamType('Seq1Step12',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step13',
-        ParameterDef(  
+      ParamType('Seq1Step13',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step14',
-        ParameterDef(  
+      ParamType('Seq1Step14',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step15',
-        ParameterDef(  
+      ParamType('Seq1Step15',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq1Step16',
-        ParameterDef(  
+      ParamType('Seq1Step16',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step1',
-        ParameterDef(  
+      ParamType('Seq2Step1',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step2',
-        ParameterDef(  
+      ParamType('Seq2Step2',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step3',
-        ParameterDef(  
+      ParamType('Seq2Step3',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step4',
-        ParameterDef(  
+      ParamType('Seq2Step4',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step5',
-        ParameterDef(  
+      ParamType('Seq2Step5',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step6',
-        ParameterDef(  
+      ParamType('Seq2Step6',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step7',
-        ParameterDef(  
+      ParamType('Seq2Step7',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step8',
-        ParameterDef(  
+      ParamType('Seq2Step8',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step9',
-        ParameterDef(  
+      ParamType('Seq2Step9',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step10',
-        ParameterDef(  
+      ParamType('Seq2Step10',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step11',
-        ParameterDef(  
+      ParamType('Seq2Step11',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step12',
-        ParameterDef(  
+      ParamType('Seq2Step12',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step13',
-        ParameterDef(  
+      ParamType('Seq2Step13',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step14',
-        ParameterDef(  
+      ParamType('Seq2Step14',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step15',
-        ParameterDef(  
+      ParamType('Seq2Step15',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Seq2Step16',
-        ParameterDef(  
+      ParamType('Seq2Step16',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -1240,16 +1240,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('MixMod',
-        ParameterDef(  
+      ParamType('MixMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mix',
-        ParameterDef(  
+      ParamType('Mix',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1272,24 +1272,24 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Lev1',
-        ParameterDef(  
+      ParamType('Lev1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev2',
-        ParameterDef(  
+      ParamType('Lev2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev3',
-        ParameterDef(  
+      ParamType('Lev3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1314,48 +1314,48 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('AttackShape',
-        ParameterDef(  
+      ParamType('AttackShape',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='adsrshape'
         ),
       ),
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Decay',
-        ParameterDef(  
+      ParamType('Decay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Sustain',
-        ParameterDef(  
+      ParamType('Sustain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Release',
-        ParameterDef(  
+      ParamType('Release',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Invert',
-        ParameterDef(  
+      ParamType('Invert',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -1379,72 +1379,72 @@ modules = [
       OutputType('Right',        nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='companderattack'
         ),
       ),
-      ParameterType('Release',
-        ParameterDef(  
+      ParamType('Release',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='companderrelease'
         ),
       ),
-      ParameterType('Threshold',
-        ParameterDef(  
+      ParamType('Threshold',
+        ParamDef(  
           default=0,
           low=0,
           high=42,
           comment='compandertreshold'
         ),
       ),
-      ParameterType('Ratio',
-        ParameterDef(  
+      ParamType('Ratio',
+        ParamDef(  
           default=0,
           low=0,
           high=66,
           comment='companderratio'
         ),
       ),
-      ParameterType('RefLevel',
-        ParameterDef(  
+      ParamType('RefLevel',
+        ParamDef(  
           default=0,
           low=0,
           high=42,
           comment='companderref'
         ),
       ),
-      ParameterType('Limiter',
-        ParameterDef(  
+      ParamType('Limiter',
+        ParamDef(  
           default=0,
           low=0,
           high=24,
           comment='companderlimit'
         ),
       ),
-      ParameterType('Act',
-        ParameterDef(  
+      ParamType('Act',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Mon',
-        ParameterDef(  
+      ParamType('Mon',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -1465,8 +1465,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Range',
-        ParameterDef(  
+      ParamType('Range',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1495,72 +1495,72 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Decay',
-        ParameterDef(  
+      ParamType('Decay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Sustain',
-        ParameterDef(  
+      ParamType('Sustain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Release',
-        ParameterDef(  
+      ParamType('Release',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('AttackMod',
-        ParameterDef(  
+      ParamType('AttackMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('DecayMod',
-        ParameterDef(  
+      ParamType('DecayMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('SustainMod',
-        ParameterDef(  
+      ParamType('SustainMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('ReleaseMod',
-        ParameterDef(  
+      ParamType('ReleaseMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Invert',
-        ParameterDef(  
+      ParamType('Invert',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -1583,64 +1583,64 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='lforate'
         ),
       ),
-      ParameterType('Range',
-        ParameterDef(  
+      ParamType('Range',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='lforange'
         ),
       ),
-      ParameterType('Waveform',
-        ParameterDef(  
+      ParamType('Waveform',
+        ParamDef(  
           default=0,
           low=0,
           high=4,
           comment='lfoshape'
         ),
       ),
-      ParameterType('RateMod',
-        ParameterDef(  
+      ParamType('RateMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mono',
-        ParameterDef(  
+      ParamType('Mono',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('Phase',
-        ParameterDef(  
+      ParamType('Phase',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='phase'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -1664,64 +1664,64 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='lforate'
         ),
       ),
-      ParameterType('Range',
-        ParameterDef(  
+      ParamType('Range',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='lforange'
         ),
       ),
-      ParameterType('Phase',
-        ParameterDef(  
+      ParamType('Phase',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='phase'
         ),
       ),
-      ParameterType('RateMod',
-        ParameterDef(  
+      ParamType('RateMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mono',
-        ParameterDef(  
+      ParamType('Mono',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('PwMod',
-        ParameterDef(  
+      ParamType('PwMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Pw',
-        ParameterDef(  
+      ParamType('Pw',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1743,48 +1743,48 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='lforate'
         ),
       ),
-      ParameterType('Range',
-        ParameterDef(  
+      ParamType('Range',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='lforange'
         ),
       ),
-      ParameterType('Waveform',
-        ParameterDef(  
+      ParamType('Waveform',
+        ParamDef(  
           default=0,
           low=0,
           high=4,
           comment='lfoshape'
         ),
       ),
-      ParameterType('RateMod',
-        ParameterDef(  
+      ParamType('RateMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mono',
-        ParameterDef(  
+      ParamType('Mono',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -1805,8 +1805,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1816,7 +1816,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -1836,8 +1836,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1847,7 +1847,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -1867,8 +1867,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1878,7 +1878,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -1898,8 +1898,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1909,7 +1909,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -1927,8 +1927,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Color',
-        ParameterDef(  
+      ParamType('Color',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -1949,120 +1949,120 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('50',
-        ParameterDef(  
+      ParamType('50',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('75',
-        ParameterDef(  
+      ParamType('75',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('110',
-        ParameterDef(  
+      ParamType('110',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('170',
-        ParameterDef(  
+      ParamType('170',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('250',
-        ParameterDef(  
+      ParamType('250',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('380',
-        ParameterDef(  
+      ParamType('380',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('570',
-        ParameterDef(  
+      ParamType('570',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('850',
-        ParameterDef(  
+      ParamType('850',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('1.3',
-        ParameterDef(  
+      ParamType('1.3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('1.9',
-        ParameterDef(  
+      ParamType('1.9',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('2.9',
-        ParameterDef(  
+      ParamType('2.9',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('4.2',
-        ParameterDef(  
+      ParamType('4.2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('6.4',
-        ParameterDef(  
+      ParamType('6.4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('8.3',
-        ParameterDef(  
+      ParamType('8.3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2083,16 +2083,16 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Mono',
-        ParameterDef(  
+      ParamType('Mono',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Color',
-        ParameterDef(  
+      ParamType('Color',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2113,8 +2113,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2133,8 +2133,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Density',
-        ParameterDef(  
+      ParamType('Density',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2155,8 +2155,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2177,8 +2177,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2199,8 +2199,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2221,8 +2221,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2250,72 +2250,72 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Lev1',
-        ParameterDef(  
+      ParamType('Lev1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev2',
-        ParameterDef(  
+      ParamType('Lev2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev3',
-        ParameterDef(  
+      ParamType('Lev3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev4',
-        ParameterDef(  
+      ParamType('Lev4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev5',
-        ParameterDef(  
+      ParamType('Lev5',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev6',
-        ParameterDef(  
+      ParamType('Lev6',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev7',
-        ParameterDef(  
+      ParamType('Lev7',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Lev8',
-        ParameterDef(  
+      ParamType('Lev8',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('-6Db',
-        ParameterDef(  
+      ParamType('-6Db',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2334,16 +2334,16 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Value',
-        ParameterDef(  
+      ParamType('Value',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Unipolar',
-        ParameterDef(  
+      ParamType('Unipolar',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2365,8 +2365,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Shift',
-        ParameterDef(  
+      ParamType('Shift',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2389,72 +2389,72 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Vowel1',
-        ParameterDef(  
+      ParamType('Vowel1',
+        ParamDef(  
           default=0,
           low=0,
           high=8,
           comment='vowel'
         ),
       ),
-      ParameterType('Vowel2',
-        ParameterDef(  
+      ParamType('Vowel2',
+        ParamDef(  
           default=0,
           low=0,
           high=8,
           comment='vowel'
         ),
       ),
-      ParameterType('Vowel3',
-        ParameterDef(  
+      ParamType('Vowel3',
+        ParamDef(  
           default=0,
           low=0,
           high=8,
           comment='vowel'
         ),
       ),
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Vowel',
-        ParameterDef(  
+      ParamType('Vowel',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symeteric'
         ),
       ),
-      ParameterType('VowelMod',
-        ParameterDef(  
+      ParamType('VowelMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('FreqMod',
-        ParameterDef(  
+      ParamType('FreqMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Res',
-        ParameterDef(  
+      ParamType('Res',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2481,48 +2481,48 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Hold',
-        ParameterDef(  
+      ParamType('Hold',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Decay',
-        ParameterDef(  
+      ParamType('Decay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('AttackMod',
-        ParameterDef(  
+      ParamType('AttackMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('HoldMod',
-        ParameterDef(  
+      ParamType('HoldMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('DecayMod',
-        ParameterDef(  
+      ParamType('DecayMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2545,16 +2545,16 @@ modules = [
       OutputType('Outr',         nm1conncolors.audio),
     ],
     params=[
-      ParameterType('PanMod',
-        ParameterDef(  
+      ParamType('PanMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Pan',
-        ParameterDef(  
+      ParamType('Pan',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2576,8 +2576,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2601,32 +2601,32 @@ modules = [
       OutputType('Lp',           nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='filterfreq'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('Res',
-        ParameterDef(  
+      ParamType('Res',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FreqMod',
-        ParameterDef(  
+      ParamType('FreqMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -2636,7 +2636,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -2658,24 +2658,24 @@ modules = [
       OutputType('Hp',           nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='filterfreq'
         ),
       ),
-      ParameterType('Res',
-        ParameterDef(  
+      ParamType('Res',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('GainControl',
-        ParameterDef(  
+      ParamType('GainControl',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2685,7 +2685,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -2708,80 +2708,80 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('FilterType',
-        ParameterDef(  
+      ParamType('FilterType',
+        ParamDef(  
           default=0,
           low=0,
           high=3,
           comment='filtertype'
         ),
       ),
-      ParameterType('GainControl',
-        ParameterDef(  
+      ParamType('GainControl',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('FreqMod1',
-        ParameterDef(  
+      ParamType('FreqMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='filterfreq'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('ResMod',
-        ParameterDef(  
+      ParamType('ResMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Res',
-        ParameterDef(  
+      ParamType('Res',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Slope',
-        ParameterDef(  
+      ParamType('Slope',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='filterslope2'
         ),
       ),
-      ParameterType('FreqMod2',
-        ParameterDef(  
+      ParamType('FreqMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2791,7 +2791,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -2814,88 +2814,88 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Level1',
-        ParameterDef(  
+      ParamType('Level1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level2',
-        ParameterDef(  
+      ParamType('Level2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level3',
-        ParameterDef(  
+      ParamType('Level3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level4',
-        ParameterDef(  
+      ParamType('Level4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Time1',
-        ParameterDef(  
+      ParamType('Time1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Time2',
-        ParameterDef(  
+      ParamType('Time2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Time3',
-        ParameterDef(  
+      ParamType('Time3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Time4',
-        ParameterDef(  
+      ParamType('Time4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Time5',
-        ParameterDef(  
+      ParamType('Time5',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Sustain',
-        ParameterDef(  
+      ParamType('Sustain',
+        ParamDef(  
           default=0,
           low=0,
           high=4,
           comment='0 ~ off, 4 ~ level 4'
         ),
       ),
-      ParameterType('Curve',
-        ParameterDef(  
+      ParamType('Curve',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
@@ -2930,8 +2930,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Bits',
-        ParameterDef(  
+      ParamType('Bits',
+        ParamDef(  
           default=0,
           low=0,
           high=12,
@@ -2952,16 +2952,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Mode',
-        ParameterDef(  
+      ParamType('Mode',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='0 ~ bipolar, 1 ~ uni/neg, 2 ~ uni/pos'
         ),
       ),
-      ParameterType('Inv',
-        ParameterDef(  
+      ParamType('Inv',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -2984,128 +2984,128 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Masterfreq',
-        ParameterDef(  
+      ParamType('Masterfreq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('SlaveRatio',
-        ParameterDef(  
+      ParamType('SlaveRatio',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('MasterDecay',
-        ParameterDef(  
+      ParamType('MasterDecay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('SlaveDecay',
-        ParameterDef(  
+      ParamType('SlaveDecay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('MasterLevel',
-        ParameterDef(  
+      ParamType('MasterLevel',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('SlaveLevel',
-        ParameterDef(  
+      ParamType('SlaveLevel',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('NoiseFltFreq',
-        ParameterDef(  
+      ParamType('NoiseFltFreq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('NoiseFltRes',
-        ParameterDef(  
+      ParamType('NoiseFltRes',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('NoiseFltSweep',
-        ParameterDef(  
+      ParamType('NoiseFltSweep',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('NoiseFltDecay',
-        ParameterDef(  
+      ParamType('NoiseFltDecay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('NoiseFltMode',
-        ParameterDef(  
+      ParamType('NoiseFltMode',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='filtertype1'
         ),
       ),
-      ParameterType('BendAmount',
-        ParameterDef(  
+      ParamType('BendAmount',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('BendDecay',
-        ParameterDef(  
+      ParamType('BendDecay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Click',
-        ParameterDef(  
+      ParamType('Click',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Noise',
-        ParameterDef(  
+      ParamType('Noise',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3126,8 +3126,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3149,24 +3149,24 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('ClipMod',
-        ParameterDef(  
+      ParamType('ClipMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Clip',
-        ParameterDef(  
+      ParamType('Clip',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Sym',
-        ParameterDef(  
+      ParamType('Sym',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3188,16 +3188,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('OverdriveMod',
-        ParameterDef(  
+      ParamType('OverdriveMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Overdrive',
-        ParameterDef(  
+      ParamType('Overdrive',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3232,8 +3232,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3268,40 +3268,40 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Inv1',
-        ParameterDef(  
+      ParamType('Inv1',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Level1',
-        ParameterDef(  
+      ParamType('Level1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Inv2',
-        ParameterDef(  
+      ParamType('Inv2',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Level2',
-        ParameterDef(  
+      ParamType('Level2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mode',
-        ParameterDef(  
+      ParamType('Mode',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3322,8 +3322,8 @@ modules = [
       OutputType('Releasevelocity',nm1conncolors.control),
     ],
     params=[
-      ParameterType('Note',
-        ParameterDef(  
+      ParamType('Note',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3347,16 +3347,16 @@ modules = [
       OutputType('Sync',         nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('On/Off',
-        ParameterDef(  
+      ParamType('On/Off',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3378,8 +3378,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Divider',
-        ParameterDef(  
+      ParamType('Divider',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3413,16 +3413,16 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Release',
-        ParameterDef(  
+      ParamType('Release',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3443,8 +3443,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Transpose',
-        ParameterDef(  
+      ParamType('Transpose',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3466,8 +3466,8 @@ modules = [
       OutputType('Out',          nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Mode',
-        ParameterDef(  
+      ParamType('Mode',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
@@ -3489,16 +3489,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('WrapMod',
-        ParameterDef(  
+      ParamType('WrapMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Wrap',
-        ParameterDef(  
+      ParamType('Wrap',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3519,16 +3519,16 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Range',
-        ParameterDef(  
+      ParamType('Range',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Notes',
-        ParameterDef(  
+      ParamType('Notes',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3549,8 +3549,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('On',
-        ParameterDef(  
+      ParamType('On',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3589,16 +3589,16 @@ modules = [
       OutputType('VariableDelayOut',nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Modulation',
-        ParameterDef(  
+      ParamType('Modulation',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Time',
-        ParameterDef(  
+      ParamType('Time',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3622,48 +3622,48 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Sel',
-        ParameterDef(  
+      ParamType('Sel',
+        ParamDef(  
           default=0,
           low=0,
           high=3,
           comment=''
         ),
       ),
-      ParameterType('Level1',
-        ParameterDef(  
+      ParamType('Level1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level2',
-        ParameterDef(  
+      ParamType('Level2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level3',
-        ParameterDef(  
+      ParamType('Level3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level4',
-        ParameterDef(  
+      ParamType('Level4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3685,40 +3685,40 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='lfoslvrate'
         ),
       ),
-      ParameterType('Phase',
-        ParameterDef(  
+      ParamType('Phase',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='phase'
         ),
       ),
-      ParameterType('Waveform',
-        ParameterDef(  
+      ParamType('Waveform',
+        ParamDef(  
           default=0,
           low=0,
           high=4,
           comment='lfoshape'
         ),
       ),
-      ParameterType('Mono',
-        ParameterDef(  
+      ParamType('Mono',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3728,7 +3728,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -3748,8 +3748,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Gain',
-        ParameterDef(  
+      ParamType('Gain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3770,8 +3770,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Mode',
-        ParameterDef(  
+      ParamType('Mode',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
@@ -3792,8 +3792,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Mode',
-        ParameterDef(  
+      ParamType('Mode',
+        ParamDef(  
           default=0,
           low=0,
           high=4,
@@ -3817,24 +3817,24 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Decay',
-        ParameterDef(  
+      ParamType('Decay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='adsrtime'
         ),
       ),
-      ParameterType('Gate',
-        ParameterDef(  
+      ParamType('Gate',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3857,40 +3857,40 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('DetuneCoarse',
-        ParameterDef(  
+      ParamType('DetuneCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('DetuneFine',
-        ParameterDef(  
+      ParamType('DetuneFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('-3Oct',
-        ParameterDef(  
+      ParamType('-3Oct',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -3900,7 +3900,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -3920,8 +3920,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3942,8 +3942,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -3967,24 +3967,24 @@ modules = [
       OutputType('Out4',         nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Sel',
-        ParameterDef(  
+      ParamType('Sel',
+        ParamDef(  
           default=0,
           low=0,
           high=3,
           comment='0 ~ out1, 3 ~ out4'
         ),
       ),
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4023,168 +4023,168 @@ modules = [
       OutputType('Gclk',         nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Note1',
-        ParameterDef(  
+      ParamType('Note1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note2',
-        ParameterDef(  
+      ParamType('Note2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note3',
-        ParameterDef(  
+      ParamType('Note3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note4',
-        ParameterDef(  
+      ParamType('Note4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note5',
-        ParameterDef(  
+      ParamType('Note5',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note6',
-        ParameterDef(  
+      ParamType('Note6',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note7',
-        ParameterDef(  
+      ParamType('Note7',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note8',
-        ParameterDef(  
+      ParamType('Note8',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note9',
-        ParameterDef(  
+      ParamType('Note9',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note10',
-        ParameterDef(  
+      ParamType('Note10',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note11',
-        ParameterDef(  
+      ParamType('Note11',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note12',
-        ParameterDef(  
+      ParamType('Note12',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note13',
-        ParameterDef(  
+      ParamType('Note13',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note14',
-        ParameterDef(  
+      ParamType('Note14',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note15',
-        ParameterDef(  
+      ParamType('Note15',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Note16',
-        ParameterDef(  
+      ParamType('Note16',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Length',
-        ParameterDef(  
+      ParamType('Length',
+        ParamDef(  
           default=0,
           low=0,
           high=15,
           comment=''
         ),
       ),
-      ParameterType('Currentstep',
-        ParameterDef(  
+      ParamType('Currentstep',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='editpos'
         ),
       ),
-      ParameterType('Record',
-        ParameterDef(  
+      ParamType('Record',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Play',
-        ParameterDef(  
+      ParamType('Play',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Loop',
-        ParameterDef(  
+      ParamType('Loop',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4194,7 +4194,7 @@ modules = [
     ],
     modes=[
       ModeType('Zoomfactor',
-        ParameterDef(  
+        ParamDef(  
           low=6,
           default=6,
           high=1,
@@ -4202,7 +4202,7 @@ modules = [
         ),
       ),
       ModeType('Sliderposition',
-        ParameterDef(  
+        ParamDef(  
           low=117,
           default=117,
           high=6,
@@ -4225,152 +4225,152 @@ modules = [
       OutputType('Link',         nm1conncolors.logic),
     ],
     params=[
-      ParameterType('Ctrl1',
-        ParameterDef(  
+      ParamType('Ctrl1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl2',
-        ParameterDef(  
+      ParamType('Ctrl2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl3',
-        ParameterDef(  
+      ParamType('Ctrl3',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl4',
-        ParameterDef(  
+      ParamType('Ctrl4',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl5',
-        ParameterDef(  
+      ParamType('Ctrl5',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl6',
-        ParameterDef(  
+      ParamType('Ctrl6',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl7',
-        ParameterDef(  
+      ParamType('Ctrl7',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl8',
-        ParameterDef(  
+      ParamType('Ctrl8',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl9',
-        ParameterDef(  
+      ParamType('Ctrl9',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl10',
-        ParameterDef(  
+      ParamType('Ctrl10',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl11',
-        ParameterDef(  
+      ParamType('Ctrl11',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl12',
-        ParameterDef(  
+      ParamType('Ctrl12',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl13',
-        ParameterDef(  
+      ParamType('Ctrl13',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl14',
-        ParameterDef(  
+      ParamType('Ctrl14',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl15',
-        ParameterDef(  
+      ParamType('Ctrl15',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Ctrl16',
-        ParameterDef(  
+      ParamType('Ctrl16',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Length',
-        ParameterDef(  
+      ParamType('Length',
+        ParamDef(  
           default=0,
           low=0,
           high=15,
           comment=''
         ),
       ),
-      ParameterType('Uni',
-        ParameterDef(  
+      ParamType('Uni',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Loop',
-        ParameterDef(  
+      ParamType('Loop',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4393,56 +4393,56 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='filterfreq'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqkbt'
         ),
       ),
-      ParameterType('Res',
-        ParameterDef(  
+      ParamType('Res',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FreqMod1',
-        ParameterDef(  
+      ParamType('FreqMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FreqMod2',
-        ParameterDef(  
+      ParamType('FreqMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Slope',
-        ParameterDef(  
+      ParamType('Slope',
+        ParamDef(  
           default=0,
           low=0,
           high=2,
           comment='filtertype1'
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4452,7 +4452,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -4473,24 +4473,24 @@ modules = [
       OutputType('Outright',     nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Detune',
-        ParameterDef(  
+      ParamType('Detune',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Amount',
-        ParameterDef(  
+      ParamType('Amount',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4513,56 +4513,56 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='0 ~ 8.18 Hz, 127 ~ 12.54 kHz'
         ),
       ),
-      ParameterType('Click',
-        ParameterDef(  
+      ParamType('Click',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Decay',
-        ParameterDef(  
+      ParamType('Decay',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Punch',
-        ParameterDef(  
+      ParamType('Punch',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('PitchMod',
-        ParameterDef(  
+      ParamType('PitchMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4572,7 +4572,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -4595,56 +4595,56 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Timbre',
-        ParameterDef(  
+      ParamType('Timbre',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PitchMod1',
-        ParameterDef(  
+      ParamType('PitchMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PitchMod2',
-        ParameterDef(  
+      ParamType('PitchMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -4654,7 +4654,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -4675,40 +4675,40 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('PitchMod1',
-        ParameterDef(  
+      ParamType('PitchMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PitchMod2',
-        ParameterDef(  
+      ParamType('PitchMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -4718,7 +4718,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -4738,112 +4738,112 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Range',
-        ParameterDef(  
+      ParamType('Range',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Cont',
-        ParameterDef(  
+      ParamType('Cont',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('E',
-        ParameterDef(  
+      ParamType('E',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('F',
-        ParameterDef(  
+      ParamType('F',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('F#',
-        ParameterDef(  
+      ParamType('F#',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('G',
-        ParameterDef(  
+      ParamType('G',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('G#',
-        ParameterDef(  
+      ParamType('G#',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('A',
-        ParameterDef(  
+      ParamType('A',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('A#',
-        ParameterDef(  
+      ParamType('A#',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('B',
-        ParameterDef(  
+      ParamType('B',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('C',
-        ParameterDef(  
+      ParamType('C',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('C#',
-        ParameterDef(  
+      ParamType('C#',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('D',
-        ParameterDef(  
+      ParamType('D',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('D#',
-        ParameterDef(  
+      ParamType('D#',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4866,40 +4866,40 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Pattern',
-        ParameterDef(  
+      ParamType('Pattern',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Bank',
-        ParameterDef(  
+      ParamType('Bank',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('LowDelta',
-        ParameterDef(  
+      ParamType('LowDelta',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Step',
-        ParameterDef(  
+      ParamType('Step',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Mono',
-        ParameterDef(  
+      ParamType('Mono',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -4924,16 +4924,16 @@ modules = [
       OutputType('Vel',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Upper',
-        ParameterDef(  
+      ParamType('Upper',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('Lower',
-        ParameterDef(  
+      ParamType('Lower',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -4956,88 +4956,88 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='0 ~ 62.9 s, 127 ~ 24.4 hHz'
         ),
       ),
-      ParameterType('Lfo',
-        ParameterDef(  
+      ParamType('Lfo',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('FreqMod',
-        ParameterDef(  
+      ParamType('FreqMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='0 ~ 100 Hz, 127 ~ 16 kHz'
         ),
       ),
-      ParameterType('SpreadMod',
-        ParameterDef(  
+      ParamType('SpreadMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Feedback',
-        ParameterDef(  
+      ParamType('Feedback',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Peaks',
-        ParameterDef(  
+      ParamType('Peaks',
+        ParamDef(  
           default=0,
           low=0,
           high=5,
           comment='0 ~ 1 peak, 5 ~ 6 peaks'
         ),
       ),
-      ParameterType('Spread',
-        ParameterDef(  
+      ParamType('Spread',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Depth',
-        ParameterDef(  
+      ParamType('Depth',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5058,40 +5058,40 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='eqfreq'
         ),
       ),
-      ParameterType('Gain',
-        ParameterDef(  
+      ParamType('Gain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='eqgain'
         ),
       ),
-      ParameterType('Bandwidth',
-        ParameterDef(  
+      ParamType('Bandwidth',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5112,40 +5112,40 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Freq',
-        ParameterDef(  
+      ParamType('Freq',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='eqfreq'
         ),
       ),
-      ParameterType('Gain',
-        ParameterDef(  
+      ParamType('Gain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='eqgain'
         ),
       ),
-      ParameterType('Mode',
-        ParameterDef(  
+      ParamType('Mode',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='0 ~ low, 1 ~ high'
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5169,72 +5169,72 @@ modules = [
       OutputType('OutRight',     nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Attack',
-        ParameterDef(  
+      ParamType('Attack',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='companderattack'
         ),
       ),
-      ParameterType('Release',
-        ParameterDef(  
+      ParamType('Release',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='companderrelease'
         ),
       ),
-      ParameterType('Treshold',
-        ParameterDef(  
+      ParamType('Treshold',
+        ParamDef(  
           default=0,
           low=0,
           high=84,
           comment='compandertreshold'
         ),
       ),
-      ParameterType('Ratio',
-        ParameterDef(  
+      ParamType('Ratio',
+        ParamDef(  
           default=0,
           low=0,
           high=66,
           comment='companderratio'
         ),
       ),
-      ParameterType('Gate',
-        ParameterDef(  
+      ParamType('Gate',
+        ParamDef(  
           default=0,
           low=0,
           high=72,
           comment='compandergate'
         ),
       ),
-      ParameterType('Hold',
-        ParameterDef(  
+      ParamType('Hold',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='companderhold'
         ),
       ),
-      ParameterType('Act',
-        ParameterDef(  
+      ParamType('Act',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Mon',
-        ParameterDef(  
+      ParamType('Mon',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Bypass',
-        ParameterDef(  
+      ParamType('Bypass',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -5263,192 +5263,192 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Osc1Coarse',
-        ParameterDef(  
+      ParamType('Osc1Coarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc1Fine',
-        ParameterDef(  
+      ParamType('Osc1Fine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Osc1Level',
-        ParameterDef(  
+      ParamType('Osc1Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc2Coarse',
-        ParameterDef(  
+      ParamType('Osc2Coarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc2Fine',
-        ParameterDef(  
+      ParamType('Osc2Fine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Osc2Level',
-        ParameterDef(  
+      ParamType('Osc2Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc3Coarse',
-        ParameterDef(  
+      ParamType('Osc3Coarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc3Fine',
-        ParameterDef(  
+      ParamType('Osc3Fine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Osc3Level',
-        ParameterDef(  
+      ParamType('Osc3Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc4Coarse',
-        ParameterDef(  
+      ParamType('Osc4Coarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc4Fine',
-        ParameterDef(  
+      ParamType('Osc4Fine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Osc4Level',
-        ParameterDef(  
+      ParamType('Osc4Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc5Coarse',
-        ParameterDef(  
+      ParamType('Osc5Coarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc5Fine',
-        ParameterDef(  
+      ParamType('Osc5Fine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Osc5Level',
-        ParameterDef(  
+      ParamType('Osc5Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc6Coarse',
-        ParameterDef(  
+      ParamType('Osc6Coarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc6Fine',
-        ParameterDef(  
+      ParamType('Osc6Fine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='symetric'
         ),
       ),
-      ParameterType('Osc6Level',
-        ParameterDef(  
+      ParamType('Osc6Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Osc1Mute',
-        ParameterDef(  
+      ParamType('Osc1Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Osc2Mute',
-        ParameterDef(  
+      ParamType('Osc2Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Osc3Mute',
-        ParameterDef(  
+      ParamType('Osc3Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Osc4Mute',
-        ParameterDef(  
+      ParamType('Osc4Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Osc5Mute',
-        ParameterDef(  
+      ParamType('Osc5Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Osc6Mute',
-        ParameterDef(  
+      ParamType('Osc6Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -5473,80 +5473,80 @@ modules = [
       OutputType('Slv',          nm1conncolors.slave),
     ],
     params=[
-      ParameterType('FreqCoarse',
-        ParameterDef(  
+      ParamType('FreqCoarse',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('FreqFine',
-        ParameterDef(  
+      ParamType('FreqFine',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqfine'
         ),
       ),
-      ParameterType('Shape',
-        ParameterDef(  
+      ParamType('Shape',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Partials',
-        ParameterDef(  
+      ParamType('Partials',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='0 ~ odd, 1 ~ all'
         ),
       ),
-      ParameterType('PitchMod1',
-        ParameterDef(  
+      ParamType('PitchMod1',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('PitchMod2',
-        ParameterDef(  
+      ParamType('PitchMod2',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('FmMod',
-        ParameterDef(  
+      ParamType('FmMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('ShapeMod',
-        ParameterDef(  
+      ParamType('ShapeMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Kbt',
-        ParameterDef(  
+      ParamType('Kbt',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('Mute',
-        ParameterDef(  
+      ParamType('Mute',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -5556,7 +5556,7 @@ modules = [
     ],
     modes=[
       ModeType('FreqDisplayUnits',
-        ParameterDef(  
+        ParamDef(  
           low=1,
           default=1,
           high=0,
@@ -5577,152 +5577,152 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Band1',
-        ParameterDef(  
+      ParamType('Band1',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band2',
-        ParameterDef(  
+      ParamType('Band2',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band3',
-        ParameterDef(  
+      ParamType('Band3',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band4',
-        ParameterDef(  
+      ParamType('Band4',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band5',
-        ParameterDef(  
+      ParamType('Band5',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band6',
-        ParameterDef(  
+      ParamType('Band6',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band7',
-        ParameterDef(  
+      ParamType('Band7',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band8',
-        ParameterDef(  
+      ParamType('Band8',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band9',
-        ParameterDef(  
+      ParamType('Band9',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band10',
-        ParameterDef(  
+      ParamType('Band10',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band11',
-        ParameterDef(  
+      ParamType('Band11',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band12',
-        ParameterDef(  
+      ParamType('Band12',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band13',
-        ParameterDef(  
+      ParamType('Band13',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band14',
-        ParameterDef(  
+      ParamType('Band14',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band15',
-        ParameterDef(  
+      ParamType('Band15',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Band16',
-        ParameterDef(  
+      ParamType('Band16',
+        ParamDef(  
           default=0,
           low=0,
           high=16,
           comment='vocoband'
         ),
       ),
-      ParameterType('Outgain',
-        ParameterDef(  
+      ParamType('Outgain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('Emphasis',
-        ParameterDef(  
+      ParamType('Emphasis',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment=''
         ),
       ),
-      ParameterType('Monitor',
-        ParameterDef(  
+      ParamType('Monitor',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -5743,8 +5743,8 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5765,16 +5765,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Gain',
-        ParameterDef(  
+      ParamType('Gain',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Unipolar',
-        ParameterDef(  
+      ParamType('Unipolar',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -5795,16 +5795,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Level',
-        ParameterDef(  
+      ParamType('Level',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='unibi'
         ),
       ),
-      ParameterType('Unipolar',
-        ParameterDef(  
+      ParamType('Unipolar',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -5826,8 +5826,8 @@ modules = [
       OutputType('Out2',         nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Mix',
-        ParameterDef(  
+      ParamType('Mix',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5849,8 +5849,8 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Mix',
-        ParameterDef(  
+      ParamType('Mix',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5872,32 +5872,32 @@ modules = [
       OutputType('Out',          nm1conncolors.control),
     ],
     params=[
-      ParameterType('VelocitySensitivity',
-        ParameterDef(  
+      ParamType('VelocitySensitivity',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('LeftGain',
-        ParameterDef(  
+      ParamType('LeftGain',
+        ParamDef(  
           default=0,
           low=0,
           high=48,
           comment='velscalgain'
         ),
       ),
-      ParameterType('Breakpoint',
-        ParameterDef(  
+      ParamType('Breakpoint',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='freqcoarse'
         ),
       ),
-      ParameterType('RightGain',
-        ParameterDef(  
+      ParamType('RightGain',
+        ParamDef(  
           default=0,
           low=0,
           high=48,
@@ -5920,16 +5920,16 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('ModDepth',
-        ParameterDef(  
+      ParamType('ModDepth',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('RingmodDepth',
-        ParameterDef(  
+      ParamType('RingmodDepth',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
@@ -5951,40 +5951,40 @@ modules = [
       OutputType('Out',          nm1conncolors.audio),
     ],
     params=[
-      ParameterType('Bits',
-        ParameterDef(  
+      ParamType('Bits',
+        ParamDef(  
           default=0,
           low=0,
           high=11,
           comment='quantbits'
         ),
       ),
-      ParameterType('Rate',
-        ParameterDef(  
+      ParamType('Rate',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment='0 ~ 34.65 Hz, 127 ~ 50.18 kHz'
         ),
       ),
-      ParameterType('RateMod',
-        ParameterDef(  
+      ParamType('RateMod',
+        ParamDef(  
           default=0,
           low=0,
           high=127,
           comment=''
         ),
       ),
-      ParameterType('QuantOff',
-        ParameterDef(  
+      ParamType('QuantOff',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
           comment='onoff'
         ),
       ),
-      ParameterType('SamplingOff',
-        ParameterDef(  
+      ParamType('SamplingOff',
+        ParamDef(  
           default=0,
           low=0,
           high=1,
@@ -6004,8 +6004,8 @@ modules = [
       OutputType('Right',        nm1conncolors.audio),
     ],
     params=[
-      ParameterType('+6Db',
-        ParameterDef(  
+      ParamType('+6Db',
+        ParamDef(  
           default=0,
           low=0,
           high=1,

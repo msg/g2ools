@@ -35,7 +35,7 @@ def updatevals(g2mp,params,nm1tab,g2tab):
     newmidival = nm2g2val(midival,nm1tab,g2tab)
     setv(getattr(g2mp,param),newmidival)
 
-class Convert:
+class Convert(object):
 
   parammap = []
   inputmap = []
