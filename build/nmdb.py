@@ -136,8 +136,8 @@ for module in modules:
 %s
     ],\n''' % (
         '\n'.join(
-        ['''      ParameterType('%s',
-        ParameterDef(  
+        ['''      ParamType('%s',
+        ParamDef(  
           default=%s,
           low=%s,
           high=%s,
@@ -155,7 +155,7 @@ for module in modules:
 %s
     ],\n''' % (
         '\n'.join(['''      ModeType('%s',
-        ParameterDef(  
+        ParamDef(  
           low=%s,
           default=%s,
           high=%s,

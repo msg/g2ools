@@ -84,18 +84,18 @@ f.write('''#!/usr/bin/env python
 
 from nord.types import Struct
 
-class ParameterMap(Struct): pass
-class ParameterDef(Struct): pass
+class ParamMap(Struct): pass
+class ParamDef(Struct): pass
 
 params = [
 ''')
 
 for param in params:
-  f.write('  ParameterDef(%s\n  ),\n' % ('\n    '.join(param)))
+  f.write('  ParamDef(%s\n  ),\n' % ('\n    '.join(param)))
 
 f.write(''']
 
-parammap = ParameterMap()
+parammap = ParamMap()
 for param in params:
   setattr(parammap, param.name, param)
 
@@ -163,7 +163,7 @@ for struct in modulestructs:
     s += '    params=[\n'
     for p in range(len(struct.params)):
       nm, t = struct.params[p], struct.paramtypes[p]
-      s += '      ParameterType(%-16sparammap.%s' % ("'%s'," % nm, t)
+      s += '      ParamType(%-16sparammap.%s' % ("'%s'," % nm, t)
       # add param labels
       if paramlabels.has_key(struct.type):
         if paramlabels[struct.type].has_key(p):
