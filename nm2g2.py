@@ -648,7 +648,7 @@ def main(argv):
       logging.error(s)
       return '%s\n%s' % (fname, s)
     except Exception, e:
-      return '%s\n%s' % (fname, traceback.format_execption())
+      return '%s\n%s' % (fname, traceback.format_exc())
     return ''
 
   failedpatches = []
