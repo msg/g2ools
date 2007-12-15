@@ -164,7 +164,7 @@ class Conv4_1Switch(Convert):
        not nmmodule.params.Sel.ctrl:
       self.maing2module = 'Mix4-1C'
       self.parammap[0] = None
-    Convert.__init__(self, nmarea, g2area, nmmodule, options)
+    super(Conv4_1Switch,self).__init__(nmarea, g2area, nmmodule, options)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
