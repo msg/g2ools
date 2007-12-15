@@ -3585,7 +3585,7 @@ modules = [
       InputType('Modulation',   nm1conncolors.control),
     ],
     outputs=[
-      OutputType('2.65MsFixedDelay',nm1conncolors.audio),
+      OutputType('FixedDelay',   nm1conncolors.audio),
       OutputType('VariableDelayOut',nm1conncolors.audio),
     ],
     params=[

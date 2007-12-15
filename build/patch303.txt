@@ -1577,7 +1577,7 @@ inputs
 0 "in" audio
 1 "modulation" control
 outputs
-0 "2.65 ms fixed delay" audio
+0 "fixed delay" audio
 1 "variable delay out" audio
 custom
 ----------
