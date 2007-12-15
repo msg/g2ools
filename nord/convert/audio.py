@@ -149,17 +149,31 @@ class ConvQuantizer(Convert):
     setv(g2mp.Rate,127) # max sample rate
 
 class ConvDelay(Convert):
-  maing2module = 'DelayDual'
-  parammap = [['Time1Mod','Modulation'],['Time1','Time']]
-  inputmap = ['In','Time1']
-  outputmap = ['Out2','Out1']
+  # no defaults because it's dependant on 2.64mS output.
+  def __init__(self, nmarea, g2area, nmmodule, options):
+    if not nmmodule.outputs.FixedDelay.net:
+      self.maing2module = 'DlySingleB'
+      self.parammap = [['TimeMod','Modulation'],['Time','Time']]
+      self.inputmap = ['In','Time']
+      self.outputmap = [None, 'Out']
+    else:
+      self.maing2module = 'DelayDual'
+      self.parammap = [['Time1Mod','Modulation'],['Time1','Time']]
+      self.inputmap = ['In','Time1']
+      self.outputmap = ['Out2','Out1']
+    super(ConvDelay,self).__init__(nmarea, g2area, nmmodule, options)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
     
-    setv(g2mp.Time1,(getv(nmmp.Time)+1)/2)
-    setv(g2mp.Time1Mod,(getv(nmmp.Modulation)+1)/2)
+    if self.maing2module == 'DelayDual':
+      setv(g2mp.Time2, 63) # 2.64mS
+      setv(g2mp.Time1,(getv(nmmp.Time)+1)/2)
+      setv(g2mp.Time1Mod,(getv(nmmp.Modulation)+1)/2)
+    else:
+      setv(g2mp.Time,(getv(nmmp.Time)+1)/2)
+      setv(g2mp.TimeMod,(getv(nmmp.Modulation)+1)/2)
 
 class ConvSampleNHold(Convert):
   maing2module = 'S&H'
