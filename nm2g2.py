@@ -32,7 +32,6 @@ from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1conncolors
 from nord.nm1.file import NM1Error
 from nord.convert import typetable,setv
-from nord.net import printnet
 from nord.convert.version import version as g2oolsversion
 from nord.utils import toascii
 
@@ -527,7 +526,7 @@ def dotitleblock(pch,pch2,options):
   vert = addnamebars(lines,0,vert+1)
   vert = addnamebars(['All rights','reserved'],0,vert+1)
 
-def convert(pch,options):
+def convert(pchfile,options):
   #   loop through each module
   #     determine and store separation from module above >= 0
   #     if mod in convertion table
@@ -548,6 +547,7 @@ def convert(pch,options):
   # create patch equal function
   # create patch merge function that updates variations
   #   of one patch from another.
+  pch = PchFile(pchfile)
   pch2 = Pch2File('initpatch.pch2')
   nmpatch = pch.patch
   g2patch = pch2.patch
@@ -641,7 +641,7 @@ def main(argv):
   def doconvert(fname,options):
     # general algorithm for converter:
     try:
-      convert(PchFile(fname),options)
+      convert(fname,options)
     except KeyboardInterrupt:
       sys.exit(1)
     except NM1Error, s:
