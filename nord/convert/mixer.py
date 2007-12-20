@@ -24,46 +24,100 @@ from convert import *
 from nord.g2.colors import g2conncolors
 from table import modtable
 
+def mixeroptimize(nmmodule, parammap, inputmap, maxinputs):
+
+  # if Mixer8 (has -6Db param), and used, gotta use Mix8-1B
+  if hasattr(nmmodule.params,'-6Db'):
+    if getv(getattr(nmmodule.params,'-6Db')) != 0:
+      return 'Mix8-1B',8
+    
+  # remove all inputs and parameters (level settings)
+  for i in range(maxinputs):
+    parammap[i] = None
+    inputmap[i] = None
+
+  # get levels and inputs 
+  ins = range(1,maxinputs+1)
+  levels = [ getattr(nmmodule.params,'Lev%d' % i) for i in ins ]
+  inputs = [ getattr(nmmodule.inputs,'In%d' % i) for i in ins ]
+
+  # levels[i].knob and levels[i].ctrl and levels[i].morph
+  # move inputs/levels to lowest available and count them
+  o = 0
+  for i in range(maxinputs):
+    if inputs[i].net:
+      s = '%d' % (o+1)
+      parammap[i] = 'Lev' + s
+      inputmap[i] = 'In' + s
+      o += 1
+  # based on number of inputs connected, use smallest possible mixer
+  if o < 2:
+    maing2mod = 'Mix1-1A'
+    # Mix1-1A doesn't have Lev1 or In1, has Lev and In
+    for i in range(len(parammap)):
+      if i < maxinputs and parammap[i]:
+        parammap[i] = [ 'Lev', 'Lev%d' % (i+1) ]
+	inputmap[i] = 'In'
+      else:  # remove all other parameters but Lev
+        parammap[i] = None
+  elif o < 3:
+    maing2mod = 'Mix2-1A'
+  elif o < 5:
+    maing2mod = 'Mix4-1B'
+  elif o < 9:
+    maing2mod = 'Mix8-1B'
+    
+  # if not usingMix8-1B, remove Pad param
+  if maing2mod != 'Mix8-1B':
+    for i in range(len(parammap)):
+      if type(parammap[i]) == type([]) and parammap[i][0] == 'Pad':
+        parammap[i] = None
+  #print 'mixeroptimize "%s" mod="%s" o=%d' % (nmmodule.name, maing2mod, o)
+  return maing2mod,o
+
 class Conv3Mixer(Convert):
-  maing2module = 'Mix4-1B'
-  parammap = ['Lev1','Lev2','Lev3']
-  inputmap = ['In1','In2','In3']
-  outputmap = ['Out']
+
+  def initmixerparams(self):
+    self.maing2module = 'Mix4-1B'
+    self.maxinputs = 3
+    self.parammap = ['Lev1','Lev2','Lev3']
+    self.inputmap = ['In1','In2','In3']
+    self.outputmap = ['Out']
+
+  def __init__(self, nmarea, g2area, nmmodule, options):
+    self.initmixerparams()
+    self.maing2module,self.maxinputs = mixeroptimize(nmmodule, self.parammap,
+	  self.inputmap, self.maxinputs)
+    super(Conv3Mixer,self).__init__(nmarea, g2area, nmmodule, options)
+
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    g2m.uprate = 1
-    for i in range(1,4):
-      getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
     g2m.outputs.Out.rate = g2conncolors.red
-    setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
-    setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
-    setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
-
-class Conv8Mixer(Convert):
-  maing2module = 'Mix8-1B'
-  parammap = ['Lev1','Lev2','Lev3','Lev4','Lev5','Lev6','Lev7','Lev8',
-              ['Pad','-6Db']]
-  inputmap = ['In1','In2','In3','In4','In5','In6','In7','In8']
-  outputmap = ['Out']
-  def domodule(self):
-    nmm,g2m = self.nmmodule, self.g2module
-    nmmp,g2mp = nmm.params, g2m.params
-
     g2m.uprate = 1
-    for i in range(1,9):
-      getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
-    g2m.outputs.Out.rate = g2conncolors.red
 
-    setv(g2mp.Lev1,modtable[getv(g2mp.Lev1)][0])
-    setv(g2mp.Lev2,modtable[getv(g2mp.Lev2)][0])
-    setv(g2mp.Lev3,modtable[getv(g2mp.Lev3)][0])
-    setv(g2mp.Lev4,modtable[getv(g2mp.Lev4)][0])
-    setv(g2mp.Lev5,modtable[getv(g2mp.Lev5)][0])
-    setv(g2mp.Lev6,modtable[getv(g2mp.Lev6)][0])
-    setv(g2mp.Lev7,modtable[getv(g2mp.Lev7)][0])
-    setv(g2mp.Lev8,modtable[getv(g2mp.Lev8)][0])
+    if self.maing2module == 'Mix1-1A':
+      setv(g2mp.On,1)
+      setv(g2mp.Lev, modtable[getv(g2mp.Lev)][0])
+      return
+    elif self.maing2module == 'Mix2-1A':
+      setv(g2mp.On1,1)
+      setv(g2mp.On2,1)
+
+    for i in range(1,self.maxinputs+1):
+      getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
+      l = getattr(g2mp,'Lev%d' % i)
+      setv(l, modtable[getv(l)][0])
+
+class Conv8Mixer(Conv3Mixer):
+  def initmixerparams(self):
+    self.maing2module = 'Mix8-1B'
+    self.maxinputs = 8
+    self.parammap = ['Lev1','Lev2','Lev3','Lev4','Lev5','Lev6','Lev7','Lev8',
+		['Pad','-6Db']]
+    self.inputmap = ['In1','In2','In3','In4','In5','In6','In7','In8']
+    self.outputmap = ['Out']
 
 class ConvGainControl(Convert):
   maing2module = 'LevMult'
