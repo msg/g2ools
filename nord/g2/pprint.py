@@ -42,14 +42,14 @@ def printpatch(patch):
             knob.param.module.name, knob.param.type.name,
             knob.isled)
   print 'midicc:'
-  for midiassignment in patch.midiassignments:
-    param = midiassignment.param.index
-    if midiassignment.type == 2:
+  for ctrl in patch.ctrls:
+    param = ctrl.param.index
+    if ctrl.type == 2:
       index = 1
     else:
-      index = midiassignment.param.module.index
+      index = ctrl.param.module.index
     print ' type=%s midicc=%d index=%d param=%d' % (
-        {0:'fx',1:'voice',2:'system'}[midiassignment.type], midiassignment.midicc,
+        {0:'fx',1:'voice',2:'system'}[ctrl.type], ctrl.midicc,
         index,param)
   settings = patch.settings
   print 'morphs:'

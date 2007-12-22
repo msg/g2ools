@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+import sys
 from nord.g2.file import Pch2File
 from nord.g2.pprint import printpatch
 
