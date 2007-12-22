@@ -20,7 +20,7 @@
 #
 
 from nord.g2.file import Pch2File
-from nord.g2.print import printpatch
+from nord.g2.pprint import printpatch
 
 prog = sys.argv.pop(0)
 while len(sys.argv):
