@@ -950,11 +950,11 @@ class ParameterLabels(Section):
         paramlen -= 1 # decrease because we got param index
         if paramlen:
           for i in range(paramlen/7):
-            bit,word1 = getbits(bit,24,data) # grab 3 chars
-            bit,word2 = getbits(bit,24,data) # grab 3 more chars
-            bit,byte3 = getbits(bit,8,data)  # grab last char
+	    s = ''
+	    for i in range(7):
+	      bit,c = getbits(bit,8,data) # grab 3 chars
+	      s += chr(c)
             modlen -= 7
-            s = struct.pack('>LL',word1,word2<<8)[1:-1] + chr(byte3)
             null = s.find('\0')
             if null > -1:
               s = s[:null]
