@@ -28,7 +28,7 @@ from modules import fromname
 from nord.file import *
 import modules
 
-sectiondebug = 1 # outputs section debug 
+sectiondebug = 0 # outputs section debug 
 titlesection = 0 # replace end of section with section title
 
 # calculate crc of 1 char
