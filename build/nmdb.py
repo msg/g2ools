@@ -137,12 +137,7 @@ for module in modules:
     ],\n''' % (
         '\n'.join(
         ['''      ParamType('%s',
-        ParamDef(  
-          default=%s,
-          low=%s,
-          high=%s,
-          comment='%s'
-        ),
+        ParamDef(  default=%s, low=%s, high=%s, comment='%s'),
       ),''' % (
           nm.title().replace(' ',''), l, l, h, c)
           for (n,nm,l,h,c) in module.parameters

@@ -49,12 +49,7 @@ modules = [
     outputs=[],
     params=[
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -70,28 +65,13 @@ modules = [
     outputs=[],
     params=[
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Destination',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='2destination'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='2destination'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -106,28 +86,13 @@ modules = [
     outputs=[],
     params=[
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Destination',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=5,
-          comment='1destination'
-        ),
+        ParamDef(  default=0, low=0, high=5, comment='1destination'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -149,84 +114,34 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('PulseWidth',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='pulsewidth'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='pulsewidth'),
       ),
       ParamType('Waveform',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=3,
-          comment='waveform1'
-        ),
+        ParamDef(  default=0, low=0, high=3, comment='waveform1'),
       ),
       ParamType('PitchMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PitchMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PwMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -256,76 +171,31 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('Waveform',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=3,
-          comment='waveform1'
-        ),
+        ParamDef(  default=0, low=0, high=3, comment='waveform1'),
       ),
       ParamType('PitchMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PitchMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PwMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='pulsewidth'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='pulsewidth'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -354,52 +224,22 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('FreqMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -426,44 +266,19 @@ modules = [
     ],
     params=[
       ParamType('DetuneCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('DetuneFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('PulseWidth',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='pulsewidth'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='pulsewidth'),
       ),
       ParamType('PwMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -490,36 +305,16 @@ modules = [
     ],
     params=[
       ParamType('DetuneCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('DetuneFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -546,36 +341,16 @@ modules = [
     ],
     params=[
       ParamType('DetuneCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('DetuneFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -603,36 +378,16 @@ modules = [
     ],
     params=[
       ParamType('DetuneCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('DetuneFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -661,44 +416,19 @@ modules = [
     ],
     params=[
       ParamType('DetuneCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('DetuneFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Waveform',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=3,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=3, comment=''),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -728,172 +458,67 @@ modules = [
     ],
     params=[
       ParamType('Note1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note10',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note11',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note12',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note13',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note14',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note15',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Note16',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Length',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=15,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=15, comment=''),
       ),
       ParamType('EditPosition',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='editpos'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='editpos'),
       ),
       ParamType('Record',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Pause',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Loop',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -911,12 +536,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
     ],
     modes=[],
@@ -937,292 +557,112 @@ modules = [
     ],
     params=[
       ParamType('Length',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=15,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=15, comment=''),
       ),
       ParamType('Loop',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Gate1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Gate2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step10',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step11',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step12',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step13',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step14',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step15',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq1Step16',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step10',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step11',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step12',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step13',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step14',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step15',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Seq2Step16',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -1241,20 +681,10 @@ modules = [
     ],
     params=[
       ParamType('MixMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mix',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
     ],
     modes=[],
@@ -1273,28 +703,13 @@ modules = [
     ],
     params=[
       ParamType('Lev1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -1315,52 +730,22 @@ modules = [
     ],
     params=[
       ParamType('AttackShape',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='adsrshape'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='adsrshape'),
       ),
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Decay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Sustain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Release',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Invert',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -1380,76 +765,31 @@ modules = [
     ],
     params=[
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='companderattack'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='companderattack'),
       ),
       ParamType('Release',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='companderrelease'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='companderrelease'),
       ),
       ParamType('Threshold',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=42,
-          comment='compandertreshold'
-        ),
+        ParamDef(  default=0, low=0, high=42, comment='compandertreshold'),
       ),
       ParamType('Ratio',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=66,
-          comment='companderratio'
-        ),
+        ParamDef(  default=0, low=0, high=66, comment='companderratio'),
       ),
       ParamType('RefLevel',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=42,
-          comment='companderref'
-        ),
+        ParamDef(  default=0, low=0, high=42, comment='companderref'),
       ),
       ParamType('Limiter',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=24,
-          comment='companderlimit'
-        ),
+        ParamDef(  default=0, low=0, high=24, comment='companderlimit'),
       ),
       ParamType('Act',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Mon',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -1466,12 +806,7 @@ modules = [
     ],
     params=[
       ParamType('Range',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
     ],
     modes=[],
@@ -1496,76 +831,31 @@ modules = [
     ],
     params=[
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Decay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Sustain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Release',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('AttackMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('DecayMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('SustainMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('ReleaseMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Invert',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -1584,68 +874,28 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lforate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lforate'),
       ),
       ParamType('Range',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='lforange'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='lforange'),
       ),
       ParamType('Waveform',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=4,
-          comment='lfoshape'
-        ),
+        ParamDef(  default=0, low=0, high=4, comment='lfoshape'),
       ),
       ParamType('RateMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mono',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('Phase',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='phase'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='phase'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -1665,68 +915,28 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lforate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lforate'),
       ),
       ParamType('Range',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='lforange'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='lforange'),
       ),
       ParamType('Phase',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='phase'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='phase'),
       ),
       ParamType('RateMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mono',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('PwMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Pw',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='pulsewidth'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='pulsewidth'),
       ),
     ],
     modes=[],
@@ -1744,52 +954,22 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lforate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lforate'),
       ),
       ParamType('Range',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='lforange'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='lforange'),
       ),
       ParamType('Waveform',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=4,
-          comment='lfoshape'
-        ),
+        ParamDef(  default=0, low=0, high=4, comment='lfoshape'),
       ),
       ParamType('RateMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mono',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -1806,12 +986,7 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
     ],
     modes=[
@@ -1837,12 +1012,7 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
     ],
     modes=[
@@ -1868,12 +1038,7 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
     ],
     modes=[
@@ -1899,12 +1064,7 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
     ],
     modes=[
@@ -1928,12 +1088,7 @@ modules = [
     ],
     params=[
       ParamType('Color',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='noisecolor'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='noisecolor'),
       ),
     ],
     modes=[],
@@ -1950,124 +1105,49 @@ modules = [
     ],
     params=[
       ParamType('50',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('75',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('110',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('170',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('250',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('380',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('570',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('850',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('1.3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('1.9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('2.9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('4.2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('6.4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('8.3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -2084,20 +1164,10 @@ modules = [
     ],
     params=[
       ParamType('Mono',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Color',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -2114,12 +1184,7 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
     ],
     modes=[],
@@ -2134,12 +1199,7 @@ modules = [
     ],
     params=[
       ParamType('Density',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -2156,12 +1216,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='logictime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='logictime'),
       ),
     ],
     modes=[],
@@ -2178,12 +1233,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='logictime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='logictime'),
       ),
     ],
     modes=[],
@@ -2200,12 +1250,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='logictime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='logictime'),
       ),
     ],
     modes=[],
@@ -2222,12 +1267,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='smoothtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='smoothtime'),
       ),
     ],
     modes=[],
@@ -2251,76 +1291,31 @@ modules = [
     ],
     params=[
       ParamType('Lev1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Lev8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('-6Db',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -2335,20 +1330,10 @@ modules = [
     ],
     params=[
       ParamType('Value',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Unipolar',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -2366,12 +1351,7 @@ modules = [
     ],
     params=[
       ParamType('Shift',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -2390,76 +1370,31 @@ modules = [
     ],
     params=[
       ParamType('Vowel1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=8,
-          comment='vowel'
-        ),
+        ParamDef(  default=0, low=0, high=8, comment='vowel'),
       ),
       ParamType('Vowel2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=8,
-          comment='vowel'
-        ),
+        ParamDef(  default=0, low=0, high=8, comment='vowel'),
       ),
       ParamType('Vowel3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=8,
-          comment='vowel'
-        ),
+        ParamDef(  default=0, low=0, high=8, comment='vowel'),
       ),
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Vowel',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symeteric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symeteric'),
       ),
       ParamType('VowelMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('FreqMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Res',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -2482,52 +1417,22 @@ modules = [
     ],
     params=[
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Hold',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Decay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('AttackMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('HoldMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('DecayMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -2546,20 +1451,10 @@ modules = [
     ],
     params=[
       ParamType('PanMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Pan',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
     ],
     modes=[],
@@ -2577,12 +1472,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
     ],
     modes=[],
@@ -2602,36 +1492,16 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='filterfreq'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='filterfreq'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('Res',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FreqMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[
@@ -2659,28 +1529,13 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='filterfreq'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='filterfreq'),
       ),
       ParamType('Res',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('GainControl',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -2709,84 +1564,34 @@ modules = [
     ],
     params=[
       ParamType('FilterType',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=3,
-          comment='filtertype'
-        ),
+        ParamDef(  default=0, low=0, high=3, comment='filtertype'),
       ),
       ParamType('GainControl',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('FreqMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='filterfreq'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='filterfreq'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('ResMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Res',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Slope',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='filterslope2'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='filterslope2'),
       ),
       ParamType('FreqMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -2815,92 +1620,37 @@ modules = [
     ],
     params=[
       ParamType('Level1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Time1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Time2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Time3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Time4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Time5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Sustain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=4,
-          comment='0 ~ off, 4 ~ level 4'
-        ),
+        ParamDef(  default=0, low=0, high=4, comment='0 ~ off, 4 ~ level 4'),
       ),
       ParamType('Curve',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='0 ~ bipolar, 1 ~ uni/exp, 2 ~ uni/lin'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='0 ~ bipolar, 1 ~ uni/exp, 2 ~ uni/lin'),
       ),
     ],
     modes=[],
@@ -2931,12 +1681,7 @@ modules = [
     ],
     params=[
       ParamType('Bits',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=12,
-          comment='quantbits'
-        ),
+        ParamDef(  default=0, low=0, high=12, comment='quantbits'),
       ),
     ],
     modes=[],
@@ -2953,20 +1698,10 @@ modules = [
     ],
     params=[
       ParamType('Mode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='0 ~ bipolar, 1 ~ uni/neg, 2 ~ uni/pos'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='0 ~ bipolar, 1 ~ uni/neg, 2 ~ uni/pos'),
       ),
       ParamType('Inv',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -2985,132 +1720,52 @@ modules = [
     ],
     params=[
       ParamType('Masterfreq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('SlaveRatio',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('MasterDecay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('SlaveDecay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('MasterLevel',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('SlaveLevel',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('NoiseFltFreq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('NoiseFltRes',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('NoiseFltSweep',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('NoiseFltDecay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('NoiseFltMode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='filtertype1'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='filtertype1'),
       ),
       ParamType('BendAmount',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('BendDecay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Click',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Noise',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -3127,12 +1782,7 @@ modules = [
     ],
     params=[
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
     ],
     modes=[],
@@ -3150,28 +1800,13 @@ modules = [
     ],
     params=[
       ParamType('ClipMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Clip',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Sym',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -3189,20 +1824,10 @@ modules = [
     ],
     params=[
       ParamType('OverdriveMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Overdrive',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -3233,12 +1858,7 @@ modules = [
     ],
     params=[
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='logictime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='logictime'),
       ),
     ],
     modes=[],
@@ -3269,44 +1889,19 @@ modules = [
     ],
     params=[
       ParamType('Inv1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Level1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Inv2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Level2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='0 ~ lin, 1 ~ exp'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='0 ~ lin, 1 ~ exp'),
       ),
     ],
     modes=[],
@@ -3323,12 +1918,7 @@ modules = [
     ],
     params=[
       ParamType('Note',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
     ],
     modes=[],
@@ -3348,20 +1938,10 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('On/Off',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -3379,12 +1959,7 @@ modules = [
     ],
     params=[
       ParamType('Divider',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='logicdiv'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='logicdiv'),
       ),
     ],
     modes=[],
@@ -3414,20 +1989,10 @@ modules = [
     ],
     params=[
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Release',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -3444,12 +2009,7 @@ modules = [
     ],
     params=[
       ParamType('Transpose',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -3467,12 +2027,7 @@ modules = [
     ],
     params=[
       ParamType('Mode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='0 ~ and, 1 ~ or, 2 ~ xor'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='0 ~ and, 1 ~ or, 2 ~ xor'),
       ),
     ],
     modes=[],
@@ -3490,20 +2045,10 @@ modules = [
     ],
     params=[
       ParamType('WrapMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Wrap',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -3520,20 +2065,10 @@ modules = [
     ],
     params=[
       ParamType('Range',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Notes',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ off'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ off'),
       ),
     ],
     modes=[],
@@ -3550,12 +2085,7 @@ modules = [
     ],
     params=[
       ParamType('On',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -3590,20 +2120,10 @@ modules = [
     ],
     params=[
       ParamType('Modulation',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Time',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 0 ms, 127 ~ 2.65 ms'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 0 ms, 127 ~ 2.65 ms'),
       ),
     ],
     modes=[],
@@ -3623,52 +2143,22 @@ modules = [
     ],
     params=[
       ParamType('Sel',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=3,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=3, comment=''),
       ),
       ParamType('Level1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -3686,44 +2176,19 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
       ParamType('Phase',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='phase'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='phase'),
       ),
       ParamType('Waveform',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=4,
-          comment='lfoshape'
-        ),
+        ParamDef(  default=0, low=0, high=4, comment='lfoshape'),
       ),
       ParamType('Mono',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -3749,12 +2214,7 @@ modules = [
     ],
     params=[
       ParamType('Gain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='ampgain'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='ampgain'),
       ),
     ],
     modes=[],
@@ -3771,12 +2231,7 @@ modules = [
     ],
     params=[
       ParamType('Mode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='0 ~ off, 1 ~ half wave, 2 ~ full wave'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='0 ~ off, 1 ~ half wave, 2 ~ full wave'),
       ),
     ],
     modes=[],
@@ -3793,12 +2248,7 @@ modules = [
     ],
     params=[
       ParamType('Mode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=4,
-          comment='0 ~ log2, 1 ~ log1, 2 ~ lin, 3 ~ exp1, 4 ~ exp2'
-        ),
+        ParamDef(  default=0, low=0, high=4, comment='0 ~ log2, 1 ~ log1, 2 ~ lin, 3 ~ exp1, 4 ~ exp2'),
       ),
     ],
     modes=[],
@@ -3818,28 +2268,13 @@ modules = [
     ],
     params=[
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Decay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='adsrtime'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='adsrtime'),
       ),
       ParamType('Gate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -3858,44 +2293,19 @@ modules = [
     ],
     params=[
       ParamType('DetuneCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('DetuneFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('-3Oct',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -3921,12 +2331,7 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='filterfreqAB'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='filterfreqAB'),
       ),
     ],
     modes=[],
@@ -3943,12 +2348,7 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='filterfreqAB'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='filterfreqAB'),
       ),
     ],
     modes=[],
@@ -3968,28 +2368,13 @@ modules = [
     ],
     params=[
       ParamType('Sel',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=3,
-          comment='0 ~ out1, 3 ~ out4'
-        ),
+        ParamDef(  default=0, low=0, high=3, comment='0 ~ out1, 3 ~ out4'),
       ),
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -4024,172 +2409,67 @@ modules = [
     ],
     params=[
       ParamType('Note1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note10',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note11',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note12',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note13',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note14',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note15',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Note16',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Length',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=15,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=15, comment=''),
       ),
       ParamType('Currentstep',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='editpos'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='editpos'),
       ),
       ParamType('Record',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Play',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Loop',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -4226,156 +2506,61 @@ modules = [
     ],
     params=[
       ParamType('Ctrl1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl10',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl11',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl12',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl13',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl14',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl15',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Ctrl16',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Length',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=15,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=15, comment=''),
       ),
       ParamType('Uni',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Loop',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -4394,60 +2579,25 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='filterfreq'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='filterfreq'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqkbt'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqkbt'),
       ),
       ParamType('Res',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FreqMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FreqMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Slope',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=2,
-          comment='filtertype1'
-        ),
+        ParamDef(  default=0, low=0, high=2, comment='filtertype1'),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -4474,28 +2624,13 @@ modules = [
     ],
     params=[
       ParamType('Detune',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Amount',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -4514,60 +2649,25 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 8.18 Hz, 127 ~ 12.54 kHz'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 8.18 Hz, 127 ~ 12.54 kHz'),
       ),
       ParamType('Click',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Decay',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Punch',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('PitchMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -4596,60 +2696,25 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Timbre',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PitchMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PitchMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[
@@ -4676,44 +2741,19 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('PitchMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PitchMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[
@@ -4739,116 +2779,46 @@ modules = [
     ],
     params=[
       ParamType('Range',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Cont',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('E',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('F',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('F#',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('G',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('G#',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('A',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('A#',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('B',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('C',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('C#',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('D',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('D#',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -4867,44 +2837,19 @@ modules = [
     ],
     params=[
       ParamType('Pattern',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Bank',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('LowDelta',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Step',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Mono',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -4925,20 +2870,10 @@ modules = [
     ],
     params=[
       ParamType('Upper',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('Lower',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
     ],
     modes=[],
@@ -4957,92 +2892,37 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 62.9 s, 127 ~ 24.4 hHz'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 62.9 s, 127 ~ 24.4 hHz'),
       ),
       ParamType('Lfo',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('FreqMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 100 Hz, 127 ~ 16 kHz'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 100 Hz, 127 ~ 16 kHz'),
       ),
       ParamType('SpreadMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Feedback',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Peaks',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=5,
-          comment='0 ~ 1 peak, 5 ~ 6 peaks'
-        ),
+        ParamDef(  default=0, low=0, high=5, comment='0 ~ 1 peak, 5 ~ 6 peaks'),
       ),
       ParamType('Spread',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Depth',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -5059,44 +2939,19 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='eqfreq'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='eqfreq'),
       ),
       ParamType('Gain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='eqgain'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='eqgain'),
       ),
       ParamType('Bandwidth',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 2 oct, 64 ~ 1 oct, 127 ~ 0.02 oct'),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -5113,44 +2968,19 @@ modules = [
     ],
     params=[
       ParamType('Freq',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='eqfreq'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='eqfreq'),
       ),
       ParamType('Gain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='eqgain'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='eqgain'),
       ),
       ParamType('Mode',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='0 ~ low, 1 ~ high'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='0 ~ low, 1 ~ high'),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
     ],
     modes=[],
@@ -5170,76 +3000,31 @@ modules = [
     ],
     params=[
       ParamType('Attack',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='companderattack'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='companderattack'),
       ),
       ParamType('Release',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='companderrelease'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='companderrelease'),
       ),
       ParamType('Treshold',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=84,
-          comment='compandertreshold'
-        ),
+        ParamDef(  default=0, low=0, high=84, comment='compandertreshold'),
       ),
       ParamType('Ratio',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=66,
-          comment='companderratio'
-        ),
+        ParamDef(  default=0, low=0, high=66, comment='companderratio'),
       ),
       ParamType('Gate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=72,
-          comment='compandergate'
-        ),
+        ParamDef(  default=0, low=0, high=72, comment='compandergate'),
       ),
       ParamType('Hold',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='companderhold'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='companderhold'),
       ),
       ParamType('Act',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Mon',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Bypass',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -5264,196 +3049,76 @@ modules = [
     ],
     params=[
       ParamType('Osc1Coarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc1Fine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Osc1Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc2Coarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc2Fine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Osc2Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc3Coarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc3Fine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Osc3Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc4Coarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc4Fine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Osc4Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc5Coarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc5Fine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Osc5Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc6Coarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc6Fine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
       ParamType('Osc6Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Osc1Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Osc2Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Osc3Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Osc4Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Osc5Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Osc6Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -5474,84 +3139,34 @@ modules = [
     ],
     params=[
       ParamType('FreqCoarse',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('FreqFine',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqfine'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqfine'),
       ),
       ParamType('Shape',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Partials',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='0 ~ odd, 1 ~ all'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='0 ~ odd, 1 ~ all'),
       ),
       ParamType('PitchMod1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('PitchMod2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('FmMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('ShapeMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Kbt',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('Mute',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[
@@ -5578,156 +3193,61 @@ modules = [
     ],
     params=[
       ParamType('Band1',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band2',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band3',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band4',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band5',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band6',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band7',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band8',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band9',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band10',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band11',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band12',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band13',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band14',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band15',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Band16',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=16,
-          comment='vocoband'
-        ),
+        ParamDef(  default=0, low=0, high=16, comment='vocoband'),
       ),
       ParamType('Outgain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('Emphasis',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
       ParamType('Monitor',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -5744,12 +3264,7 @@ modules = [
     ],
     params=[
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='lfoslvrate'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='lfoslvrate'),
       ),
     ],
     modes=[],
@@ -5766,20 +3281,10 @@ modules = [
     ],
     params=[
       ParamType('Gain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Unipolar',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -5796,20 +3301,10 @@ modules = [
     ],
     params=[
       ParamType('Level',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='unibi'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='unibi'),
       ),
       ParamType('Unipolar',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=1, comment=''),
       ),
     ],
     modes=[],
@@ -5827,12 +3322,7 @@ modules = [
     ],
     params=[
       ParamType('Mix',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
     ],
     modes=[],
@@ -5850,12 +3340,7 @@ modules = [
     ],
     params=[
       ParamType('Mix',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='symetric'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='symetric'),
       ),
     ],
     modes=[],
@@ -5873,36 +3358,16 @@ modules = [
     ],
     params=[
       ParamType('VelocitySensitivity',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('LeftGain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=48,
-          comment='velscalgain'
-        ),
+        ParamDef(  default=0, low=0, high=48, comment='velscalgain'),
       ),
       ParamType('Breakpoint',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='freqcoarse'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='freqcoarse'),
       ),
       ParamType('RightGain',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=48,
-          comment='velscalgain'
-        ),
+        ParamDef(  default=0, low=0, high=48, comment='velscalgain'),
       ),
     ],
     modes=[],
@@ -5921,20 +3386,10 @@ modules = [
     ],
     params=[
       ParamType('ModDepth',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('RingmodDepth',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 0, 64 ~ AM, 127 ~ RM'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 0, 64 ~ AM, 127 ~ RM'),
       ),
     ],
     modes=[],
@@ -5952,44 +3407,19 @@ modules = [
     ],
     params=[
       ParamType('Bits',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=11,
-          comment='quantbits'
-        ),
+        ParamDef(  default=0, low=0, high=11, comment='quantbits'),
       ),
       ParamType('Rate',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment='0 ~ 34.65 Hz, 127 ~ 50.18 kHz'
-        ),
+        ParamDef(  default=0, low=0, high=127, comment='0 ~ 34.65 Hz, 127 ~ 50.18 kHz'),
       ),
       ParamType('RateMod',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=127,
-          comment=''
-        ),
+        ParamDef(  default=0, low=0, high=127, comment=''),
       ),
       ParamType('QuantOff',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
       ParamType('SamplingOff',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
@@ -6005,12 +3435,7 @@ modules = [
     ],
     params=[
       ParamType('+6Db',
-        ParamDef(  
-          default=0,
-          low=0,
-          high=1,
-          comment='onoff'
-        ),
+        ParamDef(  default=0, low=0, high=1, comment='onoff'),
       ),
     ],
     modes=[],
