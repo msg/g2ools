@@ -353,13 +353,14 @@ class ConvOscA(Convert):
     # handle special parameters
     self.inputs[4] = handlepw(self,getv(nmmp.PulseWidth),1,3,8)
 
-    self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
     # handle special inputs/outputs
     self.outputs[1],inputmod = handleslv(self)
     self.inputmod = inputmod
+    inp = inputmod.params
+    self.params[:3] = inp.FreqCoarse, inp.FreqFine, inp.Kbt
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,5,6)
     self.inputs[2:4] = p1,p2
@@ -382,7 +383,6 @@ class ConvOscB(Convert):
     nmmp,g2mp = nmm.params, g2m.params
 
     # handle special special parameters
-    self.params[2] = g2mp.Kbt
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
 
@@ -399,6 +399,8 @@ class ConvOscB(Convert):
     # handle special inputs
     self.outputs[1],inputmod = handleslv(self)
     self.inputmod = inputmod
+    inp = inputmod.params
+    self.params[:3] = inp.FreqCoarse, inp.FreqFine, inp.Kbt
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1, p2
@@ -433,7 +435,11 @@ class ConvOscC(Convert):
     self.outputs[0] = output
     self.inputs[2] = aminput
     self.outputs[1],inputmod = handleslv(self)
+    inp = inputmod.params
+    self.params[:4] = inp.FreqCoarse, inp.FreqFine, inp.Kbt, inp.PitchMod
     self.inputs[1] = inputmod.inputs.PitchVar
+    inp = inputmod.params
+    self.params[:4] = inp.FreqCoarse, inp.FreqFine, inp.Kbt, inp.PitchMod
 
   def precables(self):
     doslvcables(self)
@@ -454,6 +460,9 @@ class ConvSpectralOsc(Convert):
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
     self.outputs[1],inputmod = handleslv(self)
+    inp = inputmod.params
+    self.params[:2] = inp.FreqCoarse, inp.FreqFine
+    self.params[8] = inp.Kbt
     p1,p2 = handledualpitchmod(self,inputmod.inputs.PitchVar,
         inputmod.params.PitchMod,4,5)
     self.inputs[1:3] = p1,p2
@@ -514,59 +523,77 @@ class ConvSpectralOsc(Convert):
     self.outputs[0] = output.outputs.Out
 
 class ConvFormantOsc(Convert):
-  maing2module = 'OscC'
-  parammap = ['FreqCoarse','FreqFine','Kbt',['Active','Mute'],None,None,None]
+  maing2module = 'OscC'                                    #Timbre,PMod1,PMod2
+  parammap = ['FreqCoarse','FreqFine','Kbt',None,None,None,None]
   inputmap = [None,None,None]
-  oscmodnms = ['Invert','RndClkB','EqPeak','Mix4-1A',
-               'ConstSwT','NoteQuant','LevAmp']
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
     setv(g2mp.FreqMode,[1,0][nmm.modes[0].value])
-    setv(g2mp.Active,1-getv(nmmp.Mute))
     # handle special inputs
     # NOTE: this must be done before adding the rest of the structure
     #       as it should be placed right below the OscC.
     p1,p2 = handledualpitchmod(self,g2m.inputs.PitchVar,g2m.params.PitchMod,5,6)
     self.inputs[:2] = p1,p2
 
-    modules = [ None ] * len(ConvFormantOsc.oscmodnms)
-    for i in range(len(ConvFormantOsc.oscmodnms)):
-      modnm = ConvFormantOsc.oscmodnms[i]
+    timbreinput = nmm.inputs.Timbre.net != None
+    if timbreinput:
+      modnms = ['Invert','RndClkB','EqPeak','Mix4-1A',
+                'ConstSwT','NoteQuant','LevAmp']
+    else:
+      modnms = ['Invert','RndClkB','EqPeak','ConstSwT']
+
+    modules = [ None ] * len(modnms)
+    for i in range(len(modnms)):
+      modnm = modnms[i]
       mod = self.addmodule(modnm,name=modnm)
       modules[i] = mod
 
-    inv,rndclkb,eqpeak,mix41a,constswt,notequant,levamp = modules
+    if timbreinput:
+      inv,rndclkb,eqpeak,mix41a,constswt,notequant,levamp = modules
+    else:
+      inv,rndclkb,eqpeak,constswt = modules
+
     self.connect(g2m.outputs.Out,inv.inputs.In2)
     self.connect(inv.inputs.In2,rndclkb.inputs.Rst)
     self.connect(inv.outputs.Out1,inv.inputs.In1)
     self.connect(inv.inputs.In1,rndclkb.inputs.Clk)
     self.connect(rndclkb.outputs.Out,eqpeak.inputs.In)
-    self.connect(mix41a.outputs.Out,rndclkb.inputs.Seed)
-    self.connect(constswt.outputs.Out,mix41a.inputs.In4)
-    setv(constswt.params.On,1)
-    self.connect(notequant.outputs.Out,mix41a.inputs.In3)
-    self.connect(levamp.outputs.Out,notequant.inputs.In)
+    if timbreinput:
+      self.connect(mix41a.outputs.Out,rndclkb.inputs.Seed)
+      self.connect(constswt.outputs.Out,mix41a.inputs.In4)
+      setv(constswt.params.On,1)
+      self.connect(notequant.outputs.Out,mix41a.inputs.In3)
+      self.connect(levamp.outputs.Out,notequant.inputs.In)
+    else:
+      self.connect(constswt.outputs.Out,rndclkb.inputs.Seed)
 
     inv.uprate = 1
     inv.outputs.Out1.rate = g2conncolors.orange
     rndclkb.uprate = 1
     rndclkb.modes.Character.value = 0
     setv(rndclkb.params.StepProb,61)
+    setv(rndclkb.params.Active,1-getv(nmmp.Mute))
     setv(eqpeak.params.Freq,109)
     setv(eqpeak.params.Gain,100)
     setv(eqpeak.params.Bandwidth,2)
     setv(eqpeak.params.Level,100)
     setv(constswt.params.Lev,getv(nmm.params.Timbre))
     self.params[4] = constswt.params.Lev
-    setv(notequant.params.Range,127)
-    setv(notequant.params.Notes,1)
-    setv(levamp.params.Type,1)
-    setv(levamp.params.Gain,20)
 
-    self.inputs[2] = levamp.inputs.In
-    self.outputs = [eqpeak.outputs.Out,handleslv(self)[0]]
+    if timbreinput:
+      setv(notequant.params.Range,127)
+      setv(notequant.params.Notes,1)
+      setv(levamp.params.Type,1)
+      setv(levamp.params.Gain,20)
+
+      self.inputs[2] = levamp.inputs.In
+
+    output,inputmod = handleslv(self)
+    inp = inputmod.params
+    self.params[:3] = inp.FreqCoarse, inp.FreqFine, inp.Kbt
+    self.outputs = [eqpeak.outputs.Out,output]
 
 class ConvOscSlvA(Convert):
   maing2module = 'OscB'
