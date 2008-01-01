@@ -27,9 +27,10 @@ from table import modtable
 def mixeroptimize(nmmodule, parammap, inputmap, maxinputs):
 
   # if Mixer8 (has -6Db param), and used, gotta use Mix8-1B
+  use6db = False
   if hasattr(nmmodule.params,'-6Db'):
     if getv(getattr(nmmodule.params,'-6Db')) != 0:
-      return 'Mix8-1B',8
+      use6db = True
     
   # remove all inputs and parameters (level settings)
   for i in range(maxinputs):
@@ -60,10 +61,12 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs):
 	inputmap[i] = 'In'
       else:  # remove all other parameters but Lev
         parammap[i] = None
-  elif o < 3:
+  elif o < 3 and use6db == False:
     maing2mod = 'Mix2-1A'
-  elif o < 5:
+  elif o < 5 and use6db == False:
     maing2mod = 'Mix4-1B'
+  elif o < 5:
+    maing2mod = 'Mix4-1C'
   elif o < 9:
     maing2mod = 'Mix8-1B'
     
@@ -212,10 +215,18 @@ class Conv4_1Switch(Convert):
   outputmap = ['Out']
 
   def __init__(self, nmarea, g2area, nmmodule, options):
-    # if no morph, knob or midi cc on Sel, use Mix4-1C
-    if not nmmodule.params.Sel.knob or \
-       not nmmodule.params.Sel.morph or \
-       not nmmodule.params.Sel.ctrl:
+    # use mixer if knobs, morphs, or midi cc's assigned and connected
+    usemixer = False
+    for i in range(1,5):
+      level = getattr(nmmodule.params,'Level%d' % i)
+      innet = getattr(nmmodule.inputs,'In%d' % i).net
+      if not innet:
+        continue
+      if level.knob or level.morph or level.ctrl:
+        usemixer = True
+      if getv(level) != 127 and getv(level) != 0:
+        usemixer = True
+    if usemixer:
       self.maing2module = 'Mix4-1C'
       self.parammap[0] = None
     super(Conv4_1Switch,self).__init__(nmarea, g2area, nmmodule, options)
