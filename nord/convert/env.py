@@ -38,6 +38,13 @@ def handleretrig(conv):
     retrig = flipflop.inputs.Clk
   return gatein,retrig
 
+def handlegate(conv, name='Gate'):
+  gate = getattr(conv.nmmodule.inputs, name)
+  # if gate source Keyboard, disconnect and set KB
+  if gate and gate.net and gate.net.output.module.type.shortnm == 'Keyboard':
+    conv.nmmodule.area.removeconnector(getattr(conv.nmmodule.inputs, name))
+    setv(conv.g2module.params.KB, 1)
+
 class ConvADSR_Env(Convert):
   maing2module = 'EnvADSR'
   parammap = [['Shape','AttackShape'],'Attack','Decay','Sustain','Release',None]
@@ -47,6 +54,7 @@ class ConvADSR_Env(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+    handlegate(self)
 
     # handle special parameters
     updatevals(g2mp,['Attack','Decay','Release'],nm1adsrtime,g2adsrtime)
@@ -63,11 +71,12 @@ class ConvAD_Env(Convert):
     if options.adsrforad:
       self.maing2module = 'EnvADSR'
       self.parammap[-1][0] = 'NR'
-    Convert.__init__(self, nmarea, g2area, nmmodule, options)
+    super(ConvAD_Env,self).__init__(nmarea, g2area, nmmodule, options)
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+    handlegate(self, 'Trigger')
 
     # handle special parameters
     updatevals(g2mp,['Attack','Release'],nm1adsrtime,g2adsrtime)
@@ -87,6 +96,7 @@ class ConvMod_Env(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+    handlegate(self)
 
     # handle special parameters
     updatevals(g2mp,['Attack','Decay','Release'],nm1adsrtime,g2adsrtime)
@@ -120,6 +130,7 @@ class ConvAHD_Env(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+    handlegate(self,'Trig')
 
     # handle special parameters
     updatevals(g2mp,['Attack','Hold','Decay'],nm1adsrtime,g2adsrtime)
@@ -156,6 +167,7 @@ class ConvMulti_Env(Convert):
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+    handlegate(self)
 
     setv(g2mp.SustainMode,[3,0,1,2,3][getv(nmmp.Sustain)])
     setv(g2mp.Shape,[3,2,1][getv(nmmp.Curve)])
