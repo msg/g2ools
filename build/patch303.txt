@@ -28,7 +28,7 @@ outputs
 0 "Note" control
 1 "gate" logic
 2 "velocity on" control
-3 "velocity off" control
+3 "velocity rel" control
 custom
 ----------
 2 AudioIn

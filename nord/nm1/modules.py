@@ -19,7 +19,7 @@ modules = [
       OutputType('Note',         nm1conncolors.control),
       OutputType('Gate',         nm1conncolors.logic),
       OutputType('VelocityOn',   nm1conncolors.control),
-      OutputType('VelocityOff',  nm1conncolors.control),
+      OutputType('VelocityRel',  nm1conncolors.control),
     ],
     params=[],
     modes=[],
