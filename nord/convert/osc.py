@@ -654,6 +654,13 @@ class ConvOscSlvC(Convert):
   inputmap = ['Pitch','FmMod']
   outputmap = ['Out']
 
+  def __init__(self, nmarea, g2area, nmmodule, options):
+    if len(nmmodule.inputs.FmMod.cables) == 0:
+      self.parammap[2] = None
+      self.inputmap[1] = None
+      self.maing2module = 'OscD'
+    super(ConvOscSlvC,self).__init__(nmarea, g2area, nmmodule, options)
+
   def domodule(self):
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
@@ -663,8 +670,13 @@ class ConvOscSlvC(Convert):
     setv(g2mp.Active,1-getv(nmmp.Mute))
     setv(g2mp.FreqMode,[2,3,1][nmm.modes[0].value])
     g2m.modes.Waveform.value = self.waveform
-    self.inputs[0],fmmod,fmparam = handlemst(self,
-        g2m.inputs.FmMod,g2m.params.FmAmount)
+    if self.maing2module == 'OscD':
+      fmmod = None
+      fmamt = None
+    else:
+      fmmod = g2m.inputs.FmMod
+      fmamt = g2m.params.FmAmount
+    self.inputs[0],fmmod,fmparam = handlemst(self, fmmod, fmamt)
     self.inputs[1] = handlefm(self,fmmod,fmparam,fmamod)
 
     postmst(self,0)
@@ -676,7 +688,7 @@ class ConvOscSlvE(ConvOscSlvC):
   waveform = 0 # sine
    
   def domodule(self):
-    ConvOscSlvC.domodule(self)
+    super(ConvOscSlvE,self).domodule()
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
