@@ -240,8 +240,9 @@ def handlemst(conv,fmmod,fmparam):
   
   if not hasfmmod and coarsefreq == 64:
     setv(g2m.params.FreqCoarse,0)
-    setv(fmparam,79)
-    mst = g2m.inputs.FmMod
+    if fmparam:
+      setv(fmparam,79)
+      mst = g2m.inputs.FmMod
     return mst,fmmod,fmparam
     
   if coarsefreq != 64:
