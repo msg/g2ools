@@ -27,10 +27,10 @@ class ConvKeyboard(Convert):
   outputmap = ['Pitch','Gate','Lin','Release']
   def domodule(self):
     self.g2module.area.keyboard = self.g2module
-  def precables(self):
+  def finalize(self):
     noconnections = True
-    for output in ['Note','Gate','VelocityOn','VelocityRel']:
-      if not getattr(self.nmmodule.outputs, output).net:
+    for output in ['Pitch','Note','Gate','Lin','Exp','Release']:
+      if getattr(self.g2module.outputs, output).net:
         noconnections = False
     if noconnections:
       self.g2module.area.delmodule(self.g2module)
