@@ -457,15 +457,18 @@ def domorphsknobsmidiccs(nmpatch,g2patch,options):
   reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97]+range(120,128)
   from nord.g2.file import Ctrl
   for ctrl in nmpatch.ctrls:
+    param = ctrl.param
+    if hasattr(ctrl.param,'module'): # module parameter
+      s = ' CC%d %s.%s(%d,%d)' % (ctrl.midicc,param.module.name,
+        param.type.name, param.module.horiz, param.module.vert)
+    else:
+      s = ' CC%d' % ctrl.midicc
     if ctrl.midicc in reservedmidiccs:
-      logging.warning(' CC%d: cannot be used (reserved)' % ctrl.midicc)
+      logging.warning('%s cannot be used (reserved)' % s)
       continue
     m = Ctrl()
     m.midicc = ctrl.midicc
-    param = ctrl.param
     if hasattr(ctrl.param,'module'): # module parameter
-      s = ' CC%d: %s(%d,%d):%s' % (ctrl.midicc,param.module.name,
-        param.module.horiz, param.module.vert, param.type.name)
       index = param.index
       conv = param.module.conv
       if index < len(conv.params) and conv.params[index]:
@@ -548,7 +551,8 @@ def convert(pchfile,options):
   # create patch merge function that updates variations
   #   of one patch from another.
   pch = PchFile(pchfile)
-  pch2 = Pch2File('initpatch.pch2')
+  g2oolsdir = os.path.dirname(sys.argv[0])
+  pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
   nmpatch = pch.patch
   g2patch = pch2.patch
   g2patch.voice.keyboard = None
@@ -621,6 +625,7 @@ nm2g2_options = [
       help='Set converter verbosity level 0-4'),
 ]
 
+maindone = False
 def main(argv):
   global nm2g2_options
 
@@ -652,7 +657,7 @@ def main(argv):
     return ''
 
   failedpatches = []
-  while len(args):
+  while len(args) and maindone == False:
     arg = args.pop(0)
     patchlist = glob(arg)
     if len(patchlist) == 0:
