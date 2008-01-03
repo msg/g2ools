@@ -373,7 +373,7 @@ class CableList(Section):
   def parse(self, patch, data):
 
     bit,self.area = getbits(0,2,data)
-    bit,cablecnt  = getbits(16,8,data)
+    bit,cablecnt  = getbits(8,16,data)
 
     if self.area:
       area = patch.voice
@@ -421,10 +421,12 @@ class CableList(Section):
     else:
       area = patch.fx
 
-    bit = setbits(16,8,data,len(area.cables))
+    bit = setbits(8,16,data,len(area.cables))
 
     for i in range(len(area.cables)):
       c = area.cables[i]
+      #print '%d %02d %d -%d- %02d %d' % (c.color, c.source.module.index,
+      #    c.source.index, c.source.direction, c.dest.module.index, c.dest.index)
       bit = setbits(bit,3,data,c.color)
       bit = setbits(bit,8,data,c.source.module.index)
       bit = setbits(bit,6,data,c.source.index)
@@ -1009,9 +1011,7 @@ class ParameterLabels(Section):
           ps = chr(1)+chr(len(ps))+ps
           s += ps
 
-      t += chr(m.index)
-      t += chr(len(s))
-      t += s
+      t += chr(m.index) + chr(len(s)) + s
 
     #print 'paramlabels:'
     #print hexdump(t)
@@ -1050,7 +1050,7 @@ class ModuleNames(Section):
     data = self.data
 
     bit = setbits(0,2,data,self.area)
-    bit = setbits(bit,6,data,self.unk1) # unknown, see if zero works
+    bit = setbits(bit,6,data,self.area) # seems to be duplicate of area
     # finish paring
     if self.area:
       area = patch.voice
@@ -1154,14 +1154,16 @@ Info=BUILD 266\r
       f = section.format(patch)
       if sectiondebug:
 	nm = section.__class__.__name__
-	print '0x%02x %-25s             len:0x%04x total: 0x%04x' % (
-	   section.type,nm,len(f),len(s))
+	print '0x%02x %-25s len:0x%04x total: 0x%04x' % (
+	   section.type,nm,len(f),self.off+len(s)),
+	tbl = string.maketrans(string.ascii_lowercase,' '*26)
+	nm = nm.translate(tbl).replace(' ','')
+	print nm
 	if titlesection:
-	  tbl = string.maketrans(string.ascii_lowercase,' '*26)
-	  nm = nm.translate(tbl).replace(' ','')
 	  l = len(nm)
 	  if l < len(f):
-	    f = f[:-len(nm)]+nm
+	    #f = f[:-len(nm)]+nm # debug for front of section or back
+	    f = nm+f[len(nm):]
       s += struct.pack('>BH',section.type,len(f)) + f
     return s
 
@@ -1171,10 +1173,12 @@ Info=BUILD 266\r
   # write - this looks a lot easier then read ehhhh???
   def write(self, fname=None):
     out = open(fname,'wb')
-    out.write(Pch2File.standardtxthdr % self.type)
+    hdr = Pch2File.standardtxthdr % self.type
+    self.off = len(hdr)
     s = struct.pack('BB',Pch2File.standardbinhdr,self.binrev)
+    self.off += len(s)
     s += self.format()
-    out.write(s)
+    out.write(hdr + s)
     out.write(struct.pack('>H',crc(s)))
 
 class PerformanceDescription(Section):
