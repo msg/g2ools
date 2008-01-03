@@ -52,552 +52,566 @@ conn2cablecolors = {
   g2conncolors.yellow_orange: g2cablecolors.yellow,
 }
 
-def doconverters(nmarea,g2area,options):
-  converters = []
-  for module in nmarea.modules:
-    if module.type.type in typetable:
-      logging.debug('%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
-          module.type.type,module.type.type))
-      conv = typetable[module.type.type](nmarea,g2area,module,options)
-      converters.append(conv)
-      #g2module = conv.g2module
-      #print '%s (%d,%d)' % (g2module.type.shortnm,
-      #    g2module.horiz, g2module.vert)
-    else:
-      logging.warning('No converter for module "%s" type %d(0x%02x)' % (
-          module.type.shortnm, module.type.type, module.type.type))
-  return converters
+nm2g2log = None
 
-def domodules(converters, options):
-  logging.info('domodule:')
-  for conv in converters:
-    logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
-    conv.domodule()
+class NM2G2Converter:
+  def __init__(self, pchfname, options, log):
+    self.pch = PchFile(pchfname)
+    g2oolsdir = os.path.dirname(sys.argv[0])
+    self.pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
+    self.nmpatch = self.pch.patch
+    self.g2patch = self.pch2.patch
+    self.g2patch.voice.keyboard = None
+    self.g2patch.fx.keyboard = None
+    self.options = options
+    self.log = log
 
+  def convert(self):
+    # loop through each module
+    #   determine and store separation from module above >= 0
+    #   if mod in convertion table
+    #     call convertion table module function
+    # loop through each cable
+    #   if source and dest in convertion table
+    #     create new connection
+    # update midi controller assignments
+    # update knob assignments (on pags A1:1, A1:2 and A1:3)
+    # update morph assignments
+    # reorder modules top to bottom, left to right
+    # relocate modules top to bottom, left to right based on separation
+    # add name bar with my name and convertion info
+    # add name bar with errors/comments etc.
+    # save g2 file
 
-def docolorizemultis(converters, options):
-  modcolors = [
-      g2modulecolors.yellow2,g2modulecolors.green2,
-      g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1]
-  # colorize multi-module convertions
-  curr = 0
-  for conv in converters:
-    if len(conv.g2modules):
-      conv.g2module.color = modcolors[curr]
-      for mod in conv.g2modules:
-        mod.color = modcolors[curr]
-      curr = (curr+1)%len(modcolors)
+    # other ideas:
+    # create patch equal function
+    # create patch merge function that updates variations
+    #   of one patch from another.
+    g2patch,nmpatch = self.g2patch,self.nmpatch
 
+    setv(g2patch.settings.patchvol,127)
+    for color in ['red','blue','yellow','green','purple']:
+      setattr(g2patch.description,color,getattr(nmpatch.header,color))
+    if nmpatch.header.voices > 1:
+      g2patch.description.monopoly = 0
+      g2patch.description.voicecnt = nmpatch.header.voices - 1
+    setv(g2patch.settings.glide,nmpatch.header.porta)
+    setv(g2patch.settings.glidetime,nmpatch.header.portatime)
+    setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
 
-def doreposition(converters, options):
-  logging.info('reposition:')
+    areaconverters = { }
+    for areanm in 'voice','fx':
+      nmarea = getattr(nmpatch,areanm)
+      g2area = getattr(g2patch,areanm)
+      nm2g2log.info('--- area %s: ---' % areanm)
 
-  # location compare by horiz, then vert
-  def locationcmp(a, b):
-    if a.horiz == b.horiz:
-      return cmp(a.nmmodule.vert, b.nmmodule.vert)
-    return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
-  locsorted = converters[:]
-  locsorted.sort(locationcmp)
+      # build converters for all NM1 modules
+      self.converters = areaconverters[areanm] = self.doconverters(nmarea,g2area)
+      self.domodules()              # do the modules
+      self.docolorizemultis()       # colorize multi module setups
+      self.doreposition()           # repostion all modules
+      self.doprecables()            # precable processing
+      self.docables(nmarea,g2area)  # connect cables
+      self.dologiccombine(g2area)   # combine logic modules
+      self.docableshorten(g2area)   # shorten up cables
+      self.douprate(g2area)         # uprate necessary modules
+      self.cablerecolorize(g2area)  # recolor cables based on output
 
-  if len(locsorted):
-    locsorted[0].reposition(None)
-    for i in range(1,len(locsorted)):
-      ca = locsorted[i-1]
-      cb = locsorted[i]
-      if ca.nmmodule.horiz == cb.nmmodule.horiz:
-        cb.reposition(ca)
+    self.domorphsknobsmidiccs()
+    self.docurrentnotes()
+    self.dofinalize(areaconverters)
+
+    # handle text pad
+    self.pch2.patch.textpad = self.pch.patch.textpad
+
+    self.dotitleblock()
+
+    self.log.info('Writing patch "%s2"' % (self.pch.fname))
+    self.pch2.write(self.pch.fname+'2')
+
+  def doconverters(self,nmarea,g2area):
+    converters = []
+    for module in nmarea.modules:
+      if module.type.type in typetable:
+	self.log.debug('%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
+	    module.type.type,module.type.type))
+	conv = typetable[module.type.type](nmarea,g2area,module,self.options)
+	converters.append(conv)
+	#g2module = conv.g2module
+	#print '%s (%d,%d)' % (g2module.type.shortnm,
+	#    g2module.horiz, g2module.vert)
       else:
-        cb.reposition(None)
+	self.log.warning('No converter for module "%s" type %d(0x%02x)' % (
+	    module.type.shortnm, module.type.type, module.type.type))
+    return converters
 
-def doprecables(converters, options):
-  logging.info('precables:')
-  for conv in converters:
-    logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-        conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
-    conv.precables()
 
-def docables(nmarea, g2area, converters, options):
-  # now do the cables
-  logging.info('cables:')
-  for cable in nmarea.cables:
-    source = cable.source
-    g2source = None
-    if source.direction:
-      if source.index < len(source.conv.outputs):
-        g2source = source.conv.outputs[source.index]
-    elif source.index < len(source.conv.inputs):
-      g2source = source.conv.inputs[source.index]
-    dest = cable.dest
-    s = '%s:%s:%d -> %s:%s:%d :' % (
-        source.module.name,source.type.name, source.type.type,
-        dest.module.name,dest.type.name, dest.type.type)
-    if dest.index >= len(dest.conv.inputs) or not g2source:
-      logging.warning(s + ' UNCONNECTED')
-    else:
-      s += ' connected'
-      g2dest = dest.conv.inputs[dest.index]
-      if not source.net.output:
-        s += ' No source connection'
-        color = g2cablecolors.white
-      elif source.net.output.type.type == nm1conncolors.slave:
-        color = g2cablecolors.purple
+  def domodules(self):
+    self.log.info('domodule:')
+    for conv in self.converters:
+      self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+	  conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
+      conv.domodule()
+
+
+  def docolorizemultis(self):
+    modcolors = [
+	g2modulecolors.yellow2,g2modulecolors.green2,
+	g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1 ]
+    # colorize multi-module convertions
+    curr = 0
+    for conv in self.converters:
+      if len(conv.g2modules):
+	conv.g2module.color = modcolors[curr]
+	for mod in conv.g2modules:
+	  mod.color = modcolors[curr]
+	curr = (curr+1)%len(modcolors)
+
+
+  def doreposition(self):
+    self.log.info('reposition:')
+
+    # location compare by horiz, then vert
+    def locationcmp(a, b):
+      if a.horiz == b.horiz:
+	return cmp(a.nmmodule.vert, b.nmmodule.vert)
+      return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
+    locsorted = self.converters[:]
+    locsorted.sort(locationcmp)
+
+    if len(locsorted):
+      locsorted[0].reposition(None)
+      for i in range(1,len(locsorted)):
+	ca = locsorted[i-1]
+	cb = locsorted[i]
+	if ca.nmmodule.horiz == cb.nmmodule.horiz:
+	  cb.reposition(ca)
+	else:
+	  cb.reposition(None)
+
+
+  def doprecables(self):
+    self.log.info('precables:')
+    for conv in self.converters:
+      self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+	  conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
+      conv.precables()
+
+
+  def docables(self, nmarea, g2area):
+    # now do the cables
+    self.log.info('cables:')
+    for cable in nmarea.cables:
+      source = cable.source
+      g2source = None
+      if source.direction:
+	if source.index < len(source.conv.outputs):
+	  g2source = source.conv.outputs[source.index]
+      elif source.index < len(source.conv.inputs):
+	g2source = source.conv.inputs[source.index]
+      dest = cable.dest
+      s = '%s:%s:%d -> %s:%s:%d :' % (
+	  source.module.name,source.type.name, source.type.type,
+	  dest.module.name,dest.type.name, dest.type.type)
+      if dest.index >= len(dest.conv.inputs) or not g2source:
+	self.log.warning(s + ' UNCONNECTED')
       else:
-        color = source.net.output.type.type
-      logging.debug(s)
-      g2area.connect(g2source,g2dest,color)
+	s += ' connected'
+	g2dest = dest.conv.inputs[dest.index]
+	if not source.net.output:
+	  s += ' No source connection'
+	  color = g2cablecolors.white
+	elif source.net.output.type.type == nm1conncolors.slave:
+	  color = g2cablecolors.purple
+	else:
+	  color = source.net.output.type.type
+	self.log.debug(s)
+	g2area.connect(g2source,g2dest,color)
 
-def douprate(g2area,options):
-  # now parse the entire netlist of the area and .uprate=1 all
-  # modules with blue_red and yello_orange inputs connected to red outputs.
-  # scan module list until we done change any modules
-  logging.info('uprate:')
-  done = 0
-  while not done:
-    modified = 0
-    for module in g2area.modules:
-      #logging.debug('%s:%s' % (module.name, module.type.shortnm))
-      for input in module.inputs:
-        if not input.net:
-          continue
-        #logging.debug(' %s:%d' % (input.type.name, input.rate))
-        # try and make all logic run at control rate.
-        if input.rate == g2conncolors.yellow_orange:
-          input.rate = g2conncolors.yellow
-          continue
-        if input.rate != g2conncolors.blue_red:
-          continue
-        if not input.net.output:
-          continue
-        if input.net.output.rate == g2conncolors.red:
-          #logging.debug('%s:%s %s' % (
-          #     module.name,input.type.name,input.net.output.type.name))
-          modified = 1
-          module.uprate = 1
-          input.rate = g2conncolors.red
-          # change all outputs to red for next iteration
-          for output in module.outputs:
-            if output.rate == g2conncolors.blue_red:
-              output.rate = g2conncolors.red
-            if output.rate == g2conncolors.yellow_orange:
-              output.rate = g2conncolors.orange
-          break
-        #elif input.net.output.rate == g2conncolors.blue:
-        #  modified = 1
-        #  module.uprate = 0
-        #  input.rate = g2conncolors.red
-        #  # change all outputs to red for next iteration
-        #  for output in module.outputs:
-        #    if output.rate == g2conncolors.blue_red:
-        #      output.rate = g2conncolors.blue
-        #    if output.rate == g2conncolors.yellow_orange:
-        #      output.rate = g2conncolors.yellow
-        #  break
-    if not modified:
-      done = 1
+  def douprate(self, g2area):
+    # now parse the entire netlist of the area and .uprate=1 all
+    # modules with blue_red and yello_orange inputs connected to red outputs.
+    # scan module list until we done change any modules
+    self.log.info('uprate:')
+    done = 0
+    while not done:
+      modified = 0
+      for module in g2area.modules:
+	#nm2g2log.debug('%s:%s' % (module.name, module.type.shortnm))
+	for input in module.inputs:
+	  if not input.net:
+	    continue
+	  #nm2g2log.debug(' %s:%d' % (input.type.name, input.rate))
+	  # try and make all logic run at control rate.
+	  if input.rate == g2conncolors.yellow_orange:
+	    input.rate = g2conncolors.yellow
+	    continue
+	  if input.rate != g2conncolors.blue_red:
+	    continue
+	  if not input.net.output:
+	    continue
+	  if input.net.output.rate == g2conncolors.red:
+	    #nm2g2log.debug('%s:%s %s' % (
+	    #     module.name,input.type.name,input.net.output.type.name))
+	    modified = 1
+	    module.uprate = 1
+	    input.rate = g2conncolors.red
+	    # change all outputs to red for next iteration
+	    for output in module.outputs:
+	      if output.rate == g2conncolors.blue_red:
+		output.rate = g2conncolors.red
+	      if output.rate == g2conncolors.yellow_orange:
+		output.rate = g2conncolors.orange
+	    break
+	  #elif input.net.output.rate == g2conncolors.blue:
+	  #  modified = 1
+	  #  module.uprate = 0
+	  #  input.rate = g2conncolors.red
+	  #  # change all outputs to red for next iteration
+	  #  for output in module.outputs:
+	  #    if output.rate == g2conncolors.blue_red:
+	  #      output.rate = g2conncolors.blue
+	  #    if output.rate == g2conncolors.yellow_orange:
+	  #      output.rate = g2conncolors.yellow
+	  #  break
+      if not modified:
+	done = 1
 
-def dologiccombine(g2area,options):
-  # find all Gate modules
-  # sort and create a 2d array gates[col][index]
-  # group gates in pairs, ignore last one if odd numbered
-  # for each pair:
-  #   move upper gate connections to left
-  #   move lower gate connections to right
-  # find all Invert modules
-  # sort and create a 2d array inverters[col][index]
-  # group inverters in pairs, ignore last one if odd numbered
-  # for each pair:
-  #   move upper inverter connections to left
-  #   move lower inverter connections to right
-  # 'Gate','Invert'
+  def dologiccombine(self, g2area):
+    # find all Gate modules
+    # sort and create a 2d array gates[col][index]
+    # group gates in pairs, ignore last one if odd numbered
+    # for each pair:
+    #   move upper gate connections to left
+    #   move lower gate connections to right
+    # find all Invert modules
+    # sort and create a 2d array inverters[col][index]
+    # group inverters in pairs, ignore last one if odd numbered
+    # for each pair:
+    #   move upper inverter connections to left
+    #   move lower inverter connections to right
+    # 'Gate','Invert'
 
-  if not options.logiccombine:
-    return
-
-  def locationcmp(a, b):
-    if a.horiz == b.horiz:
-      return cmp(a.vert,b.vert)
-    return cmp(a.horiz,b.horiz)
-  
-  def gateused(gate,num):
-    if num == 1:
-      return len(gate.inputs.In1_1.cables) != 0 or \
-             len(gate.inputs.In1_2.cables) != 0 or \
-             len(gate.outputs.Out1.cables) != 0
-    elif num == 2:
-      return len(gate.inputs.In2_1.cables) != 0 or \
-             len(gate.inputs.In2_2.cables) != 0 or \
-             len(gate.outputs.Out2.cables) != 0
-    return False
-
-  def freegate(gate):
-    if not gateused(gate,1):   return 1
-    elif not gateused(gate,2): return 2
-    else:                      return 0
-
-  def usedgate(gate):
-    if gateused(gate,1):   return 1
-    elif gateused(gate,2): return 2
-    else:                  return 0
-
-  def invertused(invert,num):
-    if num == 1:
-      return len(invert.inputs.In1.cables) != 0 or \
-             len(invert.outputs.Out1.cables) != 0
-    elif num == 2:
-      return len(invert.inputs.In2.cables) != 0 or \
-             len(invert.outputs.Out2.cables) != 0
-    return 0
-
-  def freeinvert(invert):
-    if not invertused(invert,1):   return 1
-    elif not invertused(invert,2): return 2
-    else:                          return 0
-
-  def usedinvert(invert):
-    if invertused(invert,1):   return 1
-    elif invertused(invert,2): return 2
-    else:                      return 0
-
-  def makepairs(shortnm,freelogic):
-    mods = [ m for m in g2area.modules if m.type.shortnm == shortnm ]
-    modcols = {}
-    for mod in mods:
-      if freelogic(mod) == 0:
-        continue
-      if not modcols.has_key(mod.horiz):
-        modcols[mod.horiz] = []
-      modcols[mod.horiz].append(mod)
-    colpairs = []
-    for col in modcols.keys():
-      mods = modcols[col]
-      mods.sort(locationcmp)
-      if len(mods) % 2:
-        oddmod = mods[-1]
-      else:
-        oddmod = None
-      colpairs.append([zip(mods[::2],mods[1::2]),oddmod])
-    return colpairs
-
-  def movecable(g2area,fromconn,toconn):
-    if len(fromconn.cables) == 0:
+    if not self.options.logiccombine:
       return
-    minconn = g2area.removeconnector(fromconn)
-    if minconn.direction:
-      fromconn = minconn
-    else:
-      fromconn,toconn = toconn,minconn
-    g2area.connect(fromconn,toconn,g2cablecolors.yellow)
 
-  logging.info('logic combine:')
+    def locationcmp(a, b):
+      if a.horiz == b.horiz:
+	return cmp(a.vert,b.vert)
+      return cmp(a.horiz,b.horiz)
+    
+    def gateused(gate,num):
+      if num == 1:
+	return len(gate.inputs.In1_1.cables) != 0 or \
+	      len(gate.inputs.In1_2.cables) != 0 or \
+	      len(gate.outputs.Out1.cables) != 0
+      elif num == 2:
+	return len(gate.inputs.In2_1.cables) != 0 or \
+	      len(gate.inputs.In2_2.cables) != 0 or \
+	      len(gate.outputs.Out2.cables) != 0
+      return False
 
-  for gatecol,oddmod in makepairs('Gate',freegate):
-    for odd,even in gatecol:
-      logging.debug('Gate combine: %s(%d,%d) and %s(%d,%d)' %
-        (odd.name,odd.horiz,odd.vert,even.name,even.horiz,even.vert))
-      odd.modes[0].value = odd.modes[1].value
-      odd.modes[1].value = even.modes[1].value
-      if freegate(odd) == 1:
-        movecable(g2area,odd.inputs.In2_1,odd.inputs.In1_1)
-        movecable(g2area,odd.inputs.In2_2,odd.inputs.In1_2)
-        movecable(g2area,odd.outputs.Out2,odd.outputs.Out1)
-      if usedgate(even) == 1:
-        movecable(g2area,even.inputs.In1_1,odd.inputs.In1_1)
-        movecable(g2area,even.inputs.In1_2,odd.inputs.In1_2)
-        movecable(g2area,even.outputs.Out1,odd.outputs.Out1)
-      elif usedgate(even) == 2:
-        movecable(g2area,even.inputs.In2_1,odd.inputs.In2_1)
-        movecable(g2area,even.inputs.In2_2,odd.inputs.In2_2)
-        movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
-      g2area.modules.remove(even)
+    def freegate(gate):
+      if not gateused(gate,1):   return 1
+      elif not gateused(gate,2): return 2
+      else:                      return 0
 
-  for invertercol,oddmod in makepairs('Invert',freeinvert):
-    for odd,even in invertercol:
-      logging.debug('Invert combine: %s(%d,%d) and %s(%d,%d)' %
-        (odd.name,odd.horiz,odd.vert,even.name,even.horiz,even.vert))
-      if freeinvert(odd) == 1:
-        movecable(g2area,odd.inputs.In2,odd.inputs.In1)
-        movecable(g2area,odd.outputs.Out2,odd.outputs.Out1)
-      if usedinvert(even) == 1:
-        movecable(g2area,even.inputs.In1,odd.inputs.In2)
-        movecable(g2area,even.outputs.Out1,odd.outputs.Out2)
-      elif usedinvert(even) == 2:
-        movecable(g2area,even.inputs.In2,odd.inputs.In2)
-        movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
-      g2area.modules.remove(even)
+    def usedgate(gate):
+      if gateused(gate,1):   return 1
+      elif gateused(gate,2): return 2
+      else:                  return 0
 
-def cablerecolorize(g2area,options):
-  logging.info('cable recolorize:')
-  for cable in g2area.cables:
-    if cable.source.net.output:
-      cable.color = conn2cablecolors[cable.source.net.output.rate]
+    def invertused(invert,num):
+      if num == 1:
+	return len(invert.inputs.In1.cables) != 0 or \
+	      len(invert.outputs.Out1.cables) != 0
+      elif num == 2:
+	return len(invert.inputs.In2.cables) != 0 or \
+	      len(invert.outputs.Out2.cables) != 0
+      return 0
 
-def docableshorten(g2area,options):
-  if not options.shorten:
-    return
-  logging.info('cable shorten:')
-  g2area.shortencables()
+    def freeinvert(invert):
+      if not invertused(invert,1):   return 1
+      elif not invertused(invert,2): return 2
+      else:                          return 0
 
-def domorphsknobsmidiccs(nmpatch,g2patch,options):
-  # handle Morphs
-  #  morphs[x].ctrl.midicc
-  #    1: Wheel -> Wheel (morph 0)
-  #    7: Volume -> ?
-  #    4: Foot -> Ctrl.Pd (morph 5)
-  #  morphs[x].keyassign
-  #    0: None -> ignored
-  #    1: Velocity -> Vel (morph 1)
-  #    2: Note -> Keyb (morph 2)
-  #  morphs[x].knob.knob
-  #    19: Pedal -> Sust Pd. (morph 4)
-  #    20: After Touch -> Aft. Tch. (morph 3)
-  #    22: On/Off -> P.Stick (morph 6) set to knob
-  #
-  #  Priority:
-  #    keyassign (highest)
-  #    ctrl
-  #    knob (lowest)
-  #    This means if keyassign is found it's will ignore the other two
-  #
-  # build a morphmap[x] that maps x to g2 morph
-  logging.info('morphs:')
-  nmmorphs = nmpatch.morphs
-  g2morphs = g2patch.settings.morphs
-  unused = g2morphs[:]
-  morphmap = [None] * 4
-  for morph in range(len(nmmorphs)):
-    if nmmorphs[morph].ctrl:
-      logging.debug(' nm morph%d: midicc=%d' %
-          (morph,nmmorphs[morph].ctrl.midicc))
-      # ignore Volume cannot be assigned anyways
-      if nmmorphs[morph].ctrl.midicc == 1:
-        morphmap[morph] = g2morphs[0]
-        unused.remove(g2morphs[0])
-        continue
-      elif nmmorphs[morph].ctrl.midicc == 4:
-        morphmap[morph] = g2morphs[5]
-        unused.remove(g2morphs[5])
-        continue
-    if nmmorphs[morph].keyassign:
-      logging.debug(' nm morph%d: keyassign=%d' %
-          (morph,nmmorphs[morph].keyassign))
-      m = g2morphs[nmmorphs[morph].keyassign]
-      unused.remove(m)
-      morphmap[morph] = m
-      continue
-    if nmmorphs[morph].knob:
-      knob = nmmorphs[morph].knob
-      logging.debug(' nm morph%d: knob=%d' % (morph,knob.knob))
-      if knob.knob > 18:                  #  v: 0 unused
-        m = g2morphs[[4,3,0,6][knob.knob-19]]
-        morphmap[morph] = m
-        unused.remove(m)
+    def usedinvert(invert):
+      if invertused(invert,1):   return 1
+      elif invertused(invert,2): return 2
+      else:                      return 0
 
-  # if morphmap[morph] empty assign unused morph and set it to knob
-  for morph in range(len(morphmap)-1,-1,-1):
-    if not morphmap[morph]:
-      morphmap[morph] = unused.pop()
-      setv(morphmap[morph].modes,0)
-    else:
-      setv(morphmap[morph].modes,1)
-    logging.debug(' nm morph%d -> g2 morph%d' % (morph,morphmap[morph].index))
+    def makepairs(shortnm,freelogic):
+      mods = [ m for m in g2area.modules if m.type.shortnm == shortnm ]
+      modcols = {}
+      for mod in mods:
+	if freelogic(mod) == 0:
+	  continue
+	if not modcols.has_key(mod.horiz):
+	  modcols[mod.horiz] = []
+	modcols[mod.horiz].append(mod)
+      colpairs = []
+      for col in modcols.keys():
+	mods = modcols[col]
+	mods.sort(locationcmp)
+	if len(mods) % 2:
+	  oddmod = mods[-1]
+	else:
+	  oddmod = None
+	colpairs.append([zip(mods[::2],mods[1::2]),oddmod])
+      return colpairs
 
-  for morph in range(len(morphmap)):
-    g2morph = morphmap[morph]
-    setv(g2morph.dials,nmmorphs[morph].dial)
-    logging.debug(' Morph%d: dial=%d' % (morph+1,nmmorphs[morph].dial))
-    for map in nmmorphs[morph].maps:
-      s = '  %s:%s range=%d' % (map.param.module.name,map.param.type.name,
-          map.range)
-      mmap = MorphMap()
-      conv = map.param.module.conv
-      mmap.range = conv.domorphrange(map.param.index,map.range)
-      index = map.param.index
-      if index < len(conv.params) and conv.params[index]:
-        mmap.param = conv.params[index]
-        mmap.morph = g2morph
-        morphmap[morph].maps[0].append(mmap)
-        logging.debug(s)
+    def movecable(g2area,fromconn,toconn):
+      if len(fromconn.cables) == 0:
+	return
+      minconn = g2area.removeconnector(fromconn)
+      if minconn.direction:
+	fromconn = minconn
       else:
-        logging.warning(s + ' -- Parameter missing')
-    for variation in range(1,9):
-      g2morph.maps[variation]=g2morph.maps[0][:]
-      
-  # handle Knobs
-  logging.info('knobs:')
-  #knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
-  knobmap = [0,8,16,1,9,17,2,10,18,3,11,19,4,12,20,5,13,21]
-  for knob in nmpatch.knobs:
-    if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
-      continue
-    g2knob = g2patch.knobs[knobmap[knob.knob]]
-    index = knob.param.index
-    if hasattr(knob.param,'module'): # module parameter
-      # Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
-      conv = knob.param.module.conv
-      s = 'Knob%d: %s:%s ->' % (knob.knob,
-          knob.param.module.name,knob.param.type.name)
-      if index < len(conv.params) and conv.params[index]:
-        s += ' %s' % conv.params[index]
-        g2knob.param = conv.params[index]
-        g2knob.assigned = 1
-        g2knob.isled = 0
-        logging.debug(s)
+	fromconn,toconn = toconn,minconn
+      g2area.connect(fromconn,toconn,g2cablecolors.yellow)
+
+    self.log.info('logic combine:')
+
+    for gatecol,oddmod in makepairs('Gate',freegate):
+      for odd,even in gatecol:
+	self.log.debug('Gate combine: %s(%d,%d) and %s(%d,%d)' %
+	  (odd.name,odd.horiz,odd.vert,even.name,even.horiz,even.vert))
+	odd.modes[0].value = odd.modes[1].value
+	odd.modes[1].value = even.modes[1].value
+	if freegate(odd) == 1:
+	  movecable(g2area,odd.inputs.In2_1,odd.inputs.In1_1)
+	  movecable(g2area,odd.inputs.In2_2,odd.inputs.In1_2)
+	  movecable(g2area,odd.outputs.Out2,odd.outputs.Out1)
+	if usedgate(even) == 1:
+	  movecable(g2area,even.inputs.In1_1,odd.inputs.In1_1)
+	  movecable(g2area,even.inputs.In1_2,odd.inputs.In1_2)
+	  movecable(g2area,even.outputs.Out1,odd.outputs.Out1)
+	elif usedgate(even) == 2:
+	  movecable(g2area,even.inputs.In2_1,odd.inputs.In2_1)
+	  movecable(g2area,even.inputs.In2_2,odd.inputs.In2_2)
+	  movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
+	g2area.modules.remove(even)
+
+    for invertercol,oddmod in makepairs('Invert',freeinvert):
+      for odd,even in invertercol:
+	self.log.debug('Invert combine: %s(%d,%d) and %s(%d,%d)' %
+	  (odd.name,odd.horiz,odd.vert,even.name,even.horiz,even.vert))
+	if freeinvert(odd) == 1:
+	  movecable(g2area,odd.inputs.In2,odd.inputs.In1)
+	  movecable(g2area,odd.outputs.Out2,odd.outputs.Out1)
+	if usedinvert(even) == 1:
+	  movecable(g2area,even.inputs.In1,odd.inputs.In2)
+	  movecable(g2area,even.outputs.Out1,odd.outputs.Out2)
+	elif usedinvert(even) == 2:
+	  movecable(g2area,even.inputs.In2,odd.inputs.In2)
+	  movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
+	g2area.modules.remove(even)
+
+  def cablerecolorize(self, g2area):
+    self.log.info('cable recolorize:')
+    for cable in g2area.cables:
+      if cable.source.net.output:
+	cable.color = conn2cablecolors[cable.source.net.output.rate]
+
+  def docableshorten(self, g2area):
+    if not self.options.shorten:
+      return
+    self.log.info('cable shorten:')
+    g2area.shortencables()
+
+  def domorphsknobsmidiccs(self):
+    # handle Morphs
+    #  morphs[x].ctrl.midicc
+    #    1: Wheel -> Wheel (morph 0)
+    #    7: Volume -> ?
+    #    4: Foot -> Ctrl.Pd (morph 5)
+    #  morphs[x].keyassign
+    #    0: None -> ignored
+    #    1: Velocity -> Vel (morph 1)
+    #    2: Note -> Keyb (morph 2)
+    #  morphs[x].knob.knob
+    #    19: Pedal -> Sust Pd. (morph 4)
+    #    20: After Touch -> Aft. Tch. (morph 3)
+    #    22: On/Off -> P.Stick (morph 6) set to knob
+    #
+    #  Priority:
+    #    keyassign (highest)
+    #    ctrl
+    #    knob (lowest)
+    #    This means if keyassign is found it's will ignore the other two
+    #
+    # build a morphmap[x] that maps x to g2 morph
+    g2patch,nmpatch = self.g2patch,self.nmpatch
+    self.log.info('morphs:')
+    nmmorphs = nmpatch.morphs
+    g2morphs = g2patch.settings.morphs
+    unused = g2morphs[:]
+    morphmap = [None] * 4
+    for morph in range(len(nmmorphs)):
+      if nmmorphs[morph].ctrl:
+	self.log.debug(' nm morph%d: midicc=%d' %
+	    (morph,nmmorphs[morph].ctrl.midicc))
+	# ignore Volume cannot be assigned anyways
+	if nmmorphs[morph].ctrl.midicc == 1:
+	  morphmap[morph] = g2morphs[0]
+	  unused.remove(g2morphs[0])
+	  continue
+	elif nmmorphs[morph].ctrl.midicc == 4:
+	  morphmap[morph] = g2morphs[5]
+	  unused.remove(g2morphs[5])
+	  continue
+      if nmmorphs[morph].keyassign:
+	self.log.debug(' nm morph%d: keyassign=%d' %
+	    (morph,nmmorphs[morph].keyassign))
+	m = g2morphs[nmmorphs[morph].keyassign]
+	unused.remove(m)
+	morphmap[morph] = m
+	continue
+      if nmmorphs[morph].knob:
+	knob = nmmorphs[morph].knob
+	self.log.debug(' nm morph%d: knob=%d' % (morph,knob.knob))
+	if knob.knob > 18:                  #  v: 0 unused
+	  m = g2morphs[[4,3,0,6][knob.knob-19]]
+	  morphmap[morph] = m
+	  unused.remove(m)
+
+    # if morphmap[morph] empty assign unused morph and set it to knob
+    for morph in range(len(morphmap)-1,-1,-1):
+      if not morphmap[morph]:
+	morphmap[morph] = unused.pop()
+	setv(morphmap[morph].modes,0)
       else:
-        logging.warning(s + ' Unknown param %d' % index)
-    else: # morph
-      #logging.debug(' Knob%d: Morph%d' % (knob.knob,knob.param.index))
-      g2knob.param = morphmap[knob.param.index-1]
-      g2knob.assigned = 1
-      g2knob.isled = 0
-  
-  # handle Midi CCs
-  logging.info('MIDI CCs:')
-  reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97]+range(120,128)
-  from nord.g2.file import Ctrl
-  for ctrl in nmpatch.ctrls:
-    param = ctrl.param
-    if hasattr(ctrl.param,'module'): # module parameter
-      s = ' CC%d %s.%s(%d,%d)' % (ctrl.midicc,param.module.name,
-        param.type.name, param.module.horiz, param.module.vert)
-    else:
-      s = ' CC%d' % ctrl.midicc
-    if ctrl.midicc in reservedmidiccs:
-      logging.warning('%s cannot be used (reserved)' % s)
-      continue
-    m = Ctrl()
-    m.midicc = ctrl.midicc
-    if hasattr(ctrl.param,'module'): # module parameter
-      index = param.index
-      conv = param.module.conv
-      if index < len(conv.params) and conv.params[index]:
-        m.param = conv.params[index]
-        m.type = conv.g2module.area.index
-        logging.debug(s)
+	setv(morphmap[morph].modes,1)
+      self.log.debug(' nm morph%d -> g2 morph%d' % (morph,morphmap[morph].index))
+
+    for morph in range(len(morphmap)):
+      g2morph = morphmap[morph]
+      setv(g2morph.dials,nmmorphs[morph].dial)
+      self.log.debug(' Morph%d: dial=%d' % (morph+1,nmmorphs[morph].dial))
+      for map in nmmorphs[morph].maps:
+	s = '  %s:%s range=%d' % (map.param.module.name,map.param.type.name,
+	    map.range)
+	mmap = MorphMap()
+	conv = map.param.module.conv
+	mmap.range = conv.domorphrange(map.param.index,map.range)
+	index = map.param.index
+	if index < len(conv.params) and conv.params[index]:
+	  mmap.param = conv.params[index]
+	  mmap.morph = g2morph
+	  morphmap[morph].maps[0].append(mmap)
+	  self.log.debug(s)
+	else:
+	  self.log.warning(s + ' -- Parameter missing')
+      for variation in range(1,9):
+	g2morph.maps[variation]=g2morph.maps[0][:]
+	
+    # handle Knobs
+    self.log.info('knobs:')
+    #knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
+    knobmap = [0,8,16,1,9,17,2,10,18,3,11,19,4,12,20,5,13,21]
+    for knob in nmpatch.knobs:
+      if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
+	continue
+      g2knob = g2patch.knobs[knobmap[knob.knob]]
+      index = knob.param.index
+      if hasattr(knob.param,'module'): # module parameter
+	# Place parameters in A1(knobs 1-6),A2(knobs 7-12),A3(knobs 13-18)
+	conv = knob.param.module.conv
+	s = 'Knob%d: %s:%s ->' % (knob.knob,
+	    knob.param.module.name,knob.param.type.name)
+	if index < len(conv.params) and conv.params[index]:
+	  param = conv.params[index]
+	  s += ' %s:%s' % (param.module.name,param.type.name)
+	  g2knob.param = param
+	  g2knob.assigned = 1
+	  g2knob.isled = 0
+	  self.log.debug(s)
+	else:
+	  self.log.warning(s + ' Unknown param %d' % index)
+      else: # morph
+	#self.log.debug(' Knob%d: Morph%d' % (knob.knob,knob.param.index))
+	g2knob.param = morphmap[knob.param.index-1]
+	g2knob.assigned = 1
+	g2knob.isled = 0
+    
+    # handle Midi CCs
+    self.log.info('MIDI CCs:')
+    reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97]+range(120,128)
+    from nord.g2.file import Ctrl
+    for ctrl in nmpatch.ctrls:
+      param = ctrl.param
+      if hasattr(ctrl.param,'module'): # module parameter
+	s = ' CC%d %s.%s(%d,%d)' % (ctrl.midicc,param.module.name,
+	  param.type.name, param.module.horiz, param.module.vert)
       else:
-        logging.warning(s + ' -- Parameter missing')
-        continue
-    else:
-      m.param = morphmap[ctrl.param.index-1]
-      m.type = 2 # system
-    g2patch.ctrls.append(m)
+	s = ' CC%d' % ctrl.midicc
+      if ctrl.midicc in reservedmidiccs:
+	self.log.warning('%s cannot be used (reserved)' % s)
+	continue
+      m = Ctrl()
+      m.midicc = ctrl.midicc
+      if hasattr(ctrl.param,'module'): # module parameter
+	index = param.index
+	conv = param.module.conv
+	if index < len(conv.params) and conv.params[index]:
+	  m.param = conv.params[index]
+	  m.type = conv.g2module.area.index
+	  nm2g2log.debug(s)
+	else:
+	  self.log.warning(s + ' -- Parameter missing')
+	  continue
+      else:
+	m.param = morphmap[ctrl.param.index-1]
+	m.type = 2 # system
+      g2patch.ctrls.append(m)
 
-def docurrentnotes(nmpatch,g2patch,options):
-  # handle CurrentNotes
-  logging.info('currentnotes:')
-  #g2patch.lastnote = nmpatch.lastnote
-  g2patch.notes.append(nmpatch.lastnote)
-  for note in nmpatch.notes:
-    g2patch.notes.append(note)
+  def docurrentnotes(self):
+    g2patch,nmpatch = self.g2patch,self.nmpatch
+    # handle CurrentNotes
+    self.log.info('currentnotes:')
+    #g2patch.lastnote = nmpatch.lastnote
+    g2patch.notes.append(nmpatch.lastnote)
+    for note in nmpatch.notes:
+      g2patch.notes.append(note)
 
-def dofinalize(areaconverters,options):
-  logging.info('Finalize:')
-  for areanm in 'voice','fx':
-    logging.info('--- area %s: ---' % areanm)
-    for conv in areaconverters[areanm]:
-      logging.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
-      conv.finalize()
+  def dofinalize(self, areaconverters):
+    self.log.info('Finalize:')
+    for areanm in 'voice','fx':
+      self.log.info('--- area %s: ---' % areanm)
+      for conv in areaconverters[areanm]:
+	self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
+	    conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
+	conv.finalize()
 
-def dotitleblock(pch,pch2,options):
-  lines = ['Converted by',
-           'gtools-%s' % (g2oolsversion),
-           'by',
-           'Matt Gerassimoff',
-           'models by',
-           'Sven Roehrig']
+  def dotitleblock(self):
+    lines = ['Converted by',
+	    'gtools-%s' % (g2oolsversion),
+	    'by',
+	    'Matt Gerassimoff',
+	    'models by',
+	    'Sven Roehrig']
 
-  vert = 0
-  for module in pch2.patch.voice.modules:
-    if module.horiz != 0:
-      continue
-    v = module.vert + module.type.height
-    if v > vert:
-      vert = v
+    vert = 0
+    for module in self.pch2.patch.voice.modules:
+      if module.horiz != 0:
+	continue
+      v = module.vert + module.type.height
+      if v > vert:
+	vert = v
 
-  def addnamebars(lines, horiz, vert):
-    for line in lines:
-      m = pch2.patch.voice.addmodule('Name',name=toascii(line))
-      m.horiz = horiz
-      m.vert = vert
-      vert += 1
-    return vert
+    def addnamebars(lines, horiz, vert):
+      for line in lines:
+	m = self.pch2.patch.voice.addmodule('Name',name=toascii(line))
+	m.horiz = horiz
+	m.vert = vert
+	vert += 1
+      return vert
 
-  path = os.path.dirname(os.path.abspath(pch.fname))[-16:]
-  vert = addnamebars([path],0,vert+2)
-  vert = addnamebars(lines,0,vert+1)
-  vert = addnamebars(['All rights','reserved'],0,vert+1)
+    path = os.path.dirname(os.path.abspath(self.pch.fname))[-16:]
+    vert = addnamebars([path],0,vert+2)
+    vert = addnamebars(lines,0,vert+1)
+    vert = addnamebars(['All rights','reserved'],0,vert+1)
 
-def convert(pchfile,options):
-  #   loop through each module
-  #     determine and store separation from module above >= 0
-  #     if mod in convertion table
-  #       call convertion table module function
-  #   loop through each cable
-  #     if source and dest in convertion table
-  #       create new connection
-  #   update midi controller assignments
-  #   update knob assignments (on pags A1:1, A1:2 and A1:3)
-  #   update morph assignments
-  #   reorder modules top to bottom, left to right
-  #   relocate modules top to bottom, left to right based on separation
-  #   add name bar with my name and convertion info
-  #   add name bar with errors/comments etc.
-  #   save g2 file
-
-  # other ideas:
-  # create patch equal function
-  # create patch merge function that updates variations
-  #   of one patch from another.
-  pch = PchFile(pchfile)
-  g2oolsdir = os.path.dirname(sys.argv[0])
-  pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
-  nmpatch = pch.patch
-  g2patch = pch2.patch
-  g2patch.voice.keyboard = None
-  g2patch.fx.keyboard = None
-
-  setv(g2patch.settings.patchvol,127)
-  for color in ['red','blue','yellow','green','purple']:
-    setattr(g2patch.description,color,getattr(nmpatch.header,color))
-  if nmpatch.header.voices > 1:
-    g2patch.description.monopoly = 0
-    g2patch.description.voicecnt = nmpatch.header.voices - 1
-  setv(g2patch.settings.glide,nmpatch.header.porta)
-  setv(g2patch.settings.glidetime,nmpatch.header.portatime)
-  setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
-
-  areaconverters = { }
-  for areanm in 'voice','fx':
-    nmarea = getattr(nmpatch,areanm)
-    g2area = getattr(g2patch,areanm)
-    logging.info('--- area %s: ---' % areanm)
-
-    # build converters for all NM1 modules
-    converters = areaconverters[areanm] = doconverters(nmarea,g2area,options)
-    domodules(converters,options)              # do the modules
-    docolorizemultis(converters,options)       # colorize multi module setups
-    doreposition(converters,options)           # repostion all modules
-    doprecables(converters,options)            # precable processing
-    docables(nmarea,g2area,converters,options) # connect cables
-    dologiccombine(g2area,options)             # combine logic modules
-    docableshorten(g2area,options)             # shorten up cables
-    douprate(g2area,options)                   # uprate necessary modules
-    cablerecolorize(g2area,options)            # recolor cables based on output
-
-  domorphsknobsmidiccs(nmpatch,g2patch,options)
-  docurrentnotes(nmpatch,g2patch,options)
-  dofinalize(areaconverters,options)
-
-  # handle text pad
-  pch2.patch.textpad = pch.patch.textpad
-
-  dotitleblock(pch,pch2,options)
-
-  logging.info('Writing patch "%s2"' % (pch.fname))
-  pch2.write(pch.fname+'2')
-  
 nm2g2_options = [
   make_option('-a', '--all-files', action='store_true',
       dest='allfiles', default=False,
@@ -614,6 +628,12 @@ nm2g2_options = [
   make_option('-l', '--no-logic-combine', action='store_false',
       dest='logiccombine', default=True,
       help='Do not combine logic and inverter modules'),
+  make_option('-o', '--g2-overdrive', action='store_true',
+      dest='g2overdrive', default=False,
+      help='Use g2 overdrive model'),
+  make_option('-p', '--pad-mixer', action='store_true',
+      dest='padmixer', default=False,
+      help='Use mixers with Pad when possible'),
   make_option('-r', '--recursive', action='store_true',
       dest='recursive', default=False,
       help='On dir arguments, convert all .pch files'),
@@ -626,8 +646,8 @@ nm2g2_options = [
 ]
 
 maindone = False
-def main(argv):
-  global nm2g2_options
+def main(argv, stream):
+  global nm2g2_options, nm2g2log
 
   parser = OptionParser("usage: %prog [options] <pch-files-or-dirs>",option_list=nm2g2_options)
   (options, args) = parser.parse_args(argv)
@@ -640,17 +660,23 @@ def main(argv):
       logging.DEBUG,
   ][int(options.verbosity)]
 
-  log = logging.getLogger('')
-  log.setLevel(verbosity)
+  nm2g2log = logging.getLogger('nm2g2')
+  fmt = logging.Formatter('%(message)s',None)
+  hdlr = logging.StreamHandler(stream)
+  hdlr.setFormatter(fmt)
+  nm2g2log.addHandler(hdlr)
+  nm2g2log.setLevel(verbosity)
+  nm2g2log.propagate = False
 
   def doconvert(fname,options):
     # general algorithm for converter:
     try:
-      convert(fname,options)
+      nm2g2 = NM2G2Converter(fname,options,nm2g2log)
+      nm2g2.convert()
     except KeyboardInterrupt:
       sys.exit(1)
     except NM1Error, s:
-      logging.error(s)
+      nm2g2log.error(s)
       return '%s\n%s' % (fname, s)
     except Exception, e:
       return '%s\n%s' % (fname, traceback.format_exc())
@@ -676,31 +702,45 @@ def main(argv):
                 testname = fname+'.pch'
               if options.keepold and os.path.exists(testname+'2'):
                 continue
-              logging.critical('"%s"' % fname)
+              nm2g2log.error('"%s"' % fname)
               failed = doconvert(fname,options)
               if failed:
                 failedpatches.append(failed)
-              logging.info('-' * 20)
+              nm2g2log.info('-' * 20)
       else:
-        logging.critical('"%s"' % fname)
+        nm2g2log.error('"%s"' % fname)
         failed = doconvert(fname,options)
         if failed:
           failedpatches.append(failed)
-        logging.info('-' * 20)
+        nm2g2log.info('-' * 20)
 
   if len(failedpatches):
     f=open('failedpatches.txt','w')
     s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
     f.write(s)
-    logging.warning(s)
+    nm2g2log.warning(s)
+
+  return nm2g2log
 
 if __name__ == '__main__':
+
+  class StdoutStream:
+    def __init__(self):
+      self.str = ''
+      
+    def write(self, s):
+      self.str += s
+
+    def flush(self):
+      sys.stdout.write(self.str)
+      self.str = ''
+
   try:
     import psyco
     psyco.full()
   except ImportError:
     pass
 
-  logging.basicConfig(format='%(message)s')
+  stream = StdoutStream()
 
-  main(sys.argv)
+  main(sys.argv, stream)
