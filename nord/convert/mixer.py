@@ -24,13 +24,12 @@ from convert import *
 from nord.g2.colors import g2conncolors
 from table import modtable
 
-def mixeroptimize(nmmodule, parammap, inputmap, maxinputs):
+def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
 
   # if Mixer8 (has -6Db param), and used, gotta use Mix8-1B
-  use6db = False
   if hasattr(nmmodule.params,'-6Db'):
     if getv(getattr(nmmodule.params,'-6Db')) != 0:
-      use6db = True
+      usepad = True
     
   # remove all inputs and parameters (level settings)
   for i in range(maxinputs):
@@ -61,9 +60,9 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs):
 	inputmap[i] = 'In'
       else:  # remove all other parameters but Lev
         parammap[i] = None
-  elif o < 3 and use6db == False:
+  elif o < 3 and usepad == False:
     maing2mod = 'Mix2-1A'
-  elif o < 5 and use6db == False:
+  elif o < 5 and usepad == False:
     maing2mod = 'Mix4-1B'
   elif o < 5:
     maing2mod = 'Mix4-1C'
@@ -90,7 +89,7 @@ class Conv3Mixer(Convert):
   def __init__(self, nmarea, g2area, nmmodule, options):
     self.initmixerparams()
     self.maing2module,self.maxinputs = mixeroptimize(nmmodule, self.parammap,
-	  self.inputmap, self.maxinputs)
+	  self.inputmap, self.maxinputs, options.padmixer)
     super(Conv3Mixer,self).__init__(nmarea, g2area, nmmodule, options)
 
   def domodule(self):
@@ -107,6 +106,11 @@ class Conv3Mixer(Convert):
     elif self.maing2module == 'Mix2-1A':
       setv(g2mp.On1,1)
       setv(g2mp.On2,1)
+    elif self.maing2module == 'Mix4-1C':
+      setv(g2mp.On1,1)
+      setv(g2mp.On2,1)
+      setv(g2mp.On3,1)
+      setv(g2mp.On4,1)
 
     for i in range(1,self.maxinputs+1):
       getattr(g2m.inputs,'In%d' % i).rate = g2conncolors.red
