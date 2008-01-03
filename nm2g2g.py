@@ -19,41 +19,31 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import sys
+import os, sys
 from PyQt4.Qt import *
-
-from nm2g2g_ui import Ui_NM2G2G
+from PyQt4 import uic
 
 sys.setcheckinterval(10)
 
 class ConvertThread(QThread):
-  def __init__(self,main):
+  def __init__(self, main):
     QThread.__init__(self)
     self.main = main
     self.connect(self, SIGNAL('write'), self.main.write)
 
   def run(self):
     self.str = ''
-    script=open('nm2g2.py').read()
+    g2oolsdir = os.path.dirname(sys.argv[0])
+    prog = os.path.join(g2oolsdir, 'nm2g2.py')
+    sys.path.append(g2oolsdir)
+    script=open(prog).read()
     globs = globals()
     exec 'from nm2g2 import *' in globs
-    logging = globs['logging']
-    logging.basicConfig(stream=self, format='%(message)s')
-    main(['nm2g2.py','-v0','-r']+self.files)
-    logging.critical('Convertion finished.')
+    nm2g2log = main([prog ,'-r']+self.files, self)
+    nm2g2log.error('Convertion Finished.')
     self.exit(0)
   
   def write(self, s):
-    #c = s.find(':')
-    #if c < 0:
-    #  pass
-    #elif '---' == s[:3]:
-    #  s = '<b>'+s+'</b>'
-    #elif 'Writing Patch' == s[:13]:
-    #  s = s[:13]+' <b>'+s[15:]+'</b>'
-    #else:
-    #  s = '<b>'+s[:c+1]+'</b>'+s[c+1:]
-    #s += '<br>'
     self.str += s
 
   def flush(self):
@@ -95,16 +85,17 @@ class CheckableDirModel(QDirModel):
       return QVariant(Qt.Unchecked)
     return QDirModel.data(self, index, role)
 
-class NM2G2G(QMainWindow):
+form_class, base_class = uic.loadUiType("nm2g2g.ui")
+
+class NM2G2G(QMainWindow, form_class):
   def __init__(self, parent=None):
     QMainWindow.__init__(self, parent)
 
-    self.ui = Ui_NM2G2G()
-    self.ui.setupUi(self)
+    self.setupUi(self)
 
     self.dirmodel = CheckableDirModel()
     self.dirmodel.setSorting(QDir.Name|QDir.DirsFirst)
-    tree = self.ui.treeView
+    tree = self.treeView
     tree.setModel(self.dirmodel)
     tree.setRootIndex(self.dirmodel.index(QDir.currentPath()))
     tree.resizeColumnToContents(0)
@@ -121,14 +112,19 @@ class NM2G2G(QMainWindow):
     cm = self.dirmodel.checkmap
     files = [ str(k) for k in self.dirmodel.checkmap.keys() if cm[k] ]
     files.sort()
-    self.ui.textEdit.document().clear()
+    self.textEdit.document().clear()
     self.convert.files = files
     self.convert.start()
 
+  @pyqtSignature('bool')
+  def on_action_Stop_triggered(self, checked):
+    global maindone
+    maindone = True
+
   def write(self, s):
     #self.ui.textEdit.insertHtml(s)
-    self.ui.textEdit.insertPlainText(s)
-    self.ui.textEdit.ensureCursorVisible()
+    self.textEdit.insertPlainText(s)
+    self.textEdit.ensureCursorVisible()
     
 if __name__ == "__main__":
   app = QApplication(sys.argv)

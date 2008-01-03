@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>NM2G2G</class>
  <widget class="QMainWindow" name="NM2G2G" >
   <property name="geometry" >
@@ -17,18 +14,25 @@
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QVBoxLayout" >
-    <property name="margin" >
+    <property name="spacing" >
      <number>0</number>
     </property>
-    <property name="spacing" >
+    <property name="leftMargin" >
+     <number>0</number>
+    </property>
+    <property name="topMargin" >
+     <number>0</number>
+    </property>
+    <property name="rightMargin" >
+     <number>0</number>
+    </property>
+    <property name="bottomMargin" >
      <number>0</number>
     </property>
     <item>
      <widget class="QSplitter" name="splitter" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>5</hsizetype>
-        <vsizetype>7</vsizetype>
+       <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -48,7 +52,7 @@
      <x>0</x>
      <y>0</y>
      <width>658</width>
-     <height>29</height>
+     <height>35</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File" >
@@ -56,11 +60,29 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Run" />
+    <addaction name="action_Stop" />
+    <addaction name="separator" />
     <addaction name="action_Quit" />
    </widget>
    <addaction name="menu_File" />
   </widget>
   <widget class="QStatusBar" name="statusbar" />
+  <widget class="QToolBar" name="toolBar" >
+   <property name="windowTitle" >
+    <string>toolBar</string>
+   </property>
+   <property name="allowedAreas" >
+    <set>Qt::NoToolBarArea|Qt::RightToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Run" />
+   <addaction name="action_Stop" />
+  </widget>
   <action name="action_Quit" >
    <property name="text" >
     <string>&amp;Quit</string>
@@ -77,8 +99,12 @@
     <string>Ctrl+R</string>
    </property>
   </action>
+  <action name="action_Stop" >
+   <property name="text" >
+    <string>&amp;Stop</string>
+   </property>
+  </action>
  </widget>
- <pixmapfunction></pixmapfunction>
  <resources/>
  <connections>
   <connection>
