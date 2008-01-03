@@ -115,6 +115,11 @@ class Area(object):
 
   # connect input/output to input
   def connect(self, source, dest, color):
+    sid = (source.module.index << 16) + source.index
+    did = (dest.module.index << 16) + dest.index
+    if source.direction == dest.direction and sid > did:
+      source,dest = dest,source
+
     cable = Cable(self)
     self.cables.append(cable)
 
