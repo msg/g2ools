@@ -34,9 +34,22 @@ class ConvOverdrive(Convert):
   inputmap = ['In',None]
   outputmap = [None]
 
+  def __init__(self, nmarea, g2area, nmmodule, options):
+    if options.g2overdrive:
+      self.maing2module = 'Overdrive'
+      self.parammap = [['AmountMod','Overdrive'],['Amount','Overdrive']]
+      self.inputmap[1] = 'Mod'
+      self.outputmap[0] = 'Out'
+    super(ConvOverdrive,self).__init__(nmarea, g2area, nmmodule, options)
+
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
+
+    if self.options.g2overdrive:
+      setv(g2mp.Shape, 0) # Asym
+      setv(g2mp.Type, 3)  # Heavy
+      return
 
     setv(g2mp.Shape,1) # Sym
     setv(g2mp.ClipLevMod,91)
