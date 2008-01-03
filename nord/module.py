@@ -47,6 +47,8 @@ class Param(Member):
     self.knob = None
     self.ctrl = None
     self.morph = None
+    if len(type.labels):
+      self.labels = type.labels
 
 class Mode(Member):
   def __init__(self, module, type, index):
