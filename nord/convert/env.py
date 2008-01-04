@@ -179,7 +179,7 @@ class ConvMulti_Env(Convert):
     if sustain == 4:
       adsr = self.addmodule('EnvADSR')
       setv(adsr.params.Shape,[3,2,1][getv(nmmp.Curve)])
-      setv(adsr.params.KB,0)
+      setv(adsr.params.KB,getv(g2mp.KB))
       setv(adsr.params.Attack,0)
       setv(adsr.params.Decay,0)
       setv(adsr.params.Sustain,127)
