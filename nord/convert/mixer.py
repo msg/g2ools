@@ -269,11 +269,12 @@ class Conv1_4Switch(Convert):
     nmm,g2m = self.nmmodule, self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
-    # note going to handle this as it's probably never used
+    # note going to handle this as there is no Active.
     #setv(g2mp.Active,1-getv(nmmp.Mute))
 
     level = getv(nmmp.Level)
-    if level != 0 or level != 127:
+    if level != 0 or level != 127 or \
+      nmmp.Level.knob or nmmp.Level.morph or nmmp.Level.ctrl:
       # add LevAmp module
       mix11a = self.addmodule('Mix1-1A')
       self.connect(mix11a.outputs.Out,g2m.inputs.In)
