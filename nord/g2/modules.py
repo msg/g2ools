@@ -1456,7 +1456,9 @@ modules = [
       OutputType('Ctrl',         g2conncolors.blue,         horiz=0,vert=3),
     ],
     params=[
-      ParamType('Sel',          parammap.sw_3),
+      ParamType('Sel',          parammap.sw_3,
+        labels=['Out 1','Out 2','Out 3','Out 4','Out 5','Out 6','Out 7','Out 8']
+      ),
     ],
     modes=[],
   ),
@@ -1649,7 +1651,7 @@ modules = [
     ],
     params=[
       ParamType('Sel',          parammap.sw_2,
-        labels=['Out 1','Out 2','Out 3','Out 4','Out 5','Out 6','Out 7','Out 8']
+        labels=['Out 1','Out 2','Out 3','Out 4']
       ),
     ],
     modes=[],

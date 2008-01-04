@@ -70,7 +70,7 @@ paramlabels = { # [ param#, [ strlist ] ]
   186: { 0: ['Switch'], },                        # Sw1-2M
    17: { 0: ['Out 1','Out 2'], },                 # ValSw1-2
    88: { 0: ['Out 1','Out 2','Out 3','Out 4'], }, # Sw1-4
-   88: { 0: ['Out 1','Out 2','Out 3','Out 4',
+   78: { 0: ['Out 1','Out 2','Out 3','Out 4',
              'Out 5','Out 6','Out 7','Out 8'], }, # Sw1-8
 }                                                      
 
