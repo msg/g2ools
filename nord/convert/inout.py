@@ -180,13 +180,11 @@ class ConvKeyboardSplit(Convert):
     struct = [ ['Constant','Upper'],
                ['CompLev','Lower'],
                ['CompSig','<=Upper'],
-               ['Gate','Gate'],
-               ['DlyClock','Note'],
-               ['DlyClock','Vel'] ]
+               ['Gate','Gate'], ]
     for mod,nm in struct:
       m = self.addmodule(mod,name=nm)
 
-    u,l,lu,g,n,v = self.g2modules
+    u,l,lu,g = self.g2modules
 
     setv(u.params.Level,getv(nmmp.Upper))
     setv(l.params.C,getv(nmmp.Lower))
@@ -194,13 +192,30 @@ class ConvKeyboardSplit(Convert):
     self.connect(u.outputs.Out,lu.inputs.A)
     self.connect(l.inputs.In,lu.inputs.B)
     self.connect(l.outputs.Out,g.inputs.In1_1)
-    self.connect(lu.inputs.B,n.inputs.In)
     self.connect(lu.outputs.Out,g.inputs.In1_2)
     self.connect(g.outputs.Out1,g.inputs.In2_2)
-    self.connect(g.outputs.Out2,n.inputs.Clk)
-    self.connect(n.inputs.Clk,v.inputs.Clk)
+
+    extra  = [ ['DlyClock','Note'],
+               ['DlyClock','Vel'] ]
+    gout = g.outputs.Out2
+
+    nin = nout = None
+    if len(nmm.outputs.Note.cables):
+      n = self.addmodule('DlyClock',name='Note')
+      self.connect(gout,n.inputs.Clk)
+      self.connect(lu.inputs.B,n.inputs.In)
+      gout = n.inputs.Clk
+      nin = n.inputs.In
+      nout = n.outputs.Out
+
+    vin = vout = None
+    if len(nmm.outputs.Vel.cables):
+      v = self.addmodule('DlyClock',name='Vel')
+      self.connect(gout,v.inputs.Clk)
+      vin = v.inputs.In
+      vout = v.outputs.Out
 
     self.params = [l.params.C,u.params.Level]
-    self.outputs = [n.outputs.Out,g.outputs.Out2,v.outputs.Out]
-    self.inputs = [l.inputs.In,g.inputs.In2_1,v.inputs.In]
+    self.outputs = [nout,g.outputs.Out2,vout]
+    self.inputs = [l.inputs.In,g.inputs.In2_1,vin]
 
