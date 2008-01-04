@@ -43,13 +43,13 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
 
   # levels[i].knob and levels[i].ctrl and levels[i].morph
   # move inputs/levels to lowest available and count them
-  o = 0
+  o = 1
   for i in range(maxinputs):
     if inputs[i].net:
-      s = '%d' % (o+1)
-      parammap[i] = 'Lev' + s
-      inputmap[i] = 'In' + s
+      parammap[i] = [ 'Lev%d' % o, 'Lev%d' % (i+1) ]
+      inputmap[i] = 'In%d' % o
       o += 1
+  o -= 1
   # based on number of inputs connected, use smallest possible mixer
   if o < 2:
     maing2mod = 'Mix1-1A'
