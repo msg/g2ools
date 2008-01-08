@@ -1957,7 +1957,7 @@ ModuleKnowledge(
     modes([])
     inputtypes(['red', 'blue'])
     outputtypes(['red'])
-    inputlocs(['16,1'])
+    inputlocs(['16,1','7,1'])
     outputlocs(['19,1'])
     paramranges(['0 .. 127', '0 .. 127', '0 .. 1'])
     moderanges([])

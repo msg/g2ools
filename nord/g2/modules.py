@@ -2285,6 +2285,7 @@ modules = [
     page=PageType('Filter', 8),
     inputs=[
       InputType('In',           g2conncolors.red,          horiz=16,vert=1),
+      InputType('Sweep',        g2conncolors.blue,         horiz=7,vert=1),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.red,          horiz=19,vert=1),
