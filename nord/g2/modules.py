@@ -2269,6 +2269,7 @@ modules = [
       InputType('In6',          g2conncolors.blue_red,     horiz=14,vert=1),
       InputType('In7',          g2conncolors.blue_red,     horiz=15,vert=1),
       InputType('In8',          g2conncolors.blue_red,     horiz=17,vert=1),
+      InputType('Ctrl',         g2conncolors.blue,         horiz=0,vert=1),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.blue_red,     horiz=19,vert=1),
