@@ -483,12 +483,15 @@ class ConvSpectralOsc(Convert):
     setv(shape.params.Lev,getv(nmmp.Shape))
     self.params[2] = shape.params.Lev
 
-    shapemod = self.addmodule('Mix1-1A',name='ShapeMod')
-    setv(shapemod.params.ExpLin,1) # Line
-    setv(shapemod.params.On,1)
-    shapemod.params.On.labels = ['Amount']
-    setv(shapemod.params.Lev,getv(nmmp.ShapeMod))
-    self.params[7] = shapemod.params.Lev
+    hasshapemod = len(nmm.inputs.ShapeMod.cables) != 0
+    if hasshapemod:
+      shapemod = self.addmodule('Mix1-1A',name='ShapeMod')
+      setv(shapemod.params.ExpLin,1) # Line
+      setv(shapemod.params.On,1)
+      shapemod.params.On.labels = ['Amount']
+      setv(shapemod.params.Lev,getv(nmmp.ShapeMod))
+      self.params[7] = shapemod.params.Lev
+      self.inputs[3] = shapemod.inputs.In
 
     levmult = self.addmodule('LevMult')
     levmult2 = self.addmodule('LevMult')
@@ -509,9 +512,13 @@ class ConvSpectralOsc(Convert):
     setv(output.params.Lev,79)
 
     self.connect(g2m.outputs.Out,levmult2.inputs.In)
-    self.connect(shape.outputs.Out,shapemod.inputs.Chain)
-    self.connect(shapemod.outputs.Out,g2m.inputs.ShapeMod)
-    self.connect(shapemod.outputs.Out,levmult.inputs.In)
+    if hasshapemod:
+      self.connect(shape.outputs.Out,shapemod.inputs.Chain)
+      self.connect(shapemod.outputs.Out,g2m.inputs.ShapeMod)
+      self.connect(shapemod.outputs.Out,levmult.inputs.In)
+    else:
+      self.connect(shape.outputs.Out,g2m.inputs.ShapeMod)
+      self.connect(shape.outputs.Out,levmult.inputs.In)
     self.connect(levmult.inputs.In,levmult.inputs.Mod)
     self.connect(levmult.outputs.Out,levmult2.inputs.Mod)
     self.connect(levmult2.inputs.In,out.inputs.In2)
@@ -520,7 +527,6 @@ class ConvSpectralOsc(Convert):
     self.connect(out.outputs.Out,output.inputs.Chain)
     self.connect(output.outputs.Out,output.inputs.In)
 
-    self.inputs[3] = shapemod.inputs.In
     self.outputs[0] = output.outputs.Out
 
 class ConvFormantOsc(Convert):
