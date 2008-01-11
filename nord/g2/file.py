@@ -1122,6 +1122,7 @@ Info=BUILD 266\r
       if sectiondebug:
 	nm = section.__class__.__name__
 	print '0x%02x %-25s addr:0x%04x len:0x%04x' % (id,nm,off,l)
+        print binhexdump(data[off:off+l])
       section.parse(patch, data[off:off+l])
       off += l
     return off
@@ -1139,6 +1140,8 @@ Info=BUILD 266\r
     self.txthdr = data[:null]
     off = null+1
     self.binhdr = struct.unpack('BB',data[off:off+2])
+    if self.binhdr[0] != self.standardbinhdr:
+      raise 'Cannot parse version pch2 version %d' % self.binhdr[0]
     off += 2
     off = self.parse(data, off)
 
@@ -1267,6 +1270,7 @@ class Prf2File(Pch2File):
     if sectiondebug:
       nm = section.__class__.__name__
       print '0x%02x %-25s addr:0x%04x len:0x%04x' % (id,nm,off,l)
+
     section.parse(self.performance, data[off:off+l])
     off += l
     return off

@@ -50,6 +50,28 @@ def hexdump(bytes,addr=0,size=1):
       ''.join([out(ord(byte)) for byte in bytes[off:off+16]])))
   return '\n'.join(s)
 
+def binhexdump(bytes, addr=0, bits=[]):
+  from array import array
+  def bin(byte):
+    return ''.join([ '01'[(byte>>(7-i))&1] for i in range(8) ])
+  def hex(byte):
+    return '%x   %x   ' % (byte>>4, byte&0xf)
+  a = array('B', bytes)
+  s = []
+  for off in range(0,len(a),8):
+    s.append('%04x: %s' % (addr+off, ' '.join([hex(b) for b in a[off:off+8]])))
+    s.append('      %s' % (' '.join([bin(b) for b in a[off:off+8]])))
+  # add bits
+  # single bits represented by: 0 or 1
+  # two bits represented by: [0 thru [3
+  # < five bits represented by: [0] thru [f]
+  # < nine bits represented by: [00    ] thru [ff     ]
+  # < thirteen bits represented by: [000    ] thru [fff    ]
+  # > twelve bits represented by: [0000      ] thru [ffff     ]
+  # 00000000 00000000 
+  # 0[3[f ][1f   ]
+  return '\n'.join(s)
+
 class Note(object):
   pass
 
