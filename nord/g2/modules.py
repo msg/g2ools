@@ -1927,7 +1927,9 @@ modules = [
     shortnm='OscNoise',
     page=PageType('Osc', 8),
     inputs=[
-
+      InputType('Pitch',        g2conncolors.blue_red,     horiz=0,vert=1),
+      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0,vert=2),
+      InputType('Width',        g2conncolors.blue_red,     horiz=12,vert=2),
     ],
     outputs=[
       OutputType('Out',          g2conncolors.red,          horiz=19,vert=1),
