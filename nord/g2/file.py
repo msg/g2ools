@@ -1140,8 +1140,6 @@ Info=BUILD 266\r
     self.txthdr = data[:null]
     off = null+1
     self.binhdr = struct.unpack('BB',data[off:off+2])
-    if self.binhdr[0] != self.standardbinhdr:
-      raise 'Cannot parse version pch2 version %d' % self.binhdr[0]
     off += 2
     off = self.parse(data, off)
 
