@@ -75,14 +75,29 @@ def handlepw(conv,pw,haspw,shape,shapemod):
     conv.connect(constswt.outputs.Out,g2m.inputs.ShapeMod)
   return pwmod
 
-pitchadjnum = 1
+class ModIndexes:
+  def __init__(self):
+    self.reset()
+
+  def reset(self):
+    self.__dict__['__values__'] = {}
+  
+  def __getattr__(self, name):
+    d = self.__dict__['__values__']
+    if not d.has_key(name):
+      d[name] = 1
+    ret = d[name]
+    d[name] += 1
+    return ret
+
+modindex = ModIndexes()
+
 def pitchadj(conv, pitchparam, pitchinput, tableentry):
-  global pitchadjnum
+  global modindex
   setv(pitchparam, tableentry[0])
   if tableentry[1] == 0 and tableentry[2] == 0:
     return pitchinput
-  adj1 = conv.addmodule('Mix2-1B',name='PitchAdj%d' % pitchadjnum)
-  pitchadjnum += 1
+  adj1 = conv.addmodule('Mix2-1B',name='PitchAdj%d' % modindex.pitchadj)
   conv.connect(adj1.inputs.Chain,adj1.inputs.In1)
   conv.connect(adj1.inputs.In1,adj1.inputs.In2)
   conv.connect(adj1.outputs.Out,pitchinput)
@@ -96,9 +111,8 @@ def pitchadj(conv, pitchparam, pitchinput, tableentry):
 # NOTE: could check the PitchMod1 and PitchMod2 for maximum modulation.
 #       in that case, the Pitch input could be used (if no knob tied
 #       to the said PitchModX dial).
-pitchmodnum = 1
 def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
-  global pitchmodnum
+  global modindex
   nmm, g2m = conv.nmmodule, conv.g2module
   p1 = p2 = None
 
@@ -110,8 +124,7 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
     setv(modinputparam,127)
 
-    mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % pitchmodnum)
-    pitchmodnum += 1
+    mix21b = conv.addmodule('Mix2-1B',name='PitchMod%d' % modindex.pitchmod)
     conv.connect(mix21b.outputs.Out,modinput)
 
     if pmod1 == 0 or pmod1 == 127:
@@ -151,9 +164,8 @@ def handledualpitchmod(conv,modinput,modinputparam,mod1param,mod2param):
 
   return p1, p2
 
-fmmodnum = 1
 def handlefm(conv,fminput,fmparam,fmtable):
-  global fmmodnum
+  global modindex
   nmm, g2m = conv.nmmodule, conv.g2module
   if len(nmm.inputs.FmMod.cables) == 0:
     return fminput
@@ -163,8 +175,7 @@ def handlefm(conv,fminput,fmparam,fmtable):
   if fma:
     if fmtable[fma][1] == 0 and fmtable[fma][2] == 0:
       return fminput
-    mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % fmmodnum)
-    fmmodnum += 1
+    mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % modindex.fmmod)
     conv.connect(mix21b.outputs.Out,fminput)
     conv.connect(mix21b.inputs.Chain,mix21b.inputs.In1)
     conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
@@ -174,32 +185,28 @@ def handlefm(conv,fminput,fmparam,fmtable):
     return mix21b.inputs.Chain
   return fminput
 
-ammodnum = 1
 def handleam(conv):
-  global ammodnum
+  global modindex
   nmm, g2m = conv.nmmodule, conv.g2module
   aminput = None
   output = g2m.outputs.Out
   if len(nmm.inputs.Am.cables):
-    am = conv.addmodule('LevMult',name='AM%d' % ammodnum)
-    ammodnum += 1
+    am = conv.addmodule('LevMult',name='AM%d' % modindex.ammod)
     conv.connect(g2m.outputs.Out,am.inputs.In)
     aminput = am.inputs.Mod
     output = am.outputs.Out
   return aminput, output
 
-slvoutnum=1
 def handleslv(conv):
-  global slvoutnum
+  global modindex
   conv.nonslaves = []
   conv.slaves = []
   nmm, g2m = conv.nmmodule, conv.g2module
   if len(nmm.outputs.Slv.cables):
     # add a masterosc
-    master = conv.addmodule('OscMaster',name='SlvOut%d' % slvoutnum)
+    master = conv.addmodule('OscMaster',name='SlvOut%d' % modindex.slvout)
     setv(g2m.params.Kbt,0)
     conv.kbt = master.params.Kbt
-    slvoutnum += 1
     conv.connect(master.outputs.Out,g2m.inputs.Pitch)
     setv(master.params.FreqCoarse,getv(g2m.params.FreqCoarse))
     setv(master.params.FreqFine,getv(g2m.params.FreqFine))
@@ -216,9 +223,8 @@ def handleslv(conv):
     conv.kbt = g2m.params.Kbt
     return None,g2m
 
-mstinnum = 1
 def handlemst(conv,fmmod,fmparam):
-  global mstinnum
+  global modindex
   nmm, g2m = conv.nmmodule, conv.g2module
   mst = g2m.inputs.Pitch
 
@@ -270,6 +276,7 @@ def handlemst(conv,fmmod,fmparam):
 
   setv(g2m.params.FreqCoarse,0)
 
+  mstinnum = modindex.mstin
   mix11a = conv.addmodule('Mix1-1A',name='MstIn%d' % mstinnum)
   setv(mix11a.params.On,1)
   setv(mix11a.params.Lev,79)
@@ -285,7 +292,6 @@ def handlemst(conv,fmmod,fmparam):
     conv.connect(fmmodinput.outputs.Out,mix11a.inputs.Chain)
     fmparam = fmmodinput.params.Lev
     fmmod = fmmodinput.inputs.In
-  mstinnum += 1
 
   return mst,fmmod,fmparam
 
@@ -844,6 +850,7 @@ class ConvPercOsc(Convert):
   outputmap = ['Out']
 
   def domodule(self):
+    global modindex
     nmm,g2m = self.nmmodule,self.g2module
     nmmp,g2mp = nmm.params, g2m.params
 
@@ -864,7 +871,7 @@ class ConvPercOsc(Convert):
       
     # add pitchmod if needed
     if len(nmm.inputs.PitchMod.cables):
-      adj = self.addmodule('Mix2-1B',name='PitchAdj1-%d' % pitchmodnum)
+      adj = self.addmodule('Mix2-1B',name='PitchAdj1-%d' % modindex.pitchmod)
       self.connect(adj.outputs.Out,g2m.inputs.PitchVar)
       self.connect(adj.inputs.Chain,adj.inputs.In1)
       self.connect(adj.inputs.In1,adj.inputs.In2)
