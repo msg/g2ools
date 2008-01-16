@@ -34,6 +34,7 @@ from nord.nm1.file import NM1Error
 from nord.convert import typetable,setv
 from nord.convert.version import version as g2oolsversion
 from nord.utils import toascii
+import nord.convert.osc 
 
 nm2g2colors = {
   nm1cablecolors.red:    g2cablecolors.red,
@@ -65,6 +66,7 @@ class NM2G2Converter:
     self.g2patch.fx.keyboard = None
     self.options = options
     self.log = log
+    nord.convert.osc.modindex.reset()
 
   def convert(self):
     # loop through each module
@@ -99,27 +101,14 @@ class NM2G2Converter:
     setv(g2patch.settings.glidetime,nmpatch.header.portatime)
     setv(g2patch.settings.octaveshift,nmpatch.header.octshift)
 
-    areaconverters = { }
-    for areanm in 'voice','fx':
-      nmarea = getattr(nmpatch,areanm)
-      g2area = getattr(g2patch,areanm)
-      nm2g2log.info('--- area %s: ---' % areanm)
-
-      # build converters for all NM1 modules
-      self.converters = areaconverters[areanm] = self.doconverters(nmarea,g2area)
-      self.domodules()              # do the modules
-      self.docolorizemultis()       # colorize multi module setups
-      self.doreposition()           # repostion all modules
-      self.doprecables()            # precable processing
-      self.docables(nmarea,g2area)  # connect cables
-      self.dologiccombine(g2area)   # combine logic modules
-      self.docableshorten(g2area)   # shorten up cables
-      self.douprate(g2area)         # uprate necessary modules
-      self.cablerecolorize(g2area)  # recolor cables based on output
+    nm2g2log.info('--- area voice: ---')
+    self.voiceconverters = self.doarea(nmpatch.voice, g2patch.voice)
+    nm2g2log.info('--- area fx: ---')
+    self.fxconverters = self.doarea(nmpatch.fx, g2patch.fx)
 
     self.domorphsknobsmidiccs()
     self.docurrentnotes()
-    self.dofinalize(areaconverters)
+    self.dofinalize()
 
     # handle text pad
     self.pch2.patch.textpad = self.pch.patch.textpad
@@ -128,6 +117,23 @@ class NM2G2Converter:
 
     self.log.info('Writing patch "%s2"' % (self.pch.fname))
     self.pch2.write(self.pch.fname+'2')
+
+
+  def doarea(self, nmarea, g2area):
+      # build converters for all NM1 modules
+      converters = self.doconverters(nmarea,g2area)
+      self.domodules(converters)        # do the modules
+      self.docolorizemultis(converters) # colorize multi module setups
+      self.dogroups(converters)         # handle groups of modules
+      self.doreposition(converters)     # repostion all modules
+      self.doprecables(converters)      # precable processing
+      self.docables(nmarea,g2area)      # connect cables
+      self.dologiccombine(g2area)       # combine logic modules
+      self.docableshorten(g2area)       # shorten up cables
+      self.douprate(g2area)             # uprate necessary modules
+      self.cablerecolorize(g2area)      # recolor cables based on output
+      return converters
+
 
   def doconverters(self,nmarea,g2area):
     converters = []
@@ -146,21 +152,21 @@ class NM2G2Converter:
     return converters
 
 
-  def domodules(self):
+  def domodules(self, converters):
     self.log.info('domodule:')
-    for conv in self.converters:
+    for conv in converters:
       self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
 	  conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
       conv.domodule()
 
 
-  def docolorizemultis(self):
+  def docolorizemultis(self, converters):
     modcolors = [
 	g2modulecolors.yellow2,g2modulecolors.green2,
 	g2modulecolors.cyan2,g2modulecolors.blue2,g2modulecolors.magenta1 ]
     # colorize multi-module convertions
     curr = 0
-    for conv in self.converters:
+    for conv in converters:
       if len(conv.g2modules):
 	conv.g2module.color = modcolors[curr]
 	for mod in conv.g2modules:
@@ -168,7 +174,21 @@ class NM2G2Converter:
 	curr = (curr+1)%len(modcolors)
 
 
-  def doreposition(self):
+  def dogroups(self, converters):
+    self.log.info('groups:')
+    groups = {}
+    for conv in converters:
+      nm = conv.nmmodule.type.shortnm
+      if not groups.has_key(nm):
+        groups[nm] = []
+      groups[nm].append(conv)
+    
+    for key in groups:
+      group = groups[key]
+      group[0].dogroup(group)
+
+
+  def doreposition(self, converters):
     self.log.info('reposition:')
 
     # location compare by horiz, then vert
@@ -176,7 +196,7 @@ class NM2G2Converter:
       if a.horiz == b.horiz:
 	return cmp(a.nmmodule.vert, b.nmmodule.vert)
       return cmp(a.nmmodule.horiz,b.nmmodule.horiz)
-    locsorted = self.converters[:]
+    locsorted = converters[:]
     locsorted.sort(locationcmp)
 
     if len(locsorted):
@@ -189,10 +209,36 @@ class NM2G2Converter:
 	else:
 	  cb.reposition(None)
 
+    # remove gaps in horiz
+    if self.options.compresscolumns:
+      columns = []
+      column = []
+      last = None
+      for conv in locsorted:
+	if not last or last.g2module.horiz != conv.g2module.horiz:
+	  if len(column):
+	    columns.append(column)
+	  column = [ conv ]
+	else:
+	  column.append(conv)
+	last = conv
+      if len(column):
+	columns.append(column)
 
-  def doprecables(self):
+      col = 0 
+      for column in columns:
+	dcol = column[0].g2module.horiz - col
+	if dcol > 1:
+	  for conv in column:
+	    conv.g2module.horiz = col + 1
+	    for mod in conv.g2modules:
+	      mod.horiz = col + 1
+	col = column[0].g2module.horiz
+
+
+  def doprecables(self, converters):
     self.log.info('precables:')
-    for conv in self.converters:
+    for conv in converters:
       self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
 	  conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
       conv.precables()
@@ -227,6 +273,7 @@ class NM2G2Converter:
 	  color = source.net.output.type.type
 	self.log.debug(s)
 	g2area.connect(g2source,g2dest,color)
+
 
   def douprate(self, g2area):
     # now parse the entire netlist of the area and .uprate=1 all
@@ -277,6 +324,7 @@ class NM2G2Converter:
       if not modified:
 	done = 1
 
+
   def dologiccombine(self, g2area):
     # find all Gate modules
     # sort and create a 2d array gates[col][index]
@@ -303,12 +351,12 @@ class NM2G2Converter:
     def gateused(gate,num):
       if num == 1:
 	return len(gate.inputs.In1_1.cables) != 0 or \
-	      len(gate.inputs.In1_2.cables) != 0 or \
-	      len(gate.outputs.Out1.cables) != 0
+	       len(gate.inputs.In1_2.cables) != 0 or \
+	       len(gate.outputs.Out1.cables) != 0
       elif num == 2:
 	return len(gate.inputs.In2_1.cables) != 0 or \
-	      len(gate.inputs.In2_2.cables) != 0 or \
-	      len(gate.outputs.Out2.cables) != 0
+	       len(gate.inputs.In2_2.cables) != 0 or \
+	       len(gate.outputs.Out2.cables) != 0
       return False
 
     def freegate(gate):
@@ -324,10 +372,10 @@ class NM2G2Converter:
     def invertused(invert,num):
       if num == 1:
 	return len(invert.inputs.In1.cables) != 0 or \
-	      len(invert.outputs.Out1.cables) != 0
+	       len(invert.outputs.Out1.cables) != 0
       elif num == 2:
 	return len(invert.inputs.In2.cables) != 0 or \
-	      len(invert.outputs.Out2.cables) != 0
+	       len(invert.outputs.Out2.cables) != 0
       return 0
 
     def freeinvert(invert):
@@ -407,17 +455,20 @@ class NM2G2Converter:
 	  movecable(g2area,even.outputs.Out2,odd.outputs.Out2)
 	g2area.modules.remove(even)
 
+
   def cablerecolorize(self, g2area):
     self.log.info('cable recolorize:')
     for cable in g2area.cables:
       if cable.source.net.output:
 	cable.color = conn2cablecolors[cable.source.net.output.rate]
 
+
   def docableshorten(self, g2area):
     if not self.options.shorten:
       return
     self.log.info('cable shorten:')
     g2area.shortencables()
+
 
   def domorphsknobsmidiccs(self):
     # handle Morphs
@@ -565,6 +616,7 @@ class NM2G2Converter:
 	m.type = 2 # system
       g2patch.ctrls.append(m)
 
+
   def docurrentnotes(self):
     g2patch,nmpatch = self.g2patch,self.nmpatch
     # handle CurrentNotes
@@ -574,14 +626,16 @@ class NM2G2Converter:
     for note in nmpatch.notes:
       g2patch.notes.append(note)
 
-  def dofinalize(self, areaconverters):
+
+  def dofinalize(self):
     self.log.info('Finalize:')
     for areanm in 'voice','fx':
       self.log.info('--- area %s: ---' % areanm)
-      for conv in areaconverters[areanm]:
+      for conv in getattr(self, '%sconverters' % areanm):
 	self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
 	    conv.nmmodule.name, conv.nmmodule.type.type,conv.nmmodule.type.type))
 	conv.finalize()
+
 
   def dotitleblock(self):
     lines = ['Converted by',
@@ -619,6 +673,9 @@ nm2g2_options = [
   make_option('-A', '--adsr-for-ad', action='store_true',
       dest='adsrforad', default=False,
       help='Replace AD modules with ADSR modules'),
+  make_option('-c', '--compress-columns', action='store_true',
+      dest='compresscolumns', default=False,
+      help='Remove columns not containing modules'),
   make_option('-d', '--debug', action='store_true',
       dest='debug', default=False,
       help='Allow exceptions to terminate application'),
@@ -679,7 +736,10 @@ def main(argv, stream):
       nm2g2log.error(s)
       return '%s\n%s' % (fname, s)
     except Exception, e:
-      return '%s\n%s' % (fname, traceback.format_exc())
+      if options.debug:
+	return '%s\n%s' % (fname, traceback.format_exc())
+      else:
+        return '%s\n%s' % (fname, e)
     return ''
 
   failedpatches = []
