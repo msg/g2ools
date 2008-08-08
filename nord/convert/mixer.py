@@ -256,8 +256,10 @@ class Conv4_1Switch(Convert):
       sel = getv(nmmp.Sel)
       for i in range(1,5):
         level = getv(getattr(nmmp,'Level%d' % i))
-        setv(getattr(g2mp,'Lev%d' % i),modtable[level][0])
+        lev = getattr(g2mp,'Lev%d' % i)
+        setv(lev,modtable[level][0])
         setv(getattr(g2mp,'On%d' % i),sel == i-1)
+        self.params[i] = lev
 
 class Conv1_4Switch(Convert):
   maing2module = 'Sw1-4'
