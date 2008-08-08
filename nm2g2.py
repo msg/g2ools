@@ -106,7 +106,9 @@ class NM2G2Converter:
     nm2g2log.info('--- area fx: ---')
     self.fxconverters = self.doarea(nmpatch.fx, g2patch.fx)
 
-    self.domorphsknobsmidiccs()
+    self.domorphs()
+    self.doknobs()
+    self.domidiccs()
     self.docurrentnotes()
     self.dofinalize()
 
@@ -470,7 +472,7 @@ class NM2G2Converter:
     g2area.shortencables()
 
 
-  def domorphsknobsmidiccs(self):
+  def domorphs(self):
     # handle Morphs
     #  morphs[x].ctrl.midicc
     #    1: Wheel -> Wheel (morph 0)
@@ -546,6 +548,8 @@ class NM2G2Converter:
 	conv = map.param.module.conv
 	mmap.range = conv.domorphrange(map.param.index,map.range)
 	index = map.param.index
+	if map.range == 0: # ignore junk morphs (0 range)
+	  continue
 	if index < len(conv.params) and conv.params[index]:
 	  mmap.param = conv.params[index]
 	  mmap.morph = g2morph
@@ -555,7 +559,10 @@ class NM2G2Converter:
 	  self.log.warning(s + ' -- Parameter missing')
       for variation in range(1,9):
 	g2morph.maps[variation]=g2morph.maps[0][:]
+    self.morphmap = morphmap
 	
+  def doknobs(self):
+    g2patch,nmpatch = self.g2patch,self.nmpatch
     # handle Knobs
     self.log.info('knobs:')
     #knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
@@ -581,10 +588,12 @@ class NM2G2Converter:
 	  self.log.warning(s + ' Unknown param %d' % index)
       else: # morph
 	#self.log.debug(' Knob%d: Morph%d' % (knob.knob,knob.param.index))
-	g2knob.param = morphmap[knob.param.index-1]
+	g2knob.param = self.morphmap[knob.param.index-1]
 	g2knob.assigned = 1
 	g2knob.isled = 0
     
+  def domidiccs(self):
+    g2patch,nmpatch = self.g2patch,self.nmpatch
     # handle Midi CCs
     self.log.info('MIDI CCs:')
     reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97]+range(120,128)
@@ -612,7 +621,7 @@ class NM2G2Converter:
 	  self.log.warning(s + ' -- Parameter missing')
 	  continue
       else:
-	m.param = morphmap[ctrl.param.index-1]
+	m.param = self.morphmap[ctrl.param.index-1]
 	m.type = 2 # system
       g2patch.ctrls.append(m)
 
