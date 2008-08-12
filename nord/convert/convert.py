@@ -114,6 +114,10 @@ class Convert(object):
   def domodule(self):
     pass
 
+  # dogroup - process group of modules once
+  def dogroup(self, group):
+    pass
+
   # precables - process modules after after all domodules() are done
   #             but before cabling starts
   def precables(self):
