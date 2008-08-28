@@ -1136,10 +1136,14 @@ Info=BUILD 266\r
     data = open(fname,'rb').read()
     null = data.find('\0')
     if null < 0:
-      raise 'Invalid G2File "%s"' % fname
+      raise 'Invalid G2File "%s" missing null terminator.' % fname
     self.txthdr = data[:null]
     off = null+1
     self.binhdr = struct.unpack('BB',data[off:off+2])
+    if self.binhdr[0] != self.standardbinhdr:
+      print 'Warning: %s version %d' % ( fname, self.binhdr[0])
+      print '         version %d supported. it may fail to load.' % (
+      	  self.standardbinhdr)
     off += 2
     off = self.parse(data, off)
 
