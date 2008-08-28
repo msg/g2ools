@@ -76,10 +76,9 @@ class Module(object):
     self.area = area
     self.__dict__.update(kw)
     for nm,cls in Module.Groups:
-      a = Array()
-      setattr(self, nm, a)
       t = getattr(type,nm)
-      a += [ None ] * len(t)
+      a = Array([ None ] * len(t))
+      setattr(self, nm, a)
       for i in range(len(t)):
         o = cls(self,t[i],i)
 	a.add(t[i].name,o, i)
