@@ -1,13 +1,19 @@
 #!/bin/sh
 
+if [ $# -lt 1 ]; then
+	echo "usage: $0 <version>"
+	exit 1
+fi
+
 L=g2ools-
+V=${L}$1
 HTDOCSFILES=/v/www/localhost/htdocs/files
 
 rm -rf ~/nord/${L}*
-hg clone . ..//${L}$1
-echo "version='$1'" >>../${L}$1/nord/convert/version.py
-(cd ..;zip -r ${L}$1.zip ${L}$1)
+hg clone . ..//${V}
+echo "version='$1'" >>../${V}/nord/convert/version.py
+(cd ..;zip -r ${V}.zip ${V})
 rm ${HTDOCSFILES}/${L}*
-cp ~/nord/${L}$1.zip ${HTDOCSFILES}
+cp ~/nord/${V}.zip ${HTDOCSFILES}
 ls ${HTDOCSFILES}
 
