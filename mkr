@@ -14,6 +14,6 @@ hg clone . ..//${V}
 echo "version='$1'" >>../${V}/nord/convert/version.py
 (cd ..;zip -r ${V}.zip ${V})
 rm ${HTDOCSFILES}/${L}*
-cp ~/nord/${V}.zip ${HTDOCSFILES}
+cp -v ~/nord/${V}.zip ${HTDOCSFILES}
 ls ${HTDOCSFILES}
 
