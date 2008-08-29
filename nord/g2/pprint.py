@@ -25,12 +25,13 @@ def printpatch(patch):
   print 'patchdescription:'
   desc = patch.description
   #print ' header:', hexdump(desc.header)
-  print ' voicecnt=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d' % (
+  x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
+      desc.purple, desc.white ]
+  colors = ''.join([' ','RBYOGPW'[i]][x[i]] for i in range(len(x)))
+  print ' voicecnt=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d colors=%s' % (
       desc.voicecnt, desc.height, desc.unk2, desc.monopoly,
-      desc.variation, desc.category)
-  print '  red=%d blue=%d yellow=%d orange=%d green=%d purple=%d white=%d' % (
-      desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
-      desc.purple, desc.white)
+      desc.variation, desc.category, colors)
+    
   print 'knobs:'
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
