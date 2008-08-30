@@ -21,17 +21,18 @@
 
 from nord.g2.file import Pch2File
 
-def printpatch(patch):
+def printdescription(patch):
   print 'patchdescription:'
   desc = patch.description
   #print ' header:', hexdump(desc.header)
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white ]
-  colors = ''.join([' ','RBYOGPW'[i]][x[i]] for i in range(len(x)))
+  colors = ''.join(['','RBYOGPW'[i]][x[i]] for i in range(len(x)))
   print ' voicecnt=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d colors=%s' % (
       desc.voicecnt, desc.height, desc.unk2, desc.monopoly,
       desc.variation, desc.category, colors)
     
+def printknobs(patch):
   print 'knobs:'
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
@@ -42,6 +43,8 @@ def printpatch(patch):
             ['fx','voice'][knob.param.module.area.index],
             knob.param.module.name, knob.param.type.name,
             knob.isled)
+
+def printmidicc(patch):
   print 'midicc:'
   for ctrl in patch.ctrls:
     param = ctrl.param.index
@@ -52,6 +55,8 @@ def printpatch(patch):
     print ' type=%s midicc=%d index=%d param=%d' % (
         {0:'fx',1:'voice',2:'system'}[ctrl.type], ctrl.midicc,
         index,param)
+
+def printmorphs(patch):
   settings = patch.settings
   print 'morphs:'
   print ' dial settings:'
@@ -73,12 +78,17 @@ def printpatch(patch):
         map = morph.maps[j][k]
         print '    %s:%s range=%d' % (map.param.module.name,map.param.type.name,
             map.range)
+
+def printvariations(patch):
+  settings = patch.settings
   print 'variations:'
   for attr in [ 'activemuted','patchvol','glide','glidetime','bend', 'semi',
                 'vibrato','cents','rate',
                 'arpeggiator','arptime','arptype','octaves',
                 'octaveshift','sustain' ]:
     print ' %-16s' % (attr+':'), getattr(settings,attr).variations
+
+def printmodules(patch):
   print 'modules:'
   for module in patch.voice.modules:
     print ' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d' % (
@@ -99,6 +109,8 @@ def printpatch(patch):
         print '  %-16s %r' % (ptype.name+':', param.variations)
         if hasattr(param,'labels'):
           print '   %r' % param.labels
+
+def printcables(patch):
   print 'cables:'
   for cable in patch.voice.cables:
     source,dest = cable.source,cable.dest
@@ -108,6 +120,16 @@ def printpatch(patch):
     dnm = dest.type.name
     print ' %s.%s -%s %s.%s: c=%d' % (
       stype.shortnm,snm,'->'[source.direction],dtype.shortnm,dnm,cable.color)
+
+def printpatch(patch):
+  printdescription(patch)
+  printknobs(patch)
+  printmidicc(patch)
+  printmorphs(patch)
+  printvariations(patch)
+  printmodules(patch)
+  printcables(patch)
+
   #print 'Unknown0x69:'
   #print '','\n '.join(hexdump(patch.unknown0x69.data).split('\n'))
   #print 'ParamNames fx:'
