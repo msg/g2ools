@@ -20,17 +20,21 @@
 #
 
 from nord.g2.file import Pch2File
+from nord.g2.categories import G2Categories
 
 def printdescription(patch):
   print 'patchdescription:'
   desc = patch.description
-  #print ' header:', hexdump(desc.header)
+  print ' category: %s' % G2Categories[desc.category]
+  print ' voices: %d' % desc.voicecnt
+  print ' height: %d' % desc.height
+  print ' monopoly: %d' % desc.monopoly
+  print ' variation: %d' % desc.variation
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white ]
   colors = ''.join(['','RBYOGPW'[i]][x[i]] for i in range(len(x)))
-  print ' voicecnt=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d colors=%s' % (
-      desc.voicecnt, desc.height, desc.unk2, desc.monopoly,
-      desc.variation, desc.category, colors)
+  print ' colors: %s' % colors
+  #print ' unk2=0x%02x' % desc.unk2
     
 def printknobs(patch):
   print 'knobs:'
