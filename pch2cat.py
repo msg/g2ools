@@ -22,10 +22,14 @@
 import sys
 from nord.g2.file import Pch2File
 from nord.g2.pprint import printpatch
+from nord.g2.categories import G2Categories
 
 prog = sys.argv.pop(0)
-while len(sys.argv):
-  fname = sys.argv.pop(0)
-  print '"%s"' % fname
-  pch2 = Pch2File(fname)
-  printpatch(pch2.patch)
+try:
+  while len(sys.argv):
+    fname = sys.argv.pop(0)
+    pch2 = Pch2File(fname)
+    print '"%s"' % fname
+    printpatch(pch2.patch)
+except IOError:
+  pass
