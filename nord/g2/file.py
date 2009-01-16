@@ -31,8 +31,8 @@ import modules
 sectiondebug = 0 # outputs section debug 
 titlesection = 0 # replace end of section with section title
 
-# calculate crc of 1 char
 def crc16(val, icrc):
+  '''crc16(val, ircr) - calculate crc of 1 char.'''
   k = (((icrc>>8)^val)&0xff)<<8
   crc = 0
   for bits in range(8):
@@ -43,8 +43,8 @@ def crc16(val, icrc):
     k <<= 1
   return (icrc<<8)^crc
 
-# calculate crc of whole string
 def crc(s):
+  '''crc(s) - calculate crc of whole string.'''
   return  reduce(lambda a,b: crc16(ord(b),a),s,0) & 0xffff
 
 # calculated via:
@@ -86,6 +86,7 @@ crctab = [
 ]
 
 def crc(s):
+  '''crc(s) - calculate crc of whole string.'''
   #crc = 0
   #for c in s:
   #  crc = (crctab[((crc>>8)^c)&0xff] ^ (crc << 8)) & 0xffff
@@ -101,11 +102,12 @@ def crc(s):
 # m: msb
 # l: lsb
 
-# getbits - return int as subset of string data
-# the values are formatted in big-endiann:
-#   0 is msb, 31 is lsb for a 32-bit word
-
 def getbits(bit,nbits,data,signed=0):
+  '''getbits(bit,nbits,data,signed=0) - return int as subset of string data.
+  the values are formatted in big-endiann:
+  0 is msb, 31 is lsb for a 32-bit word.
+'''
+
   def getbits(x, p, n):
     return (x >> p) & ~(~0<<n)
   # grab 32-bits starting with the byte that contains bit
@@ -117,8 +119,10 @@ def getbits(bit,nbits,data,signed=0):
     val |= ~0 << nbits
   return bit+nbits,int(val)
 
-# setbits - set bits in subset of string data from int
 def setbits(bit,nbits,data,value,debug=0):
+  '''setbits(bit,nbits,data,value,debug=0) - set bits in subset
+  of string data from int.
+'''
   def setbits(x, p, n, y):
     m = ~(~0<<n)
     return (x&~(m<<p))|((m&y)<<p)
@@ -145,34 +149,36 @@ NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
 NKNOBS = 120    # 120 knob settings
 
-# exception for throwing when there is an unrecoverable error
 class NordG2Error(Exception):
+  '''NordG2Error - exception for throwing an unrecoverable error.'''
   def __init__(self, value):
     self.value = value
   def __str__(self):
     return repr(self.value)
 
-# Struct - generic class for creating named variables in objects
-# i.e. s = Struct(one=1,two=2,three=3,...)
-#      contains: s.one, s.two, s.three
 class Struct(object):
+  '''Struct - generic class for creating named variables in objects
+  i.e. s = Struct(one=1,two=2,three=3,...)
+     contains: s.one, s.two, s.three
+'''
   def __init__(self, **kw):
     self.__dict__ = kw
 
-# Section - generic class that represents a section of .pch2 file.
-#   all sections contain parse() and format() methods.
 zeros = array('B', [0] * (64<<10))
 class Section(Struct):
+  '''Section abstract class that represents a section of .pch2 file.
+  all sections objects have parse() and format() methods.
+'''
   def __init__(self, **kw):
     super(Section,self).__init__(**kw)
     self.data = zeros[:]
 
-# holder object for patch/performance description
 class Description(object):
+  '''Description class for patch/performance description.'''
   pass
 
-# PatchDescription - section object for parse/format 
 class PatchDescription(Section):
+  '''PatchDescription Section subclass'''
   def parse(self, patch, data):
     desc = patch.description = Description()
 
@@ -214,8 +220,8 @@ class PatchDescription(Section):
     last = (bit+7)>>3
     return data[:last].tostring()
 
-# ModuleList - section object for parse/format 
 class ModuleList(Section):
+  '''ModuleList Section subclass'''
   def parse(self, patch, data):
     bit,self.area = getbits(0,2,data)
     bit,modulecnt = getbits(bit,8,data)
@@ -314,8 +320,8 @@ class ModuleList(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# CurrentNote - section object for parse/format
 class CurrentNote(Section):
+  '''CurrentNote Section subclass'''
   def parse(self, patch, data):
     lastnote = patch.lastnote = Note()
     bit, lastnote.note    = getbits(0,7,data)
@@ -349,8 +355,10 @@ class CurrentNote(Section):
       return '\x80\x00\x00\x20\x00\x00'  # normal default
 
 
-# validatecable - if connection valid return 0, otherwise error
 def validcable(area, smodule, sconn, direction, dmodule, dconn):
+  '''validatecable(area, smodule, sconn, direction, dmodule, dconn)
+ if connection valid return 0, otherwise error.
+'''
 
   # verify from
   # out -> in
@@ -368,8 +376,8 @@ def validcable(area, smodule, sconn, direction, dmodule, dconn):
   # if we got here, everything's cool.
   return 0
 
-# CableList - section object for parse/format 
 class CableList(Section):
+  '''CableList Section subclass'''
   def parse(self, patch, data):
 
     bit,self.area = getbits(0,2,data)
@@ -436,16 +444,16 @@ class CableList(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# holder object for module parameters/settings
 class Parameter(object):
+  '''Parameter class for module parameters/settings.'''
   def __init__(self,default=0):
     self.variations = [default]*NVARIATIONS
     self.knob = None
     self.mmap = None
     self.ctrl = None
 
-# holder object for morph settings
 class Morph(object):
+  '''Morph class for morph settings.'''
   def __init__(self,index):
     self.dials = Parameter(0)
     self.modes = Parameter(1)
@@ -454,8 +462,8 @@ class Morph(object):
     self.index = index
     self.ctrl = None
 
-# holder for patch settings
 class Settings(object):
+  '''Settings class for patch settings.'''
   def __init__(self):
     self.patchvol    = Parameter()
     self.activemuted = Parameter()
@@ -474,8 +482,8 @@ class Settings(object):
     self.sustain     = Parameter()
     self.morphs = [ Morph(morph) for morph in range(NMORPHS) ]
 
-# PatchSettings - section object for parse/format 
 class PatchSettings(Section):
+  '''PatchSettings Section subclass'''
   def parse(self, patch, data):
     settings = patch.settings = Settings()
 
@@ -615,8 +623,8 @@ class PatchSettings(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# ModuleParameters - section object for parse/format 
 class ModuleParameters(Section):
+  '''ModuleParameters Section subclass'''
   def parse(self, patch, data):
     bit,self.area   = getbits(0,2,data) # (0=fx,1=voice)
     bit,modulecnt   = getbits(bit,8,data)
@@ -681,8 +689,8 @@ class ModuleParameters(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# MorphParameters - section object for parse/format 
 class MorphParameters(Section):
+  '''MorphParameters Section subclass'''
   def parse(self, patch, data):
     bit,nvariations = getbits(0,8,data)
     bit,nmorphs     = getbits(bit,4,data)
@@ -751,8 +759,8 @@ class MorphParameters(Section):
     bit -= 4
     return data[:(bit+7)>>3].tostring()
 
-# KnobAssignments - section object for parse/format 
 class KnobAssignments(Section):
+  '''KnobAssignments Section subclass'''
   def parse(self, patch, data):
     bit,nknobs = getbits(0,16,data)
     patch.knobs = [ Knob() for i in range(nknobs)]
@@ -815,8 +823,8 @@ class KnobAssignments(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# CtrlMap - section object for parse/format 
 class CtrlAssignments(Section):
+  '''CtrlAssignments Section subclass'''
   def parse(self, patch, data):
     bit,ctrlcnt = getbits(0,7,data)
     patch.ctrls = [ Ctrl() for i in range(ctrlcnt)]
@@ -853,8 +861,8 @@ class CtrlAssignments(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# MorphLabels - section object for parse/format 
 class MorphLabels(Section):
+  '''MorphLabels Section subclass'''
   def parse(self, patch, data):
     bit,self.area = getbits(0,2,data)   # 0=fx,1=voice,2=morph
 
@@ -904,8 +912,8 @@ class MorphLabels(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# ParameterLabels - section object for parse/format 
 class ParameterLabels(Section):
+  '''ParameterLabels Section subclass'''
   def parse(self, patch, data):
 
     bit, self.area = getbits(0,2,data) # 0=fx,1=voice,2=morph
@@ -1021,8 +1029,8 @@ class ParameterLabels(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# ModuleNames - section object for parse/format 
 class ModuleNames(Section):
+  '''ModuleNames Section subclass'''
   def parse(self, patch, data):
     bit,self.area = getbits(0,2,data)
     bit,self.unk1 = getbits(bit,6,data)
@@ -1069,19 +1077,20 @@ class ModuleNames(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-# TextPad - section object for parse/format 
 class TextPad(Section):
+  '''TextPad Section subclass'''
   def parse(self, patch, data):
     patch.textpad = data
 
   def format(self, patch):
     return patch.textpad
 
-# Pch2File - main reading/writing object for .pch2 files
-#   this may become generic G2 file for .pch2 and .prf2 files
-#   just by handling the performance sections (and perhaps others)
-#   and parsing all 4 patches within the .prf2 file.
 class Pch2File(object):
+  '''Pch2File(filename) - main reading/writing object for .pch2 files
+   this may become generic G2 file for .pch2 and .prf2 files
+   just by handling the performance sections (and perhaps others)
+   and parsing all 4 patches within the .prf2 file.
+'''
   patchsections = [
     PatchDescription(type=0x21),
     ModuleList(type=0x4a,area=1),
@@ -1187,6 +1196,7 @@ Info=BUILD 266\r
     out.write(struct.pack('>H',crc(s)))
 
 class PerformanceDescription(Section):
+  '''PerformanceDescription Section subclass'''
   def parse(self, perf, data):
     desc = perf.description = Description()
 
@@ -1257,6 +1267,7 @@ class PerformanceDescription(Section):
     return data[:last].tostring()
 
 class Prf2File(Pch2File):
+  '''Prf2File(filename) -> load a nord modular g2 performance.'''
   def __init__(self, fname=None):
     self.type = 'Performance'
     self.binrev = 1
