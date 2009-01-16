@@ -92,8 +92,19 @@ class Knob(object):
 class Ctrl(object):
   pass
 
-# holder object for patch voice and fx area data (modules, cables, etc..)
+# holder object for patch voice and fx area data (modules, cables, etc...)
 class Area(object):
+  '''Area class representing nord modular voice and fx areas within a patch.
+
+This class maintains the modules, cable connections, and netlist
+for the voice and fx areas of a nord modules g2 patch.
+
+\tuseful members:
+\tpatch\tpatch containing area.
+\tmodules\tarray of modules within area.
+\tcables\tarray of cables connections within area.
+'''
+
   def __init__(self,patch,index):
     self.patch = patch
     self.index = index
@@ -102,6 +113,7 @@ class Area(object):
     self.netlist = []
 
   def findmodule(self, index):
+    '''findmodule(index) -> module at index or None'''
     for module in self.modules:
       if module.index == index:
         return module
@@ -110,6 +122,15 @@ class Area(object):
   modmembers = [ 'name','index','color','horiz','vert','uprate','leds' ]
 
   def addmodule(self, shortnm, **kw):
+    '''addmodule(shortnm, **kw) -> Module
+\tshortnm\tmodule short type name to add.
+
+\t**kw:
+\tname\tname of module (label displayed in upper left corner.
+\tcolor\tcolor of module (nord.g2.color.g2modulecolors.
+\thoriz\tcolumn where module is placed (<32).
+\tvert\trow where module is placed (<127)
+'''
     # get next available index
     type = self.patch.fromname[shortnm]
     indexes = [ m.index for m in self.modules ]
@@ -132,11 +153,22 @@ class Area(object):
       return m
 
   def delmodule(self, module):
+    '''delmodule(module) -> None
+
+\tdelete module from modules sequence.
+'''
     self.modules.remove(module)
 
 
   # connect input/output to input
   def connect(self, source, dest, color):
+    '''connect(source, dest, color) -> None
+
+\tconnect source port to destination port using color.
+\tcolor is in nord.g2.colors.g2cablecolors or nord.nm1.colors.nm1cablecolors.
+
+\tcannot connect 2 Outputs together.
+'''
     sid = (source.module.index << 16) + source.index
     did = (dest.module.index << 16) + dest.index
     if source.direction == dest.direction and sid > did:
@@ -157,6 +189,10 @@ class Area(object):
 
   # disconnect a input or output port - update all cables connected to port
   def disconnect(self, cable):
+    '''disconnect(cable) -> None
+
+\tremove cable connection from area's cable list.
+'''
     source,dest = cable.source,cable.dest
 
     #print 'disconnect %s:%s -> %s:%s' % (
@@ -195,6 +231,11 @@ class Area(object):
 
   # removeconnector - remove a port from a cable net
   def removeconnector(self, connector):
+    '''removeconnector(connector) -> connector
+
+\tremove connector from the cable netlist and cable connections.
+\tconnector is a member of the Module object.
+'''
     connectors = []
     minconn = None
     mindist = 1000000
@@ -237,10 +278,12 @@ class Area(object):
 
   # quick cable length calculation
   def cablelength(self, cable):
+    '''cablelength(cable) -> length of cable'''
     return self.connectionlength(cable.source, cable.dest)
 
   # quick connection length calculation (returns square distance)
   def connectionlength(self, start, end):
+    '''connectionlength(start, end) -> distance from start port to end port'''
     # horiz coordinates about 20 times bigger.
     sm,em=start.module,end.module
     dh = (19*em.horiz+end.type.horiz)-(19*sm.horiz+start.type.horiz)
@@ -248,6 +291,10 @@ class Area(object):
     return (dh**2)+(dv**2)
 
   def shortencables(self):
+    '''shortencables()
+
+\tmake all cable as short as possible.
+'''
     netlist = self.netlist[:]
     # remove all cables
     cables = self.cables[:]
@@ -286,7 +333,20 @@ class Area(object):
 
 # holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch(object):
+  '''Patch class representing nord modular patch.
+
+This class maintains the areas, controls, notes.  
+A holder object for a g2 patch (the base of all fun/trouble/glory/nightmares).
+
+This class is normally not instanced directly but reimplemented in
+the nm1 and g2 implementations.
+'''
+
   def __init__(self,fromname):
+    '''Patch(fromname) -> Patch object
+
+\tfromname is a list names to module types.
+'''
     self.fx = Area(self,0)
     self.voice = Area(self,1)
     self.fromname = fromname
@@ -296,6 +356,11 @@ class Patch(object):
 
 # holder object for Performances
 class Performance(object):
+  '''Performance class representing a nord modular performance.
+
+Basically a holder for 4 patches, one each for slot a, slot b,
+slot c, and slot d.
+'''
   def __init__(self,fromname):
     self.patches = [ Patch(fromname) for slot in range(4) ]
 
