@@ -73,28 +73,28 @@ def binhexdump(bytes, addr=0, bits=[]):
   return '\n'.join(s)
 
 class Note(object):
+  '''Note class for nord patch notes.'''
   pass
 
-# holder object for patch cables
 class Cable(object):
+  '''Cable class for patch cables.'''
   def __init__(self, area):
     self.area = area
 
-# holder object for patch morph parameters
 class MorphMap(object):
+  '''MorphMap class for patch morph parameters.'''
   pass
 
-# holder object of patch knob settings
 class Knob(object):
+  '''Knob class for patch knob settings.'''
   pass
 
-# holder object of patch midi assignments
 class Ctrl(object):
+  '''Ctrl class for patch midi assignments.'''
   pass
 
-# holder object for patch voice and fx area data (modules, cables, etc...)
 class Area(object):
-  '''Area class representing nord modular voice and fx areas within a patch.
+  '''Area class for patch voice and fx area data (modules, cables, etc...)
 
 This class maintains the modules, cable connections, and netlist
 for the voice and fx areas of a nord modules g2 patch.
@@ -160,11 +160,10 @@ for the voice and fx areas of a nord modules g2 patch.
     self.modules.remove(module)
 
 
-  # connect input/output to input
   def connect(self, source, dest, color):
     '''connect(source, dest, color) -> None
 
-\tconnect source port to destination port using color.
+\tconnect input/output to input from source port to dest port using color.
 \tcolor is in nord.g2.colors.g2cablecolors or nord.nm1.colors.nm1cablecolors.
 
 \tcannot connect 2 Outputs together.
@@ -187,11 +186,10 @@ for the voice and fx areas of a nord modules g2 patch.
 
     addnet(self.netlist, cable.source, cable.dest)
 
-  # disconnect a input or output port - update all cables connected to port
   def disconnect(self, cable):
     '''disconnect(cable) -> None
 
-\tremove cable connection from area's cable list.
+\tdisconnect a input or output port - update all cables connected to port
 '''
     source,dest = cable.source,cable.dest
 
@@ -229,11 +227,10 @@ for the voice and fx areas of a nord modules g2 patch.
     #print ' dest',
     #printnet(dest.net)
 
-  # removeconnector - remove a port from a cable net
   def removeconnector(self, connector):
     '''removeconnector(connector) -> connector
 
-\tremove connector from the cable netlist and cable connections.
+\tremove connector from the cable net and cable connections.
 \tconnector is a member of the Module object.
 '''
     connectors = []
@@ -331,11 +328,10 @@ for the voice and fx areas of a nord modules g2 patch.
         inputs.remove(toconn)
         connected.append(toconn)
 
-# holder object for the patch (the base of all fun/trouble/glory/nightmares)
 class Patch(object):
-  '''Patch class representing nord modular patch.
+  '''Patch class for a nord modular patch.
 
-This class maintains the areas, controls, notes.  
+\tThis class maintains the areas, controls, notes.  
 A holder object for a g2 patch (the base of all fun/trouble/glory/nightmares).
 
 This class is normally not instanced directly but reimplemented in

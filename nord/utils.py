@@ -36,31 +36,31 @@ def toascii(s):
     return ''
   return ''.join(map(conv, s))
 
-# setv - set all variations to val
 def setv(g2param,val):
+  '''setv(g2param,val) - set all variations to val.'''
   g2param.variations = [ val for variation in range(9) ]
 
-# getv - get variation[0]
 def getv(nmparam):
+  '''getv(nmparam) - get variation[0].'''
   return nmparam.variations[0]
 
-# setav - set variations from array
 def setav(g2param,array):
+  '''setv(g2param,array) - set variations from array.'''
   g2param.variations = array[:9]
 
-# cpv - copy variations 
 def cpv(g2param,nmparam):
+  '''cpy(g2param,nmparam) - copy variations.'''
   g2param.variations = nmparam.variations[:]
 
-# isnm1osc - is NM1 module an oscillator
 def isnm1osc(module):
+  '''isnm1osc(module) - is NM1 module an oscillator'''
   shortnms = ['OscMaster','OscA','OscB','OscC',
               'OscSlvB','OscSlvC','OscSlvD','OscSlvE','OscSlvA','OscSlvFM',
               'PercOsc','FormantOsc','SpectralOsc','MasterOsc','OscSineBank']
   return module.type.shortnm in shortnms
 
-# isnm1lfo - is NM1 module an lfo
 def isnm1lfo(module):
+  '''isnm1lfo(module) - is NM1 module an lfo.'''
   shortnms = ['LFOA','LFOB','LFOC',
               'LFOSlvB','LFOSlvC','LFOSlvD','LFOSlvE','LFOSlvF','ClkGen']
   return module.type.shortnm in shortnms

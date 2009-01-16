@@ -22,13 +22,20 @@
 from nord.module import Input, Output, Param, Mode, Module
 
 class Struct(object):
+  '''Struct class for creating objects with named parameters.'''
   def __init__(self, **kw):
+    '''Struct(**kw) -> Struct object
+
+\tmembers become **kw keys.
+'''
     self.__dict__ = kw
 
 class ParamDef(Struct):
+  '''ParamDef Struct subclass for handling module parameter definitions.'''
   pass
 
 class Type(object):
+  '''Type abstract class maintaining types.'''
   def __init__(self, name, type, horiz=0, vert=0):
     self.name = name
     self.type = type
@@ -36,12 +43,15 @@ class Type(object):
     self.vert = vert
 
 class InputType(Type):
+  '''InputType Type subclass maintaining module type Inputs.'''
   cls = Input
 
 class OutputType(Type):
+  '''OutputType Type subclass maintaining module type Outputs.'''
   cls = Output
 
 class ParamType(object):
+  '''ParamType Type subclass maintaining module type Parameters.'''
   cls = Param
   def __init__(self, name, type, labels=[]):
     self.name = name
@@ -49,12 +59,17 @@ class ParamType(object):
     self.labels = labels
 
 class ModeType(Type):
+  '''ModeType Type subclass maintaining module type Parameters.'''
   cls = Mode
 
 class PageType(object):
+  '''PageType class maintaining page where module type resides.'''
   def __init__(self, page, index):
     self.page = page
     self.index = index
 
 class ModuleType(Struct):
+  '''ModuleType class maintaining a module type with
+inputs/outputs/parameters/modes.'''
   cls = Module
+

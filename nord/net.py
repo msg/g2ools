@@ -20,6 +20,9 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+'''These classes should not be used by user applications.  It's all
+internal representations of cable netlists of patches.'''
+
 class NetError(Exception):
   def __init__(self, value):
     self.value = value
