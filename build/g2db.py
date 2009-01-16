@@ -137,13 +137,13 @@ for struct in modulestructs:
       h, v = map(eval,loc.split(','))
       ins.append("      InputType(%-16sg2conncolors.%-14shoriz=%d,vert=%d)," %
           ("'%s'," % nm,'%s,' %t,h,v))
-    s += '''    inputs=[
+    s += '''    inputs=InputList([
 %s
-    ],\n''' % (
+    ]),\n''' % (
       '\n'.join(ins),
       )
   else:
-    s += '    inputs=[],\n'
+    s += '    inputs=InputList([]),\n'
 
   if len(struct.outputs):
     outs = []
@@ -151,16 +151,16 @@ for struct in modulestructs:
       h,v = map(eval,loc.split(','))
       outs.append("      OutputType(%-16sg2conncolors.%-14shoriz=%d,vert=%d),"
           % ("'%s'," % nm,'%s,' % t, h, v))
-    s += '''    outputs=[
+    s += '''    outputs=OutputList([
 %s
-    ],\n''' % (
+    ]),\n''' % (
       '\n'.join(outs),
       )
   else:
-    s += '    outputs=[],\n'
+    s += '    outputs=OutputList([]),\n'
 
   if len(struct.params):
-    s += '    params=[\n'
+    s += '    params=ParamList([\n'
     for p in range(len(struct.params)):
       nm, t = struct.params[p], struct.paramtypes[p]
       s += '      ParamType(%-16sparammap.%s' % ("'%s'," % nm, t)
@@ -171,19 +171,19 @@ for struct in modulestructs:
           s += ',\n        labels=[%s]\n      ' % ','.join(
               [ "'%s'" % label for label in labels ])
       s += '),\n'
-    s += '    ],\n'
+    s += '    ]),\n'
   else:
-    s += '    params=[],\n'
+    s += '    params=ParamList([]),\n'
 
   if len(struct.modes):
-    s += '''    modes=[
+    s += '''    modes=ModeList([
 %s
-    ],\n''' % (
+    ]),\n''' % (
       '\n'.join(["      ModeType(%-16sparammap.%s)," % ("'%s'," % nm,t) 
           for nm,t in zip(struct.modes, struct.modetypes) ]),
       )
   else:
-    s += '    modes=[],\n'
+    s += '    modes=ModeList([]),\n'
 
   s = '''  ModuleType(
 %s  ),

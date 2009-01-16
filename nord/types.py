@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.module import Input, Output, Param, Mode, Module
+from UserList import UserList
 
 class Struct(object):
   '''Struct class for creating objects with named parameters.'''
@@ -42,13 +43,23 @@ class Type(object):
     self.horiz = horiz
     self.vert = vert
 
+class TypeList(UserList):
+  def __init__(self, types):
+    UserList.__init__(self, types)
+    for type in types:
+      setattr(self, type.name, type)
+
 class InputType(Type):
   '''InputType Type subclass maintaining module type Inputs.'''
   cls = Input
 
+InputList = TypeList
+
 class OutputType(Type):
   '''OutputType Type subclass maintaining module type Outputs.'''
   cls = Output
+
+OutputList = TypeList
 
 class ParamType(object):
   '''ParamType Type subclass maintaining module type Parameters.'''
@@ -58,9 +69,13 @@ class ParamType(object):
     self.type = type
     self.labels = labels
 
+ParamList = TypeList
+
 class ModeType(Type):
   '''ModeType Type subclass maintaining module type Parameters.'''
   cls = Mode
+
+ModeList = TypeList
 
 class PageType(object):
   '''PageType class maintaining page where module type resides.'''
