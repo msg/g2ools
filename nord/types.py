@@ -20,7 +20,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.module import Input, Output, Param, Mode, Module
-from UserList import UserList
 
 class Struct(object):
   '''Struct class for creating objects with named parameters.'''
@@ -43,9 +42,9 @@ class Type(object):
     self.horiz = horiz
     self.vert = vert
 
-class TypeList(UserList):
+class TypeList(list):
   def __init__(self, types):
-    UserList.__init__(self, types)
+    super(TypeList,self).__init__(types)
     for type in types:
       setattr(self, type.name, type)
 
