@@ -1113,10 +1113,11 @@ class Pch2File(object):
   ]
   standardtxthdr = '''Version=Nord Modular G2 File Format 1\r
 Type=%s\r
-Version=23\r
-Info=BUILD 266\r
+Version=%d\r
+Info=BUILD %d\r
 \0'''
   standardbinhdr = 23
+  standardbuild = 266
   def __init__(self, fname=None):
     self.type = 'Patch'
     self.binrev = 0
@@ -1187,7 +1188,8 @@ Info=BUILD 266\r
   # write - this looks a lot easier then read ehhhh???
   def write(self, fname=None):
     out = open(fname,'wb')
-    hdr = Pch2File.standardtxthdr % self.type
+    hdr = Pch2File.standardtxthdr % (self.type,
+	self.standardbinhdr, self.standardbuild)
     self.off = len(hdr)
     s = struct.pack('BB',Pch2File.standardbinhdr,self.binrev)
     self.off += len(s)
