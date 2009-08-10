@@ -7,13 +7,13 @@ fi
 
 L=g2ools-
 V=${L}$1
-HTDOCSFILES=/v/www/localhost/htdocs/files
+DEST=/v/www/files
 
 rm -rf ~/nord/${L}*
 hg clone . ..//${V}
 echo "version='$1'" >>../${V}/nord/convert/version.py
 (cd ..;zip -r ${V}.zip ${V})
-rm ${HTDOCSFILES}/${L}*
-cp -v ~/nord/${V}.zip ${HTDOCSFILES}
-ls ${HTDOCSFILES}
+rm ${DEST}/${L}*
+cp -v ~/nord/${V}.zip ${DEST}
+ls ${DEST}
 
