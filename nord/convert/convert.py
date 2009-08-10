@@ -27,9 +27,10 @@ from nord.units import *
 from nord.utils import toascii
 from table import *
 
-# updatevals - parameters set from constructor, this changes the times
-#              based on the convertion tables in ./units.py.
 def updatevals(g2mp,params,nm1tab,g2tab):
+  '''updatevals(g2mp,params,nm1tab,g2tab) -> None
+  change the time values of g2 module based on tables in ./units.py.
+  '''
   for param in params:
     midival = getv(getattr(g2mp,param))
     newmidival = nm2g2val(midival,nm1tab,g2tab)
@@ -42,26 +43,31 @@ class Convert(object):
   outputmap = []
 
   def __init__(self, nmarea, g2area, nmmodule, options):
+    '''Convert(nmarea, g2area, nmmodule, options) -> Convert
+    create a convert object from a nm1 module in nmarea to g2area.
+    '''
     self.nmarea = nmarea
     self.g2area = g2area
     nmm = self.nmmodule = nmmodule
+    nmm.conv = self # to get back here when needed (cables)
     self.options = options
     # use for cabling
     for output in nmmodule.outputs:
       output.conv = self 
     for input in nmmodule.inputs:
       input.conv = self 
-    self.nmmodule.conv = self # to get back here when needed (cables)
     self.g2modules = []
     self.params = []
     self.outputs = []
     self.inputs = []
 
+    # create main module and setup size requirements
     g2m = self.g2module = g2area.addmodule(self.maing2module)
     g2m.name = toascii(nmm.name)
     self.horiz = g2m.horiz = nmm.horiz
     self.height = g2m.type.height
 
+    # setup parameters from parammap static member of convert module class
     self.params = [ None ] * len(self.parammap)
     for i in range(len(self.parammap)):
       param = self.parammap[i]
@@ -74,6 +80,7 @@ class Convert(object):
       else:
 	self.params[i] = param # None: placeholder for other parameters
 
+    # setup inputs from inputmap static member of convert module class
     self.inputs = [ None ] * len(self.inputmap)
     for i in range(len(self.inputmap)):
       input = self.inputmap[i]
@@ -81,6 +88,7 @@ class Convert(object):
 	input = getattr(g2m.inputs,input)
       self.inputs[i] = input
           
+    # setup outputs from outputmap static member of convert module class
     self.outputs = [ None ] * len(self.outputmap)
     for i in range(len(self.outputmap)):
       output = self.outputmap[i]
@@ -89,6 +97,9 @@ class Convert(object):
       self.outputs[i] = output
 
   def addmodule(self, shortnm, **kw):
+    '''addmodule(shortnm, **kw) -> module
+    add module to pch2, area, and conver object, then update convert height.
+    '''
     mod = self.g2area.addmodule(shortnm, **kw)
     mod.horiz = self.g2module.horiz
     mod.vert = self.height
@@ -97,42 +108,57 @@ class Convert(object):
     return mod
   
   def delmodule(self, module):
-    def byvert(a, b):
-      return cmp(a.vert, b.vert)
+    '''delmodule(module) -> None
+    remove module from pch2, area, and convert object and update geometry.
+    '''
     self.g2area.delmodule(module)
     self.g2modules.remove(module)
     # update vertical position of all modules with the one removed
+    def byvert(a, b):
+      return cmp(a.vert, b.vert)
     self.g2modules.sort(byvert)
     for i in range(1,len(self.g2modules)):
       above = self.g2modules[i-1]
       self.g2modules[i].vert = above.vert + above.height
 
   def connect(self, source, dest):
+    '''connect(source, dest) -> None
+    create a cable connection from port source to port dest.
+    '''
     self.g2area.connect(source,dest,g2cablecolors.blue) # change color later
 
-  # domodule - process module, setup paramaters, inputs, outputs
   def domodule(self):
+    '''domodule() -> none
+    process module, setup paramaters, inputs, outputs.
+    '''
     pass
 
-  # dogroup - process group of modules once
   def dogroup(self, group):
+    '''dogroup(group) -> None
+    process group of modules once.
+    '''
     pass
 
-  # precables - process modules after after all domodules() are done
-  #             but before cabling starts
   def precables(self):
-    pass
+    '''precables() -> None
+    process modules after after all domodules() are done
+    but before cabling starts.
+    '''
 
-  # finailize - after all cables, colors, repositioning, uprate,
-  #             knobs, morphs, midiccs, and current notes.
   def finalize(self):
+    '''finailize() -> None
+    after all cables, colors, repositioning, uprate,
+    knobs, morphs, midiccs, and current notes.
+    '''
     pass
 
   def domorphrange(self,paramindex,morphrange):
     return morphrange
 
-  # reposition module based on nm1's separation from module above
   def reposition(self, convabove):
+    '''reposition(convabove) -> None
+    reposition module based on nm1's separation from module above.
+    '''
     nmm,g2m = self.nmmodule,self.g2module
     if not convabove:
       g2m.vert += nmm.vert
@@ -147,12 +173,16 @@ class Convert(object):
     for g2mod in self.g2modules:
       g2mod.vert += vert
 
-  # return True of no modules in column from rowstart to rowend
   def emptyspace(self, column, rowstart, rowend):
+    '''emptyspace(column, rowstart, rowend) -> True or False
+    return True of no modules in column from rowstart to rowend.
+    '''
     pass
     
-  # readjust horiz>=column for all modules in both g2area, nmarea
   def insertcolumn(self, column):
+    '''insertcolumn(column) -> None
+    readjust horiz>=column for all modules in both g2area, nmarea
+    '''
     for nmmod in nmarea.modules:
       if nmmod.horiz >= column:
         nmmod.horiz += 1
@@ -161,6 +191,8 @@ class Convert(object):
         g2mod.horiz += 1
 
 def handlekbt(conv,input,kbt100,addalways=False):
+  '''handlekbt(conv, input, kbt100, addalways=False) -> input
+  '''
   nmm,g2m = conv.nmmodule,conv.g2module
   nmmp,g2mp = nmm.params, g2m.params
 
@@ -189,6 +221,8 @@ def handlekbt(conv,input,kbt100,addalways=False):
   return input
   
 def handleoscmasterslv(conv,mst,left,bp,right,lev1,lev2,sub48=False):
+  '''handleoscmasterslv(conv,msg,left,bp,right,lev1,lev2,sub48=False) -> output
+  '''
   nmm, g2m = conv.nmmodule, conv.g2module
 
   conv.nonslaves = []
@@ -241,6 +275,8 @@ def handleoscmasterslv(conv,mst,left,bp,right,lev1,lev2,sub48=False):
   return greyout.outputs.Out
 
 def doslvcables(conv):
+  '''doslvcables(conv) -> None
+  '''
   if not hasattr(conv,'slvoutput'):
     return
   for input in conv.slaves:
