@@ -38,7 +38,7 @@ def toascii(s):
 
 def setv(g2param,val):
   '''setv(g2param,val) - set all variations to val.'''
-  g2param.variations = [ val for variation in range(9) ]
+  g2param.variations = [ val ] * 9
 
 def getv(nmparam):
   '''getv(nmparam) - get variation[0].'''
