@@ -88,7 +88,7 @@ class PatchDescription(Section):
     desc = self.patch.description = Description()
 
     bit,desc.reserved  = getbits(7*8,5,data)
-    bit,desc.voicecnt  = getbits(bit,5,data)
+    bit,desc.nvoices  = getbits(bit,5,data)
     bit,desc.height    = getbits(bit,14,data)
     bit,desc.unk2      = getbits(bit,3,data) # range 0 to 4
     bit,desc.red       = getbits(bit,1,data)
@@ -107,7 +107,7 @@ class PatchDescription(Section):
     desc = self.patch.description
 
     bit = setbits(7*8,5,data,desc.reserved)
-    bit = setbits(bit,5,data,desc.voicecnt)
+    bit = setbits(bit,5,data,desc.nvoices)
     bit = setbits(bit,14,data,desc.height)
     bit = setbits(bit,3,data,desc.unk2)
     bit = setbits(bit,1,data,desc.red)
@@ -149,18 +149,18 @@ class ModuleList(Section):
     patch = self.patch
 
     bit,self.area = getbits(0,2,data)
-    bit,modulecnt = getbits(bit,8,data)
+    bit,nmodules = getbits(bit,8,data)
 
     if self.area:
       area = self.patch.voice
     else:
       area = self.patch.fx
 
-    #print 'modules:'
+    #printf('modules:\n')
     if not hasattr(area,'modules'):
-      area.modules = [ Module() for i in range(modulecnt) ]
+      area.modules = [ Module() for i in range(nmodules) ]
 
-    for i in range(modulecnt):
+    for i in range(nmodules):
       m = area.modules[i]
       bit,m.type     = getbits(bit,8,data)
       bit,m.index    = getbits(bit,8,data)
@@ -282,7 +282,7 @@ class CableList(Section):
     patch = self.patch
 
     bit,self.area = getbits(0,2,data)
-    bit,cablecnt  = getbits(16,8,data)
+    bit,ncables  = getbits(16,8,data)
 
     if self.area:
       area = self.patch.voice
@@ -292,7 +292,7 @@ class CableList(Section):
     if not hasattr(area,'cables'):
       area.cables = []
 
-    for i in range(cablecnt):
+    for i in range(ncables):
       c = Cable()
       bit,c.color    = getbits(bit,3,data)
       bit,c.modfrom  = getbits(bit,8,data)
@@ -351,7 +351,7 @@ class PatchSettings(Section):
     settings = patch.settings = Settings()
 
     bit,self.area   = getbits(0,2,data)   # always 2 (0=fx,1=voice,2=settings)
-    bit,sectioncnt  = getbits(bit,8,data) # always 7
+    bit,nsections  = getbits(bit,8,data) # always 7
     bit,nvariations = getbits(bit,8,data) # always 9
 
     if not hasattr(settings,'morphs'):
@@ -509,7 +509,7 @@ class ModuleParameters(Section):
     patch = self.patch
 
     bit,self.area   = getbits(0,2,data) # (0=fx,1=voice)
-    bit,modulecnt   = getbits(bit,8,data)
+    bit,nmodules   = getbits(bit,8,data)
     bit,nvariations = getbits(bit,8,data) # if any modules=9, otherwise=0
 
     if self.area:
@@ -707,10 +707,10 @@ class MIDIControllerAssignments(Section):
     data  = self.data
     patch = self.patch
 
-    bit,assignmentcnt = getbits(0,7,data)
-    patch.midiassignments = [ MIDIAssignment() for i in range(assignmentcnt)]
+    bit,nassignments = getbits(0,7,data)
+    patch.midiassignments = [ MIDIAssignment() for i in range(nassignments)]
 
-    for i in range(assignmentcnt):
+    for i in range(nassignments):
       m = patch.midiassignments[i]
       bit,m.midicc = getbits(bit,7,data)
       bit,m.type = getbits(bit,2,data)
@@ -789,10 +789,10 @@ class ParamNames(Section):
     data = self.data
 
     bit, self.area = getbits(0,2,data) # 0=fx,1=voice,2=morph
-    bit, modulecnt = getbits(bit,8,data)
+    bit, nmodules = getbits(bit,8,data)
 
     #b = bit
-    #s = chr(modulecnt)
+    #s = chr(nmodules)
     #while b/8 < len(data):
     #  b,c = getbits(b,8,data)
     #  s += chr(c)
@@ -803,7 +803,7 @@ class ParamNames(Section):
     else:
       area = self.patch.fx
 
-    for mod in range(modulecnt):
+    for mod in range(nmodules):
 
       bit,index = getbits(bit,8,data)
       m = area.findmodule(index)
@@ -905,7 +905,7 @@ class ModuleNames(Section):
     patch = self.patch
     bit,self.area = getbits(0,2,data)
     bit,self.unk1 = getbits(bit,6,data)
-    bit,modulecnt = getbits(bit,8,data)
+    bit,nmodules = getbits(bit,8,data)
 
     if self.area:
       area = patch.voice
@@ -913,7 +913,7 @@ class ModuleNames(Section):
       area = patch.fx
 
     names = data[bit/8:]
-    for i in range(modulecnt):
+    for i in range(nmodules):
       null = names.find('\0')
       index = ord(names[0])
       if null < 0 or null > 17:
@@ -1056,7 +1056,7 @@ Info=BUILD 266\r
 
 # patch = g2f.patch
 # desc = patch.description
-#   desc.voicecnt
+#   desc.nvoices
 #   desc.height
 #   desc.unk2
 #   desc.monopoly

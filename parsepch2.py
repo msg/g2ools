@@ -85,14 +85,14 @@ def setbits(bit,nbits,data,value):
 #  return bit,val
 
 def printval(nm, val):
-  print ' %s=0x%x(%d)' % (nm, val, val)
+  printf(' %s=0x%x(%d)\n', nm, val, val)
 
 def parsepatchdesc(data):
   bit = 7*8
   bit, unknown1 = getbits(bit,5,data)
   printval('unknown1',unknown1)
-  bit, voicecnt = getbits(bit,5,data)
-  printval('voicecnt',voicecnt)
+  bit, nvoices = getbits(bit,5,data)
+  printval('nvoices',nvoices)
   bit, height = getbits(bit,14,data)
   printval('height',height)
   bit, unknown2 = getbits(bit,3,data)
@@ -124,7 +124,7 @@ def parsemodulelist(data):
   bit, nmodules = getbits(bit,8,data)
   printval('nmodules',nmodules)
   for mod in range(nmodules):
-    printf(' mod %d', mod)
+    print(' mod %d' % mod)
     bit, modtype = getbits(bit,8,data)
     printval(' modtype',modtype)
     bit, modindex = getbits(bit,8,data)
@@ -239,8 +239,8 @@ def parsepatchsettings(data):
 def parsemoduleparams(data):
   bit, location = getbits(0,2,data)
   printval('location', location)
-  bit, modulecnt = getbits(bit,8,data)
-  printval('modulecnt', modulecnt)
+  bit, nmodules = getbits(bit,8,data)
+  printval('nmodules', nmodules)
   bit, unknown = getbits(bit,8,data)
   printval('unknown', unknown)
   for mod in range(nmodules):
