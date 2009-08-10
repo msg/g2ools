@@ -105,9 +105,10 @@ for the voice and fx areas of a nord modules g2 patch.
 \tcables\tarray of cables connections within area.
 '''
 
-  def __init__(self,patch,index):
+  def __init__(self, patch, index, name):
     self.patch = patch
     self.index = index
+    self.name = name
     self.modules = []
     self.cables = []
     self.netlist = []
@@ -343,8 +344,8 @@ the nm1 and g2 implementations.
 
 \tfromname is a list names to module types.
 '''
-    self.fx = Area(self,0)
-    self.voice = Area(self,1)
+    self.fx = Area(self,0,'fx')
+    self.voice = Area(self,1,'voice')
     self.fromname = fromname
     self.ctrls = []
     self.lastnote = None
