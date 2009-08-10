@@ -22,6 +22,7 @@
 G2Categories = {
   0: 'No Cat',
   1: 'Acoustic',
+  2: 'Sequencer',
   3: 'Bass',
   4: 'Classic',
   5: 'Drum',
@@ -37,3 +38,13 @@ G2Categories = {
   15: 'User 2',
 }
 
+__names = {}
+for key in G2Categories:
+  nm = G2Categories[key]
+  __names[nm.lower()] = key
+
+def namefromtype(type):
+  return G2Categories[type]
+
+def typefromname(name):
+  return __names[name.lower()]
