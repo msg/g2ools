@@ -168,7 +168,6 @@ pygetbits(PyObject *self, PyObject *args)
 {
   int bit, nbits, sign=0, value, byte;
   short *sp;
-  arrayobject *array;
   char *ap;
   int l;
   if(!PyArg_ParseTuple(args, "iis#|i", &bit, &nbits, &ap, &l, &sign)) {
