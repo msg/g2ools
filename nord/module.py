@@ -82,14 +82,21 @@ def sattr(obj,nm,val):
 class Array(list):
   '''Array class for managing arrays within a Module object (internal).'''
   def add(self, nm, obj, index):
-    setattr(self, nm, obj)
+    setattr(self, nm.lower(), obj)
     self[index] = obj
     #self.append(obj)
+
+  def __setattr__(self, nm, val):
+    self.__dict__[nm.lower()] = val
+
+  def __getattr__(self, nm):
+    return self.__dict__[nm.lower()]
+  
 
 class Module(object):
   '''Module class representing a nord modular module within a patch.'''
   Groups = [ ['inputs', Input ], ['outputs', Output ],
-	     ['params', Param ], ['modes', Mode ] ]
+             ['params', Param ], ['modes', Mode ] ]
 
   def __init__(self, type, area, **kw):
     '''Module(type, area, **kw) -> Module object'''
@@ -98,12 +105,12 @@ class Module(object):
     self.area = area
     self.__dict__.update(kw)
     for nm,cls in Module.Groups:
-      t = getattr(type,nm)
+      t = getattr(type, nm)
       a = Array([ None ] * len(t))
       setattr(self, nm, a)
       for i in range(len(t)):
-        o = cls(self,t[i],i)
-	a.add(t[i].name,o, i)
+        o = cls(self, t[i], i)
+        a.add(t[i].name, o, i)
     if type.type == 121: # SeqNote mag/octave additions
-      self.editmodes=[0,1,1,0,1,5]
+      self.editmodes=[ 0, 1, 1, 0, 1, 5]
 
