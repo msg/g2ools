@@ -20,6 +20,8 @@
 #
 
 import re, sys, string
+sys.path.append('..')
+from nord import printf
 
 def grab_entries(fname, classnm, arraynm):
   # read file, remove first and last line
@@ -82,6 +84,7 @@ paramstructs = [ eval('Struct('+''.join(param)+')') for param in params ]
 f=open('../nord/g2/params.py','w')
 f.write('''#!/usr/bin/env python
 
+from nord import printf
 from nord.types import Struct
 
 class ParamMap(Struct): pass
@@ -111,6 +114,7 @@ modulestructs = [ eval('Struct('+''.join(module)+')') for module in modules ]
 f=open('../nord/g2/modules.py','w')
 f.write('''#!/usr/bin/env python
 
+from nord import printf
 from nord.types import *
 from nord.g2.colors import g2conncolors
 from params import parammap
@@ -122,7 +126,7 @@ modules = [
 ''')
 
 for struct in modulestructs:
-  print struct.shortnm
+  printf('%s\n', struct.shortnm)
   s = '''    type=%s,
     height=%s,
     longnm='%s',
@@ -188,7 +192,7 @@ for struct in modulestructs:
   s = '''  ModuleType(
 %s  ),
 ''' % (s)
-  print s
+  printf('%s\n', s)
   f.write(s)
 
 f.write(''']
@@ -204,19 +208,19 @@ for module in modules:
 
 if __name__ == '__main__':
   for module in modules:
-    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    printf('%s.type: %d(0x%02x)\\n', module.shortnm, module.type, module.type)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
-      print ' .inputs[%d] .%s' % (i, input.name)
+      printf(' .inputs[%d] .%s\\n', i, input.name)
     for i in range(len(module.outputs)):
       output = module.outputs[i]
-      print ' .outputs[%d] .%s' % (i, output.name)
+      printf(' .outputs[%d] .%s\\n', i, output.name)
     for i in range(len(module.params)):
       param = module.params[i]
-      print ' .params[%d] .%s' % (i, param.name)
+      printf(' .params[%d] .%s\\n', i, param.name)
     for i in range(len(module.modes)):
       mode = module.modes[i]
-      print ' .modes[%d] .%s' % (i, mode.name)
+      printf(' .modes[%d] .%s\\n', i, mode.name)
 ''')
 
 
@@ -224,7 +228,7 @@ fromtype = {}
 fromname = {}
 
 for struct in modulestructs:
-  #print struct.longnm
+  #printf('%s\\n', struct.longnm)
   fromname[struct.shortnm] = fromtype[struct.type] = Struct(
     inputs=[ Struct(name=nm,type=t)
             for nm,t in zip(struct.inputs, struct.inputtypes) ],

@@ -147,7 +147,7 @@ def convert(fname,options):
         for paramnm in opparamnms:
           g2param = getattr(g2op.params,paramnm)
           dxparam = getattr(dxop,paramnm)
-          #print ' ',paramnm, dxparam
+          #printf(' %s %s\n', paramnm, dxparam,)
           g2param.variations[i] = dxparam
         g2op.params.AMod.variations[i] = dxtable.amodsens[dxop.AMod][1]
         g2op.params.Kbt.variations[i] = 1 - dxop.RatioFixed
@@ -236,7 +236,7 @@ def convert(fname,options):
       if module.horiz != 0:
         continue
       v = module.vert + module.type.height
-      #print '',module.name, module.vert, module.type.height, v
+      #printf('%s %d %d %d\n', module.name, module.vert, module.type.height, v)
       if v > vert:
         vert = v
     vert = addnamebars(dxconv.pch2,lines,0,vert+1)
@@ -285,7 +285,7 @@ def main(argv):
         convert(fname,options)
       except KeyboardInterrupt:
         sys.exit(1)
-      except Exception, e:
+      except Exception:
         logging.error(traceback.format_execption())
         return '%s\n%s' % (fname, traceback.format_execption())
     return ''

@@ -134,10 +134,10 @@ def setbits(bit,nbits,data,value,debug=0):
   long = setbits(struct.unpack('>L',s)[0],32-(bit&7)-nbits,nbits,value)
   # readjust array to fit (bits+nbits)/8 bytes
   a = array('B',struct.pack('>L',long)[:last-byte])
-  #print 'bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d' % (
+  #printf('bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d\n',
   #   bit,nbits,byte,last,last-byte,len(data),len(a))
   data[byte:last] = a
-  #print data
+  #printf('%s\n', data)
   return bit+nbits
 
 try:
@@ -253,8 +253,8 @@ class ModuleList(Section):
       bit,m.reserved = getbits(bit,6,data)
       bit, nmodes = getbits(bit,4,data)
 
-      #print 'modules %-10s t=%03d i=%02x h=%d v=%02d c=%02d r=%x l=%x s=%02x m=%x' % (
-      #    modules.fromtype[m.type].shortnm, m.type, m.ndex,
+      #printf('modules %-10s t=%03d i=%02x h=%d v=%02d c=%02d r=%x l=%x s=%02x m=%x\n',
+      #    modules.fromtype(m.type).shortnm, m.type, m.ndex,
       #    m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved, nmodes)
 
       # mode data for module (if there is any)
@@ -403,7 +403,7 @@ class CableList(Section):
 
       invalid = validcable(area, smodule, sconn, dir, dmodule, dconn)
       if invalid:
-        print 'Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)' % (
+        printf('Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)\n',
             invalid, smodule.type.shortnm, smodule.index, sconn, dir,
             dmodule.type.shortnm, dmodule.index, dconn)
       else:
@@ -433,8 +433,9 @@ class CableList(Section):
 
     for i in range(len(area.cables)):
       c = area.cables[i]
-      #print '%d %02d %d -%d- %02d %d' % (c.color, c.source.module.index,
-      #    c.source.index, c.source.direction, c.dest.module.index, c.dest.index)
+      #printf('%d %02d %d -%d- %02d %d\n', c.color, c.source.module.index,
+      #    c.source.index, c.source.direction, c.dest.module.index,
+      #    c.dest.index)
       bit = setbits(bit,3,data,c.color)
       bit = setbits(bit,8,data,c.source.module.index)
       bit = setbits(bit,6,data,c.source.index)
@@ -497,7 +498,11 @@ class PatchSettings(Section):
     for i in range(NVARIATIONS): # morph groups
       bit,variation = getbits(bit,8,data) # variation number
       for morph in range(NMORPHS):
-        bit,settings.morphs[morph].dials.variations[variation] = getbits(bit,7,data)
+        bit,dial = getbits(bit,7,data)
+	#printf('var %d: morph dial=%d', i, dial)
+	if variation >= NVARIATIONS:
+	  continue
+        settings.morphs[morph].dials.variations[variation] = dial
       for morph in range(NMORPHS):
         bit,settings.morphs[morph].modes.variations[variation] = getbits(bit,7,data)
 
@@ -774,30 +779,30 @@ class KnobAssignments(Section):
         bit,index = getbits(bit,8,data)
         bit,k.isled = getbits(bit,2,data)
         bit,param = getbits(bit,7,data)
-	if type(perf) == Performance:
-	  bit,k.slot = getbits(bit,2,data)
-	  patch = perf.patches[k.slot]
-	else:
-	  k.slot = 0
-	if area == 0:
-	  m = patch.fx.findmodule(index)
-	  if m:
-	    k.param = m.params[param]
-	  else:
-	    k.assigned = 0
-	    continue
-	elif area == 1:
-	  m = patch.voice.findmodule(index)
-	  if m:
-	    k.param = m.params[param]
-	  else:
-	    k.assigned = 0
-	    continue
-	elif area == 2:
-	  #print area,index,k.isled,param
-	  k.param = patch.settings.morphs[param]
-	#print '  %s%d-%d: %d %d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7, index,param)
-	k.param.knob = k
+        if type(perf) == Performance:
+          bit,k.slot = getbits(bit,2,data)
+          patch = perf.patches[k.slot]
+        else:
+          k.slot = 0
+        if area == 0:
+          m = patch.fx.findmodule(index)
+          if m:
+            k.param = m.params[param]
+          else:
+            k.assigned = 0
+            continue
+        elif area == 1:
+          m = patch.voice.findmodule(index)
+          if m:
+            k.param = m.params[param]
+          else:
+            k.assigned = 0
+            continue
+        elif area == 2:
+          #printf('%d %d %d %d\n', area,index,k.isled,param)
+          k.param = patch.settings.morphs[param]
+        #printf('  %s%d-%d: %d %d\n', 'ABCDE'[i/24],(i%24)>>3,(i%24)&7, index,param)
+        k.param.knob = k
 
   def format(self, patch):
     data = self.data
@@ -871,8 +876,8 @@ class MorphLabels(Section):
     #while b/8 < len(data):
     #  b,c = getbits(b,8,data)
     #  s += chr(c)
-    #print 'morphlabels:'
-    #print hexdump(s)
+    #printf('morphlabels:\n')
+    #printf('%s\n',hexdump(s))
 
     bit,nentries  = getbits(bit,8,data) # 1
     bit,entry     = getbits(bit,8,data) # 1
@@ -904,8 +909,8 @@ class MorphLabels(Section):
         t += s[i]
         #bit = setbits(bit,8,data,ord(s[i]))
 
-    #print 'morphlabels:'
-    #print hexdump(t)
+    #printf('morphlabels:\n')
+    #printf('%s\n', hexdump(t))
 
     for c in t:
       bit = setbits(bit,8,data,ord(c))
@@ -924,8 +929,8 @@ class ParameterLabels(Section):
     #while b/8 < len(data):
     #  b,c = getbits(b,8,data)
     #  s += chr(c)
-    #print 'paramlabels:'
-    #print hexdump(s)
+    #printf('paramlabels:\n')
+    #printf('%s\n', hexdump(s))
 
     if self.area:
       area = patch.voice
@@ -971,7 +976,7 @@ class ParameterLabels(Section):
             p.labels.append(s)
         else:
           p.labels.append('')
-        #print index, paramlen, param, p.labels
+        #printf('%d %d %d %s\n', index, paramlen, param, p.labels)
 
   def format(self, patch):
     data = self.data
@@ -1011,7 +1016,7 @@ class ParameterLabels(Section):
           param = m.params[i]
           if not hasattr(param,'labels'):
             continue
-          #print m.index,7*len(param.labels),i,param.labels
+          #printf('%d %d %d %s\n', m.index, 7*len(param.labels), i, param.labels)
           ps = ''
           for nm in param.labels:
             ps += (nm+'\0'*7)[:7]
@@ -1021,8 +1026,8 @@ class ParameterLabels(Section):
 
       t += chr(m.index) + chr(len(s)) + s
 
-    #print 'paramlabels:'
-    #print hexdump(t)
+    #printf('paramlabels:\n')
+    #printf('%s\n', hexdump(t))
 
     for c in t:
       bit = setbits(bit,8,data,ord(c))
@@ -1069,7 +1074,7 @@ class ModuleNames(Section):
     for i in range(len(area.modules)):
       bit = setbits(bit,8,data,area.modules[i].index)
       nm = area.modules[i].name[:16]
-      #print '%d "%s"' % (area.modules[i].index, nm)
+      #printf('%d "%s"\n', area.modules[i].index, nm)
       if len(nm) < 16:
         nm += '\0'
       for c in nm:
@@ -1130,9 +1135,9 @@ Info=BUILD %d\r
       id,l = struct.unpack('>BH',data[off:off+3])
       off += 3
       if sectiondebug:
-	nm = section.__class__.__name__
-	print '0x%02x %-25s addr:0x%04x len:0x%04x' % (id,nm,off,l)
-        print binhexdump(data[off:off+l])
+        nm = section.__class__.__name__
+        printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', sectiontype, nm, off, l)
+        printf('%s\n', binhexdump(data[off:off+l]))
       section.parse(patch, data[off:off+l])
       off += l
     return off
@@ -1151,16 +1156,16 @@ Info=BUILD %d\r
     off = null+1
     self.binhdr = struct.unpack('BB',data[off:off+2])
     if self.binhdr[0] != self.standardbinhdr:
-      print 'Warning: %s version %d' % ( fname, self.binhdr[0])
-      print '         version %d supported. it may fail to load.' % (
-      	  self.standardbinhdr)
+      printf('Warning: %s version %d\n', fname, self.binhdr[0])
+      printf('         version %d supported. it may fail to load.\n',
+          self.standardbinhdr)
     off += 2
     off = self.parse(data, off)
 
     ecrc = struct.unpack('>H',data[-2:])[0]
     acrc = crc(data[null+1:-2])
     if ecrc != acrc:
-      print 'Bad CRC'
+      printf('Bad CRC\n')
 
   def formatpatch(self, patch):
     s = ''
@@ -1168,17 +1173,17 @@ Info=BUILD %d\r
       section.data[:] = zeros[:]
       f = section.format(patch)
       if sectiondebug:
-	nm = section.__class__.__name__
-	print '0x%02x %-25s len:0x%04x total: 0x%04x' % (
-	   section.type,nm,len(f),self.off+len(s)),
-	tbl = string.maketrans(string.ascii_lowercase,' '*26)
-	nm = nm.translate(tbl).replace(' ','')
-	print nm
-	if titlesection:
-	  l = len(nm)
-	  if l < len(f):
-	    #f = f[:-len(nm)]+nm # debug for front of section or back
-	    f = nm+f[len(nm):]
+        nm = section.__class__.__name__
+        printf('0x%02x %-25s len:0x%04x total: 0x%04x\n',
+            section.type,nm,len(f),self.off+len(s))
+        tbl = string.maketrans(string.ascii_lowercase,' '*26)
+        nm = nm.translate(tbl).replace(' ','')
+        printf('%s\n', nm)
+        if titlesection:
+          l = len(nm)
+          if l < len(f):
+            #f = f[:-len(nm)]+nm # debug for front of section or back
+            f = nm+f[len(nm):]
       s += struct.pack('>BH',section.type,len(f)) + f
     return s
 
@@ -1284,7 +1289,7 @@ class Prf2File(Pch2File):
     off += 3
     if sectiondebug:
       nm = section.__class__.__name__
-      print '0x%02x %-25s addr:0x%04x len:0x%04x' % (id,nm,off,l)
+      printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', id,nm,off,l)
 
     section.parse(self.performance, data[off:off+l])
     off += l
@@ -1302,8 +1307,8 @@ class Prf2File(Pch2File):
     f = section.format(self.performance)
     if sectiondebug:
       nm = section.__class__.__name__
-      print '0x%02x %-25s             len:0x%04x total: 0x%04x' % (
-	  section.type,nm,len(f),total)
+      printf('0x%02x %-25s             len:0x%04x total: 0x%04x\n',
+          section.type,nm,len(f),total)
       if titlesection:
 	tbl = string.maketrans(string.ascii_lowercase,' '*26)
 	nm = nm.translate(tbl).replace(' ','')
@@ -1468,7 +1473,7 @@ class Prf2File(Pch2File):
 if __name__ == '__main__':
   prog = sys.argv.pop(0)
   fname = sys.argv.pop(0)
-  print '"%s"' % fname
+  printf('"%s"\n', fname)
   pch2 = Pch2File(fname)
   #pch2.write(sys.argv.pop(0))
 

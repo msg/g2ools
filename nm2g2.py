@@ -35,6 +35,7 @@ from nord.convert import typetable,setv
 from nord.convert.version import version as g2oolsversion
 from nord.utils import toascii
 import nord.convert.osc 
+from nord import printf
 
 nm2g2colors = {
   nm1cablecolors.red:    g2cablecolors.red,
@@ -145,9 +146,8 @@ class NM2G2Converter:
 	    module.type.type,module.type.type))
 	conv = typetable[module.type.type](nmarea,g2area,module,self.options)
 	converters.append(conv)
-	#g2module = conv.g2module
-	#print '%s (%d,%d)' % (g2module.type.shortnm,
-	#    g2module.horiz, g2module.vert)
+	#g2m = conv.g2module
+	#printf('%s (%d,%d)\n', g2m.type.shortnm, g2m.horiz, g2m.vert)
       else:
 	self.log.warning('No converter for module "%s" type %d(0x%02x)' % (
 	    module.type.shortnm, module.type.type, module.type.type))

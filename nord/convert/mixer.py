@@ -74,7 +74,7 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
     for i in range(len(parammap)):
       if type(parammap[i]) == type([]) and parammap[i][0] == 'Pad':
         parammap[i] = None
-  #print 'mixeroptimize "%s" mod="%s" o=%d' % (nmmodule.name, maing2mod, o)
+  #printf('mixeroptimize "%s" mod="%s" o=%d\n', nmmodule.name, maing2mod, o)
   return maing2mod,o
 
 class Conv3Mixer(Convert):

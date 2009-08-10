@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from nord import printf
 from nord.types import Struct
 
 class ParamMap(Struct): pass

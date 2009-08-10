@@ -20,8 +20,10 @@
 #
 
 import sys
+sys.path.append('..')
 from string import *
 import re
+from nord import printf
 
 class Module:
   pass
@@ -44,7 +46,7 @@ for entry in entries:
   data=entry.split('\r\n')
   m=modulere.match(data.pop(0))
   if m:
-    #print m.group(1), m.group(2)
+    #printf('%s %s\n', m.group(1), m.group(2))
     mod=Module()
     mod.type = m.group(1)
     mod.name = m.group(2)
@@ -55,7 +57,7 @@ for entry in entries:
       mnd=namedblre.match(data.pop(0))
       if mnd:
         setattr(mod,mnd.group(1),float(mnd.group(2)))
-        #print mnd.group(1), mnd.group(2)
+        #printf('%s %s\n', mnd.group(1), mnd.group(2))
     mni=nameintre.match(data.pop(0))
     if mni:
       setattr(mod,mni.group(1),int(mni.group(2)))
@@ -89,6 +91,7 @@ for entry in entries:
 out = open('../nord/nm1/modules.py','w')
 out.write('''#!/usr/bin/env python
 
+from nord import printf
 from nord.types import *
 from nord.nm1.colors import nm1conncolors
 
@@ -165,7 +168,7 @@ for module in modules:
     s += '    modes=[],\n'
   s += '  ),\n'
 
-  print s
+  printf('%s\n', s)
   out.write(s)
 
 out.write(''']
@@ -181,18 +184,18 @@ for module in modules:
 
 if __name__ == '__main__':
   for module in modules:
-    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    printf('%s.type: %d(0x%02x)\\n', module.shortnm, module.type, module.type)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
-      print ' .inputs[%d] .%s' % (i, input.name)
+      printf(' .inputs[%d] .%s\\n', i, input.name)
     for i in range(len(module.outputs)):
       output = module.outputs[i]
-      print ' .outputs[%d] .%s' % (i, output.name)
+      printf(' .outputs[%d] .%s\\n', i, output.name)
     for i in range(len(module.params)):
       param = module.params[i]
-      print ' .params[%d] .%s' % (i, param.name)
+      printf(' .params[%d] .%s\\n', i, param.name)
     for i in range(len(module.modes)):
       mode = module.modes[i]
-      print ' .modes[%d] .%s' % (i, mode.name)
+      printf(' .modes[%d] .%s\\n', i, mode.name)
 ''')
 

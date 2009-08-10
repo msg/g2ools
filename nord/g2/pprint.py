@@ -23,119 +23,156 @@ from nord.g2.file import Pch2File
 from nord.g2.categories import G2Categories
 
 def printdescription(patch):
-  print 'patchdescription:'
+  printf('patchdescription:\n')
   desc = patch.description
-  print ' category: %s' % G2Categories[desc.category]
-  print ' voices: %d' % desc.voicecnt
-  print ' height: %d' % desc.height
-  print ' monopoly: %d' % desc.monopoly
-  print ' variation: %d' % desc.variation
+  printf(' category: %s\n', G2Categories[desc.category])
+  printf(' voices: %d\n', desc.nvoices)
+  printf(' height: %d\n', desc.height)
+  printf(' monopoly: %d\n', desc.monopoly)
+  printf(' variation: %d\n', desc.variation)
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white ]
-  colors = ''.join(['','RBYOGPW'[i]][x[i]] for i in range(len(x)))
-  print ' colors: %s' % colors
-  #print ' unk2=0x%02x' % desc.unk2
+  colors = ''.join(['RBYOGPW'[i] for i in range(len(x)) if x[i]])
+  printf(' colors: %s\n', colors)
+  #printf(' unk2=0x%02x\n', desc.unk2)
     
-def printknobs(patch):
-  print 'knobs:'
-  for i in range(len(patch.knobs)):
-    knob = patch.knobs[i]
-    if knob.assigned:
-      if hasattr(knob.param,'module'):
-        print ' %s%d:%d %s:"%s":%s isled=0x%02x' % (
-            'ABCDE'[i/24],(i/8)%3,i&7,
-            ['fx','voice'][knob.param.module.area.index],
-            knob.param.module.name, knob.param.type.name,
-            knob.isled)
-
-def printmidicc(patch):
-  print 'midicc:'
-  for ctrl in patch.ctrls:
-    param = ctrl.param.index
-    if ctrl.type == 2:
-      index = 1
-    else:
-      index = ctrl.param.module.index
-    print ' type=%s midicc=%d index=%d param=%d' % (
-        {0:'fx',1:'voice',2:'system'}[ctrl.type], ctrl.midicc,
-        index,param)
-
-def printmorphs(patch):
-  settings = patch.settings
-  print 'morphs:'
-  print ' dial settings:'
-  for i in range(len(settings.morphs)):
-    print ' ',settings.morphs[i].dials.variations
-  print ' modes:'
-  for i in range(len(settings.morphs)):
-    print ' ',settings.morphs[i].modes.variations
-  print ' names:'
-  print ' ',','.join(
-      [ settings.morphs[i].label for i in range(len(settings.morphs))])
-  print ' parameters:'
-  for i in range(len(settings.morphs)):
-    morph = settings.morphs[i]
-    print '  morph %d:' % i
-    for j in range(len(morph.maps)):
-      print '   varation %d:' % j
-      for k in range(len(morph.maps[j])):
-        map = morph.maps[j][k]
-        print '    %s:%s range=%d' % (map.param.module.name,map.param.type.name,
-            map.range)
-
 def printvariations(patch):
   settings = patch.settings
-  print 'variations:'
+  printf('variations:\n')
   for attr in [ 'activemuted','patchvol','glide','glidetime','bend', 'semi',
                 'vibrato','cents','rate',
                 'arpeggiator','arptime','arptype','octaves',
                 'octaveshift','sustain' ]:
-    print ' %-16s' % (attr+':'), getattr(settings,attr).variations
+    printf(' %-16s %s\n', (attr+':'), getattr(settings,attr).variations)
 
 def printmodules(patch):
-  print 'modules:'
+  printf('modules:\n')
   for module in patch.voice.modules:
-    print ' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d' % (
+    printf(' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d\n', 
         '"%s"' % module.name, module.type.shortnm,
         module.index, module.horiz, module.vert, module.color,
         module.type.type, module.uprate, module.leds)
     if hasattr(module, 'modes') and len(module.modes):
-      print '  modes:'
+      printf('  modes:\n')
       for m in range(len(module.modes)):
         mode = module.modes[m]
         mtype = module.type.modes[m]
-        print '  %-16s %r' % (mtype.name+':', mode)
+        printf('  %-16s %r\n', mtype.name+':', mode)
     if hasattr(module, 'params') and len(module.params):
-      print '  params:'
+      printf('  params:\n')
       for p in range(len(module.params)):
         param = module.params[p]
         ptype = module.type.params[p]
-        print '  %-16s %r' % (ptype.name+':', param.variations)
+        printf('  %-16s %r\n', ptype.name+':', param.variations)
         if hasattr(param,'labels'):
-          print '   %r' % param.labels
+          printf('   %r\n', param.labels)
 
 def printcables(patch):
-  print 'cables:'
+  printf('cables:\n')
   for cable in patch.voice.cables:
     source,dest = cable.source,cable.dest
     smod,dmod = source.module,dest.module
     stype,dtype = smod.type, dmod.type
     snm = source.type.name
     dnm = dest.type.name
-    print ' %s.%s -%s %s.%s: c=%d' % (
+    printf(' %s.%s -%s %s.%s: c=%d\n',
       stype.shortnm,snm,'->'[source.direction],dtype.shortnm,dnm,cable.color)
+
+def printknobs(patch):
+  printf('knobs:\n')
+  for i in range(len(patch.knobs)):
+    knob = patch.knobs[i]
+    if knob.assigned:
+      printf(' %s%d:%d ', 'ABCDE'[i/24], (i/8)%3, i&7)
+      if hasattr(knob.param,'module'):
+        printf('%s:"%s":%s isled=0x%02x\n',
+            ['fx','voice'][knob.param.module.area.index],
+            knob.param.module.name, knob.param.type.name,
+            knob.isled)
+      else:
+        printf('morph:%d:"%s"\n', knob.param.index, knob.param.label)
+
+midicctable = {
+    0: 'Bank Select MSB',
+    1: 'Modwheel',
+    2: 'Breath',
+    4: 'Foot ctrl',
+    5: 'Port time',
+    6: 'Data MSB',
+    8: 'Balance',
+   10: 'Pan',
+   38: 'Data LSB',
+   65: 'Portamento On/Off',
+   66: 'Sustenuto On/Off',
+   67: 'Soft Pedal On/Off',
+   68: 'Legato Pedal On/Off',
+   69: 'Hold 2',
+   84: 'Port control',
+   91: 'Effect 1 Depth',
+   92: 'Effect 2 Depth',
+   93: 'Effect 3 Depth',
+   94: 'Effect 4 Depth',
+   95: 'Effect 5 Depth',
+   96: 'G2 Global Modwheel 1',
+   97: 'G2 Global Modwheel 2',
+   98: 'NRPN LSB',
+   99: 'NPRN MSB',
+  100: 'RPN LSB',
+  101: 'RPN MSB',
+  121: 'Reset all controllers',
+  123: 'All notes off',
+}
+
+def printmidicc(patch):
+  printf('midicc:\n')
+  for ctrl in patch.ctrls:
+    param = ctrl.param.index
+    if ctrl.type == 2:
+      index = 1
+    else:
+      index = ctrl.param.module.index
+    if midicctable.has_key(ctrl.midicc):
+      s = ':"' + midicctable[ctrl.midicc] + '"'
+    else:
+      s = ''
+    printf(' type=%s midicc=%2d%s index=%d param=%d\n',
+        {0:'fx',1:'voice',2:'system'}[ctrl.type], ctrl.midicc, s,
+        index, param)
+
+def printmorphs(patch):
+  settings = patch.settings
+  printf('morphs:\n')
+  printf(' dial settings:\n')
+  for i in range(len(settings.morphs)):
+    printf(' %s\n', settings.morphs[i].dials.variations)
+  printf(' modes:\n')
+  for i in range(len(settings.morphs)):
+    printf(' %s\n', settings.morphs[i].modes.variations)
+  printf(' names:\n')
+  printf(' %s\n', ','.join(
+      [ settings.morphs[i].label for i in range(len(settings.morphs))]))
+  printf(' parameters:\n')
+  for i in range(len(settings.morphs)):
+    morph = settings.morphs[i]
+    printf('  morph %d:\n', i)
+    for j in range(len(morph.maps)):
+      printf('   varation %d:\n', j)
+      for k in range(len(morph.maps[j])):
+        map = morph.maps[j][k]
+        printf('    %s:%s range=%d\n', map.param.module.name,
+	    map.param.type.name, map.range)
 
 def printpatch(patch):
   printdescription(patch)
-  printknobs(patch)
-  printmidicc(patch)
-  printmorphs(patch)
   printvariations(patch)
   printmodules(patch)
   printcables(patch)
+  printknobs(patch)
+  printmidicc(patch)
+  printmorphs(patch)
 
-  #print 'Unknown0x69:'
-  #print '','\n '.join(hexdump(patch.unknown0x69.data).split('\n'))
-  #print 'ParamNames fx:'
-  #print '','\n '.join(hexdump(patch.fx.paramnames).split('\n'))
+  #printf('Unknown0x69:\n')
+  #printf('%s\n', '\n '.join(hexdump(patch.unknown0x69.data).split('\n')))
+  #printf('ParamNames fx:\n')
+  #printf('%s\n', '\n '.join(hexdump(patch.fx.paramnames).split('\n')))
 

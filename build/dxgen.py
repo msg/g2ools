@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 import string
+import sys
+sys.path.append('..')
 import dxian
+from nord import printf
 
 def getnumbers(fname):
   lines = map(string.strip, open(fname).readlines())
@@ -43,7 +46,7 @@ dxlfodelay = getnumbers('dxlfodelay.txt')
 dxlfoattack = interpolate(
    [ l for l in filter(lambda a: len(a) > 1, dxlfodelay[1:])])
  
-print len(dxlfo),len(dxlforate),len(dxlfomod),len(dxlfoattack)
+printf('%d %d %d %d\n', len(dxlfo),len(dxlforate),len(dxlfomod),len(dxlfoattack))
 dxlfo = [ [dxlfo[i+1][1],dxlforate[i][1],dxlfomod[i][1],dxlfoattack[i][1]]
     for i in range(len(dxlfo)-1)]
 
@@ -53,7 +56,7 @@ dxlfo = [ [dxlfo[i+1][1],dxlforate[i][1],dxlfomod[i][1],dxlfoattack[i][1]]
 #   [ [l[0],l[1]] for l in filter(lambda a: len(a)>1 and a[1], dxpitcheg[1:])])
 #dxpitchegtime = interpolate(
 #   [ [l[0],l[2]] for l in filter(lambda a: len(a)>2 and a[2]!='', dxpitcheg[1:])])
-#print len(dxpitcheglev),len(dxpitchegtime)
+#printf('%d %d\n', len(dxpitcheglev),len(dxpitchegtime))
 #dxpitcheg = [
 #  [dxpitcheglev[i][1]+64,dxpitchegrate[i][0]] for i in range(len(dxpitcheglev))]
 dxpmodsens = getnumbers('dxpmodsens.txt')[1:]

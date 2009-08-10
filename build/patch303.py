@@ -20,6 +20,8 @@
 #
 
 import sys
+sys.path.append('..')
+from nord import printf 
 from string import *
 import re
 
@@ -44,7 +46,7 @@ for entry in entries:
   data=entry.split('\r\n')
   m=modulere.match(data.pop(0))
   if m:
-    #print m.group(1), m.group(2)
+    #printf('%s %s\n', m.group(1), m.group(2))
     mod=Module()
     mod.type = m.group(1)
     mod.name = m.group(2)
@@ -55,7 +57,7 @@ for entry in entries:
       mnd=namedblre.match(data.pop(0))
       if mnd:
         setattr(mod,mnd.group(1),float(mnd.group(2)))
-        #print mnd.group(1), mnd.group(2)
+        #printf('%s %s', mnd.group(1), mnd.group(2))
     mni=nameintre.match(data.pop(0))
     if mni:
       setattr(mod,mni.group(1),int(mni.group(2)))
@@ -87,17 +89,17 @@ for entry in entries:
     modules.append(mod)
 
 for module in modules:
-  print module.name, module.type
+  printf('%s %s\n', module.name, module.type)
   if len(module.parameters):
-    print ' parameters'
-    print '',str(module.parameters)
+    printf(' parameters\n')
+    printf('%s\n', str(module.parameters))
   if len(module.inputs):
-    print ' inputs'
-    print '',str(module.inputs)
+    printf(' inputs\n')
+    printf('%s\n', str(module.inputs))
   if len(module.outputs):
-    print ' outputs'
-    print '',str(module.outputs)
+    printf(' outputs\n')
+    printf('%s\n', str(module.outputs))
   if len(module.custom):
-    print ' custom'
-    print '',str(module.custom)
+    printf(' custom\n')
+    printf('%s\n', str(module.custom))
 

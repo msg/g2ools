@@ -57,14 +57,14 @@ def setbits(bit,nbits,data,value,debug=0):
   # readjust array to fit (bits+nbits)/8 bytes
   a = array('B',struct.pack('>L',long)[:last-byte])
   if debug:
-    print 'bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d' % (
-      bit,nbits,byte,last,last-byte,len(data),len(a))
+    printf('bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d\n', 
+	bit,nbits,byte,last,last-byte,len(data),len(a))
   if last > len(data):
     data.extend([ 0 ] * (last-len(data)))
-  #print data
+  #printf('%s\n', data)
   data[byte:last] = a
   if debug:
-    print data
+    printf('%s\n', data)
   return bit+nbits
 
 NVARIATIONS = 9 # 1-8, init
@@ -178,7 +178,8 @@ class ModuleList(Section):
       bit,m.reserved = getbits(bit,6,data)
       bit, nmodes = getbits(bit,4,data)
 
-      #print 'modules %-10s t=%03d i=%02x h=%d v=%02d c=%02d r=%x l=%x s=%02x m=%x' % (
+      #printf(
+      #    'modules %-10s t=%03d i=%02x h=%d v=%02d c=%02d r=%x l=%x s=%02x m=%x\n\n',
       #    modules.fromtype[int(m.type)].shortnm, m.type, m.ndex,
       #    m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved, nmodes)
 
@@ -232,15 +233,13 @@ class ModuleList(Section):
 class Unknown0x69(Section):
   def parse(self):
     data = self.data
-    print 'Unknown0x69:'
-    print hexdump(self.data)
+    printf('Unknown0x69:\n %s\n', hexdump(self.data))
 
   def format(self):
     # smallest unknown
     # this seems to work with all files generated.
     return '\x80\x00\x00\x20\x00\x00'
-    print 'Unknown0x69:'
-    print hexdump(self.data)
+    printf('Unknown0x69:\n%s\n', hexdump(self.data))
     return self.data
 
 # Cable - placeholder for all Cable connection data
@@ -308,7 +307,7 @@ class CableList(Section):
         mto = area.findmodule(c.modto)
         mtfrom = modules.fromtype[mfrom.type]
         mtto = modules.fromtype[mto.type]
-        print 'Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)' % (
+        printf('Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)\n',
             invalid, mtfrom.shortnm, c.modfrom, c.jackfrom, c.type,
             mtto.shortnm, c.modto, c.jackto)
       else:
@@ -519,34 +518,34 @@ class ModuleParameters(Section):
       area = patch.fx
 
     if not hasattr(area,'modules'):
-      area.modules = [ Module() for i in range(modulecnt) ]
+      area.modules = [ Module() for i in range(nmodules) ]
 
-    for i in range(modulecnt):
+    for i in range(nmodules):
       bit,index = getbits(bit,8,data)
       m = area.findmodule(index)
 
-      bit,paramcnt = getbits(bit,7,data)
+      bit,nparams = getbits(bit,7,data)
 
-      params = m.params = [ Parameter() for i in range(paramcnt) ]
-      for i in range(paramcnt):
+      params = m.params = [ Parameter() for i in range(nparams) ]
+      for i in range(nparams):
         params[i].variations = [ 0 for variation in range(nvariations) ]
 
       mt = modules.fromtype[m.type]
       for i in range(nvariations):
         bit,variation = getbits(bit,8,data)
-        for param in range(paramcnt):
+        for param in range(nparams):
           bit,params[param].variations[variation] = getbits(bit,7,data)
             
-      if paramcnt >= len(mt.params):
-        for param in range(len(mt.params), paramcnt):
-          print 'Removing unknown param %d from %d "%s"' % (
+      if nparams >= len(mt.params):
+        for param in range(len(mt.params), nparams):
+          printf('Removing unknown param %d from %d "%s"\n', 
               param, m.index, mt.shortnm)
           del params[param]
 
       mt = modules.fromtype[m.type]
       if len(m.params) < len(mt.params):
         for i in range(len(m.params),len(mt.params)):
-          print 'Adding %s to %d "%s"' % (mt.params[i].type.name,
+          printf('Adding %s to %d "%s"\n', mt.params[i].type.name,
               m.index, mt.shortnm)
           p = Parameter()
           p.variations = [
@@ -681,7 +680,7 @@ class KnobAssignments(Section):
         bit,k.index = getbits(bit,8,data)
         bit,k.isled = getbits(bit,2,data)
         bit,k.paramindex = getbits(bit,7,data)
-        #print '  %s%d-%d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7)
+        #printf('  %s%d-%d\n', 'ABCDE'[i/24], (i%24)>>3, (i%24)&7)
 
   def format(self):
     data  = array('B',[])
@@ -745,8 +744,7 @@ class MorphNames(Section):
     #while b/8 < len(data):
     #  b,c = getbits(b,8,data)
     #  s += chr(c)
-    #print 'morphnames:'
-    #print hexdump(s)
+    #printf('morphnames:\n%s\n', hexdump(s))
 
     bit,nentries  = getbits(bit,8,data) # 1
     bit,entry     = getbits(bit,8,data) # 1
@@ -779,8 +777,7 @@ class MorphNames(Section):
         t += s[i]
         #bit = setbits(bit,8,data,ord(s[i]))
 
-    #print 'morphnames:'
-    #print hexdump(t)
+    #printf('morphnames:\n%s\n', hexdump(t))
 
     for c in t:
       bit = setbits(bit,8,data,ord(c))
@@ -799,8 +796,7 @@ class ParamNames(Section):
     #while b/8 < len(data):
     #  b,c = getbits(b,8,data)
     #  s += chr(c)
-    #print 'paramnames:'
-    #print hexdump(s)
+    #printf('paramnames:\n%s\n', hexdump(s))
 
     if self.area:
       area = self.patch.voice
@@ -843,7 +839,7 @@ class ParamNames(Section):
             p.names.append(s)
         else:
           p.names.append('')
-        #print index, paramlen, param, p.names
+        #printf('%d %d %d %s\n', index, paramlen, param, p.names)
 
   def format(self):
     data  = array('B',[])
@@ -884,7 +880,7 @@ class ParamNames(Section):
           param = m.params[i]
           if not hasattr(param,'names'):
             continue
-          #print m.index,7*len(param.names),i,param.names
+          #printf('%d %d %d %s\n', m.index, 7*len(param.names), i, param.names)
           ps = ''
           for nm in param.names:
             ps += (nm+'\0'*7)[:7]
@@ -896,8 +892,7 @@ class ParamNames(Section):
       t += chr(len(s))
       t += s
 
-    #print 'paramnames:'
-    #print hexdump(t)
+    #printf('paramnames:\n%s\n', hexdump(t))
 
     for c in t:
       bit = setbits(bit,8,data,ord(c))
@@ -1017,8 +1012,7 @@ Info=BUILD 266\r
     self.txthdr,data = data[:null],data[null+1:]
     self.binhdr,data = struct.unpack('BB',data[:2]),data[2:]
 
-    print self.txthdr
-    print self.binhdr
+    printf('%s\n%s\n', self.txthdr, self.binhdr)
 
     off = null + 2
     self.sections = []
@@ -1026,9 +1020,9 @@ Info=BUILD 266\r
     while len(data)>3:
       id,l = struct.unpack('>BH',data[:3])
       section = self.sectiontypes[sect](self.patch,data[3:3+l])
-      print section.__class__.__name__
+      printf('%s\n', section.__class__.__name__)
       if hasattr(section,'area'):
-        print section.area
+        prnitf('%s\n', section.area)
       self.sections.append([id, section, off])
       off += 3+l
       data = data[3+l:]
@@ -1037,15 +1031,15 @@ Info=BUILD 266\r
     ecrc = struct.unpack('>H',data)[0]
     acrc = crc(bindata[null+1:-2])
     if ecrc != acrc:
-      print 'Bad CRC expected=0x%04x actual=0x%02x' % ecrc, acrc
+      printf('Bad CRC expected=0x%04x actual=0x%02x\n', ecrc, acrc)
 
     # output section info for debugging
-    #print self.txthdr.strip()
-    #print '0x%02x' % self.binhdr[0]
+    #printf('%s\n0x%02x\n', self.txthdr.strip(), self.binhdr[0])
     #for i in range(len(self.sections)):
     #  section = self.sections[i]
     #  nm = section[1].__class__.__name__
-    #  print '0x%02x %-25s addr:0x%04x len:%d' % (section[0],nm,section[2],len(section[1].data))
+    #  printf('0x%02x %-25s addr:0x%04x len:%d\n',
+    #      section[0],nm,section[2],len(section[1].data))
 
   def write(self, fname=None):
     out = open(fname,'wb')
@@ -1054,7 +1048,7 @@ Info=BUILD 266\r
     for section in self.sections:
       f = section[1].format()
       #nm = section[1].__class__.__name__
-      #print '0x%02x %-25s             len:%d' % (section[0],nm,len(f))
+      #printf('0x%02x %-25s             len:%d\n', section[0],nm,len(f))
       s += struct.pack('>BH',section[0],len(f)) + f
     ccrc = crc(s)
     s += struct.pack('>H',ccrc)
@@ -1143,70 +1137,70 @@ Info=BUILD 266\r
 if __name__ == '__main__':
   prog = sys.argv.pop(0)
   fname = sys.argv.pop(0)
-  print '"%s"' % fname
+  printf('"%s"\n', fname)
   g2f = G2File(fname)
   g2f.write(sys.argv.pop(0))
 
   sys.exit(0)
   patch = g2f.patch
-  print 'PatchDescription:'
+  printf('PatchDescription:\n')
   desc = patch.description
-  #print ' header:', hexdump(desc.header)
-  print ' voicecnt=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d' % (
-      desc.voicecnt, desc.height, desc.unk2, desc.monopoly,
+  #printf(' header: %s\n', hexdump(desc.header))
+  printf(' nvoices=%d height=%d unk2=0x%02x mono=%d var=%d cat=%d\n', 
+      desc.nvoices, desc.height, desc.unk2, desc.monopoly,
       desc.variation, desc.category)
-  print '  red=%d blue=%d yellow=%d orange=%d green=%d purple=%d white=%d' % (
+  printf('  red=%d blue=%d yellow=%d orange=%d green=%d purple=%d white=%d\n',
       desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white)
-  print 'Knobs:'
+  printf('Knobs:\n')
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
     if knob.assigned:
-      print ' %s%d:%d mod=%03d param=%03d area=%d isled=0x%02x' % (
+      printf(' %s%d:%d mod=%03d param=%03d area=%d isled=0x%02x\n',
           'ABCDE'[i/24],(i/8)%3,i&7,
           knob.index, knob.paramindex, knob.area, knob.isled)
-  print 'MIDIAssignments:'
+  printf('MIDIAssignments:\n')
   for midiassignment in patch.midiassignments:
-    print ' type=%s midicc=%d index=%d paramindex=%d' % (
+    printf(' type=%s midicc=%d index=%d paramindex=%d\n',
         {1:'User', 2:'System'}[midiassignment.type], midiassignment.midicc,
         midiassignment.index, midiassignment.paramindex)
   settings = patch.settings
-  print 'Morphs:'
-  print ' dial settings:'
+  printf('Morphs:\n')
+  printf(' dial settings:\n')
   for i in range(NMORPHS):
-    print ' ',settings.morphs[i].dials
-  print ' modes:'
+    printf(' %d\n',settings.morphs[i].dials)
+  printf(' modes:\n')
   for i in range(NMORPHS):
-    print ' ',settings.morphs[i].modes
-  print ' names:'
-  print ' ',','.join([ settings.morphs[i].name for i in range(NMORPHS)])
-  print 'Variations:'
+    printf(' %d\n',settings.morphs[i].modes)
+  printf(' names:\n')
+  printf(' %s\n',','.join([ settings.morphs[i].name for i in range(NMORPHS)]))
+  printf('Variations:\n')
   for var in settings.variations:
-    print ' active=%d arp=%d type=%d bend=%d cents=%d glide=%d octs=%d shift=%d' % (
+    printf(' active=%d arp=%d type=%d bend=%d cents=%d glide=%d octs=%d shift=%d\n',
         var.activemuted, var.arpeggiator, var.arptype, var.bend, var.cents,
         var.glide, var.octaves, var.octaveshift)
-    print '  vol=%d rate=%d semi=%d sustain=%d time=%d vibrato=%d' % (
+    printf('  vol=%d rate=%d semi=%d sustain=%d time=%d vibrato=%d\n',
         var.patchvol, var.rate, var.semi, var.sustain, var.time, var.vibrato)
-  print 'Modules:'
+  printf('Modules:\n')
   for module in patch.voice.modules:
-    print ' |%s| %d:(%d,%d)%d type=%d uprate=%d leds=%d' % (
+    printf(' |%s| %d:(%d,%d)%d type=%d uprate=%d leds=%d\n',
         module.name, module.index, module.horiz, module.vert, module.color,
         module.type, module.uprate, module.leds)
     if hasattr(module, 'modes'):
-      print '  modes:'
+      printf('  modes:\n')
       for mode in module.modes:
-        print '  ',mode
+        printf('  %s\n', mode)
     if hasattr(module, 'params'):
-      print '  params:'
+      printf('  params:\n')
       for param in module.params:
-        print '  ',param.variations
-  print 'Cables:'
+        printf('  %s\n',param.variations)
+  printf('Cables:\n')
   for cable in patch.voice.cables:
-    print ' type=%d color=%d modfrom=%d jackfrom=%d modto=%d jackto=%d' % (
+    printf(' type=%d color=%d modfrom=%d jackfrom=%d modto=%d jackto=%d\n',
         cable.type, cable.color, cable.modfrom, cable.jackfrom, cable.modto,
         cable.jackto)
-  print 'Unknown0x69:'
-  print '','\n '.join(hexdump(patch.unknown0x69.data).split('\n'))
-  print 'ParamNames fx:'
-  print '','\n '.join(hexdump(patch.fx.paramnames).split('\n'))
+  printf('Unknown0x69:\n')
+  printf('%s\n','\n '.join(hexdump(patch.unknown0x69.data).split('\n')))
+  printf('ParamNames fx:\n')
+  printf('%s\n','\n '.join(hexdump(patch.fx.paramnames).split('\n')))
 

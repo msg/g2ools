@@ -310,7 +310,7 @@ class PchFile(object):
     if not len(lines):
       raise NM1Error('NM1File: no valid data: not parsing')
     if lines[0] != '[Header]':
-      print 'added missing [Header]'
+      printf('added missing [Header]\n')
       lines.insert(0,'[Header]')
 
     if fname[-4:].lower() != '.pch':
@@ -344,7 +344,7 @@ class PchFile(object):
     if len(endtags):
       if len(starttags) != len(endtags):
         lasttag = '[/'+lines[starttags[-1]][1:]
-        print 'added missing endtag: %s' % lasttag
+        printf('added missing endtag: %s\n', lasttag)
         lines.append(lasttag)
         endtags.append(len(lines)-1)
       if len(starttags) != len(endtags):
@@ -365,18 +365,18 @@ class PchFile(object):
       if rb < 0:
         rb = None
       nm = section[0][1:rb]
-      #print nm
-      sect = eval('%s(self.patch,section[1:-1])' % nm)
+      #printf('%d\n', nm)
+      eval('%s(self.patch,section[1:-1])' % nm)
 
 if __name__ == '__main__':
   prog = sys.argv.pop(0)
   while sys.argv:
     fname = sys.argv.pop(0)
-    print '"%s"' % fname
+    printf('"%s"\n', fname)
     try:
       nm1 = PchFile(fname)
     except NM1Error, s:
-      print s
+      printf('%s\n', s)
 
 # object ledgend when finished parsing
 #   nm1.patch.header

@@ -67,7 +67,7 @@ def setbits(bit,nbits,data,value):
 #def getbits(bit,nbits,data):
 #  byte = bit>>3
 #  msb = 8-(bit&7)
-#  #print 'len(data)=%d byte=%d bit=%d nbits=%d' % (len(data), byte, bit, nbits)
+#  #printf('len(data)=%d byte=%d bit=%d nbits=%d\n',len(data), byte, bit, nbits)
 #  bit += nbits
 #  lsb = msb - nbits
 #  if lsb >= 0:
@@ -121,10 +121,10 @@ def parsepatchdesc(data):
 def parsemodulelist(data):
   bit, location = getbits(0,2,data)
   printval('location',location)
-  bit, modulecnt = getbits(bit,8,data)
-  printval('modulecnt',modulecnt)
-  for mod in range(modulecnt):
-    print ' mod %d' % mod
+  bit, nmodules = getbits(bit,8,data)
+  printval('nmodules',nmodules)
+  for mod in range(nmodules):
+    printf(' mod %d', mod)
     bit, modtype = getbits(bit,8,data)
     printval(' modtype',modtype)
     bit, modindex = getbits(bit,8,data)
@@ -140,17 +140,17 @@ def parsemodulelist(data):
     bit, nstatic = getbits(bit,4,data)
     printval(' nstatic',nstatic)
     for static in range(nstatic):
-      print '  static %d' % static
+      print('  static %d' % static)
       bit, val = getbits(bit,6,data)
       printval('  val',val)
 
 def parsecablelist(data):
   bit, location = getbits(0,2,data)
   printval('location',location)
-  bit, cablecnt = getbits(16,8,data)
-  printval('cablecnt',cablecnt)
-  for cable in range(cablecnt):
-    print ' cable %d' % cable
+  bit, ncables = getbits(16,8,data)
+  printval('ncables',ncables)
+  for cable in range(ncables):
+    printf(' cable %d\n', cable)
     bit, color = getbits(bit,3,data)
     printval(' color',color)
     bit, modfrom = getbits(bit,8,data)
@@ -165,19 +165,19 @@ def parsecablelist(data):
     printval(' jackto',jackto)
 
 def parsepatchsettings(data):
-  print hexdump(data.tostring())
-  print ' unknown',hexdump(data[:6].tostring())
+  printf('%s\n',hexdump(data.tostring()))
+  printf(' unknown %s',hexdump(data[:6].tostring()))
   bit = 6*8
   N=9
   for i in range(N): # morph groups
-    print ' %d' % i
+    printf(' %d\n', i)
     bit+=6*8
     for morph in range(8):
       bit, morphgroup = getbits(bit,8,data)
       printval(' morphgroup%d' % morph, morphgroup)
     bit+=8
   for i in range(N): # variation volume/active
-    print ' Volume/Active %d' % i
+    printf(' Volume/Active %d\n', i)
     bit, variation = getbits(bit,8,data)
     printval(' variation', variation)
     bit, patchvol = getbits(bit,8,data)
@@ -186,7 +186,7 @@ def parsepatchsettings(data):
     printval(' activemuted', activemuted)
   bit+=15
   for i in range(N): # variation glide
-    print ' Glide %d' % i
+    printf(' Glide %d\n', i)
     bit, variation = getbits(bit,8,data)
     printval(' variation', variation)
     bit, glide = getbits(bit,7,data)
@@ -195,7 +195,7 @@ def parsepatchsettings(data):
     printval(' time', time)
   bit+=15
   for i in range(N): # variation bend
-    print ' Bend %d' % i
+    printf(' Bend %d\n', i)
     bit, variation = getbits(bit,8,data)
     printval(' variation', variation)
     bit, bend = getbits(bit,7,data)
@@ -204,7 +204,7 @@ def parsepatchsettings(data):
     printval(' semi', semi)
   bit+=15
   for i in range(N): # variation vibrato
-    print ' Vibrato %d' % i
+    printf(' Vibrato %d\n', i)
     bit, variation = getbits(bit,8,data)
     printval(' variation', variation)
     bit, vibrato = getbits(bit,7,data)
@@ -215,7 +215,7 @@ def parsepatchsettings(data):
     printval(' rate', rate)
   bit+=15
   for i in range(N): # variation arpeggiator
-    print ' Arpeggiator %d' % i
+    printf(' Arpeggiator %d\n', i)
     bit, variation = getbits(bit,8,data)
     printval(' variation', variation)
     bit, arpeggiator = getbits(bit,7,data)
@@ -228,7 +228,7 @@ def parsepatchsettings(data):
     printval(' octaves', octaves)
   bit+=15
   for i in range(N): # variation octave shift
-    print ' Octave Shift %d' % i
+    printf(' Octave Shift %d\n', i)
     bit, variation = getbits(bit,8,data)
     printval(' variation', variation)
     bit, octaveshift = getbits(bit,7,data)
@@ -243,22 +243,22 @@ def parsemoduleparams(data):
   printval('modulecnt', modulecnt)
   bit, unknown = getbits(bit,8,data)
   printval('unknown', unknown)
-  for mod in range(modulecnt):
-    print ' mod %d' % mod
+  for mod in range(nmodules):
+    printf(' mod %d\n', mod)
     bit, moduleidx = getbits(bit,8,data)
     printval(' moduleidx', moduleidx)
-    bit, paramcnt = getbits(bit,7,data)
-    printval(' paramcnt', paramcnt)
+    bit, nparams = getbits(bit,7,data)
+    printval(' nparams', nparams)
     for i in range(9):
       bit, variation = getbits(bit,8,data)
       printval('  variation', variation)
-      print '   ',
-      for param in range(paramcnt):
+      printf('    ')
+      for param in range(nparams):
 	bit, val = getbits(bit,7,data)
-	print '%d=%03d' % (param, val),
-      print
+	printf('%d=%03d ', param, val)
+      printf('\n')
       if variation > 8:
-        print 'bad variation'
+        printf('bad variation\n')
 	return
 
 def parseknobassignments(data):
@@ -270,15 +270,15 @@ def parseknobassignments(data):
       bit,moduleidx = getbits(bit,8,data)
       bit,unknown = getbits(bit,2,data)
       bit,paramidx = getbits(bit,7,data)
-      print '  %s%d-%d' % ('ABCDE'[i/24],(i%24)>>3,(i%24)&7)
+      printf('  %s%d-%d\n', 'ABCDE'[i/24],(i%24)>>3,(i%24)&7)
       printval('  moduleidx',moduleidx)
       printval('  paramidx',paramidx)
 
 def parsemidicontroller(data):
-  bit, assignmentcnt = getbits(0,7,data)
-  printval(' assignmentcnt',assignmentcnt)
-  for i in range(assignmentcnt):
-    print ' %d' % i
+  bit, nassignments = getbits(0,7,data)
+  printval(' nassignments',nassignments)
+  for i in range(nassignments):
+    printf(' %d\n', i)
     bit,midicc = getbits(bit,7,data)
     printval('  midicc',midicc)
     bit,assigntype = getbits(bit,2,data)
@@ -293,13 +293,13 @@ def parsemodulenames(data):
   printval(' location',location)
   bit,unknown = getbits(bit,6,data)
   printval(' unknown',unknown)
-  bit,modulecnt = getbits(bit,8,data)
-  printval(' modulecnt',modulecnt)
+  bit,nmodules = getbits(bit,8,data)
+  printval(' nmodules',nmodules)
   names = data[bit/8:].tostring()
-  for i in range(modulecnt):
+  for i in range(nmodules):
     null = names.find('\0')
     moduleidx,name = ord(names[0]),names[1:null]
-    print ' %03d: %s' % (moduleidx, name)
+    printf(' %03d: %s\n', moduleidx, name)
     names = names[null+1:]
 
 def parseempty(data):
@@ -395,16 +395,16 @@ class G2File:
       off += 3+l
       data = data[3+l:]
     filecrc = struct.unpack('>H',data)[0]
-    print self.txthdr.strip()
-    print self.binhdr
+    printf('%s\n', self.txthdr.strip())
+    printf('%s\n', self.binhdr)
     for i in range(len(self.sections)):
       section = self.sections[i]
-      print '0x%02x %s addr:0x%08x' % (section[0], sectiondesc[i], section[2])
+      printf('0x%02x %s addr:0x%08x\n', section[0], sectiondesc[i], section[2])
       if parse[i]:
 	parse[i](array('B',section[1]))
       else:
-	print hexdump(section[1])
-    print filecrc, crc(bindata[null+1:-2])
+	printf('%s\n', hexdump(section[1]))
+    printf('%d %d\n', filecrc, crc(bindata[null+1:-2]))
 
   def write(fname):
     pass
@@ -417,6 +417,6 @@ class Patch(G2File):
     
 prog = sys.argv.pop(0)
 fname = sys.argv.pop(0)
-print 'fname=|%s|' % fname
+printf('fname=|%s|\n', fname)
 patch = Patch(fname)
 

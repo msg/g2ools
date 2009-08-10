@@ -19,7 +19,9 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import string
+import string, sys
+sys.append.path('..')
+from nord import printf
 
 def formatarray(data):
   s = ''
@@ -149,6 +151,6 @@ nm1smoothtime = [%s
        formatarray([ '%.4f' % ratios[i] for i in range(len(ratios))]),
        formattimes(g2glidetime),formattimes(nm1smoothtime))
 
-print s
+printf('%s\n', s)
 f.write(s)
 f.close()

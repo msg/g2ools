@@ -76,7 +76,7 @@ class Mode(Member):
 def sattr(obj,nm,val):
   '''sattr(obj,nm,val) -> None  helper function for Array (internal).'''
   if hasattr(obj,nm):
-    print '  %s name "%s" exists' % (obj.__class__.__name__, nm)
+    printf('  %s name "%s" exists\n', obj.__class__.__name__, nm)
   setattr(obj,nm,val)
 
 class Array(list):

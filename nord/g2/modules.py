@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from nord import printf
 from nord.types import *
 from nord.g2.colors import g2conncolors
 from params import parammap
@@ -4066,16 +4067,16 @@ for module in modules:
 
 if __name__ == '__main__':
   for module in modules:
-    print '%s.type: %d(0x%02x)' % (module.shortnm, module.type, module.type)
+    printf('%s.type: %d(0x%02x)\n', module.shortnm, module.type, module.type)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
-      print ' .inputs[%d] .%s' % (i, input.name)
+      printf(' .inputs[%d] .%s\n', i, input.name)
     for i in range(len(module.outputs)):
       output = module.outputs[i]
-      print ' .outputs[%d] .%s' % (i, output.name)
+      printf(' .outputs[%d] .%s\n', i, output.name)
     for i in range(len(module.params)):
       param = module.params[i]
-      print ' .params[%d] .%s' % (i, param.name)
+      printf(' .params[%d] .%s\n', i, param.name)
     for i in range(len(module.modes)):
       mode = module.modes[i]
-      print ' .modes[%d] .%s' % (i, mode.name)
+      printf(' .modes[%d] .%s\n', i, mode.name)

@@ -81,7 +81,7 @@ class ConvAD_Env(Convert):
     # handle special parameters
     updatevals(g2mp,['Attack','Release'],nm1adsrtime,g2adsrtime)
     if self.options.adsrforad:
-      print g2m.type.shortnm
+      printf('%s\n', g2m.type.shortnm)
       setv(g2mp.Sustain,0)
       setv(g2mp.Decay,getv(g2mp.Release))
 

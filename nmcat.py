@@ -26,33 +26,34 @@ from nord.nm1.file import PchFile
 def printpatch(patch):
   for areanm in ['voice','fx']:
     area = getattr(patch, areanm)
-    print '%s:' % areanm
+    printf('%s:\n', areanm)
 
-    print ' modules:'
+    printf(' modules:\n')
     for module in area.modules:
       mtype = module.type
-      print '  %s: %d "%s" (%d,%d)' % (mtype.shortnm,
+      printf('  %s: %d "%s" (%d,%d)\n', mtype.shortnm,
           module.index, module.name, module.horiz, module.vert)
 
       for param in range(len(mtype.params)):
-        print '   %s(%d): %d' % (mtype.params[param].name,
+        printf('   %s(%d): %d\n', mtype.params[param].name,
             param, module.params[param].variations[0])
 
       for mode in range(len(mtype.modes)):
-        print '   >%s(%d): %d' % (mtype.modes[mode].name,
+        printf('   >%s(%d): %d\n', mtype.modes[mode].name,
             mode, module.modes[mode].value)
 
-    print ' cables:'
+    printf(' cables:\n')
     for cable in area.cables:
       source,dest = cable.source,cable.dest
       smod,dmod = source.module,dest.module
       stype,dtype = smod.type, dmod.type
       #c = cable
-      #print c.color,c.dest.index,c.dest.conn,c.dest.type,c.source.index,c.source.conn,c.source.type
-      print '  %s.%s - %s.%s: c=%d' % (
-          smod.name, source.type.name, dmod.name, dest.type.name, cable.color)
+      #printf('%d %d %d %d %d %d %d\n', c.color,c.dest.index,c.dest.conn,c.dest.type,
+      #      c.source.index,c.source.conn,c.source.type)
+      printf('  %s.%s - %s.%s: c=%d\n', smod.name, source.type.name,
+      		dmod.name, dest.type.name, cable.color)
           
-    print ' nets:'
+    printf(' nets:\n')
     for net in area.netlist:
       source = net.output
       if source:
@@ -65,37 +66,38 @@ def printpatch(patch):
         dmod = area.findmodule(dest.module.index)
         dtype = dmod.type
         t.append('%s.%s' % (dmod.name, dest.type.name))
-      print '  %s -> %s' % (s, ','.join(t))
+      printf('  %s -> %s\n', s, ','.join(t))
         
-  print 'knobs:'
+  printf('knobs:\n')
   for knob in patch.knobs:
     if hasattr(knob.param,'module'):
-      print ' %02d: %s:%s' % (knob.knob,knob.param.module.name,knob.param.type.name)
+      printf(' %02d: %s:%s\n', knob.knob,knob.param.module.name,knob.param.type.name)
     else:
-      print ' %02d: morph %d' % (knob.knob,knob.param.index)
+      printf(' %02d: morph %d\n', knob.knob,knob.param.index)
 
-  print 'ctrls:'
+  printf('ctrls:\n')
   for ctrl in patch.ctrls:
     if hasattr(ctrl.param,'module'):
-      print ' %02d: %s:%s' % (ctrl.midicc,ctrl.param.module.name,ctrl.param.type.name)
+      printf(' %02d: %s:%s\n', ctrl.midicc,ctrl.param.module.name,ctrl.param.type.name)
     else:
-      print ' %02d: morph %d' % (ctrl.midicc,ctrl.param.index)
+      printf(' %02d: morph %d\n', ctrl.midicc,ctrl.param.index)
     
-  print 'morphs:'
+  printf('morphs:\n')
   for morph in patch.morphs:
     if morph.knob:
       knob = morph.knob.knob
     else:
       knob = 0
-    print ' %d: %d %s' % (morph.index, knob,
+    printf(' %d: %d %s\n', morph.index, knob,
         ['none','vel','note'][morph.keyassign])
     for map in morph.maps:
-      print '  %s:%s range %d' % (map.param.module.name,map.param.type.name,
+      printf('  %s:%s range %d\n', map.param.module.name,map.param.type.name,
           map.range)
     
 prog = sys.argv.pop(0)
 while len(sys.argv):
   fname = sys.argv.pop(0)
-  print '"%s"' % fname
+  printf('"%s"\n', fname)
   pch = PchFile(fname)
   printpatch(pch.patch)
+

@@ -193,10 +193,10 @@ for the voice and fx areas of a nord modules g2 patch.
 '''
     source,dest = cable.source,cable.dest
 
-    #print 'disconnect %s:%s -> %s:%s' % (
+    #printf('disconnect %s:%s -> %s:%s\n' (
     #  cable.source.module.name,cable.source.type.name,
     #  cable.dest.module.name,cable.dest.type.name)
-    #print ' cable',
+    #printf(' cable ')
     #printnet(cable.source.net)
 
     # collect all the cables on the net
@@ -214,17 +214,17 @@ for the voice and fx areas of a nord modules g2 patch.
 
     source.net = dest.net = None
     for c in cables:
-      #print 'connect'
-      #print ' source',
+      #printf('connect\n')
+      #printf(' source ')
       #printnet(c.source.net)
-      #print ' dest',
+      #printf(' dest ')
       #printnet(c.dest.net)
       addnet(self.netlist,c.source,c.dest)
 
-    #print 'after disconnect'
-    #print ' source',
+    #printf('after disconnect\n')
+    #printf(' source')
     #printnet(source.net)
-    #print ' dest',
+    #printf(' dest')
     #printnet(dest.net)
 
   def removeconnector(self, connector):
@@ -237,8 +237,8 @@ for the voice and fx areas of a nord modules g2 patch.
     minconn = None
     mindist = 1000000
 
-    #print 'removeconnector %s:%s' % (connector.module.name,connector.type.name)
-    #print 'before remove',
+    #printf('removeconnector %s:%s\n', connector.module.name,connector.type.name)
+    #printf('before remove ')
     #printnet(connector.net)
     while len(connector.cables):
       cable = connector.cables[0]
@@ -259,18 +259,18 @@ for the voice and fx areas of a nord modules g2 patch.
 
     if len(connectors) != 0:
       for connector in connectors:
-        #print ' new %s:%s -> %s:%s' % (minconn.module.name,minconn.type.name,
+        #printf(' new %s:%s -> %s:%s\n', minconn.module.name,minconn.type.name,
         #    connector.module.name,connector.type.name)
         if minconn.direction:
           self.connect(minconn,connector,0)
         else:
           self.connect(connector,minconn,0)
-        #print ' done',
+        #printf(' done ')
         #printnet(connector.net)
 
-    #print 'after remove',
+    #printf('after remove ')
     #printnet(minconn.net)
-    #print
+    #printf('\n')
     return minconn
 
   # quick cable length calculation
