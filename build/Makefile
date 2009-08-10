@@ -2,11 +2,11 @@
 all: ../nord/g2/modules.py ../nord/nm1/modules.py ../nord/units.py \
 		../nord/convert/table.py ../dxtable.py
 
-../nord/g2/modules.py: g2db.py module_table.txt param_table.txt
+../nord/g2/modules.py ../g2db.txt: g2db.py module_table.txt param_table.txt
 	./g2db.py
 	(cd ..; python nord/g2/modules.py >g2db.txt)
 
-../nord/nm1/modules.py: nmdb.py patch303.txt
+../nord/nm1/modules.py ../nmdb.txt: nmdb.py patch303.txt
 	./nmdb.py
 	(cd ..; python nord/nm1/modules.py >nmdb.txt)
 
