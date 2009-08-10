@@ -149,8 +149,8 @@ NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
 NKNOBS = 120    # 120 knob settings
 
-class NordG2Error(Exception):
-  '''NordG2Error - exception for throwing an unrecoverable error.'''
+class G2Error(Exception):
+  '''G2Error - exception for throwing an unrecoverable error.'''
   def __init__(self, value):
     self.value = value
   def __str__(self):
@@ -504,7 +504,33 @@ class PatchSettings(Section):
 	  continue
         settings.morphs[morph].dials.variations[variation] = dial
       for morph in range(NMORPHS):
-        bit,settings.morphs[morph].modes.variations[variation] = getbits(bit,7,data)
+        bit,mode = getbits(bit,7,data)
+	#print 'var %d: morph mode=%d' % (i, mode)
+	if variation >= NVARIATIONS:
+	  continue
+        settings.morphs[morph].modes.variations[variation] = mode
+
+    settinggroups = [
+      [ 'patchvol', 'activemuted' ],
+      [ 'glide', 'glidetime' ],
+      [ 'bend', 'semi' ],
+      [ 'vibrato', 'cents', 'rate' ],
+      [ 'arpeggiator', 'arptime', 'arptype', 'octaves' ],
+      [ 'octaveshift', 'sustain' ],
+    ]
+    for group in settinggroups:
+      bit,section  = getbits(bit,8,data)
+      bit,nentries = getbits(bit,7,data)
+      for i in range(nvariations):
+        bit, variation = getbits(bit, 8, data)
+	for j in range(nentries):
+          bit, value = getbits(bit, 7, data)
+	  #print 'var %d: %s=%d' % (i, group[j], value)
+	  if variation >= NVARIATIONS:
+	    continue
+	  getattr(settings, group[j]).variations[variation] = value
+      
+    return
 
     bit,section  = getbits(bit,8,data) # 2 for volume/active settings
     bit,nentries = getbits(bit,7,data) # 2 parameters per variation
@@ -1136,7 +1162,7 @@ Info=BUILD %d\r
 
   def parsepatch(self, patch, data, off):
     for section in Pch2File.patchsections:
-      id,l = struct.unpack('>BH',data[off:off+3])
+      sectiontype,l = struct.unpack('>BH',data[off:off+3])
       off += 3
       if sectiondebug:
         nm = section.__class__.__name__
@@ -1155,7 +1181,7 @@ Info=BUILD %d\r
     data = open(fname,'rb').read()
     null = data.find('\0')
     if null < 0:
-      raise 'Invalid G2File "%s" missing null terminator.' % fname
+      raise G2Error('Invalid G2File "%s" missing null terminator.' % fname)
     self.txthdr = data[:null]
     off = null+1
     self.binhdr = struct.unpack('BB',data[off:off+2])
@@ -1198,7 +1224,7 @@ Info=BUILD %d\r
   def write(self, fname=None):
     out = open(fname,'wb')
     hdr = Pch2File.standardtxthdr % (self.type,
-	self.standardbinhdr, self.standardbuild)
+        self.standardbinhdr, self.standardbuild)
     self.off = len(hdr)
     s = struct.pack('BB',Pch2File.standardbinhdr,self.binrev)
     self.off += len(s)
@@ -1314,11 +1340,11 @@ class Prf2File(Pch2File):
       printf('0x%02x %-25s             len:0x%04x total: 0x%04x\n',
           section.type,nm,len(f),total)
       if titlesection:
-	tbl = string.maketrans(string.ascii_lowercase,' '*26)
-	nm = nm.translate(tbl).replace(' ','')
-	l = len(nm)
-	if l < len(f):
-	  f = f[:-len(nm)]+nm
+        tbl = string.maketrans(string.ascii_lowercase,' '*26)
+        nm = nm.translate(tbl).replace(' ','')
+        l = len(nm)
+        if l < len(f):
+          f = f[:-len(nm)]+nm
     return struct.pack('>BH',section.type,len(f)) + f
 
   def format(self):
