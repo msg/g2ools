@@ -93,10 +93,10 @@ def addnet(netlist, source, dest):
     net = dest.net
     if source.direction:
       if net.output and source != net.output:
-	raise NetError(
-	  'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
-	  source.module.type.shortnm, source.type.name,
-	  net.output.module.type.shortnm, net.output.type.name))
+        raise NetError(
+          'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
+          source.module.type.shortnm, source.type.name,
+          net.output.module.type.shortnm, net.output.type.name))
       net.output = source
     else:
       net.inputs.append(source)
