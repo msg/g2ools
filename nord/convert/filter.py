@@ -265,8 +265,7 @@ class ConvFilterBank(Convert):
       onp.labels = [onnms[i]]
     def gv(p,nm):
       return getv(getattr(p,nm))
-    setv(mixfaderp.Lev1,
-       (gv(nmmp,'50')+gv(nmmp,'75')+gv(nmmp,'110'))/3)
+    setv(mixfaderp.Lev1,(gv(nmmp,'50')+gv(nmmp,'75')+gv(nmmp,'110'))/3)
     setv(mixfaderp.Lev2,(gv(nmmp,'170')+gv(nmmp,'250'))/2)
     setv(mixfaderp.Lev3,gv(nmmp,'380'))
     setv(mixfaderp.Lev4,gv(nmmp,'570'))
