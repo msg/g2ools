@@ -78,7 +78,7 @@ class ModuleDump(Section):
       (index,type,horiz,vert) = values
       module = area.findmodule(index)
       if not module:
-        module = area.addmodule(fromtype[type].shortnm)
+        module = area.addmodule(fromtype(type).shortnm)
       module.index,module.horiz,module.vert=index,horiz,vert
 
 class CurrentNoteDump(Section):
@@ -167,7 +167,7 @@ class ParameterDump(Section):
       typecode = int(values.pop(0))
       module = area.findmodule(index)
       if not module:
-        type = fromtype[typecode]
+        type = fromtype(typecode)
         module = Module(type)
         area.modules.append(module)
       module.index = index

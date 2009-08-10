@@ -132,7 +132,7 @@ for the voice and fx areas of a nord modules g2 patch.
 \tvert\trow where module is placed (<127)
 '''
     # get next available index
-    type = self.patch.fromname[shortnm]
+    type = self.patch.fromname(shortnm)
     indexes = [ m.index for m in self.modules ]
     for index in range(1,128):
       if not index in indexes:

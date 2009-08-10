@@ -24,9 +24,9 @@ from array import array
 
 from nord.net import addnet
 from nord.module import Module
-from modules import fromname
+from nord.g2.modules import fromname
 from nord.file import *
-import modules
+from nord.g2 import modules
 
 sectiondebug = 0 # outputs section debug 
 titlesection = 0 # replace end of section with section title

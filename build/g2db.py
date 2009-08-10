@@ -81,6 +81,8 @@ for param in params:
   param.pop(0)
 paramstructs = [ eval('Struct('+''.join(param)+')') for param in params ]
 
+prog = sys.argv.pop(0)
+
 f=open('../nord/g2/params.py','w')
 f.write('''#!/usr/bin/env python
 
@@ -197,14 +199,17 @@ for struct in modulestructs:
 
 f.write(''']
 
-fromtype = {}
-fromname = {}
+__fromtype = {}
+__fromname = {}
 modulemap = ModuleMap()
 for module in modules:
-  fromname[module.shortnm] = module
-  fromtype[module.type] = module
+  __fromname[module.shortnm.lower()] = module
+  __fromtype[module.type] = module
   name = module.shortnm.replace('-','_').replace('&','n')
   setattr(modulemap, name, module)
+
+def fromname(name): return __fromname[name.lower()]
+def fromtype(type): return __fromtype[type]
 
 if __name__ == '__main__':
   for module in modules:

@@ -173,14 +173,17 @@ for module in modules:
 
 out.write(''']
 
-fromtype = {}
-fromname = {}
-modulemap = Struct()
+__fromtype = {}
+__fromname = {}
+modulemap = ModuleMap()
 for module in modules:
-  fromname[module.shortnm] = module
-  fromtype[module.type] = module
-  shortnm = module.shortnm.replace('-','_').replace('&','n').replace(' ','_')
-  setattr(modulemap, shortnm, module)
+  __fromname[module.shortnm.lower()] = module
+  __fromtype[module.type] = module
+  name = module.shortnm.replace('-','_').replace('&','n')
+  setattr(modulemap, name, module)
+
+def fromname(name): return __fromname[name.lower()]
+def fromtype(type): return __fromtype[type]
 
 if __name__ == '__main__':
   for module in modules:
