@@ -711,7 +711,6 @@ nm2g2_options = [
       help='Set converter verbosity level 0-4'),
 ]
 
-maindone = False
 def main(argv, stream):
   global nm2g2_options, nm2g2log
 
@@ -752,7 +751,7 @@ def main(argv, stream):
     return ''
 
   failedpatches = []
-  while len(args) and maindone == False:
+  while len(args):
     arg = args.pop(0)
     patchlist = glob(arg)
     if len(patchlist) == 0:
@@ -803,7 +802,6 @@ if __name__ == '__main__':
     def flush(self):
       sys.stdout.write(self.str)
       self.str = ''
-
   try:
     import psyco
     psyco.full()
