@@ -299,14 +299,14 @@ def main(argv):
           for f in files:
             fname = os.path.join(root,f)
             if fname[-4:].lower() == '.syx':
-	      logging.critical('"%s"' % fname)
+              logging.critical('"%s"' % fname)
               testname = fname
               if fname[-4:].lower() != '.syx':
                 testname = fname+'.syx'
               failed = doconvert(fname,options)
               if failed:
                 failedpatches.append(failed)
-	      logging.info('-' * 20)
+              logging.info('-' * 20)
       else:
         logging.critical('"%s"' % fname)
         failed = doconvert(fname,options)
