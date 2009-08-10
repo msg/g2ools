@@ -78,8 +78,8 @@ ModeList = TypeList
 
 class PageType(object):
   '''PageType class maintaining page where module type resides.'''
-  def __init__(self, page, index):
-    self.page = page
+  def __init__(self, name, index):
+    self.name = name
     self.index = index
 
 class ModuleType(Struct):
