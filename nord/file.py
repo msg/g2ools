@@ -105,8 +105,9 @@ for the voice and fx areas of a nord modules g2 patch.
 \tcables\tarray of cables connections within area.
 '''
 
-  def __init__(self, patch, index, name):
+  def __init__(self, patch, fromname, index, name):
     self.patch = patch
+    self.fromname = fromname
     self.index = index
     self.name = name
     self.modules = []
@@ -133,7 +134,7 @@ for the voice and fx areas of a nord modules g2 patch.
 \tvert\trow where module is placed (<127)
 '''
     # get next available index
-    type = self.patch.fromname(shortnm)
+    type = self.fromname(shortnm)
     indexes = [ m.index for m in self.modules ]
     for index in range(1,128):
       if not index in indexes:
@@ -344,9 +345,8 @@ the nm1 and g2 implementations.
 
 \tfromname is a list names to module types.
 '''
-    self.fx = Area(self,0,'fx')
-    self.voice = Area(self,1,'voice')
-    self.fromname = fromname
+    self.fx = Area(self, fromname, 0, 'fx')
+    self.voice = Area(self, fromname, 1, 'voice')
     self.ctrls = []
     self.lastnote = None
     self.notes = []
