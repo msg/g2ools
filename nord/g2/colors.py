@@ -46,6 +46,8 @@ class g2modulecolors(object):
   magenta3 = 23
   magenta4 = 24
 
+  def fromname(name): return getattr(g2modulecolors, name.lower())
+
 class g2cablecolors(object):
   red = 0
   blue = 1
@@ -55,6 +57,15 @@ class g2cablecolors(object):
   purple = 5
   white = 6
 
+  audio = red
+  control = blue
+  logic_bg = yellow
+  logic_fg = orange
+  user1 = green
+  user2 = purple
+
+  def fromname(name): return getattr(g2cablecolors, name.lower())
+
 class g2conncolors(object):
   red = 0
   blue = 1
@@ -63,3 +74,4 @@ class g2conncolors(object):
   blue_red = 4
   yellow_orange = 5
 
+  def fromname(name): return getattr(g2conncolors, name.lower())
