@@ -37,6 +37,8 @@ from nord.utils import toascii
 import nord.convert.osc 
 from nord import printf
 
+__builtins__.printf = printf
+
 nm2g2colors = {
   nm1cablecolors.red:    g2cablecolors.red,
   nm1cablecolors.blue:   g2cablecolors.blue,
