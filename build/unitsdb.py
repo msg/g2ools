@@ -20,7 +20,7 @@
 #
 
 import string, sys
-sys.append.path('..')
+sys.path.append('..')
 from nord import printf
 
 def formatarray(data):
