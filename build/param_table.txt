@@ -1138,7 +1138,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('Treshold_42')
+    name('Threshold_42')
     low(0)
     high(42)
     default(18)
@@ -1506,7 +1506,7 @@ ParamKnowledge(
   )
   param(
     type(Param)
-    name('Treshold_127')
+    name('Threshold_127')
     low(0)
     high(127)
     default(0)

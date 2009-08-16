@@ -500,7 +500,7 @@ height 7
 parameters
 0 "attack" 0..127 "companderattack"
 1 "release" 0..127 "companderrelease"
-2 "threshold" 0..42 "compandertreshold"
+2 "threshold" 0..42 "companderthreshold"
 3 "ratio" 0..66 "companderratio"
 4 "ref level" 0..42 "companderref"
 5 "limiter" 0..24 "companderlimit"
@@ -2160,7 +2160,7 @@ height 7
 parameters
 0 "attack" 0..127 "companderattack"
 1 "release" 0..127 "companderrelease"
-2 "treshold" 0..84 "compandertreshold"
+2 "threshold" 0..84 "companderthreshold"
 3 "ratio" 0..66 "companderratio"
 4 "gate" 0..72 "compandergate"
 5 "hold" 0..127 "companderhold"

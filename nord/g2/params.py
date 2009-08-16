@@ -889,7 +889,7 @@ params = [
     definitions=['0 ~ Notes Only, 1 ~ Note+Ctrls'],
     comments=''
   ),
-  ParamDef(name='Treshold_42',
+  ParamDef(name='Threshold_42',
     low=0,
     high=42,
     default=18,
@@ -1181,7 +1181,7 @@ params = [
     definitions=['0 ~ Sine, 1 ~ Tri'],
     comments=''
   ),
-  ParamDef(name='Treshold_127',
+  ParamDef(name='Threshold_127',
     low=0,
     high=127,
     default=0,

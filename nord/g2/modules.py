@@ -2803,7 +2803,7 @@ modules = [
       OutputType('OutL',         g2conncolors.red,          horiz=19,vert=4),
     ]),
     params=ParamList([
-      ParamType('Threshold',    parammap.Treshold_42),
+      ParamType('Threshold',    parammap.Threshold_42),
       ParamType('Ratio',        parammap.CompressorRatio),
       ParamType('Attack',       parammap.CompressorAttack),
       ParamType('Release',      parammap.CompressorRelease),
@@ -3701,7 +3701,7 @@ modules = [
       OutputType('Env',          g2conncolors.blue,         horiz=17,vert=2),
     ]),
     params=ParamList([
-      ParamType('Treshold',     parammap.Treshold_127),
+      ParamType('Threshold',    parammap.Threshold_127),
       ParamType('Attack',       parammap.NoiseGateAttack),
       ParamType('Release',      parammap.NoiseGateRelease),
       ParamType('Active',       parammap.ActiveMonitor),
@@ -3883,7 +3883,7 @@ modules = [
       OutputType('Pitch',        g2conncolors.blue,         horiz=19,vert=1),
     ]),
     params=ParamList([
-      ParamType('Treshold',     parammap.Treshold_127),
+      ParamType('Threshold',    parammap.Threshold_127),
     ]),
     modes=ModeList([]),
   ),
@@ -4069,6 +4069,9 @@ def fromname(name): return __fromname[name.lower()]
 def fromtype(type): return __fromtype[type]
 
 if __name__ == '__main__':
+
+  __builtins__.printf = printf
+
   for module in modules:
     printf('%s.type: %d(0x%02x)\n', module.shortnm, module.type, module.type)
     for i in range(len(module.inputs)):
