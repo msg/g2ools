@@ -39,8 +39,8 @@ params = [
     low=0,
     high=127,
     default=64,
-    definitions=['0 ~ C-1, 64 ~ E4, 127 ~ G9', '0 ~ -64, 64 ~ 0, 127 ~ +63', '0 ~ 8.1756 Hz, 64 ~ 329.63 Hz, 127 ~ 12.55 kHz', '0 ~ x0.0248, 64 ~ x1.0000, 127 ~ x38.055', '0 ~ 0 Hz, 64 ~ 1:1, 127 ~ 64:1'],
-    comments='Modes : Note, Semi, Freq, Fac and Part'
+    definitions=['0 ~ -64, 64 ~ 0, 127 ~ +63', '0 ~ 8.1756 Hz, 64 ~ 329.63 Hz, 127 ~ 12.55 kHz', '0 ~ x0.0248, 64 ~ x1.0000, 127 ~ x38.055', '0 ~ 0 Hz, 64 ~ 1:1, 127 ~ 64:1'],
+    comments='Modes : Semi, Freq, Fac and Part'
   ),
   ParamDef(name='FreqFine',
     low=0,
