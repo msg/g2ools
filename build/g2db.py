@@ -212,6 +212,9 @@ def fromname(name): return __fromname[name.lower()]
 def fromtype(type): return __fromtype[type]
 
 if __name__ == '__main__':
+
+  __builtins__.printf = printf
+
   for module in modules:
     printf('%s.type: %d(0x%02x)\\n', module.shortnm, module.type, module.type)
     for i in range(len(module.inputs)):
