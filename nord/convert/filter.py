@@ -291,7 +291,6 @@ class ConvFilterBank(Convert):
 
     self.outputs[0] = mix11a.outputs.Out
 
-
 class ConvEqMid(ConvFilter):
   maing2module = 'EqPeak'
   parammap = ['Freq','Gain','Bandwidth',['Active','Bypass'],'Level']
