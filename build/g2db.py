@@ -199,17 +199,17 @@ for struct in modulestructs:
 
 f.write(''']
 
-__fromtype = {}
-__fromname = {}
+typemap = {}
+namemap = {}
 modulemap = ModuleMap()
 for module in modules:
-  __fromname[module.shortnm.lower()] = module
-  __fromtype[module.type] = module
+  typemap[module.shortnm.lower()] = module
+  namemap[module.type] = module
   name = module.shortnm.replace('-','_').replace('&','n')
   setattr(modulemap, name, module)
 
-def fromname(name): return __fromname[name.lower()]
-def fromtype(type): return __fromtype[type]
+def fromtype(type): return typemap[type]
+def fromname(name): return namemap[name.lower()]
 
 if __name__ == '__main__':
 

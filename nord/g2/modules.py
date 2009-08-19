@@ -4060,13 +4060,13 @@ typemap = {}
 namemap = {}
 modulemap = ModuleMap()
 for module in modules:
-  typemap[module.type] = module
-  namemap[module.shortnm.lower()] = module
+  typemap[module.shortnm.lower()] = module
+  namemap[module.type] = module
   name = module.shortnm.replace('-','_').replace('&','n')
   setattr(modulemap, name, module)
 
-def fromname(name): return namemap[name.lower()]
 def fromtype(type): return typemap[type]
+def fromname(name): return namemap[name.lower()]
 
 if __name__ == '__main__':
 
