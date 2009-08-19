@@ -4056,12 +4056,12 @@ modules = [
   ),
 ]
 
-typemap = {}
 namemap = {}
+typemap = {}
 modulemap = ModuleMap()
 for module in modules:
-  typemap[module.shortnm.lower()] = module
-  namemap[module.type] = module
+  namemap[module.shortnm.lower()] = module
+  typemap[module.type] = module
   name = module.shortnm.replace('-','_').replace('&','n')
   setattr(modulemap, name, module)
 
