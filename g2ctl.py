@@ -395,7 +395,7 @@ def cmd_loadslot(command, slot, filename):
   a.fromstring(data)
   g2usb.sendmsg(a.tolist())
   return 0
-add_command('loadslot',['slot','file'],'load a slot with file', cmd_loadslot)
+add_command('loadslot',['slot','file'],'load a slot with patch', cmd_loadslot)
 
 def bankpatch(location):
   bank,patch = map(int, location.split(':'))
