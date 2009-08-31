@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import os, string, sys, traceback
-from nord.g2.file import Pch2File, Prf2File, handle_uprate
+from nord.g2.file import Pch2File, Prf2File
+from nord.g2.misc import handle_uprate
 from nord import types
 import nord.g2.modules
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
