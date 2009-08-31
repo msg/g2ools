@@ -2,9 +2,9 @@
 
 from nord import printf
 from nord.types import Struct
+from nord.types import ParamDef
 
 class ParamMap(Struct): pass
-class ParamDef(Struct): pass
 
 params = [
   ParamDef(name='Dst_2',
@@ -193,7 +193,7 @@ params = [
     low=0,
     high=127,
     default=0,
-    definitions=['0 ~ {+-}0, 1 ~ {+-}0, ..., 64 ~ {+-}32, 65 ~ {+-}32*, ... , 126 ~ {+-}63*, 126 ~ {+-}63*'],
+    definitions=['0 ~ {+-}0, 1 ~ {+-}0, 64 ~ {+-}32, 65 ~ {+-}32*, 126 ~ {+-}63*, 126 ~ {+-}63*'],
     comments='* clipped at {+-}32 and the lowest bit is not effective'
   ),
   ParamDef(name='LfoRate_3',
@@ -480,7 +480,7 @@ params = [
     low=0,
     high=127,
     default=0,
-    definitions=['0 ~0, 127 ~ 127'],
+    definitions=['0 ~ 0, 127 ~ 127'],
     comments='One to one mapping with MIDI data values'
   ),
   ParamDef(name='MidiCh_20',
@@ -879,7 +879,7 @@ params = [
     low=0,
     high=17,
     default=0,
-    definitions=['0 ~ ch1, 1 ~ ch 2, 2 ~ ch3, 3 ~ ch4, 4 ~ ch5, 5 ~ ch6, 6 ~ ch7, 7 ~ ch8, 8 ~ ch9, 9 ~ ch10, 10 ~ ch11, 11 ~ ch12, 12 ~ ch13, 13 ~ ch14, 14 ~ ch15, 15 ~ ch16, 16 ~ This, 17 ~ keyb'],
+    definitions=['0 ~ ch1, 1 ~ ch2, 2 ~ ch3, 3 ~ ch4, 4 ~ ch5, 5 ~ ch6, 6 ~ ch7, 7 ~ ch8, 8 ~ ch9, 9 ~ ch10, 10 ~ ch11, 11 ~ ch12, 12 ~ ch13, 13 ~ ch14, 14 ~ ch15, 15 ~ ch16, 16 ~ This, 17 ~ keyb'],
     comments=''
   ),
   ParamDef(name='NoteZoneThru',
@@ -1234,7 +1234,7 @@ params = [
     low=0,
     high=1,
     default=0,
-    definitions=['0 ~ m, 1 ~ 1 - m'],
+    definitions=['0 ~ m, 1 ~ 1-m'],
     comments=''
   ),
   ParamDef(name='MonoKeyMode',
@@ -1281,7 +1281,18 @@ params = [
   ),
 ]
 
+def setup_map(param):
+  param.map = []
+  for i in range(len(param.definitions)):
+    map = { }
+    for nmval in param.definitions[i].split(','):
+      val, name = [ s.strip() for s in nmval.split('~') ]
+      name = name.replace(' ','_').lower()
+      map[name] = val
+    param.map.append(map)
+
 parammap = ParamMap()
 for param in params:
+  setup_map(param)
   setattr(parammap, param.name, param)
 

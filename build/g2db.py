@@ -88,9 +88,9 @@ f.write('''#!/usr/bin/env python
 
 from nord import printf
 from nord.types import Struct
+from nord.types import ParamDef
 
 class ParamMap(Struct): pass
-class ParamDef(Struct): pass
 
 params = [
 ''')
@@ -100,8 +100,19 @@ for param in params:
 
 f.write(''']
 
+def setup_map(param):
+  param.map = []
+  for i in range(len(param.definitions)):
+    map = { }
+    for nmval in param.definitions[i].split(','):
+      val, name = [ s.strip() for s in nmval.split('~') ]
+      name = name.replace(' ','_').lower()
+      map[name] = val
+    param.map.append(map)
+
 parammap = ParamMap()
 for param in params:
+  setup_map(param)
   setattr(parammap, param.name, param)
 
 ''')
@@ -129,7 +140,8 @@ modules = [
 
 for struct in modulestructs:
   printf('%s\n', struct.shortnm)
-  s = '''    type=%s,
+  s = '''  ModuleType(
+    type=%s,
     height=%s,
     longnm='%s',
     shortnm='%s',
@@ -191,11 +203,9 @@ for struct in modulestructs:
   else:
     s += '    modes=ModeList([]),\n'
 
-  s = '''  ModuleType(
-%s  ),
-''' % (s)
+  s += '  ),'
   printf('%s\n', s)
-  f.write(s)
+  f.write(s+'\n')
 
 f.write(''']
 
