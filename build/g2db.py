@@ -49,7 +49,7 @@ class Struct:
 
 paramlabels = { # [ param#, [ strlist ] ]
    50: { 1: ['Switch'], },                        # ConstSwM
-  180: { 1: ['Switch'], },                        # ConstSwT
+  188: { 1: ['Switch'], },                        # ConstSwT
   195: { 1: ['On'],     },                        # ModAmt
   184: { 1: ['Ch 1'],   },                        # Mix1-1A
   185: { 1: ['Ch 2'],   },                        # Mix1-1S
