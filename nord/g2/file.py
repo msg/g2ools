@@ -954,13 +954,14 @@ class ParameterLabels(Section):
     bit, self.area = getbits(0,2,data) # 0=fx,1=voice,2=morph
     bit, nmodules = getbits(bit,8,data)
 
-    #b = bit
-    #s = chr(nmodules)
-    #while b/8 < len(data):
-    #  b,c = getbits(b,8,data)
-    #  s += chr(c)
-    #printf('paramlabels:\n')
-    #printf('%s\n', hexdump(s))
+    if sectiondebug:
+      b = bit
+      s = chr(nmodules)
+      while b/8 < len(data):
+	b,c = getbits(b,8,data)
+	s += chr(c)
+      printf('paramlabels:\n')
+      printf('%s\n', hexdump(s))
 
     if self.area:
       area = patch.voice
@@ -1006,7 +1007,9 @@ class ParameterLabels(Section):
             p.labels.append(s)
         else:
           p.labels.append('')
-        #printf('%d %d %d %s\n', index, paramlen, param, p.labels)
+	if sectiondebug:
+          printf('%d %s %d %d %s\n', index, m.type.shortnm,
+	      paramlen, param, p.labels)
 
   def format(self, patch):
     data = self.data
@@ -1046,7 +1049,9 @@ class ParameterLabels(Section):
           param = m.params[i]
           if not hasattr(param,'labels'):
             continue
-          #printf('%d %d %d %s\n', m.index, 7*len(param.labels), i, param.labels)
+	  if sectiondebug:
+            printf('%d %s %d %d %s\n', m.index, m.type.shortnm,
+		7*len(param.labels), i, param.labels)
           ps = ''
           for nm in param.labels:
             ps += (nm+'\0'*7)[:7]
@@ -1056,8 +1061,9 @@ class ParameterLabels(Section):
 
       t += chr(m.index) + chr(len(s)) + s
 
-    #printf('paramlabels:\n')
-    #printf('%s\n', hexdump(t))
+    if sectiondebug:
+      printf('paramlabels:\n')
+      printf('%s\n', hexdump(t))
 
     for c in t:
       bit = setbits(bit,8,data,ord(c))
