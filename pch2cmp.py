@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys, os
+from nord import printf
 from nord.g2.file import Pch2File
 
 def cmpnm(a, b):

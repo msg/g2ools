@@ -3,6 +3,7 @@
 import struct, sys
 from array import array
 from home import hexdump
+from nord import printf
 
 def crc16(val, icrc):
   k = (((icrc>>8)^val)&0xff)<<8

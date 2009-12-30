@@ -21,6 +21,7 @@
 
 from nord.g2.file import Pch2File
 from nord.g2.categories import G2Categories
+from nord import printf
 
 def printdescription(patch):
   printf('patchdescription:\n')

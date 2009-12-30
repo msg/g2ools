@@ -4,6 +4,7 @@ import string, struct, sys
 from array import array
 from home import hexdump, bin
 import modules
+from nord import printf
 
 # calculate crc of 1 char
 def crc16(val, icrc):

@@ -21,6 +21,7 @@
 
 import re, string, sys
 
+from nord import printf
 from nord.net import addnet
 from nord.module import Module
 from nord.file import *

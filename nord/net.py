@@ -20,6 +20,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+from nord import printf
+
 '''These classes should not be used by user applications.  It's all
 internal representations of cable netlists of patches.'''
 

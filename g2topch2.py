@@ -8,8 +8,6 @@ import nord.g2.modules
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf
 
-__builtins__.printf = printf
-
 def debug(fmt, *a):
   if 1: printf(fmt, *a)
 

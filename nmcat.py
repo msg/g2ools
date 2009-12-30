@@ -21,6 +21,7 @@
 
 import sys
 sys.path.append('.')
+from nord import printf
 from nord.nm1.file import PchFile
 
 def printpatch(patch):
