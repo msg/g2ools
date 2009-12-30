@@ -5,6 +5,7 @@ import os,string,sys,math,traceback
 from optparse import OptionParser,make_option
 from array import array
 sys.path.append('.')
+from nord import printf
 from nord import units
 from nord.g2.file import Pch2File, MorphMap, crc
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
@@ -286,8 +287,8 @@ def main(argv):
       except KeyboardInterrupt:
         sys.exit(1)
       except Exception:
-        logging.error(traceback.format_execption())
-        return '%s\n%s' % (fname, traceback.format_execption())
+        logging.error(traceback.format_exc())
+        return '%s\n%s' % (fname, traceback.format_exc())
     return ''
 
   failedpatches = []
@@ -323,3 +324,4 @@ def main(argv):
 if __name__ == '__main__':
   logging.basicConfig(format='%(message)s')
   main(sys.argv)
+
