@@ -3468,9 +3468,7 @@ modules = [
     ]),
     params=ParamList([
       ParamType('Kbt',          parammap.Kbt_1),
-      ParamType('Sync',         parammap.OffOn,
-        labels=['Switch']
-      ),
+      ParamType('Sync',         parammap.OffOn),
       ParamType('RatioFixed',   parammap.RatioFixed),
       ParamType('FreqCoarse',   parammap.OpFreqCoarse),
       ParamType('FreqFine',     parammap.OpFreqFine),
@@ -3682,7 +3680,9 @@ modules = [
     ]),
     params=ParamList([
       ParamType('Lev',          parammap.LevBipUni),
-      ParamType('On',           parammap.OffOn),
+      ParamType('On',           parammap.OffOn,
+        labels=['Switch']
+      ),
       ParamType('BipUni',       parammap.BipUni),
     ]),
     modes=ModeList([]),
