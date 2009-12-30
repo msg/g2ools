@@ -272,6 +272,28 @@ class G2Patch(G2Section):
     self.fx_modules = { }
     self.modules = self.voice_modules
 
+  def update_inputs(self, net, uprate):
+    # loop through all net inputs
+    # get proper color based on rate
+    # update all cables connected to each input
+    for input in net.inputs:
+      if not net.output:
+	continue
+
+      color = g2cablecolors.white
+      if net.output.rate == g2conncolors.blue_red:
+	color = [g2cablecolors.blue, g2cablecolors.red][uprate]
+      if net.output.rate == g2conncolors.red:
+	color = g2cablecolors.red
+      elif net.output.rate == g2conncolors.blue:
+	color = g2cablecolors.blue
+      elif net.output.rate == g2conncolors.yellow_orange:
+	color = [g2cablecolors.yellow, g2cablecolors.orange][uprate]
+
+      for cable in input.cables:
+	if cable.color == g2cablecolors.white:
+	  cable.color = color
+
   def update_rates(self):
     # loop through all module connections
     # check output rate and adjust rates of modules that are connected
@@ -282,25 +304,7 @@ class G2Patch(G2Section):
         if net.output == None:
 	  continue
 
-	uprate = net.output.module.uprate
-
-	for input in net.inputs:
-	  if not net.output:
-	    continue
-
-	  color = g2cablecolors.white
-	  if net.output.rate == g2conncolors.blue_red:
-	    color = [g2cablecolors.blue, g2cablecolors.red][uprate]
-	  if net.output.rate == g2conncolors.red:
-	    color = g2cablecolors.red
-	  elif net.output.rate == g2conncolors.blue:
-	    color = g2cablecolors.blue
-	  elif net.output.rate == g2conncolors.yellow_orange:
-	    color = [g2cablecolors.yellow, g2cablecolors.orange][uprate]
-
-	  for cable in input.cables:
-	    if cable.color == g2cablecolors.white:
-	      cable.color = color
+	self.update_inputs(net, net.output.module.uprate)
 
   def write(self):
     printf('Writing %s\n', self.filename + '.pch2')
@@ -460,7 +464,6 @@ class G2File(object):
   def build(self):
     for lineno, line in self.build_file(self.topfile):
       self.parse_command(cleanline(line), lineno)
-    
 
   def parse_command(self, line, lineno):
     args = [ l.strip().lower() for l in line.split() ]
