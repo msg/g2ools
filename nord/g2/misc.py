@@ -22,7 +22,7 @@ from nord.g2.colors import g2conncolors
 
 def handle_uprate(g2area):
   # parse the entire netlist of the area and .uprate=1 all
-  # modules with blue_red and yello_orange inputs connected to red outputs.
+  # modules with blue_red and yellow_orange inputs connected to red outputs.
   # scan module list until we don't change any modules
   done = 0
   while not done:
