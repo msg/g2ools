@@ -10,7 +10,7 @@ from nord import units
 from nord.g2.file import Pch2File, MorphMap, crc
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 from nord.convert.version import version as g2oolsversion
-import dxtable
+from nord.convert.dx7 import dxtable
 
 class DX7Converter: 
   def __init__(self):
