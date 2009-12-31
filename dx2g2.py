@@ -183,9 +183,10 @@ def convert(fname,options):
         lfop.OutputType = 1 # PosInv
         dxconv.lfoselect.params.Sel.variations[i] = 1
 
-      lfop.Rate.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][1]
-      lfop.Range.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][0]
-      lfop.RateMod.variations[i] = dxtable.lfo[dxpatch.lfo.Rate][2]
+      rate = min(dxpatch.lfo.Rate, len(dxtable.lfo)-1)
+      lfop.Rate.variations[i] = dxtable.lfo[rate][1]
+      lfop.Range.variations[i] = dxtable.lfo[rate][0]
+      lfop.RateMod.variations[i] = dxtable.lfo[rate][2]
       dxconv.lfodelay.params.Attack.variations[i] = \
           dxtable.lfo[dxpatch.lfo.Delay][3]
       lfop.PolyMono.variations[i] = dxpatch.lfo.Sync
