@@ -84,8 +84,19 @@ for pch2 in pch2s:
 for k in p.keys():
   a = p[k]
   printf('net size %s:\n', k)
-  for i in range(len(a)):
-    for j in range(i+1,len(a)):
-      if cmpnetlist(a[i].patch.voice.netlist,a[j].patch.voice.netlist) == 0:
-        printf('Match %s %s\n', a[i].fname, a[j].fname)
+  while len(a):
+    b = a.pop(0)
+    matches = [b]
+    j = 0
+    while j < len(a):
+      if cmpnetlist(b.patch.voice.netlist,a[j].patch.voice.netlist) == 0:
+        matches.append(a.pop(j))
+      else:
+        j += 1
+    if len(matches) == 1:
+      continue
+    printf(' matches:\n')
+    for match in matches:
+      fname = os.path.basename(match.fname)
+      printf('  %s\n', fname)
       
