@@ -20,6 +20,7 @@ def getnumbers(fname):
       return eval(s)
   a = [ lines[0].split('\t')]
   a += map(lambda line: map(emptyzero, line.split('\t')), lines[1:])
+  print a
   return a
 
 def interpolate(indexvals):
@@ -61,7 +62,7 @@ dxlfo = [ [dxlfo[i+1][1],dxlforate[i][1],dxlfomod[i][1],dxlfoattack[i][1]]
 #  [dxpitcheglev[i][1]+64,dxpitchegrate[i][0]] for i in range(len(dxpitcheglev))]
 dxpmodsens = getnumbers('dxpmodsens.txt')[1:]
 
-f=open('../dxtable.py','w')
+f=open('../nord/convert/dx7/dxtable.py','w')
 f.write('''
 #
 # dxtable.py - DX7 convertion tables
