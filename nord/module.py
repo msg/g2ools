@@ -84,7 +84,6 @@ class Array(list):
   def add(self, nm, obj, index):
     setattr(self, nm.lower(), obj)
     self[index] = obj
-    #self.append(obj)
 
   def __setattr__(self, nm, val):
     self.__dict__[nm.lower()] = val
