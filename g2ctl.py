@@ -183,13 +183,13 @@ CMD_RESP = 0x00
 
 class G2USBInterface:
   def __init__(self):
-    vendid,prodid=0xffc,2
+    vendorid, productid = 0xffc, 2 # clavia, g2
 
     # find g2 usb device
     g2dev = None
     for bus in usb.busses():
       for device in bus.devices:
-	if device.idVendor == vendid and device.idProduct == prodid:
+	if device.idVendor == vendorid and device.idProduct == productid:
 	  g2dev = device
     if not g2dev:
       raise 'No g2 device found'
@@ -339,7 +339,21 @@ def formatname(name):
     return name[:16]
 
 ###################### commands ########################
-g2usb = G2USBInterface()
+class G2Interface:
+  def __init__(self):
+    self.usb = None
+
+  def __setattribute__(self, name, value):
+    if self.usb == None:
+      self.usb = G2USBInterface()
+    setattr(self.usb, name, value)
+
+  def __getattribute__(self, name):
+    if self.usb == None:
+      self.usb = G2USBInterface()
+    return getattr(self.usb, name)
+
+g2usb = G2Interface()
 
 def cmd_list(command):
   JUMP_PATCH, NEXT_BANK, NEXT_MODE, CONTINUE = [ chr(i) for i in [1,3,4,5] ]
