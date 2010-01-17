@@ -37,6 +37,8 @@ NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
 NKNOBS = 120    # 120 knob settings
 
+FX, VOICE, SETTINGS = 0, 1, 2
+
 class G2Error(Exception):
   '''G2Error - exception for throwing an unrecoverable error.'''
   def __init__(self, value):
@@ -701,24 +703,16 @@ class KnobAssignments(Section):
           patch = perf.patches[k.slot]
         else:
           k.slot = 0
-        if area == 0:
-          m = patch.fx.findmodule(index)
+
+        if area == FX or area == VOICE:
+          m = [patch.fx,patch.voice][area].findmodule(index)
           if m:
             k.param = m.params[param]
           else:
             k.assigned = 0
             continue
-        elif area == 1:
-          m = patch.voice.findmodule(index)
-          if m:
-            k.param = m.params[param]
-          else:
-            k.assigned = 0
-            continue
-        elif area == 2:
-          #printf('%d %d %d %d\n', area,index,k.isled,param)
+        elif area == SETTINGS:
           k.param = patch.settings.morphs[param]
-        #printf('  %s%d-%d: %d %d\n', 'ABCDE'[i/24],(i%24)>>3,(i%24)&7, index,param)
         k.param.knob = k
 
   def format(self, patch):
@@ -751,19 +745,24 @@ class CtrlAssignments(Section):
   def parse(self, patch, data):
     bit,nctrls  = getbits(0,7,data)
     patch.ctrls = [ Ctrl() for i in range(nctrls)]
+    settings = patch.settings
 
     for i in range(nctrls):
       m = patch.ctrls[i]
       bit,m.midicc = getbits(bit,7,data)
-      bit,m.type = getbits(bit,2,data) # 0:FX, 1:Voice, 2:System/Morph
+      bit,m.type = getbits(bit,2,data) # FX, VOICE, SETTINGS
       bit,index = getbits(bit,8,data)
       bit,param = getbits(bit,7,data)
-      if m.type == 0:
+      m.index = index
+      if m.type == FX:
         m.param = patch.fx.findmodule(index).params[param]
-      elif m.type == 1:
+      elif m.type == VOICE:
         m.param = patch.voice.findmodule(index).params[param]
-      elif m.type == 2:
-        m.param = patch.settings.morphs[index]
+      elif m.type == SETTINGS:
+        if index < 2:
+          m.param = settings.morphs[param]
+	else:
+	  m.param = getattr(settings,settings.groups[index-2][param])
       m.param.ctrl = m
 
   def format(self, patch):
@@ -775,10 +774,10 @@ class CtrlAssignments(Section):
       m = patch.ctrls[i]
       bit = setbits(bit,7,data,m.midicc)
       bit = setbits(bit,2,data,m.type)
-      if m.type < 2:
+      if m.type < SETTINGS:
         index,param = m.param.module.index,m.param.index
       else:
-        index,param = m.param.index,0
+        index,param = m.param.index,m.param.param
       bit = setbits(bit,8,data,index)
       bit = setbits(bit,7,data,param)
 
