@@ -67,6 +67,7 @@ class Description(object):
 
 class PatchDescription(Section):
   '''PatchDescription Section subclass'''
+  type = 0x21
   def parse(self, patch, data):
     desc = patch.description = Description()
 
@@ -110,6 +111,7 @@ class PatchDescription(Section):
 
 class ModuleList(Section):
   '''ModuleList Section subclass'''
+  type = 0x4a
   def parse(self, patch, data):
     bit,self.area = getbits(0,2,data)
     bit,nmodules = getbits(bit,8,data)
@@ -210,6 +212,7 @@ class ModuleList(Section):
 
 class CurrentNote(Section):
   '''CurrentNote Section subclass'''
+  type = 0x69
   def parse(self, patch, data):
     lastnote = patch.lastnote = Note()
     bit, lastnote.note    = getbits(0,7,data)
@@ -266,6 +269,7 @@ def validcable(area, smodule, sconn, direction, dmodule, dconn):
 
 class CableList(Section):
   '''CableList Section subclass'''
+  type = 0x52
   def parse(self, patch, data):
 
     bit,self.area = getbits(0,2,data)
@@ -373,6 +377,7 @@ class Settings(object):
 
 class PatchSettings(Section):
   '''PatchSettings Section subclass'''
+  type = 0x4d
   def parse(self, patch, data):
     settings = patch.settings = Settings()
 
@@ -548,6 +553,7 @@ class PatchSettings(Section):
 
 class ModuleParameters(Section):
   '''ModuleParameters Section subclass'''
+  type = 0x4d
   def parse(self, patch, data):
     bit,self.area   = getbits(0,2,data) # (0=fx,1=voice)
     bit,nmodules    = getbits(bit,8,data)
@@ -614,6 +620,7 @@ class ModuleParameters(Section):
 
 class MorphParameters(Section):
   '''MorphParameters Section subclass'''
+  type = 0x65
   def parse(self, patch, data):
     bit,nvariations = getbits(0,8,data)
     bit,nmorphs     = getbits(bit,4,data)
@@ -684,6 +691,7 @@ class MorphParameters(Section):
 
 class KnobAssignments(Section):
   '''KnobAssignments Section subclass'''
+  type = 0x62
   def parse(self, patch, data):
     bit,nknobs = getbits(0,16,data)
     patch.knobs = [ Knob() for i in range(nknobs)]
@@ -748,6 +756,7 @@ class KnobAssignments(Section):
 
 class CtrlAssignments(Section):
   '''CtrlAssignments Section subclass'''
+  type = 0x60
   def parse(self, patch, data):
     bit,nctrls  = getbits(0,7,data)
     patch.ctrls = [ Ctrl() for i in range(nctrls)]
@@ -786,6 +795,7 @@ class CtrlAssignments(Section):
 
 class MorphLabels(Section):
   '''MorphLabels Section subclass'''
+  type = 0x5b
   def parse(self, patch, data):
     bit,self.area = getbits(0,2,data)   # 0=fx,1=voice,2=morph
 
@@ -837,6 +847,7 @@ class MorphLabels(Section):
 
 class ParameterLabels(Section):
   '''ParameterLabels Section subclass'''
+  type = 0x5b
   def parse(self, patch, data):
 
     bit, self.area = getbits(0,2,data) # 0=fx,1=voice,2=morph
@@ -960,6 +971,7 @@ class ParameterLabels(Section):
 
 class ModuleNames(Section):
   '''ModuleNames Section subclass'''
+  type = 0x5a
   def parse(self, patch, data):
     bit,self.area = getbits(0,2,data)
     bit,self.unk1 = getbits(bit,6,data)
@@ -1008,6 +1020,7 @@ class ModuleNames(Section):
 
 class TextPad(Section):
   '''TextPad Section subclass'''
+  type = 0x6f
   def parse(self, patch, data):
     patch.textpad = data
 
@@ -1021,24 +1034,19 @@ class Pch2File(object):
    and parsing all 4 patches within the .prf2 file.
 '''
   patchsections = [
-    PatchDescription(type=0x21),
-    ModuleList(type=0x4a,area=1),
-    ModuleList(type=0x4a,area=0),
-    CurrentNote(type=0x69),
-    CableList(type=0x52,area=1),
-    CableList(type=0x52,area=0),
-    PatchSettings(type=0x4d,area=2),
-    ModuleParameters(type=0x4d,area=1),
-    ModuleParameters(type=0x4d,area=0),
-    MorphParameters(type=0x65),
-    KnobAssignments(type=0x62),
-    CtrlAssignments(type=0x60),
-    MorphLabels(type=0x5b,area=2),
-    ParameterLabels(type=0x5b,area=1),
-    ParameterLabels(type=0x5b,area=0),
-    ModuleNames(type=0x5a,area=1),
-    ModuleNames(type=0x5a,area=0),
-    TextPad(type=0x6f),
+    PatchDescription(),
+    ModuleList(area=1), ModuleList(area=0),
+    CurrentNote(),
+    CableList(area=1), CableList(area=0),
+    PatchSettings(area=2),
+    ModuleParameters(area=1), ModuleParameters(area=0),
+    MorphParameters(),
+    KnobAssignments(),
+    CtrlAssignments(),
+    MorphLabels(area=2),
+    ParameterLabels(area=1), ParameterLabels(area=0),
+    ModuleNames(area=1), ModuleNames(area=0),
+    TextPad(),
   ]
   standardtxthdr = '''Version=Nord Modular G2 File Format 1\r
 Type=%s\r
@@ -1128,6 +1136,7 @@ Info=BUILD %d\r
 
 class PerformanceDescription(Section):
   '''PerformanceDescription Section subclass'''
+  type = 0x11
   def parse(self, perf, data):
     desc = perf.description = Description()
 
@@ -1197,14 +1206,18 @@ class PerformanceDescription(Section):
     last = (bit+7)>>3
     return data[:last].tostring()
 
+class GlobalKnobAssignments(KnobAssignments):
+  '''GlobalKnobAssignments Section subclasss'''
+  type = 0x5f
+
 class Prf2File(Pch2File):
   '''Prf2File(filename) -> load a nord modular g2 performance.'''
   def __init__(self, fname=None):
     self.type = 'Performance'
     self.binrev = 1
     self.performance = Performance(fromname)
-    self.perfsection = PerformanceDescription(type=0x11)
-    self.globalsection = KnobAssignments(type=0x5f)
+    self.perfsection = PerformanceDescription()
+    self.globalsection = GlobalKnobAssignments()
     if fname:
       self.read(fname)
 
