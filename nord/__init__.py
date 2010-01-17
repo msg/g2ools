@@ -20,3 +20,7 @@
 def printf(fmt, *a):
   import sys
   sys.stdout.write(fmt % a)
+
+def sprintf(fmt, *a):
+  return fmt % a
+
