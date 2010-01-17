@@ -44,22 +44,13 @@ class G2Error(Exception):
   def __str__(self):
     return repr(self.value)
 
-class Struct(object):
-  '''Struct - generic class for creating named variables in objects
-  i.e. s = Struct(one=1,two=2,three=3,...)
-     contains: s.one, s.two, s.three
-'''
-  def __init__(self, **kw):
-    self.__dict__ = kw
-
-zeros = array('B', [0] * (64<<10))
-class Section(Struct):
+class Section(object):
   '''Section abstract class that represents a section of .pch2 file.
   all sections objects have parse() and format() methods.
 '''
   def __init__(self, **kw):
-    super(Section,self).__init__(**kw)
-    self.data = zeros[:]
+    self.__dict__ = kw
+    self.data = array('B', [0] * (64<<10)) # max 64k section size
 
 class Description(object):
   '''Description class for patch/performance description.'''
@@ -1102,7 +1093,7 @@ Info=BUILD %d\r
   def formatpatch(self, patch):
     s = ''
     for section in Pch2File.patchsections:
-      section.data[:] = zeros[:]
+      section.data = array('B', [0] * (64<<10)) # max 64k section size
       f = section.format(patch)
       if sectiondebug:
         nm = section.__class__.__name__
@@ -1240,7 +1231,7 @@ class Prf2File(Pch2File):
     return off
 
   def formatsection(self, section, total=0):
-    section.data[:] = zeros[:]
+    section.data = array('B', [0] * (64<<10)) # max 64k section size
     f = section.format(self.performance)
     if sectiondebug:
       nm = section.__class__.__name__
