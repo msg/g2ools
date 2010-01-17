@@ -20,6 +20,10 @@
 #
 from nord.g2.colors import g2conncolors
 
+def midicc_reserved(cc):
+  reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97 ]+range(120,128)
+  return cc in reservedmidiccs
+
 def handle_uprate(g2area):
   # parse the entire netlist of the area and .uprate=1 all
   # modules with blue_red and yellow_orange inputs connected to red outputs.

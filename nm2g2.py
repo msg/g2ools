@@ -26,7 +26,7 @@ from glob import glob
 from exceptions import KeyboardInterrupt
 sys.path.append('.')
 from nord.g2.file import Pch2File
-from nord.g2.misc import handle_uprate
+from nord.g2.misc import handle_uprate, midicc_reserved
 from nord.file import MorphMap
 from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 from nord.nm1.file import PchFile
@@ -525,7 +525,7 @@ class NM2G2Converter:
     # handle Knobs
     self.log.info('knobs:')
     #knobmap = [0,1,2,3,4,5,8,9,10,11,12,13,16,17,18,19,20,21]
-    knobmap = [0,8,16,1,9,17,2,10,18,3,11,19,4,12,20,5,13,21]
+    knobmap = [0,8,16, 1,9,17, 2,10,18, 3,11,19, 4,12,20, 5,13,21]
     for knob in nmpatch.knobs:
       if knob.knob > 18: # 19=pedal,20=afttch,22=on/off
 	continue
@@ -555,7 +555,6 @@ class NM2G2Converter:
     g2patch,nmpatch = self.g2patch,self.nmpatch
     # handle Midi CCs
     self.log.info('MIDI CCs:')
-    reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97]+range(120,128)
     from nord.g2.file import Ctrl
     for ctrl in nmpatch.ctrls:
       param = ctrl.param
@@ -564,7 +563,7 @@ class NM2G2Converter:
 	  param.type.name, param.module.horiz, param.module.vert)
       else:
 	s = ' CC%d' % ctrl.midicc
-      if ctrl.midicc in reservedmidiccs:
+      if midicc_reserved(ctrl.midicc):
 	self.log.warning('%s cannot be used (reserved)' % s)
 	continue
       m = Ctrl()
@@ -581,7 +580,7 @@ class NM2G2Converter:
 	  continue
       else:
 	m.param = self.morphmap[ctrl.param.index-1]
-	m.type = 2 # system
+	m.type = 2 # settings
       g2patch.ctrls.append(m)
 
 
