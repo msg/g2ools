@@ -117,7 +117,7 @@ crc(PyObject *self, PyObject *args)
   if(!PyArg_ParseTuple(args, "s#", &s, &l)) {
     return NULL;
   }
-  ccrc = crc_update(0, s, l);
+  ccrc = crc_update(0, (unsigned char *)s, l);
   return Py_BuildValue("i", ccrc);
 }
 
@@ -176,7 +176,7 @@ pygetbits(PyObject *self, PyObject *args)
   byte = bit >> 3;
   sp = (short *)(ap + byte);
   value = getbits(bswap16(*sp),16-(bit&7)-nbits,nbits);
-  if (sign) {
+  if (sign && (value>>(nbits-1))) {
     value |= ~0 << nbits;
   }
   return Py_BuildValue("ii", bit+nbits, value);
@@ -191,13 +191,13 @@ static PyMethodDef G2BitsMethods[] = {
 
 /* PyMODINIT_FUNC */
 void
-initbits(void)
+init_bits(void)
 {
   PyObject *m;
 
-  m = Py_InitModule("bits", G2BitsMethods);
+  m = Py_InitModule("_bits", G2BitsMethods);
 
-  ErrorObject = PyErr_NewException("bits.error", NULL, NULL);
+  ErrorObject = PyErr_NewException("_bits.error", NULL, NULL);
   Py_INCREF(ErrorObject);
   PyModule_AddObject(m, "error", ErrorObject);
 }

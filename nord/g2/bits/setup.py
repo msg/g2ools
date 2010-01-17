@@ -2,7 +2,7 @@
 from distutils.core import setup, Extension
 #from numpy.distutils.core import setup, Extension
 
-module = Extension('bits', sources = ['bits.c'])
+module = Extension('_bits', sources = ['bits.c'])
 
 setup (name = 'G2 Bit Processing',
        version = '1.0',
