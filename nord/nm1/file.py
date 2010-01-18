@@ -22,7 +22,7 @@
 import re, string, sys
 
 from nord import printf
-from nord.net import addnet
+from nord.net import NetList
 from nord.module import Module
 from nord.file import *
 from modules import fromname, fromtype
@@ -124,7 +124,7 @@ class CableDump(Section):
     else:
       area = self.patch.fx
     area.cables = []
-    area.netlist = []
+    area.netlist = NetList()
     area.cables = [ None ] * len(self.lines)
     for i in range(len(self.lines)):
       color,dmod,dconn,ddir,smod,sconn,sdir = map(int, lines[i].split())
@@ -151,7 +151,7 @@ class CableDump(Section):
       dest.cables.append(c)
 
       # update netlist with source and dest
-      addnet(area.netlist, source, dest)
+      area.netlist.add(source, dest)
 
 class ParameterDump(Section):
   def parse(self):

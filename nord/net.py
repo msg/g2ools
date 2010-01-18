@@ -36,122 +36,115 @@ class Net:
     self.output = output
     self.inputs = inputs
 
-def combinenet(netlist, source, dest):
-  if source.net.output and dest.net.output and (
-      source.net.output != dest.net.output): # shouldn't happen
-    printf('source ')
-    printnet(source.net)
-    printf('dest ')
-    printnet(dest.net)
-    raise NetError(
-      'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
-      source.module.type.shortnm, source.type.name,
-      dest.net.output.module.type.shortnm, dest.net.output.type.name))
+class NetList:
+  def __init__(self):
+    self.nets = []
 
-  #printf('Combine:\n')
-  #printf(' source ')
-  #printnet(source.net)
-  #printf(' dest ')
-  #printnet(dest.net)
+  def copy(self):
+    new = NetList()
+    new.nets = self.nets[:]
+    return new
 
-  netlist.remove(dest.net)
+  def combine(self, source, dest):
+    sout, dout = source.net.output, dest.net.output
+    if sout and dout and (sout != dout): # shouldn't happen
+      printf('source ')
+      printnet(source.net)
+      printf('dest ')
+      printnet(dest.net)
+      raise NetError(
+	'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
+	sout.module.type.shortnm, sout.type.name,
+	dout.module.type.shortnm, dout.type.name))
 
-  if dest.net.output:
-    source.net.output = dest.net.output
-    source.net.output.net = source.net
+    self.nets.remove(dest.net)
 
-  source.net.inputs += dest.net.inputs
-  for input in dest.net.inputs:
-    #source.net.inputs.append(input)
-    input.net = source.net
+    if dout:
+      source.net.output = dout
+      source.net.output.net = source.net
 
-  #printf(' combine ')
-  #printnet(source.net)
-  #printf('\n')
-  return
+    source.net.inputs += dest.net.inputs
+    for input in dest.net.inputs:
+      input.net = source.net
 
-# addnet - update the netlist adding source and dest
-def addnet(netlist, source, dest):
-  if source.net and dest.net and source.net == dest.net:
-    printf('Connecting already created net\n')
-    printf('%r %r\n', source.net, dest.net)
-    printf('  %d:%s -> %d:%s\n', source.module.index,source.type.name,
-        dest.module.index,dest.type.name)
-    printf('source net:\n')
-    printnet(source.net)
-    printf('dest net:\n')
-    printnet(dest.net)
-    return
+  def add(self, source, dest):
+    snet, dnet = source.net, dest.net
+    if snet and dnet and snet == dnet:
+      printf('net already created\n')
+      printf('%r %r\n', snet, dnet)
+      printf('  %d:%s -> %d:%s\n',
+          source.module.index, source.type.name,
+	  dest.module.index, dest.type.name)
+      printf('source net:\n')
+      printnet(snet)
+      printf('dest net:\n')
+      printnet(dnet)
+      return
 
-  if source.net and dest.net: # two separate nets need to be combined
-    combinenet(netlist, source, dest)
-    return
+    if snet and dnet: # two separate nets need to be combined
+      self.combine(source, dest)
+      return
 
-  net = None
-  if source.net:
+    net = None
+    if snet:
+      net = snet
+      net.inputs.append(dest)
+    elif dnet:
+      net = dnet
+      if source.direction:
+	if net.output and source != net.output:
+	  raise NetError(
+	    'both nets have outputs: source=%s:%s net.source=%s:%s' % (
+	    source.module.type.shortnm, source.type.name,
+	    net.output.module.type.shortnm, net.output.type.name))
+	net.output = source
+      else:
+	net.inputs.append(source)
+
+    # add new net if one not found
+    if not net:
+      if source.direction:
+	net = Net(source,[dest])
+      else:
+	net = Net(None,[dest,source])
+      self.nets.append(net)
+
+    # update source and dest nets list
+    if not source.net: source.net = net
+    if not dest.net:   dest.net = net
+
+  def delete(self, source, dest):
+    if source.net != dest.net:
+      raise NetError('source=%s:%s dest=%s:%s not connected' % (
+	source.module.name,source.type.name,
+	dest.module.name,dest.type.name))
+      return
+    if not source.net in self.nets:
+      raise NetError('source=%s:%s dest=%s:%s not in netlist' % (
+	source.module.name,source.type.name,
+	dest.module.name,dest.type.name))
+      return
+
+    # remove net from netlist and rebuild two nets
     net = source.net
-    net.inputs.append(dest)
-  elif dest.net:
-    net = dest.net
-    if source.direction:
-      if net.output and source != net.output:
-        raise NetError(
-          'Two outputs connected to net: source=%s:%s net.source=%s:%s' % (
-          source.module.type.shortnm, source.type.name,
-          net.output.module.type.shortnm, net.output.type.name))
-      net.output = source
+    if net.output:
+      net.output.net = None
+    for input in net.inputs:
+      input.net = None
+    self.nets.remove(net)
+
+  def printnet(self, net):
+    if not net:
+      printf('<empty>\n')
+      return
+    if net.output:
+      nout = net.output
+      out = '%s(%s):%s' % (nout.module.name, nout.module.type.shortnm,
+	  nout.type.name)
     else:
-      net.inputs.append(source)
-
-  # add new net if one not found
-  if not net:
-    if source.direction:
-      net = Net(source,[dest])
-    else:
-      net = Net(None,[dest,source])
-    netlist.append(net)
-
-  # update source and dest nets list
-  if not source.net:
-    source.net = net
-
-  if not dest.net:
-    dest.net = net
-
-# delnet - remove a net from the netlist with checks
-def delnet(netlist, source, dest):
-  #printf('delnet source=%s:%s dest=%s:%s\n', (
-  #    source.module.name,source.type.name,
-  #    dest.module.name,dest.type.name)
-  if source.net != dest.net:
-    raise NetError('source=%s:%s dest=%s:%s not connected' % (
-      source.module.name,source.type.name,
-      dest.module.name,dest.type.name))
-    return
-  if not source.net in netlist:
-    raise NetError('source=%s:%s dest=%s:%s not in netlist' % (
-      source.module.name,source.type.name,
-      dest.module.name,dest.type.name))
-    return
-  # remove net from netlist and rebuild two nets
-  net = source.net
-  if net.output:
-    net.output.net = None
-  for input in net.inputs:
-    input.net = None
-  netlist.remove(net)
-
-def printnet(net):
-  if not net:
-    printf('<empty>\n')
-    return
-  if net.output:
-    out = '%s(%s):%s' % (net.output.module.name, net.output.module.type.shortnm,
-        net.output.type.name)
-  else:
-    out = '<none>'
-  inp = ','.join([
-      '%s(%s):%s' % (inp.module.name, inp.module.type.shortnm, inp.type.name)
-      for inp in net.inputs])
-  printf('%s -> %s\n', out, inp)
+      out = '<none>'
+    inp = ','.join([
+	'%s(%s):%s' % (inp.module.name, inp.module.type.shortnm, inp.type.name)
+	for inp in net.inputs])
+    printf('%s -> %s\n', out, inp)
 

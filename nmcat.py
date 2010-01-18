@@ -55,7 +55,7 @@ def printpatch(patch):
       		dmod.name, dest.type.name, cable.color)
           
     printf(' nets:\n')
-    for net in area.netlist:
+    for net in area.net.netlist:
       source = net.output
       if source:
         smod = area.findmodule(source.module.index)

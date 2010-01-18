@@ -22,7 +22,6 @@
 import string, struct, sys
 from array import array
 
-from nord.net import addnet
 from nord.module import Module
 from nord.g2.modules import fromname
 from nord.file import *
@@ -264,7 +263,7 @@ class CableList(Section):
       c.source.cables.append(c)
       c.dest.cables.append(c)
 
-      addnet(area.netlist, c.source, c.dest)
+      area.netlist.add(c.source, c.dest)
 
   def format(self, patch):
     data = self.data

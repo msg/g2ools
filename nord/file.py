@@ -19,30 +19,22 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord import printf
-from net import addnet, delnet, printnet
+from net import NetList
 from nord.module import Module
-
-def out(x):
-  if x < 32 or x > 127:
-    return '.'
-  return chr(x)
 
 def hexdump(bytes,addr=0,size=1):
   from array import array
   '''hexdump(bytes,addr,size) -> return hex dump of size itmes using addr as address'''
+  def out(x):
+    return [chr(x),'.'][x < 32 or x > 127]
+
   s = []
   if size == 4:
-    a = array('L', [])
-    fmt = '%08x'
-    l = 17
+    a, fmt, l = array('L', []), '%08x', 17
   elif size == 2:
-    a = array('H', [])
-    fmt = '%04x'
-    l = 19
+    a, fmt, l = array('H', []), '%04x', 19
   else:
-    a = array('B', [])
-    fmt = '%02x'
-    l = 23
+    a, fmt, l = array('B', []), '%02x', 23
   a.fromstring(bytes)
   for off in range(0,len(bytes),16):
     hex = [fmt % i for i in a[off/size:(off+16)/size]]
@@ -113,7 +105,7 @@ for the voice and fx areas of a nord modules g2 patch.
     self.name = name
     self.modules = []
     self.cables = []
-    self.netlist = []
+    self.netlist = NetList()
 
   def findmodule(self, index):
     '''findmodule(index) -> module at index or None'''
@@ -187,7 +179,7 @@ for the voice and fx areas of a nord modules g2 patch.
     cable.dest = dest
     dest.cables.append(cable)
 
-    addnet(self.netlist, cable.source, cable.dest)
+    self.netlist.add(cable.source, cable.dest)
 
   def disconnect(self, cable):
     '''disconnect(cable) -> None
@@ -200,7 +192,7 @@ for the voice and fx areas of a nord modules g2 patch.
     #  cable.source.module.name,cable.source.type.name,
     #  cable.dest.module.name,cable.dest.type.name)
     #printf(' cable ')
-    #printnet(cable.source.net)
+    #self.netlist.printnet(cable.source.net)
 
     # collect all the cables on the net
     cables = []
@@ -213,22 +205,20 @@ for the voice and fx areas of a nord modules g2 patch.
     source.cables.remove(cable)
     dest.cables.remove(cable)
     self.cables.remove(cable)
-    delnet(self.netlist,source,dest)
+    self.netlist.delete(source, dest)
 
     source.net = dest.net = None
     for c in cables:
-      #printf('connect\n')
-      #printf(' source ')
-      #printnet(c.source.net)
+      #printf('connect\n source')
+      #self.printnet(c.source.net)
       #printf(' dest ')
-      #printnet(c.dest.net)
-      addnet(self.netlist,c.source,c.dest)
+      #self.printnet(c.dest.net)
+      self.netlist.add(c.source, c.dest)
 
-    #printf('after disconnect\n')
-    #printf(' source')
-    #printnet(source.net)
+    #printf('after disconnect\n source')
+    #self.printnet(source.net)
     #printf(' dest')
-    #printnet(dest.net)
+    #self.printnet(dest.net)
 
   def removeconnector(self, connector):
     '''removeconnector(connector) -> connector
@@ -242,7 +232,7 @@ for the voice and fx areas of a nord modules g2 patch.
 
     #printf('removeconnector %s:%s\n', connector.module.name,connector.type.name)
     #printf('before remove ')
-    #printnet(connector.net)
+    #self.printnet(connector.net)
     while len(connector.cables):
       cable = connector.cables[0]
       source,dest = cable.source,cable.dest
@@ -269,10 +259,10 @@ for the voice and fx areas of a nord modules g2 patch.
         else:
           self.connect(connector,minconn,0)
         #printf(' done ')
-        #printnet(connector.net)
+        #self.printnet(connector.net)
 
     #printf('after remove ')
-    #printnet(minconn.net)
+    #self.printnet(minconn.net)
     #printf('\n')
     return minconn
 
@@ -295,7 +285,6 @@ for the voice and fx areas of a nord modules g2 patch.
 
 \tmake all cable as short as possible.
 '''
-    netlist = self.netlist[:]
     # remove all cables
     cables = self.cables[:]
     while len(cables):
@@ -315,7 +304,9 @@ for the voice and fx areas of a nord modules g2 patch.
       return mincable
 
     # on each net, successively connect closet connector
-    for net in netlist:
+    # net list will change while modifying so we need a static copy
+    netlist = self.netlist.copy()
+    for net in netlist.nets:
       inputs = net.inputs
       if net.output:
         fromconn, toconn = findclosest(self,[net.output],inputs)
