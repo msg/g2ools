@@ -90,10 +90,10 @@ class ConvCtrlSeq(Convert):
     self.outputs[2] = handlelength(self)
 
 class ConvNoteSeqA(Convert):
-  maing2module = 'SeqLev'
+  maing2module = 'SeqNote'
   parammap = [None]*16 + ['Length',None,None,None,'Loop']
   inputmap = ['Clk','Rst']
-  outputmap = ['Val','Link','Link','Trig']
+  outputmap = ['Note','Link','Link','Trig']
 
   def domodule(self):
     nmm,g2m = self.nmmodule, self.g2module
