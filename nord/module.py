@@ -111,5 +111,8 @@ class Module(object):
         o = cls(self, t[i], i)
         a.add(t[i].name, o, i)
     if type.type == 121: # SeqNote mag/octave additions
+      # [0, 1, mag, 0, 1, octave]
+      # mag: 0=3-octaves,1=2-octaves,2=1-octave
+      # octave: 0-9 (c0-c9)
       self.editmodes=[ 0, 1, 1, 0, 1, 5]
 

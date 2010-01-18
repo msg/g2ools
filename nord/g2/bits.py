@@ -69,7 +69,7 @@ def setbits(bit,nbits,data,value,debug=0):
   return bit+nbits
 
 try:
-  from nord.g2._bits import setbits,getbits
+  from nord.g2._bits import setbits, getbits
 except:
   print 'no _bits'
   pass

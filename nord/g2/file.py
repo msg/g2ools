@@ -108,7 +108,7 @@ class ModuleList(Section):
     bit,self.area = getbits(0,2,data)
     bit,nmodules = getbits(bit,8,data)
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     area.modules = [ None ] * nmodules
     for i in range(nmodules):
@@ -157,7 +157,7 @@ class ModuleList(Section):
   def format(self, patch):
     data = self.data
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     bit  = setbits(0,2,data,self.area)
     bit  = setbits(bit,8,data,len(area.modules))
@@ -232,7 +232,7 @@ class CableList(Section):
     bit,self.area = getbits(0,2,data)
     bit,ncables   = getbits(8,16,data)
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     area.cables = [ None ] * ncables 
     for i in range(ncables ):
@@ -269,7 +269,7 @@ class CableList(Section):
     data = self.data
     bit  = setbits(0,2,data,self.area)
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     bit = setbits(8,16,data,len(area.cables))
 
@@ -400,7 +400,7 @@ class ModuleParameters(Section):
     bit,nmodules    = getbits(bit,8,data)
     bit,nvariations = getbits(bit,8,data) # if any modules=9, otherwise=0
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     for i in range(nmodules):
       bit,index = getbits(bit,8,data)
@@ -421,7 +421,7 @@ class ModuleParameters(Section):
   def format(self, patch):
     data = self.data
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     modules = []
     for i in range(len(area.modules)):
@@ -676,7 +676,7 @@ class ParameterLabels(Section):
       printf('paramlabels:\n')
       printf('%s\n', hexdump(s))
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     for mod in range(nmodules):
 
@@ -687,7 +687,7 @@ class ParameterLabels(Section):
       if m.type.type == 121: # SeqNote
         # extra editor parameters 
         # [0, 1, mag, 0, 1, octave]
-        # view: 0=3-octaves,1=2-octaves,2=1-octave
+        # mag: 0=3-octaves,1=2-octaves,2=1-octave
         # octave: 0-9 (c0-c9)
         m.editmodes = []
         for i in range(modlen):
@@ -722,7 +722,7 @@ class ParameterLabels(Section):
   def format(self, patch):
     data = self.data
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     modules = []
     # collect all modules with parameters that have labels
@@ -782,7 +782,7 @@ class ModuleNames(Section):
     bit,self.unk1 = getbits(bit,6,data)
     bit,nmodules = getbits(bit,8,data)
 
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     names = data[bit/8:]
     for i in range(nmodules):
@@ -802,7 +802,7 @@ class ModuleNames(Section):
 
     bit = setbits(0,2,data,self.area)
     bit = setbits(bit,6,data,self.area) # seems to be duplicate of area
-    area = [ patch.fx, patch.voice][self.area]
+    area = [patch.fx, patch.voice][self.area]
 
     bit = setbits(bit,8,data,len(area.modules)) # unknown, see if zero works
     for i in range(len(area.modules)):
@@ -901,6 +901,7 @@ Info=BUILD %d\r
     for section in Pch2File.patchsections:
       section.data = array('B', [0] * (64<<10)) # max 64k section size
       f = section.format(patch)
+
       if sectiondebug:
         nm = section.__class__.__name__
         printf('0x%02x %-25s len:0x%04x total: 0x%04x\n',
@@ -910,6 +911,7 @@ Info=BUILD %d\r
         printf('%s\n', nm)
         if titlesection and len(nm) < len(f):
           f = nm+f[len(nm):]
+
       s += struct.pack('>BH',section.type,len(f)) + f
     return s
 

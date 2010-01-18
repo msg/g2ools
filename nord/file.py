@@ -285,6 +285,9 @@ for the voice and fx areas of a nord modules g2 patch.
 
 \tmake all cable as short as possible.
 '''
+    # copy netlist before changes for later
+    netlist = self.netlist.copy()
+
     # remove all cables
     cables = self.cables[:]
     while len(cables):
@@ -305,7 +308,6 @@ for the voice and fx areas of a nord modules g2 patch.
 
     # on each net, successively connect closet connector
     # net list will change while modifying so we need a static copy
-    netlist = self.netlist.copy()
     for net in netlist.nets:
       inputs = net.inputs
       if net.output:
