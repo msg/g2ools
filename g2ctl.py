@@ -60,11 +60,13 @@ def process(args):
       break
   return error
 
+prog = ''
 # default main
-def main():
-  prog = sys.argv[0]
+def main(argv):
+  global prog
+  prog = argv[0]
   try:
-    args = sys.argv[1:]
+    args = argv[1:]
     rc = 0
     printf('\n')
     if len(args) == 0:
@@ -107,7 +109,8 @@ def wrap_lines(s, maxlen=80):
 
 # default help system
 def cmd_help(command):
-  printf('usage: %s [commands]*\n', sys.argv[0])
+  global prog
+  printf('usage: %s [commands]*\n', prog)
   printf('  commands:\n')
   for command in commandlist:
     sep = ''
@@ -356,7 +359,7 @@ class G2Interface:
 g2usb = G2Interface()
 
 def cmd_list(command):
-  JUMP_PATCH, NEXT_BANK, NEXT_MODE, CONTINUE = [ chr(i) for i in [1,3,4,5] ]
+  JUMP_PATCH, NEXT_BANK, NEXT_MODE, CONTINUE = map(chr, range(1,5))
   PATCH_MODE, PERFORMANCE_MODE, END_MODE = range(3)
   mode = 0
   bank = 0
@@ -513,5 +516,5 @@ def cmd_parameterpage(command, page):
 add_command('parameterpage',['page'],'select parameterpage', cmd_parameterpage)
 
 if __name__ == '__main__':
-  main()
+  main(sys.argv)
 
