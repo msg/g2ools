@@ -300,7 +300,7 @@ class G2Patch(G2Section):
     # change "white" cables to proper color (red, blue, yellow, orange)
     for area in [ self.pch2.patch.voice, self.pch2.patch.fx ]:
       handle_uprate(area)
-      for net in area.netlist:
+      for net in area.netlist.nets:
         if net.output == None:
 	  continue
 
@@ -362,7 +362,7 @@ class G2Patch(G2Section):
   def parse_knob(knob):
     rc, index = knob.split('.', 1)
     row, col = list(rc)
-    col = 'abcde'.find(col.lower()
+    col = 'abcde'.find(col.lower())
     row = '123'.find(row)
     index = '12345678'.find(index)
     if index < 0 or col < 0 or row < 0:
