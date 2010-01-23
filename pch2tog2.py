@@ -4,21 +4,20 @@ import sys
 import string
 from nord.g2.file import Pch2File
 from nord.g2.categories import G2Categories
-from nord.net import printnet
-from nord import printf
+from nord import printf, sprintf
 
 def printdescription(patch):
   printf('# description\n')
   desc = patch.description
-  printf('setting category, %s\n', G2Categories[desc.category])
-  printf('setting voices, %d\n', desc.nvoices)
+  printf('setting category %s\n', G2Categories[desc.category])
+  printf('setting voices %d\n', desc.nvoices)
   printf('# height %d\n', desc.height)
-  printf('setting monopoly, %d\n', desc.monopoly)
-  printf('setting variation, %d\n', desc.variation)
+  printf('setting monopoly %d\n', desc.monopoly)
+  printf('setting variation %d\n', desc.variation)
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white ]
   colors = ''.join(['RBYOGPW'[i] for i in range(len(x)) if x[i]])
-  printf('setting colors, %s\n', colors)
+  printf('setting colors %s\n', colors)
   #printf(' unk2=0x%02x\n', desc.unk2)
     
 def printsettings(patch):
@@ -28,11 +27,14 @@ def printsettings(patch):
                 'vibrato','cents','rate',
                 'arpeggiator','arptime','arptype','octaves',
                 'octaveshift','sustain' ]:
-    printf('setting %s, %s\n', attr,
-        ', '.join([ '%d' % v for v in getattr(settings,attr).variations]))
+    printf('setting %s %s\n', attr,
+        ' '.join([ '%d' % v for v in getattr(settings,attr).variations]))
+
+def module_loc(module):
+  return '%s%d' % (string.ascii_lowercase[module.horiz],module.vert)
 
 def printmodules(area):
-  printf('# %s modules\n', area.name)
+  printf('\narea %s\n', area.name)
   modules = area.modules[:]
   def byposition(a, b):
     x = cmp(a.horiz, b.horiz)
@@ -41,53 +43,47 @@ def printmodules(area):
   modules.sort(byposition)
   lastvert = -1
   lasthoriz = -1
-  modcolindex = 0
+  lastcol = -1
   for module in modules:
+    if module.horiz != lastcol:
+      printf('column %d\n' % module.horiz)
+    lastcol = module.horiz
     sep = module.vert - lastvert
     if sep > module.type.height:
-      sep = ', sep=%d' % sep
-    else:
-      sep = ''
+      printf('separate %d\n', sep)
     if module.color != 0:
-      color = ', color=%d' % module.color
-    else:
-      color = ''
-    loc = '%s%d' % (string.ascii_lowercase[module.horiz],modcolindex)
+      printf('modulecolor %d\n', module.color)
+    loc = module_loc(module)
     module.loc = loc
     #moduleloc[loc] = module
-    printf('add %s, %s, %s%s%s\n',
-        module.type.shortnm.lower(), loc, module.name, color, sep)
+    modulename = module.name.replace(' ', '\\ ')
+    printf('add %s %s %s\n', module.type.shortnm.lower(), loc, modulename)
+    modulename = modulename.lower()
     lastvert = module.vert
-    modcolindex += 1
-    if lasthoriz != module.horiz:
-      lastvert = -1
-      modcolindex = 0
     lasthoriz = module.horiz
     if hasattr(module, 'modes') and len(module.modes):
-      printf('  # modes\n')
       for m in range(len(module.modes)):
         mode = module.modes[m]
         mtype = module.type.modes[m]
-        printf('  set %s.%s, %s\n', loc, mtype.name, mode.value)
+        printf('  set %s.%s %s\n', loc, mtype.name, mode.value)
     if hasattr(module, 'params') and len(module.params):
-      printf('  # params\n')
       for p in range(len(module.params)):
         param = module.params[p]
         ptype = module.type.params[p]
-        printf('  set %s.%s, %s\n', loc, ptype.name.lower(),
-	    ', '.join([ '%d' % v for v in param.variations]))
+        printf('  set %s.%s %s\n', loc, ptype.name.lower(),
+	    ' '.join([ '%d' % v for v in param.variations]))
         if hasattr(param,'labels'):
-          printf('  label %s.%s, %s\n', loc, ptype.name.lower(),
-	      ', '.join(param.labels))
+          printf('  label %s.%s %s\n', loc, ptype.name.lower(),
+	      ' '.join(param.labels))
 
 def printnetlist(area):
   printf('# %s netlist\n', area.name)
-  for net in area.netlist:
-    printnet(net)
+  for net in area.netlist.nets:
+    area.netlist.printnet(net)
 
-def printcables(patch):
+def printcables(area):
   printf('# cables\n')
-  for cable in patch.voice.cables:
+  for cable in area.cables:
     source,dest = cable.source,cable.dest
     smod,dmod = source.module,dest.module
     stype,dtype = smod.type, dmod.type
@@ -97,16 +93,20 @@ def printcables(patch):
         '->'[source.direction], dtype.shortnm, dnm, cable.color)
 
 def printknobs(patch):
-  printf('# knobs\n')
+  last_name = ''
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
     if knob.assigned:
       if hasattr(knob.param,'module'):
-        printf(' %s%d:%d %s:"%s":%s isled=0x%02x\n',
-            'ABCDE'[i/24],(i/8)%3,i&7,
-            ['fx','voice'][knob.param.module.area.index],
-            knob.param.module.name, knob.param.type.name,
-            knob.isled)
+        loc = module_loc(knob.param.module)
+        s = sprintf('knob %s%d.%d %s.%s',
+	     'abcde'[i/24],((i/8)%3) + 1,(i&7) + 1, loc,
+	     knob.param.type.name.lower())
+	t = ''
+	if knob.param.module.name != last_name:
+	  t = '  # %s' % knob.param.module.name
+	printf('%-30s %s\n', s, t)
+	last_name = knob.param.module.name
 
 def printmidicc(patch):
   printf('midicc:\n')
@@ -147,15 +147,14 @@ def printpatch(patch):
   printdescription(patch)
   printsettings(patch)
   if len(patch.voice.modules):
-    printf("area voice\n")
     printmodules(patch.voice)
-    printnetlist(patch.voice)
+    #printnetlist(patch.voice)
+    printcables(patch.voice)
   if len(patch.fx.modules):
-    printf("area fx\n")
     printmodules(patch.fx)
-    printnetlist(patch.fx)
-  #printcables(patch)
-  #printknobs(patch)
+    #printnetlist(patch.fx)
+    printcables(patch.voice)
+  printknobs(patch)
   #printmidicc(patch)
   #printmorphs(patch)
 
