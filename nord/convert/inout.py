@@ -209,7 +209,7 @@ class ConvKeyboardSplit(Convert):
       nout = n.outputs.Out
 
     vin = vout = None
-    if len(nmm.outputs.Vel.cables):
+    if len(nmm.outputs.Vel.cables) or len(nmm.inputs.Vel.cables):
       v = self.addmodule('DlyClock',name='Vel')
       self.connect(gout,v.inputs.Clk)
       vin = v.inputs.In
