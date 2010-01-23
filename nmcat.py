@@ -22,7 +22,7 @@
 import sys
 sys.path.append('.')
 from nord import printf
-from nord.nm1.file import PchFile
+from nord.nm1.file import PchFile, NM1Error
 
 def printpatch(patch):
   for areanm in ['voice','fx']:
@@ -55,7 +55,7 @@ def printpatch(patch):
       		dmod.name, dest.type.name, cable.color)
           
     printf(' nets:\n')
-    for net in area.net.netlist:
+    for net in area.netlist.nets:
       source = net.output
       if source:
         smod = area.findmodule(source.module.index)
@@ -99,6 +99,10 @@ prog = sys.argv.pop(0)
 while len(sys.argv):
   fname = sys.argv.pop(0)
   printf('"%s"\n', fname)
-  pch = PchFile(fname)
-  printpatch(pch.patch)
+  try:
+    pch = PchFile(fname)
+    printpatch(pch.patch)
+  except NM1Error, s:
+    printf('%s: NM1Error %s\n', fname, s)
+    sys.exit(1)
 
