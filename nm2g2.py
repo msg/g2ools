@@ -38,7 +38,7 @@ from nord.utils import toascii
 import nord.convert.osc 
 from nord import printf
 
-__builtins__.printf = printf
+#__builtins__.printf = printf
 
 nm2g2colors = {
   nm1cablecolors.red:    g2cablecolors.red,
@@ -62,7 +62,7 @@ nm2g2log = None
 class NM2G2Converter:
   def __init__(self, pchfname, options, log):
     self.pch = PchFile(pchfname)
-    g2oolsdir = os.path.dirname(sys.argv[0])
+    g2oolsdir = os.path.dirname(options.programpath)
     self.pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
     self.nmpatch = self.pch.patch
     self.g2patch = self.pch2.patch
@@ -278,7 +278,6 @@ class NM2G2Converter:
 	  color = source.net.output.type.type
 	self.log.debug(s)
 	g2area.connect(g2source,g2dest,color)
-
 
   def douprate(self, g2area):
 
@@ -674,7 +673,7 @@ def main(argv, stream):
 
   parser = OptionParser("usage: %prog [options] <pch-files-or-dirs>",option_list=nm2g2_options)
   (options, args) = parser.parse_args(argv)
-  args.pop(0)
+  options.programpath = args.pop(0)
   verbosity = [
       logging.CRITICAL,
       logging.ERROR,
@@ -748,24 +747,18 @@ def main(argv, stream):
 
   return nm2g2log
 
+class StdoutStream:
+  def __init__(self):
+    self.str = ''
+    
+  def write(self, s):
+    self.str += s
+
+  def flush(self):
+    sys.stdout.write(self.str)
+    self.str = ''
+
+stream = StdoutStream()
+
 if __name__ == '__main__':
-
-  class StdoutStream:
-    def __init__(self):
-      self.str = ''
-      
-    def write(self, s):
-      self.str += s
-
-    def flush(self):
-      sys.stdout.write(self.str)
-      self.str = ''
-  try:
-    import psyco
-    psyco.full()
-  except ImportError:
-    pass
-
-  stream = StdoutStream()
-
   main(sys.argv, stream)
