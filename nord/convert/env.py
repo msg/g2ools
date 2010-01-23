@@ -41,7 +41,9 @@ def handleretrig(conv):
 def handlegate(conv, name='Gate'):
   gate = getattr(conv.nmmodule.inputs, name)
   # if gate source Keyboard, disconnect and set KB
-  if gate and gate.net and gate.net.output.module.type.shortnm == 'Keyboard':
+  if not gate or not gate.net or not gate.net.output:
+    return
+  if gate.net.output.module.type.shortnm == 'Keyboard':
     conv.nmmodule.area.removeconnector(getattr(conv.nmmodule.inputs, name))
     setv(conv.g2module.params.KB, 1)
 
