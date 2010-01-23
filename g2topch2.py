@@ -2,14 +2,14 @@
 
 import os, string, sys, traceback
 from nord.g2.file import Pch2File, Prf2File
-from nord.g2.misc import handle_uprate
+from nord.g2.misc import handle_uprate, midicc_reserved
 from nord import types
 import nord.g2.modules
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf
 
 def debug(fmt, *a):
-  if 1: printf(fmt, *a)
+  if 0: printf(fmt, *a)
 
 class G2Exception(Exception): pass
 
@@ -334,16 +334,18 @@ class G2Patch(G2Section):
       self.current_area = self.pch2.patch.voice
       self.modules = self.voice_modules
     elif areaname == 'fx':
-      self.current_area = self.pch2.patch.voice
+      self.current_area = self.pch2.patch.fx
       self.modules = self.fx_modules
     else:
       return -1
     return 0
 
-  def add(self, typename, name):
+  def add(self, typename, name, label=None):
     if self.modules.has_key(name):
       raise G2Expception('Module %s already exists.' % name)
-    self.modules[name] = self.addmodule(typename, name)
+    if label == None:
+      label = name
+    self.modules[name] = self.addmodule(typename, label)
 
   def label(self, param, *names):
     param = self.parse_parameter(param)
@@ -357,14 +359,72 @@ class G2Patch(G2Section):
       return -1
     param.set(variations)
 
-  def knob(self, knob_location, mod_param):
-    pass
+  def parse_knob(knob):
+    rc, index = knob.split('.', 1)
+    row, col = list(rc)
+    col = 'abcde'.find(col.lower()
+    row = '123'.find(row)
+    index = '12345678'.find(index)
+    if index < 0 or col < 0 or row < 0:
+      raise G2Exception('Invalid knob %s.' % knob)
+    return knob-1, row, col
+    
+  def parse_morph(morph):
+    m = int(morph)-1
+    if morph < 0 or morph > 7:
+      raise G2Exception('Invalid morph %s.' % morph)
+    return m
 
-  def midicc(self, mod_param, cc):
-    pass
+  def parse_control(control, nomorph=False):
+    area, param = control.split('.', 1)
+    if area == 'voice' or area == 'fx':
+      saved_area, saved_modules = self.current_area, self.modules
+      self.area(area)
+      control = self.parse_parameter(param)
+      type = self.current_area.index
+      self.current_area, self.modules = saved_area, save_modules
+    elif nomorph == False and area == 'morph':
+      control = self.parse_morph(param)
+      type = 2
+    else:
+      raise G2Exception('Invalid control %s' % control)
+    return control, type
+
+  def knob(self, knob, control):
+    knob, row, col = self.parse_knob(knob)
+    index = (col * 24) + (row * 8) + knob
+    knob = self.pch2.knobs[index]
+    knob.param = self.parse_control(control)[0]
+    knob.assigned = 1
+    knob.isled = 0
+
+  def midicc(self, cc, control):
+    cc = int(cc)
+    if midicc_reserved(cc):
+      raise G2Exception('midicc %d reserved' % cc)
+    param, type = self.parse_control(control)
+    m = None
+    for ctrl in self.pch2.ctrls:
+      if ctrl.midicc == cc:
+        m = ctrl
+	break
+    if m == None:
+      m = Ctrl()
+      self.pch2.ctrls.append(m)
+    m.midicc = cc
+    m.param, m.type = param, type
    
-  def morph(self, morph, mod_param, start, range):
-    pass
+  def morph(self, morph, command, *args):
+    #control = self.parse_control(control, nomorph=True)[0]
+    command = command.lower()
+    if command == 'dial':
+      pass
+    elif command == 'mode':
+      pass
+    elif command == 'name':
+      pass
+    elif command == 'add':
+      pass
 
   def setting(self, setting, *variations):
     pass
