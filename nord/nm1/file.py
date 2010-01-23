@@ -44,7 +44,7 @@ class Section(object):
   def parse(self):
     pass
 
-class Header(Section):
+class HeaderV3(Section):
   def parse(self):
     patch = self.patch
     patch.header = self
@@ -53,8 +53,8 @@ class Header(Section):
       line = lines.pop(0)
       if 'Version=' in line:
         self.version = line
-        if float(self.version.split()[-1]) < 3:
-          raise NM1Error('Header: Cannot parse .pch with version < 3')
+	if self.version.find('patch 3') < 0:
+          raise NM1Error('Header: version "%s" invalid' % self.version)
         break
     values = map(int,lines[0].split()) + [1]*23 # make sure we have enough
     (self.keymin,self.keymax, self.velmin,self.velmax,
@@ -64,7 +64,7 @@ class Header(Section):
      self.red,self.blue,self.yellow,self.gray,self.green,self.purple,self.white
     ) = values[:23]
 
-class ModuleDump(Section):
+class ModuleDumpV3(Section):
   def parse(self):
     for line in self.lines:
       values = map(int, line.split())
@@ -82,7 +82,7 @@ class ModuleDump(Section):
         module = area.addmodule(fromtype(type).shortnm)
       module.index,module.horiz,module.vert=index,horiz,vert
 
-class CurrentNoteDump(Section):
+class CurrentNoteDumpV3(Section):
   def parse(self):
     # # name              value   bit count remarks
     # 1 note              0..127  7         midi note number: 64~middle E
@@ -107,7 +107,7 @@ class CurrentNoteDump(Section):
       notes[i].attack = attack
       notes[i].release = release
 
-class CableDump(Section):
+class CableDumpV3(Section):
   def parse(self):
     lines = self.lines
     line = lines.pop(0)
@@ -153,7 +153,7 @@ class CableDump(Section):
       # update netlist with source and dest
       area.netlist.add(source, dest)
 
-class ParameterDump(Section):
+class ParameterDumpV3(Section):
   def parse(self):
     lines = self.lines[:]
     sect = int(lines.pop(0))
@@ -175,10 +175,10 @@ class ParameterDump(Section):
       count = values.pop(0)
       if len(values) < count:
         values.extend(map(int,lines.pop(0).split()))
-      for i in range(len(module.params)):
+      for i in range(min(len(values),len(module.params))):
         module.params[i].variations = [ values[i] for variations in range(9) ]
 
-class CustomDump(Section):
+class CustomDumpV3(Section):
   def parse(self):
     sect = int(self.lines[0])
     if sect:
@@ -195,16 +195,7 @@ class CustomDump(Section):
       for i in range(len(module.modes)):
         module.modes[i].value = values[i]
 
-class Morph(object):
-  def __init__(self,index):
-    self.maps = []
-    self.index = index
-    self.dial = 0
-    self.keyassign = 0
-    self.knob = None
-    self.ctrl = None
-
-class MorphMapDump(Section):
+class MorphMapDumpV3(Section):
   def parse(self):
     morphs = self.patch.morphs
     dials = map(int, self.lines[0].split())
@@ -222,18 +213,18 @@ class MorphMapDump(Section):
         area = self.patch.fx
       morphmap.param = area.findmodule(index).params[param]
       morphmap.param.morph = morphs[morph]
-      if not morph in range(4):
+      if not morph in range(NMORPHS):
         raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
       morphs[morph].maps.append(morphmap)
 
-class KeyboardAssignment(Section):
+class KeyboardAssignmentV3(Section):
   def parse(self):
     keyassign = map(int, self.lines[0].split())
     morphs = self.patch.morphs
     for i in range(NMORPHS):
       morphs[i].keyassign = keyassign[i]
 
-class KnobMapDump(Section):
+class KnobMapDumpV3(Section):
   def parse(self):
     knobs = self.patch.knobs = [ Knob() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
@@ -248,7 +239,7 @@ class KnobMapDump(Section):
         knobs[i].param = self.patch.morphs[param]
       knobs[i].param.knob = knobs[i]
 
-class CtrlMapDump(Section):
+class CtrlMapDumpV3(Section):
   def parse(self):
     ctrls = self.patch.ctrls = [ Ctrl() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
@@ -262,7 +253,7 @@ class CtrlMapDump(Section):
       ctrls[i].midicc = midicc
       ctrls[i].param.ctrl = ctrls[i]
 
-class NameDump(Section):
+class NameDumpV3(Section):
   def parse(self):
     if not len(self.lines):
       return
@@ -280,9 +271,243 @@ class NameDump(Section):
       module = area.findmodule(int(vals[0]))
       module.name = name
 
-class Notes(Section):
+class NotesV3(Section):
   def parse(self):
     self.patch.textpad = '\r\n'.join(self.lines)
+
+class V2Define(object):
+  def __init__(self, title, lines, **kw):
+    self.__dict__ = kw # must be done first
+    self.title = title
+    self.lines = lines
+
+class V2Section(object):
+  def __init__(self, patch, defines, moduledefs):
+    self.patch = patch
+    self.defines = defines
+    self.moduledefs = moduledefs
+    self.parse()
+
+  def parse(self):
+    pass
+
+def getv2moduledefs(defines):
+  def ismodule(define): return define[1].title[:6] == 'Module'
+  def bymoduleindex(a, b): return cmp(int(a[1].title[6:]), int(b[1].title[6:]))
+  moduledefs = [ (int(define[0][6:]),define[1]) for define in defines.items()
+  			if ismodule(define) ]
+  moduledefs.sort(bymoduleindex)
+  return moduledefs
+
+def findv2moduledef(defines, index):
+  for define in defines:
+    if define[0] == index:
+      return define
+  return None
+  
+def getv2params(define, leader):
+  def isparam(leader, key): return key[:len(leader)] == leader
+  def byparamindex(a, b, l=len(leader)): return cmp(int(a[l:]),int(b[l:]))
+  keys = [ key for key in define.__dict__.keys() if isparam(leader, key) ]
+  keys.sort(byparamindex)
+  return [ [int(key[len(leader):]),getattr(define,key)] for key in keys ]
+
+MORPH_TYPE = 6
+MAX_MODULES = 127
+class ModulesV2(V2Section):
+  def parse(self):
+    # - create modules from modules sections
+    #   - module type 6 is morph, must be handled
+    #     midicc 126 and 127 are note and vel? (could be reversed)
+    #     knobs connect to morphs via module definition
+    # - create cables from modules sections
+    self.create_modules()
+    self.create_cables()
+
+  def update_module_params(self, moduledef, module):
+    params = getv2params(moduledef,'p')
+    lp, lmp = len(params), len(module.params)
+    for i in range(min(lp,lmp)):
+      val = int(params[i][1])
+      val = max(val,module.params[i].type.type.low)
+      val = min(val,module.params[i].type.type.high)
+      module.params[i].variations = [ val for variations in range(9) ]
+
+  def create_modules(self):
+    area = self.patch.voice
+    for i in range(len(self.moduledefs)):
+      index, moduledef = self.moduledefs[i]
+      if moduledef.type == MORPH_TYPE: # handle this later
+        continue
+
+      module = area.addmodule(fromtype(moduledef.type).shortnm)
+      module.index,module.name = (index, str(moduledef.name))
+      module.horiz,module.vert = (moduledef.col, moduledef.row)
+
+      self.update_module_params(moduledef, module)
+
+  def create_cables(self):
+    OUTPUT = 0x40
+    area = self.patch.voice
+    for i in range(len(self.moduledefs)):
+      index, moduledef = self.moduledefs[i]
+      if moduledef.type == MORPH_TYPE: # handle this later
+        continue
+      module = area.findmodule(index)
+      ims = getv2params(moduledef,'im') # module to connect to
+      ihs = getv2params(moduledef,'ih') # port (0x40=output) rest index
+      ics = getv2params(moduledef,'ic') # cable color
+      for j in range(len(ims)):
+        dconn, smod = ims[j]
+	sconn, color = ihs[j][1], ics[j][1]
+	smoduledef = findv2moduledef(self.moduledefs, smod)
+	if not smoduledef or smoduledef[1].type == MORPH_TYPE:
+	  continue
+
+	dest = module.inputs[dconn]
+	smodule = area.findmodule(smod)
+	if sconn & OUTPUT:
+	  source = smodule.outputs[sconn & ~OUTPUT]
+	else:
+	  source = smodule.inputs[sconn]
+        
+	self.patch.voice.connect(source, dest, color)
+
+
+class HeaderV2(V2Section):
+  def parse(self):
+    define = self.defines['Header']
+    self.patch.header = self
+    self.keymin, self.keymax = define.kbrangemin, define.kbrangemax
+    self.velmin, self.velmax = define.velrangemin, define.velrangemax
+    self.bend = define.bendrange
+    self.porta = define.pmmode
+    self.portatime = define.pmtime
+    self.voices = define.voices
+    self.areasep = 0
+    if hasattr(define, 'octshift'):
+      self.octshift = define.octshift
+    else:
+      self.octshift = 0
+    self.voiceretrig = define.retrig
+    self.commonretrig = 0
+    self.red = define.cable0
+    self.blue = define.cable1
+    self.yellow = define.cable2
+    self.gray = define.cable3
+    self.green = self.purple = self.white = 1
+
+class VoicesV2(V2Section):
+  def parse(self):
+    def getnote(value):
+      return (value & 0x7f, (value>>8)&0x7f, (value>>16)&0x7f)
+    define = self.defines.get('Voices', None)
+    if define == None: return
+    voices = getv2params(define,'v')
+    values = [ getnote(voice[1]) for voice in voices ]
+    l = len(values)
+    lastnote = self.patch.lastnote = Note()
+    lastnote.note,lastnote.attack,lastnote.release = values[0]
+    values = values[1:]
+    l-=1
+    currentnotes = []
+    for i in range(l):
+      if values[i] in currentnotes:
+        continue
+      currentnotes.append(values[i])
+    l = len(currentnotes)
+    notes = self.patch.notes = [ Note() for i in range(l) ]
+    for i in range(l):
+      notes[i].note,notes[i].attack,notes[i].release = values[i]
+
+class ControllersV2(V2Section):
+  def parse(self):
+    define = self.defines.get('Controllers', None)
+    if define == None: return
+    modules = getv2params(define,'m')   # module to connect to
+    params = getv2params(define,'p')    # parameters to connecto to
+    for i in range(len(modules)):
+      midicc, modindex = modules[i]
+      midicc, param = params[i]
+      moduledef = findv2moduledef(self.moduledefs, modindex)
+      if moduledef and moduledef[1].type == MORPH_TYPE:
+        continue # add midicc to morph, param is morph group
+
+class MorphsV2(V2Section):
+  def parse(self):
+    morphs = self.patch.morphs
+    morphmod = None
+    for i in range(len(self.moduledefs)):
+      if self.moduledefs[i][1].type == MORPH_TYPE:
+        morphdmod = self.moduledefs[i][1]
+    if morphmod:
+      for i in range(NMORPHS):
+        morphs[i].dial = getattr(morphmod, 'p%d' % i)
+    define = self.defines.get('Morphs', None)
+    if define == None: return
+    modules = getv2params(define,'m') # module to connect to
+    params = getv2params(define,'p')  # parameters to connecto to
+    dials = getv2params(define,'d')   # morph dial of parameter
+    groups = getv2params(define,'g')  # morph groups
+    area = self.patch.voice
+    for i in range(len(modules)):
+      morph, index = modules[i]
+      morph, param  = params[i]
+      morph, dial   = dials[i]
+      morph, group  = groups[i]
+      if not morph in range(25): ### HACK
+        #raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
+	continue
+      morphmap = MorphMap()
+      morphmap.range = dial
+      mod = area.findmodule(index)
+      if param > len(mod.params) - 1:
+        param = 0
+      morphmap.param = mod.params[param]
+      morphmap.param.morph = morphs[group]
+      morphs[group].maps.append(morphmap)
+
+class KnobsV2(V2Section):
+  def parse(self):
+    define = self.defines.get('Knobs', None)
+    if define == None: return
+
+    modules = getv2params(define,'m') # module to connect to
+    params = getv2params(define,'p')  # parameters to connecto to
+    knobs = self.patch.knobs = [ Knob() for i in range(len(modules)) ]
+    for i in range(len(modules)):
+      knob, index = modules[i]
+      knob, param = params[i]
+      moduledef = findv2moduledef(self.moduledefs, index)
+      knobs[i].knob = knob
+      if moduledef and moduledef[1].type == MORPH_TYPE:
+        if param > 3: #### HACK
+	  param &= 3
+        knobs[i].param = self.patch.morphs[param]
+      else:
+	if moduledef and moduledef[1].type == 106 and param > 23: ### HACK
+	  param -= 13
+	mod = self.patch.voice.findmodule(index)
+	if param > len(mod.params) - 1: ### HACK
+	  param = 0
+        knobs[i].param = mod.params[param]
+      knobs[i].param.knob = knobs[i]
+
+class NotesV2(V2Section):
+  def parse(self):
+    define = self.defines.get('Notes', None)
+    if define == None: return
+    lines = [ getattr(define, 'l%d' % i) for i in range(define.count) ]
+    self.patch.textpad = '\r\n'.join(lines)
+
+class Morph(object):
+  def __init__(self,index):
+    self.maps = []
+    self.index = index
+    self.dial = 0
+    self.keyassign = 0
+    self.knob = None
+    self.ctrl = None
 
 class NM1Patch(Patch):
   def __init__(self,fromname):
@@ -292,6 +517,15 @@ class NM1Patch(Patch):
     self.textpad = ''
 
 class PchFile(object):
+  v3tags = [
+    'Header','ModuleDump','CurrentNoteDump','CableDump','ParameterDump',
+    'CustomDump','MorphMapDump','KeyboardAssignment','KnobMapDump',
+    'CtrlMapDump','NameDump','Notes'
+  ]
+  v2tags = [
+    'Modules', 'Header', 'Voices', 'Controllers', 'Morphs', 'Knobs', 'Notes'
+  ]
+
   def __init__(self, fname=None):
     self.patch = NM1Patch(fromname)
     if fname:
@@ -299,17 +533,14 @@ class PchFile(object):
 
   def read(self, fname):
     self.fname = fname
-    validtags = [
-      'Header','ModuleDump','CurrentNoteDump','CableDump','ParameterDump',
-      'CustomDump','MorphMapDump','KeyboardAssignment','KnobMapDump',
-      'CtrlMapDump','NameDump','Notes'
-    ]
-    data = open(fname).read(1024)
-    if data.find('Nord Modular patch') < 0:
-      raise NM1Error('NM1File: %s not valid .pch file' % fname)
+    data = open(fname).read()
+    v2 = data.find('Nord Modular patch 2.10')
+    v3 = data.find('Nord Modular patch 3.0')
+    if v2 < 0 and v3 < 0:
+      raise NM1Error('%s not valid .pch file' % fname)
     lines = filter(lambda s: s!='', map(string.strip, open(fname).readlines()))
     if not len(lines):
-      raise NM1Error('NM1File: no valid data: not parsing')
+      raise NM1Error('%s no valid data: not parsing' % fname)
     if lines[0] != '[Header]':
       printf('added missing [Header]\n')
       lines.insert(0,'[Header]')
@@ -317,57 +548,89 @@ class PchFile(object):
     if fname[-4:].lower() != '.pch':
       self.fname += '.pch'
 
-    starttags = []
-    endtags = []
-    i=0
-    while i < len(lines):
-      line = lines[i]
-      lb = line.find('[')
-      if lb > 0:
-        validsection = 0
-        for tag in validtags:
-          if line.find(tag) > -1:
-            validsection = 1
-        if validsection:
-          lines[i] = line[:lb]
-          lines.insert(i+1,line[lb:])
-          line = lines[i]
-      if len(line) and line[0] == '[':
-        rb = line.find(']')
-        if rb < 0:
-          rb = None
-        if line[1] != '/' and line[1:rb] in validtags:
-          starttags.append(i)
-        elif line[2:rb] in validtags:
-          endtags.append(i)
-      i += 1
+    if v2 > -1:
+      self.readv2(data)
 
-    if len(endtags):
-      if len(starttags) != len(endtags):
-        lasttag = '[/'+lines[starttags[-1]][1:]
-        printf('added missing endtag: %s\n', lasttag)
-        lines.append(lasttag)
-        endtags.append(len(lines)-1)
-      if len(starttags) != len(endtags):
-        raise NM1Error(
-            'NM1File: Start/End tag mismatch: Cannot parse\n%s\n%s' %
-            (repr(starttags), repr(endtags)))
-      sections = map(lambda s,e,l=lines: l[s:e+1], starttags, endtags)
-    else:
-      sections = map(lambda s,e,l=lines: l[s:e+1], starttags[:-1], starttags[1:])
+    if v3 > -1:
+      self.readv3(data)
 
-    for s,e in zip(starttags,endtags):
-      if e < s:
-        raise NM1Error(
-            'NM1File: tags "%s" comes before "%s"' % (lines[e],lines[s]))
+  def findv3sections(self, data):
+    sections = []
+    for tag in self.v3tags:
+      starttag = '[' + tag + ']'
+      endtag = '[/' + tag + ']'
+      off = start = 0
+      while start > -1:
+	start = data.find(starttag, off)
+	if start < 0:
+	  continue
+	end = data.find(endtag, start)
+	if end > -1:
+	  end += len(endtag)
+	sections.append([tag, start, end])
+	off = start + len(starttag)
+    return sections
+
+  def parsev3data(self, data, sections):
+    l = len(sections)
+    for i in range(l):
+      tag, start, end = sections[i]
+      if start < 0:
+        printf('no start tag %s\n', tag)
+        continue
+      if end < 0:
+        if i < l-1:
+	  ntag, nstart, nend = sections[i+1]
+	  end = nstart
+	else:
+	  end = None
+      lines = map(string.strip, data[start:end].split('\n'))
+      lines = [ line for line in lines if line ]
+      if len(lines) > 2:
+        sect = eval('%sV3(self.patch,lines[1:-1])' % tag)
+
+  def readv3(self, data):
+    sections = self.findv3sections(data)
+    self.parsev3data(data, sections)
+
+  def findv2defines(self, data):
+    sections = data.split('\r\n[')
+    sections = [ ('[' + section.strip()).split('\r\n') for section in sections ]
+    sections[0][0] = sections[0][0][1:] # fix [[Header] to [Header]
+    # create dictionary of sections with
+    # each line in each section set to a parameter in a class object
+    # remove ' ' from sections names before creating
+    def fixparam(v):
+      name, value = v
+      try:
+        y = int(name)
+	name = 'v'+name
+      except:
+        pass
+      try:
+        if name != 'name':
+	  value = int(value)
+      except:
+        pass
+      return name.lower(), value
+
+    defines = { }
     for section in sections:
-      section = filter(lambda a: a, section)
-      rb = section[0].find(']')
-      if rb < 0:
-        rb = None
-      nm = section[0][1:rb]
-      #printf('%d\n', nm)
-      eval('%s(self.patch,section[1:-1])' % nm)
+      title = section[0][1:-1].replace(' ', '')  # remove [ ]
+      values = [ line.split('=',1) for line in section[1:] if line.strip() ]
+      values = [ fixparam(v) for v in values if len(v) > 1 ]
+      pairs = dict(values)
+      defines[title] = V2Define(title, section, **pairs)
+    return defines
+
+  def parsev2defines(self, defines):
+    moduledefs = getv2moduledefs(defines)
+    for tag in self.v2tags:
+      sect = eval('%sV2(self.patch, defines, moduledefs)' % tag)
+
+  def readv2(self, data):
+    defines = self.findv2defines(data)
+    self.parsev2defines(defines)
 
 if __name__ == '__main__':
   prog = sys.argv.pop(0)
