@@ -9,7 +9,18 @@ def cmpnm(a, b):
   if x: return x
   return cmp(a.type.name, b.type.name)
 
+def cmpports(aport, bport):
+  if not aport and bport: return 1
+  if aport and not bport: return -1
+  return 0
+
 def getnets(pch2):
+  # sort each net's inputs by mod-name/port-name
+  nets = [ n for n in pch2.patch.voice.netlist.nets if n.output ]
+  for net in nets:
+    #ins = net.inputs[:]
+    net.inputs.sort(cmpnm)
+
   def ordernets(a, b):
     x = cmpnm(a.output, b.output)
     if x: return x
@@ -20,55 +31,67 @@ def getnets(pch2):
       if x: return x
     return 0
 
-  nets = [ n for n in pch2.patch.voice.netlist if n.output ]
-  for net in nets:
-    ins = net.inputs[:]
-    ins.sort(cmpnm)
   nets.sort(ordernets)
 
 def chkports(modmap, aport, bport):
+  x = cmpports(aport, bport)
+  if x: return x
   x = cmpnm(aport, bport)
   if x: return x
   # if index of aport.module not seen, create a new mapping to bport.module
   aidx, bidx = aport.module.index, bport.module.index
   if modmap.has_key(aidx):
     return cmp(modmap[aidx], bidx)
-  modmap[idx] = bidx
+  modmap[aidx] = bidx
   return 0 # only have one to check against, have to assume it's correct.
 
+def chknet(modmap, anet, bnet):
+  # output module/port must match
+  x = chkports(modmap, anet.output, bnet.output)
+  if x: return x
+  # length of netlist must match
+  x = cmp(len(anet.inputs),len(bnet.inputs))
+  if x: return x
+  # all inputs must match
+  for ain, bin in zip(anet.inputs, bnet.inputs):
+    x = chkports(modmap, ain, bin)
+    if x: return x
+  return 0
+
 def cmpnetlist(a, b):
-  x = cmp(len(a), len(b))
+  x = cmp(len(a.nets), len(b.nets))
   if x: return x
   modmap = {}
-  for anet, bnet in zip(a, b):
-    # output module/port must match
-    x = chkports(modmap, anet.output, bnet.output)
+  for anet, bnet in zip(a.nets, b.nets):
+    x = chknet(modmap, anet, bnet)
     if x: return x
-    # length of netlist must match
-    x = cmp(len(anet.inputs),len(bnet.inputs))
-    if x: return x
-    # all inputs must match
-    for ain, bin in zip(anet.inputs, bnet.inputs):
-      x = chkports(modmap, ain, bin)
-      if x: return x
   return 0
-    
+
+def matchingnets(a, b):
+  modmap = {}
+  matches = 0
+  for anet in a.nets:
+    for bnet in b.nets:
+      if chknet(modmap, anet, bnet) == 0:
+        match += 1
+  return matches
 
 fnames = [ f for f in sys.argv[1:] if f[-4:] == 'pch2' ]
 fnames.sort()
 pch2s = []
 for fname in fnames:
-  printf('%s\n', fname)
+  printf('%s\n', os.path.basename(fname))
   p = Pch2File(fname)
+  getnets(p)
   pch2s.append(p)
 
-def ordernetsize(a, b):
-  return cmp(len(a.patch.voice.netlist), len(b.patch.voice.netlist))
+def bynetsize(a, b):
+  return cmp(len(a.patch.voice.netlist.nets), len(b.patch.voice.netlist.nets))
+pch2s.sort(bynetsize)
 
-pch2s.sort(ordernetsize)
 p = {}
 for pch2 in pch2s:
-  k = len(pch2.patch.voice.netlist)
+  k = len(pch2.patch.voice.netlist.nets)
   d = p.get(k, None)
   if not d:
     d = p[k] = []
@@ -92,4 +115,4 @@ for k in p.keys():
     for match in matches:
       fname = os.path.basename(match.fname)
       printf('  %s\n', fname)
-      
+
