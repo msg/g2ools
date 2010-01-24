@@ -139,12 +139,13 @@ class NetList:
       return
     if net.output:
       nout = net.output
-      out = '%s(%s):%s' % (nout.module.name, nout.module.type.shortnm,
-	  nout.type.name)
+      out = '%s(%s)%d:%s' % (nout.module.name, nout.module.type.shortnm,
+	  nout.module.index, nout.type.name)
     else:
       out = '<none>'
     inp = ','.join([
-	'%s(%s):%s' % (inp.module.name, inp.module.type.shortnm, inp.type.name)
+	'%s(%s)%d:%s' % (inp.module.name, inp.module.type.shortnm,
+		inp.module.index, inp.type.name)
 	for inp in net.inputs])
     printf('%s -> %s\n', out, inp)
 
