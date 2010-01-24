@@ -20,7 +20,7 @@
 #
 
 import logging
-import os, sys, traceback
+import os, sys, time, traceback
 from optparse import OptionParser,make_option
 from glob import glob
 from exceptions import KeyboardInterrupt
@@ -740,7 +740,7 @@ def main(argv, stream):
         nm2g2log.info('-' * 20)
 
   if len(failedpatches):
-    f=open('failedpatches.txt','w')
+    f=open('failedpatches-%s.txt' % (time.ctime().replace(' ','-')),'w')
     s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
     f.write(s)
     nm2g2log.warning(s)
