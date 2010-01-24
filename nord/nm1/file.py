@@ -522,6 +522,7 @@ class PchFile(object):
     'CustomDump','MorphMapDump','KeyboardAssignment','KnobMapDump',
     'CtrlMapDump','NameDump','Notes'
   ]
+  v3counts = [ 1, 2, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1 ]
   v2tags = [
     'Modules', 'Header', 'Voices', 'Controllers', 'Morphs', 'Knobs', 'Notes'
   ]
@@ -556,11 +557,13 @@ class PchFile(object):
 
   def findv3sections(self, data):
     sections = []
+    counts = self.v3counts[:]
     for tag in self.v3tags:
+      count = counts.pop(0)
       starttag = '[' + tag + ']'
       endtag = '[/' + tag + ']'
       off = start = 0
-      while start > -1:
+      while start > -1 and count > 0:
 	start = data.find(starttag, off)
 	if start < 0:
 	  continue
@@ -569,6 +572,7 @@ class PchFile(object):
 	  end += len(endtag)
 	sections.append([tag, start, end])
 	off = start + len(starttag)
+	count -= 1
     return sections
 
   def parsev3data(self, data, sections):
