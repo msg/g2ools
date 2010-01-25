@@ -322,8 +322,15 @@ def postmst(conv,mstindex):
     setv(levadd.params.Level,16) # -48
     conv.inputs[mstindex] = levadd.inputs.In
   if range == 0:
-    setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-79))
-    setv(g2mp.FreqFine,min(127,getv(g2mp.FreqFine)+42))
+    # NOTE: handle sine bank
+    if nmm.type.shortnm == 'OscSineBank':
+      for osc in conv.oscs:
+        oscp = osc.params
+        setv(oscp.FreqCoarse,max(0,getv(oscp.FreqCoarse)-79))
+        setv(oscp.FreqFine,min(127,getv(oscp.FreqFine)+42))
+    else:
+      setv(g2mp.FreqCoarse,max(0,getv(g2mp.FreqCoarse)-79))
+      setv(g2mp.FreqFine,min(127,getv(g2mp.FreqFine)+42))
 
 class ConvMasterOsc(Convert):
   maing2module = 'OscMaster'
@@ -794,6 +801,7 @@ class ConvOscSineBank(Convert):
       if len(oscs) > 1:
         for i in range(1,len(oscs)):
           self.connect(oscs[i-1].inputs.Pitch,oscs[i].inputs.Pitch)
+    self.oscs = oscs
 
     sinepostmst(self,0)
 
