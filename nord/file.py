@@ -86,6 +86,8 @@ class Ctrl(object):
   '''Ctrl class for patch midi assignments.'''
   pass
 
+MAX_MODULES = 256
+
 class Area(object):
   '''Area class for patch voice and fx area data (modules, cables, etc...)
 
@@ -97,7 +99,6 @@ for the voice and fx areas of a nord modules g2 patch.
 \tmodules\tarray of modules within area.
 \tcables\tarray of cables connections within area.
 '''
-
   def __init__(self, patch, fromname, index, name):
     self.patch = patch
     self.fromname = fromname
@@ -116,6 +117,12 @@ for the voice and fx areas of a nord modules g2 patch.
 
   modmembers = [ 'name','index','color','horiz','vert','uprate','leds' ]
 
+  def freeindexes(self, nindexes):
+    possibles = range(1,MAX_MODULES+1)
+    for m in self.modules:
+      possibles.remove(m.index)
+    return possibles[:nindexes]
+
   def addmodule(self, shortnm, **kw):
     '''addmodule(shortnm, **kw) -> Module
 \tshortnm\tmodule short type name to add.
@@ -126,26 +133,19 @@ for the voice and fx areas of a nord modules g2 patch.
 \thoriz\tcolumn where module is placed (<32).
 \tvert\trow where module is placed (<127)
 '''
-    # get next available index
+    if len(self.modules) >= MAX_MODULES:
+      return None
+
     type = self.fromname(shortnm)
-    indexes = [ m.index for m in self.modules ]
-    for index in range(1,128):
-      if not index in indexes:
-        break
-    if index < 128:
-      m = Module(type,self)
-      m.name = type.shortnm
-      m.index = index
-      m.color = 0
-      m.horiz = 0
-      m.vert = 0
-      m.uprate = 0
-      m.leds = 0
-      for member in Area.modmembers:
-        if kw.has_key(member):
-          setattr(m,member,kw[member])
-      self.modules.append(m)
-      return m
+    m = Module(type,self)
+    m.name = type.shortnm
+    m.index = self.freeindexes(1)[0]
+    m.color = m.horiz = m.vert = m.uprate = m.leds = 0
+    for member in Area.modmembers:
+      if kw.has_key(member):
+        setattr(m,member,kw[member])
+    self.modules.append(m)
+    return m
 
   def delmodule(self, module):
     '''delmodule(module) -> None
