@@ -38,6 +38,8 @@ NKNOBS = 120    # 120 knob settings
 
 FX, VOICE, SETTINGS = 0, 1, 2
 
+zeros = '\0' * (16<<10) # [0] * (8<<10)
+
 class G2Error(Exception):
   '''G2Error - exception for throwing an unrecoverable error.'''
   def __init__(self, value):
@@ -899,7 +901,7 @@ Info=BUILD %d\r
   def formatpatch(self, patch):
     s = ''
     for section in Pch2File.patchsections:
-      section.data = array('B', [0] * (64<<10)) # max 64k section size
+      section.data = array('B', zeros) # max 64k section size
       f = section.format(patch)
 
       if sectiondebug:
