@@ -168,9 +168,7 @@ class ParameterDumpV3(Section):
       typecode = int(values.pop(0))
       module = area.findmodule(index)
       if not module:
-        type = fromtype(typecode)
-        module = Module(type)
-        area.modules.append(module)
+        continue
       module.index = index
       count = values.pop(0)
       if len(values) < count:
@@ -269,6 +267,9 @@ class NameDumpV3(Section):
       else:
         name = ''
       module = area.findmodule(int(vals[0]))
+      if module == None:
+        printf("[NameDump]: module index %d not found\n", int(vals[0]))
+        continue
       module.name = name
 
 class NotesV3(Section):
