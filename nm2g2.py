@@ -604,15 +604,26 @@ class NM2G2Converter:
 
 
   def dotitleblock(self):
-    lines = ['Converted by',
-	    'gtools-%s' % (g2oolsversion),
-	    'by',
-	    'Matt Gerassimoff',
-	    'models by',
-	    'Sven Roehrig']
+    path = os.path.dirname(os.path.abspath(self.pch.fname))[-16:]
+    lines = [path,
+             'Converted by',
+	     'gtools-%s' % (g2oolsversion),
+	     'by',
+	     'Matt Gerassimoff',
+	     'models by',
+	     'Sven Roehrig',
+	     'All rights',
+	     'reserved']
 
     vert = 0
-    for module in self.pch2.patch.voice.modules:
+    if len(self.pch2.patch.voice.modules) <= 256 - len(lines):
+      area = self.pch2.patch.voice
+    if len(self.pch2.patch.fx.modules) <= 256 - len(lines):
+      area = self.pch2.patch.fx
+    else:
+      self.pch2.patch.textpad += '\n' + '\n'.join(lines)
+      return
+    for module in area.modules:
       if module.horiz != 0:
 	continue
       v = module.vert + module.type.height
@@ -621,16 +632,13 @@ class NM2G2Converter:
 
     def addnamebars(lines, horiz, vert):
       for line in lines:
-	m = self.pch2.patch.voice.addmodule('Name',name=toascii(line))
+	m = area.addmodule('Name',name=toascii(line))
 	m.horiz = horiz
 	m.vert = vert
 	vert += 1
       return vert
 
-    path = os.path.dirname(os.path.abspath(self.pch.fname))[-16:]
-    vert = addnamebars([path],0,vert+2)
-    vert = addnamebars(lines,0,vert+1)
-    vert = addnamebars(['All rights','reserved'],0,vert+1)
+    vert = addnamebars(lines,0,vert+2)
 
 nm2g2_options = [
   make_option('-a', '--all-files', action='store_true',
@@ -740,7 +748,8 @@ def main(argv, stream):
         nm2g2log.info('-' * 20)
 
   if len(failedpatches):
-    f=open('failedpatches-%s.txt' % (time.ctime().replace(' ','-')),'w')
+    s = time.strftime('%m-%d-%y-%H:%M:%S', time.localtime())
+    f=open('failedpatches-%s.txt' % (s),'w')
     s = 'Failed patches: \n %s\n' % '\n '.join(failedpatches)
     f.write(s)
     nm2g2log.warning(s)
