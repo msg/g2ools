@@ -334,6 +334,33 @@ class ModulesV2(V2Section):
       val = min(val,module.params[i].type.type.high)
       module.params[i].variations = [ val for variations in range(9) ]
 
+    if module.type.type == 17: # event seq has bp0 as triggers
+      val = int(moduledef.bp0)
+      for i in range(16):
+        step = getattr(module.params, 'Seq1Step%d' % (i+1))
+	on = (val >> i) & 1
+	step.variations = [on] * 9
+        step = getattr(module.params, 'Seq2Step%d' % (i+1))
+	on = (val >> (i+16)) & 1
+	step.variations = [on] * 9
+    seqmodules = [ 15, 90, 91 ]
+    if module.type.type in seqmodules:
+      if moduledef.bp0 != 0:
+        loop = 1
+      else:
+        loop = 0
+      module.params.Loop.variations = [ loop ] * 9
+
+    mutereversed = [ 9, 96, 10, 11, 12, 13, 85, 95, 58 ]
+    if module.type.type == 106: # sine bank has mutes reversed
+      for i in range(1,7):
+	param = getattr(module.params,'Osc%dMute' % i)
+	mute = 1 - param.variations[0]
+	param.variations = [mute]*9
+    elif module.type.type in mutereversed:
+      mute = 1 - module.params.Mute.variations[0]
+      module.params.Mute.variations = [mute]*9
+
   def create_modules(self):
     area = self.patch.voice
     for i in range(len(self.moduledefs)):
