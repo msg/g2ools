@@ -618,7 +618,7 @@ class NM2G2Converter:
     vert = 0
     if len(self.pch2.patch.voice.modules) <= 256 - len(lines):
       area = self.pch2.patch.voice
-    if len(self.pch2.patch.fx.modules) <= 256 - len(lines):
+    elif len(self.pch2.patch.fx.modules) <= 256 - len(lines):
       area = self.pch2.patch.fx
     else:
       self.pch2.patch.textpad += '\n' + '\n'.join(lines)
