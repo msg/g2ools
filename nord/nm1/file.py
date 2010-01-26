@@ -343,7 +343,7 @@ class ModulesV2(V2Section):
 
       module = area.addmodule(fromtype(moduledef.type).shortnm)
       module.index,module.name = (index, str(moduledef.name))
-      module.horiz,module.vert = (moduledef.col, moduledef.row)
+      module.horiz,module.vert = (moduledef.col, moduledef.row*2)
 
       self.update_module_params(moduledef, module)
 
