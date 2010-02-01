@@ -10,8 +10,8 @@ def printdescription(patch):
   printf('# description\n')
   desc = patch.description
   printf('setting category %s\n', G2Categories[desc.category])
-  printf('setting voices %d\n', desc.nvoices)
-  printf('# height %d\n', desc.height)
+  printf('setting voices %d\n', desc.voices)
+  printf('setting height %d\n', desc.height)
   printf('setting monopoly %d\n', desc.monopoly)
   printf('setting variation %d\n', desc.variation)
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,

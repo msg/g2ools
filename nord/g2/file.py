@@ -77,7 +77,7 @@ class PatchDescription(Section):
   '''PatchDescription Section subclass'''
   type = 0x21
   description_attrs = [
-    ['reserved',5], ['nvoices',5], ['height',14], ['unk2',3],
+    ['reserved',5], ['voices',5], ['height',14], ['unk2',3],
     ['red',1], ['blue',1], ['yellow',1], ['orange',1],
     ['green',1], ['purple',1], ['white', 1],
     ['monopoly',2], ['variation',8], ['category', 8],
