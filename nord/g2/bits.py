@@ -20,6 +20,7 @@
 #
 
 import struct
+from array import array
 
 # number format for getbits() and setbits()
 # b       b       b       b
