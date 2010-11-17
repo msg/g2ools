@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -25,9 +25,9 @@ from nord.g2.pprint import printpatch
 
 prog = sys.argv.pop(0)
 while len(sys.argv):
-  fname = sys.argv.pop(0)
-  printf('"%s"\n', fname)
-  prf2 = Prf2File(fname)
+  filename = sys.argv.pop(0)
+  printf('"%s"\n', filename)
+  prf2 = Prf2File(filename)
   perf = prf2.performance
   for i in range(4):
     printf('Patch %d: "%s"\n', i+1, perf.description.patches[i].name)

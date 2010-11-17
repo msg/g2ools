@@ -20,17 +20,17 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from convert import *
-import inout
-import osc
-import lfo
-import env
-import filter
-import mixer
-import audio
-import ctrl
-import logic
-import seq
+from nord.convert.convert import Convert
+from nord.convert import inout
+from nord.convert import osc
+from nord.convert import lfo
+from nord.convert import env
+from nord.convert import filter
+from nord.convert import mixer
+from nord.convert import audio
+from nord.convert import ctrl
+from nord.convert import logic
+from nord.convert import seq
 
 typetable = {
     1: inout.ConvKeyboard, 

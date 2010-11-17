@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import sys, os
 from nord import printf
@@ -76,12 +76,12 @@ def matchingnets(a, b):
         match += 1
   return matches
 
-fnames = [ f for f in sys.argv[1:] if f[-4:] == 'pch2' ]
-fnames.sort()
+filenames = [ f for f in sys.argv[1:] if f[-4:] == 'pch2' ]
+filenames.sort()
 pch2s = []
-for fname in fnames:
-  printf('%s\n', os.path.basename(fname))
-  p = Pch2File(fname)
+for filename in filenames:
+  printf('%s\n', os.path.basename(filename))
+  p = Pch2File(filename)
   getnets(p)
   pch2s.append(p)
 
@@ -113,6 +113,6 @@ for k in p.keys():
       continue
     printf(' matches:\n')
     for match in matches:
-      fname = os.path.basename(match.fname)
-      printf('  %s\n', fname)
+      filename = os.path.basename(match.filename)
+      printf('  %s\n', filename)
 

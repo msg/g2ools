@@ -19,21 +19,21 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord.utils import *
+from nord.utils import setv, getv
 from nord.g2.colors import g2cablecolors
 from nord.nm1.colors import nm1conncolors
-from nord.units import *
+from nord.units import nm2g2val
 from nord.utils import toascii
-from table import *
+from nord.convert.table import kbttable
 
-def updatevals(g2mp,params,nm1tab,g2tab):
-  '''updatevals(g2mp,params,nm1tab,g2tab) -> None
+def updatevals(g2mp, params, nm1tab, g2tab):
+  '''updatevals(g2mp, params, nm1tab, g2tab) -> None
   change the time values of g2 module based on tables in ./units.py.
   '''
   for param in params:
-    midival = getv(getattr(g2mp,param))
-    newmidival = nm2g2val(midival,nm1tab,g2tab)
-    setv(getattr(g2mp,param),newmidival)
+    midival = getv(getattr(g2mp, param))
+    newmidival = nm2g2val(midival, nm1tab, g2tab)
+    setv(getattr(g2mp, param), newmidival)
 
 class Convert(object):
 
@@ -71,20 +71,20 @@ class Convert(object):
     for i in range(len(self.parammap)):
       param = self.parammap[i]
       if type(param) == type(''):
-	setv(getattr(g2m.params,param),getv(getattr(nmm.params,param)))
-	self.params[i] = getattr(g2m.params,param)
+        setv(getattr(g2m.params, param), getv(getattr(nmm.params, param)))
+        self.params[i] = getattr(g2m.params, param)
       elif type(param) == type([]):
-	setv(getattr(g2m.params,param[0]),getv(getattr(nmm.params,param[1])))
-	self.params[i] = getattr(g2m.params,param[0])
+        setv(getattr(g2m.params, param[0]), getv(getattr(nmm.params, param[1])))
+        self.params[i] = getattr(g2m.params, param[0])
       else:
-	self.params[i] = param # None: placeholder for other parameters
+        self.params[i] = param # None: placeholder for other parameters
 
     # setup inputs from inputmap static member of convert module class
     self.inputs = [ None ] * len(self.inputmap)
     for i in range(len(self.inputmap)):
       input = self.inputmap[i]
       if input:
-	input = getattr(g2m.inputs,input)
+        input = getattr(g2m.inputs, input)
       self.inputs[i] = input
           
     # setup outputs from outputmap static member of convert module class
@@ -92,7 +92,7 @@ class Convert(object):
     for i in range(len(self.outputmap)):
       output = self.outputmap[i]
       if output:
-	output = getattr(g2m.outputs,output)
+        output = getattr(g2m.outputs, output)
       self.outputs[i] = output
 
   def addmodule(self, shortnm, **kw):
@@ -116,7 +116,7 @@ class Convert(object):
     def byvert(a, b):
       return cmp(a.vert, b.vert)
     self.g2modules.sort(byvert)
-    for i in range(1,len(self.g2modules)):
+    for i in range(1, len(self.g2modules)):
       above = self.g2modules[i-1]
       self.g2modules[i].vert = above.vert + above.height
 
@@ -124,7 +124,7 @@ class Convert(object):
     '''connect(source, dest) -> None
     create a cable connection from port source to port dest.
     '''
-    self.g2area.connect(source,dest,g2cablecolors.blue) # change color later
+    self.g2area.connect(source, dest, g2cablecolors.blue) # change color later
 
   def domodule(self):
     '''domodule() -> none
@@ -151,21 +151,21 @@ class Convert(object):
     '''
     pass
 
-  def domorphrange(self,paramindex,morphrange):
+  def domorphrange(self, paramindex, morphrange):
     return morphrange
 
   def reposition(self, convabove):
     '''reposition(convabove) -> None
     reposition module based on nm1's separation from module above.
     '''
-    nmm,g2m = self.nmmodule,self.g2module
+    nmm, g2m = self.nmmodule, self.g2module
     if not convabove:
       g2m.vert += nmm.vert
       for g2mod in self.g2modules:
         g2mod.vert += nmm.vert
       return
 
-    nma,g2a = convabove.nmmodule,convabove.g2module
+    nma, g2a = convabove.nmmodule, convabove.g2module
     sep = nmm.vert - nma.vert - nma.type.height
     vert = g2a.vert + convabove.height + sep
     g2m.vert += vert
@@ -182,45 +182,47 @@ class Convert(object):
     '''insertcolumn(column) -> None
     readjust horiz>=column for all modules in both g2area, nmarea
     '''
-    for nmmod in nmarea.modules:
-      if nmmod.horiz >= column:
-        nmmod.horiz += 1
-    for g2mod in g2area.modules:
-      if g2mod.horiz >= column:
-        g2mod.horiz += 1
+    for module in self.nmarea.modules:
+      if module.horiz >= column:
+        module.horiz += 1
 
-def handlekbt(conv,input,kbt100,addalways=False):
+    for module in self.g2area.modules:
+      if module.horiz >= column:
+        module.horiz += 1
+
+def handlekbt(conv, input, kbt100, addalways=False):
   '''handlekbt(conv, input, kbt100, addalways=False) -> input
   '''
-  nmm,g2m = conv.nmmodule,conv.g2module
-  nmmp,g2mp = nmm.params, g2m.params
+  nmm, g2m = conv.nmmodule, conv.g2module
+  nmmp, g2mp = nmm.params, g2m.params
 
   kbt = getv(nmmp.Kbt)
   if addalways:
     pass
   elif kbt == 0:
-    setv(conv.kbt,kbt)
+    setv(conv.kbt, kbt)
     return None
   elif kbt == 64:
-    setv(conv.kbt,kbt100)
+    setv(conv.kbt, kbt100)
     return None
 
   if not g2m.area.keyboard:
     g2m.area.keyboard = conv.addmodule('Keyboard')
   keyboard = g2m.area.keyboard
 
-  setv(conv.kbt,0)
-  mix21b = conv.addmodule('Mix2-1B',name='Kbt')
-  conv.connect(keyboard.outputs.Note,mix21b.inputs.In1)
-  conv.connect(mix21b.inputs.In1,mix21b.inputs.In2)
-  conv.connect(mix21b.outputs.Out,input)
-  setv(mix21b.params.ExpLin,1) # Lin
-  setv(mix21b.params.Lev1,kbttable[kbt][0])
-  setv(mix21b.params.Lev2,kbttable[kbt][1])
+  setv(conv.kbt, 0)
+  mix21b = conv.addmodule('Mix2-1B', name='Kbt')
+  conv.connect(keyboard.outputs.Note, mix21b.inputs.In1)
+  conv.connect(mix21b.inputs.In1, mix21b.inputs.In2)
+  conv.connect(mix21b.outputs.Out, input)
+  setv(mix21b.params.ExpLin, 1) # Lin
+  setv(mix21b.params.Lev1, kbttable[kbt][0])
+  setv(mix21b.params.Lev2, kbttable[kbt][1])
   return input
   
-def handleoscmasterslv(conv,mst,left,bp,right,lev1,lev2,sub48=False):
-  '''handleoscmasterslv(conv,msg,left,bp,right,lev1,lev2,sub48=False) -> output
+def handleoscmasterslv(conv, mst, left, bp, right, lev1, lev2, sub48=False):
+  '''handleoscmasterslv(conv, msg, left, bp, right, lev1, lev2, sub48=False)
+          -> output
   '''
   nmm, g2m = conv.nmmodule, conv.g2module
 
@@ -243,42 +245,42 @@ def handleoscmasterslv(conv,mst,left,bp,right,lev1,lev2,sub48=False):
     return mst.outputs.Out
 
   if sub48:
-    sub48 = conv.addmodule('LevAdd',name='-48')
-    setv(sub48.params.Level,16)
-    conv.connect(out,sub48.inputs.In)
+    sub48 = conv.addmodule('LevAdd', name='-48')
+    setv(sub48.params.Level, 16)
+    conv.connect(out, sub48.inputs.In)
     out = sub48.outputs.Out
     
   # Grey to Blue handling
-  levscaler = conv.addmodule('LevScaler',name='GreyIn')
-  setv(levscaler.params.Kbt,0)
-  setv(levscaler.params.L,16)
-  setv(levscaler.params.BP,127)
-  setv(levscaler.params.R,112)
-  levscaler2 = conv.addmodule('LevScaler',name='GreyIn')
-  setv(levscaler2.params.Kbt,0)
-  setv(levscaler2.params.L,left)
-  setv(levscaler2.params.BP,bp)
-  setv(levscaler2.params.R,right)
+  levscaler = conv.addmodule('LevScaler', name='GreyIn')
+  setv(levscaler.params.Kbt, 0)
+  setv(levscaler.params.L, 16)
+  setv(levscaler.params.BP, 127)
+  setv(levscaler.params.R, 112)
+  levscaler2 = conv.addmodule('LevScaler', name='GreyIn')
+  setv(levscaler2.params.Kbt, 0)
+  setv(levscaler2.params.L, left)
+  setv(levscaler2.params.BP, bp)
+  setv(levscaler2.params.R, right)
   mix21b = conv.addmodule('Mix2-1B')
-  setv(mix21b.params.Lev1,lev1)
-  setv(mix21b.params.Lev2,lev2)
-  greyout = conv.addmodule('LevAmp',name='GreyOut')
-  setv(greyout.params.Gain,127)
-  conv.connect(out,levscaler.inputs.Note)
-  conv.connect(levscaler.inputs.Note,levscaler2.inputs.Note)
-  conv.connect(levscaler.outputs.Level,mix21b.inputs.In1)
-  conv.connect(levscaler.outputs.Level,levscaler2.inputs.In)
-  conv.connect(levscaler2.outputs.Out,mix21b.inputs.In2)
-  conv.connect(mix21b.outputs.Out,greyout.inputs.In)
+  setv(mix21b.params.Lev1, lev1)
+  setv(mix21b.params.Lev2, lev2)
+  greyout = conv.addmodule('LevAmp', name='GreyOut')
+  setv(greyout.params.Gain, 127)
+  conv.connect(out, levscaler.inputs.Note)
+  conv.connect(levscaler.inputs.Note, levscaler2.inputs.Note)
+  conv.connect(levscaler.outputs.Level, mix21b.inputs.In1)
+  conv.connect(levscaler.outputs.Level, levscaler2.inputs.In)
+  conv.connect(levscaler2.outputs.Out, mix21b.inputs.In2)
+  conv.connect(mix21b.outputs.Out, greyout.inputs.In)
 
   return greyout.outputs.Out
 
 def doslvcables(conv):
   '''doslvcables(conv) -> None
   '''
-  if not hasattr(conv,'slvoutput'):
+  if not hasattr(conv, 'slvoutput'):
     return
   for input in conv.slaves:
     conv.nmmodule.area.removeconnector(input)
-    conv.connect(conv.slvoutput,input.module.conv.inputs[input.index])
+    conv.connect(conv.slvoutput, input.module.conv.inputs[input.index])
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -97,12 +97,12 @@ def printpatch(patch):
     
 prog = sys.argv.pop(0)
 while len(sys.argv):
-  fname = sys.argv.pop(0)
-  printf('"%s"\n', fname)
+  filename = sys.argv.pop(0)
+  printf('"%s"\n', filename)
   try:
-    pch = PchFile(fname)
+    pch = PchFile(filename)
     printpatch(pch.patch)
   except NM1Error, s:
-    printf('%s: NM1Error %s\n', fname, s)
+    printf('%s: NM1Error %s\n', filename, s)
     sys.exit(1)
 

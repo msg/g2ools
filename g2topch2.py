@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import os, string, sys, traceback
 from nord.g2.file import Pch2File, Prf2File
@@ -7,11 +7,14 @@ from nord import types
 import nord.g2.modules
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf
+from nord.file import Ctrl
 
 def debug(fmt, *a):
-  if 0: printf(fmt, *a)
+  if 0:
+    printf(fmt, *a)
 
-class G2Exception(Exception): pass
+class G2Exception(Exception):
+  pass
 
 def cleanline(line):
   comment = line.find('#')
@@ -26,11 +29,11 @@ class G2ModuleParam(object):
   
   def set(self, *a):
     for i in range(9):
-      v = a[0][i%len(a[0])]
+      v = a[0][i % len(a[0])]
       if v[0] == '=':
         map = self.param.type.type.map[0]
-	if not map.has_key(v[1:]):
-	  raise G2Exception('No name %s: pick from %s' % (v[1:], map.keys()))
+        if not map.has_key(v[1:]):
+          raise G2Exception('No name %s: pick from %s' % (v[1:], map.keys()))
         v = map[v[1:]]
       self.param.variations[i] = int(v)
 
@@ -90,7 +93,7 @@ class G2Section(object):
     mt = get_module_type(typename)
     m = mt.add(self.section.current_area, name=name,
         horiz=self.section.horiz, vert=self.section.vert,
-	color=self.module_color)
+        color=self.module_color)
     self.section.vert += m.height
     return m
 
@@ -113,7 +116,6 @@ class G2Section(object):
     return module.params[param]
 
   def connect(self, *args):
-    lastconnection = None
     connections = []
     for arg in args:
       connection = self.parse_connection(arg)
@@ -168,7 +170,7 @@ class G2GroupParam(object):
         variation = variations[var]
         self.variations[var] = variation
         paramvars = self.setupvars(var, variation)
-	val = eval(calc.equation, paramvars)
+        val = eval(calc.equation, paramvars)
         vals.append('%s' % val)
       calc.param.set(vals)
 
@@ -278,21 +280,21 @@ class G2Patch(G2Section):
     # update all cables connected to each input
     for input in net.inputs:
       if not net.output:
-	continue
+        continue
 
       color = g2cablecolors.white
       if net.output.rate == g2conncolors.blue_red:
-	color = [g2cablecolors.blue, g2cablecolors.red][uprate]
+        color = [g2cablecolors.blue, g2cablecolors.red][uprate]
       if net.output.rate == g2conncolors.red:
-	color = g2cablecolors.red
+        color = g2cablecolors.red
       elif net.output.rate == g2conncolors.blue:
-	color = g2cablecolors.blue
+        color = g2cablecolors.blue
       elif net.output.rate == g2conncolors.yellow_orange:
-	color = [g2cablecolors.yellow, g2cablecolors.orange][uprate]
+        color = [g2cablecolors.yellow, g2cablecolors.orange][uprate]
 
       for cable in input.cables:
-	if cable.color == g2cablecolors.white:
-	  cable.color = color
+        if cable.color == g2cablecolors.white:
+          cable.color = color
 
   def update_rates(self):
     # loop through all module connections
@@ -302,9 +304,9 @@ class G2Patch(G2Section):
       handle_uprate(area)
       for net in area.netlist.nets:
         if net.output == None:
-	  continue
+          continue
 
-	self.update_inputs(net, net.output.module.uprate)
+        self.update_inputs(net, net.output.module.uprate)
 
   def write(self):
     printf('Writing %s\n', self.filename + '.pch2')
@@ -322,10 +324,10 @@ class G2Patch(G2Section):
     vert = 0
     for module in self.current_area.modules:
       if module.horiz != horiz:
-	continue
+        continue
       new_vert = module.vert + module.type.height
       if new_vert > vert:
-	vert = new_vert
+        vert = new_vert
     self.vert = vert
     return 0
 
@@ -342,7 +344,7 @@ class G2Patch(G2Section):
 
   def add(self, typename, name, label=None):
     if self.modules.has_key(name):
-      raise G2Expception('Module %s already exists.' % name)
+      raise G2Exception('Module %s already exists.' % name)
     if label == None:
       label = name
     self.modules[name] = self.addmodule(typename, label)
@@ -359,7 +361,7 @@ class G2Patch(G2Section):
       return -1
     param.set(variations)
 
-  def parse_knob(knob):
+  def parse_knob(self, knob):
     rc, index = knob.split('.', 1)
     row, col = list(rc)
     col = 'abcde'.find(col.lower())
@@ -369,26 +371,26 @@ class G2Patch(G2Section):
       raise G2Exception('Invalid knob %s.' % knob)
     return knob-1, row, col
     
-  def parse_morph(morph):
+  def parse_morph(self, morph):
     m = int(morph)-1
     if morph < 0 or morph > 7:
       raise G2Exception('Invalid morph %s.' % morph)
     return m
 
-  def parse_control(control, nomorph=False):
+  def parse_control(self, control, nomorph=False):
     area, param = control.split('.', 1)
     if area == 'voice' or area == 'fx':
       saved_area, saved_modules = self.current_area, self.modules
       self.area(area)
       control = self.parse_parameter(param)
-      type = self.current_area.index
-      self.current_area, self.modules = saved_area, save_modules
-    elif nomorph == False and area == 'morph':
+      area_type = self.current_area.index
+      self.current_area, self.modules = saved_area, saved_modules
+    elif not nomorph and area == 'morph':
       control = self.parse_morph(param)
-      type = 2
+      area_type = 2
     else:
       raise G2Exception('Invalid control %s' % control)
-    return control, type
+    return control, area_type
 
   def knob(self, knob, control):
     knob, row, col = self.parse_knob(knob)
@@ -402,17 +404,17 @@ class G2Patch(G2Section):
     cc = int(cc)
     if midicc_reserved(cc):
       raise G2Exception('midicc %d reserved' % cc)
-    param, type = self.parse_control(control)
+    param, area_type = self.parse_control(control)
     m = None
     for ctrl in self.pch2.ctrls:
       if ctrl.midicc == cc:
         m = ctrl
-	break
+        break
     if m == None:
       m = Ctrl()
       self.pch2.ctrls.append(m)
     m.midicc = cc
-    m.param, m.type = param, type
+    m.param, m.type = param, area_type
    
   def morph(self, morph, command, *args):
     #control = self.parse_control(control, nomorph=True)[0]
@@ -426,8 +428,18 @@ class G2Patch(G2Section):
     elif command == 'add':
       pass
 
-  def setting(self, setting, *variations):
+  def table(self, name, file):
     pass
+
+  def setting(self, setting, *variations):
+    nonvariation = [ 'category', 'voices', 'height', 'monopoly', 'variation' ]
+    if setting in nonvariation:
+      setattr(self.pch2.patch.description, setting, variations[0])
+    elif setting in self.pch2.patch.settings.groups:
+      #getattr(self.pch2.patch.settings, setting).varations = variations
+      pass
+    elif setting == 'colors':
+      pass
 
 class G2File(object):
   def __init__(self, filename):
@@ -454,14 +466,14 @@ class G2File(object):
   def handle_include(self, filename):
     path = self.find_include(filename)
     if not path:
-      raise G2Expception('%s not found in path %s' % (filename,
+      raise G2Exception('%s not found in path %s' % (filename,
           self.include_path))
     if path in self.file_stack:
-      raise G2Expception('%s include loop.\ncurrent stack %s' % (path,
-      	  self.file_stack))
+      raise G2Exception('%s include loop.\ncurrent stack %s' % (path,
+          self.file_stack))
       return
     self.file_stack.append(path)
-    if not self.files.has_key(path):
+    if not path in self.files:
       self.build_files(path)
     self.file_stack.remove(path)
 
@@ -481,9 +493,9 @@ class G2File(object):
         inmodule = False
       elif fields[0] == 'include':
         if inmodule:
-	  printf('%s:%d - include inside module definition\n', filename, lineno)
-	else:
-	  self.handle_include(fields[1])
+          printf('%s:%d - include inside module definition\n', filename, lineno)
+        else:
+          self.handle_include(fields[1])
 
   def build_module(self, name, lines):
     module_types[name] = G2GroupType(self.g2patch, lines)
@@ -502,14 +514,14 @@ class G2File(object):
       cmd = args.pop(0)
       if cmd == 'module':
         inmodule = 1
-	module_name = args[0]
+        module_name = args[0]
       elif cmd == 'endmodule':
-	self.build_module(module_name, module)
+        self.build_module(module_name, module)
         inmodule = 0
-	module = []
+        module = []
       elif cmd == 'include':
         path = self.find_include(args[0])
-	filelines += self.build_file(path)
+        filelines += self.build_file(path)
       elif inmodule:
         module.append((lineno, line))
       else:

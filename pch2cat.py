@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -27,9 +27,9 @@ from nord import printf
 prog = sys.argv.pop(0)
 try:
   while len(sys.argv):
-    fname = sys.argv.pop(0)
-    pch2 = Pch2File(fname)
-    printf('"%s"\n', fname)
+    filename = sys.argv.pop(0)
+    pch2 = Pch2File(filename)
+    printf('"%s"\n', filename)
     printpatch(pch2.patch)
 except IOError:
   pass

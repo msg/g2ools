@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
-from nord import printf
+from nord import printf, Struct
 from nord.types import *
 from nord.nm1.colors import nm1conncolors
 

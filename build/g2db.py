@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -19,13 +19,13 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import re, sys, string
+import re, sys
 sys.path.append('..')
-from nord import printf
+from nord import printf, Struct
 
-def grab_entries(fname, classnm, arraynm):
+def grab_entries(filename, classnm):
   # read file, remove first and last line
-  lines = map(string.strip, open(fname).readlines())[1:-1]
+  lines = [ line.strip() for line in open(filename).readlines() ][1:-1]
   # search for start of first object, removing lines
   while lines[0].find('%s' % classnm) < 0:
     lines.pop(0)
@@ -33,19 +33,15 @@ def grab_entries(fname, classnm, arraynm):
   # split on start of preceding objects
   entries = '\n'.join(lines).split('\n)\n%s(' % classnm)
   def fixup(s):
-    s = re.sub('\\(','=', s).strip()
-    s = re.sub('\\)\n',',\n', s).strip()
-    return filter(lambda a: a, s[:-1].split('\n'))
-  entries = map(fixup, entries)
+    s = re.sub('\\(', '=', s).strip()
+    s = re.sub('\\)\n', ',\n', s).strip()
+    return [ field for field in s[:-1].split('\n') if field ]
+  entries = [ fixup(entry) for entry in entries ]
   return entries
 
-def build_table(fname, classnm, arraynm):
-  entries = grab_entries(fname, classnm, arraynm)
+def build_table(filename, classnm):
+  entries = grab_entries(filename, classnm)
   return entries
-
-class Struct:
-  def __init__(self, **kw):
-    self.__dict__ = kw
 
 paramlabels = { # [ param#, [ strlist ] ]
    50: { 1: ['Switch'], },                        # ConstSwM
@@ -65,32 +61,32 @@ paramlabels = { # [ param#, [ strlist ] ]
    36: { 0: ['On'], },                            # SwOnOffM
    76: { 0: ['On'], },                            # SwOnOffT
   187: { 0: ['Switch'], },                        # Sw2-1M
-  100: { 0: ['In 1','In 2'], },                   # Sw2-1
-   79: { 0: ['In 1','In 2','In 3','In 4'], },     # Sw4-1
-   15: { 0: ['In 1','In 2','In 3','In 4',           
-             'In 5','In 6','In 7','In 8'], },     # Sw8-1
+  100: { 0: ['In 1', 'In 2'], },                  # Sw2-1
+   79: { 0: ['In 1', 'In 2', 'In 3', 'In 4'], },  # Sw4-1
+   15: { 0: ['In 1', 'In 2', 'In 3', 'In 4',           
+             'In 5', 'In 6', 'In 7', 'In 8'], },  # Sw8-1
   186: { 0: ['Switch'], },                        # Sw1-2M
-   17: { 0: ['Out 1','Out 2'], },                 # ValSw1-2
-   88: { 0: ['Out 1','Out 2','Out 3','Out 4'], }, # Sw1-4
-   78: { 0: ['Out 1','Out 2','Out 3','Out 4',
-             'Out 5','Out 6','Out 7','Out 8'], }, # Sw1-8
+   17: { 0: ['Out 1', 'Out 2'], },                # ValSw1-2
+   88: { 0: ['Out 1', 'Out 2', 'Out 3', 'Out 4'], }, # Sw1-4
+   78: { 0: ['Out 1', 'Out 2', 'Out 3', 'Out 4',
+             'Out 5', 'Out 6', 'Out 7', 'Out 8'], }, # Sw1-8
 }                                                      
 
-params = build_table('param_table.txt', 'param', 'parameters')
+params = build_table('param_table.txt', 'param')
 for param in params:
   param.pop(0)
 paramstructs = [ eval('Struct('+''.join(param)+')') for param in params ]
 
 prog = sys.argv.pop(0)
 
-f=open('../nord/g2/params.py','w')
-f.write('''#!/usr/bin/env python
+f = open('../nord/g2/params.py', 'w')
+f.write('''#!/usr/bin/env python2
 
-from nord import printf
-from nord.types import Struct
+from nord import Struct
 from nord.types import ParamDef
 
-class ParamMap(Struct): pass
+class ParamMap(Struct):
+  pass
 
 params = [
 ''')
@@ -106,7 +102,7 @@ def setup_map(param):
     map = { }
     for nmval in param.definitions[i].split(','):
       val, name = [ s.strip() for s in nmval.split('~') ]
-      name = name.replace(' ','_').lower()
+      name = name.replace(' ', '_').lower()
       map[name] = val
     param.map.append(map)
 
@@ -121,18 +117,19 @@ parammap = Struct()
 for struct in paramstructs:
   setattr(parammap, struct.name, struct)
 
-modules = build_table('module_table.txt', 'module', 'modules')
+modules = build_table('module_table.txt', 'module')
 modulestructs = [ eval('Struct('+''.join(module)+')') for module in modules ]
 
-f=open('../nord/g2/modules.py','w')
-f.write('''#!/usr/bin/env python
+f = open('../nord/g2/modules.py', 'w')
+f.write('''#!/usr/bin/env python2
 
-from nord import printf
+from nord import printf, Struct
 from nord.types import *
 from nord.g2.colors import g2conncolors
 from params import parammap
 
-class ModuleMap(Struct): pass
+class ModuleMap(Struct):
+  pass
 
 
 modules = [
@@ -151,10 +148,10 @@ for struct in modulestructs:
 
   if len(struct.inputs):
     ins = []
-    for nm,t,loc in zip(struct.inputs,struct.inputtypes,struct.inputlocs):
-      h, v = map(eval,loc.split(','))
-      ins.append("      InputType(%-16sg2conncolors.%-14shoriz=%d,vert=%d)," %
-          ("'%s'," % nm,'%s,' %t,h,v))
+    for nm, t, loc in zip(struct.inputs, struct.inputtypes, struct.inputlocs):
+      h, v = [ eval(l) for l in loc.split(',')]
+      ins.append("      InputType(%-16sg2conncolors.%-14shoriz=%d, vert=%d)," %
+          ("'%s', " % nm, '%s, ' % t, h, v))
     s += '''    inputs=InputList([
 %s
     ]),\n''' % (
@@ -165,10 +162,13 @@ for struct in modulestructs:
 
   if len(struct.outputs):
     outs = []
-    for nm,t,loc in zip(struct.outputs, struct.outputtypes, struct.outputlocs):
-      h,v = map(eval,loc.split(','))
-      outs.append("      OutputType(%-16sg2conncolors.%-14shoriz=%d,vert=%d),"
-          % ("'%s'," % nm,'%s,' % t, h, v))
+    outputs = struct.outputs
+    outputtypes = struct.outputtypes
+    outputlocs = struct.outputlocs
+    for nm, t, loc in zip(outputs, outputtypes, outputlocs):
+      h, v = [ eval(l) for l in loc.split(',')]
+      outs.append("      OutputType(%-16sg2conncolors.%-14shoriz=%d, vert=%d),"
+          % ("'%s', " % nm, ' % s, ' % t, h, v))
     s += '''    outputs=OutputList([
 %s
     ]),\n''' % (
@@ -181,12 +181,12 @@ for struct in modulestructs:
     s += '    params=ParamList([\n'
     for p in range(len(struct.params)):
       nm, t = struct.params[p], struct.paramtypes[p]
-      s += '      ParamType(%-16sparammap.%s' % ("'%s'," % nm, t)
+      s += '      ParamType(%-16sparammap.%s' % ("'%s', " % nm, t)
       # add param labels
       if paramlabels.has_key(struct.type):
         if paramlabels[struct.type].has_key(p):
           labels = paramlabels[struct.type][p]
-          s += ',\n        labels=[%s]\n      ' % ','.join(
+          s += ',\n        labels=[%s]\n      ' % ', '.join(
               [ "'%s'" % label for label in labels ])
       s += '),\n'
     s += '    ]),\n'
@@ -197,8 +197,8 @@ for struct in modulestructs:
     s += '''    modes=ModeList([
 %s
     ]),\n''' % (
-      '\n'.join(["      ModeType(%-16sparammap.%s)," % ("'%s'," % nm,t) 
-          for nm,t in zip(struct.modes, struct.modetypes) ]),
+      '\n'.join(["      ModeType(%-16sparammap.%s)," % ("'%s', " % nm, t) 
+          for nm, t in zip(struct.modes, struct.modetypes) ]),
       )
   else:
     s += '    modes=ModeList([]),\n'
@@ -215,7 +215,7 @@ modulemap = ModuleMap()
 for module in modules:
   namemap[module.shortnm.lower()] = module
   typemap[module.type] = module
-  name = module.shortnm.replace('-','_').replace('&','n')
+  name = module.shortnm.replace('-', '_').replace('&', 'n')
   setattr(modulemap, name, module)
 
 def fromtype(type): return typemap[type]
@@ -248,17 +248,17 @@ fromname = {}
 for struct in modulestructs:
   #printf('%s\\n', struct.longnm)
   fromname[struct.shortnm] = fromtype[struct.type] = Struct(
-    inputs=[ Struct(name=nm,type=t)
-            for nm,t in zip(struct.inputs, struct.inputtypes) ],
+    inputs=[ Struct(name=nm, type=t)
+            for nm, t in zip(struct.inputs, struct.inputtypes) ],
     outputs=[ Struct(name=nm, type=t)
-            for nm,t in zip(struct.outputs, struct.outputtypes) ],
-    modes=[ Struct(name=nm, type=t) for nm,t in zip(struct.modes,
-            map(lambda a,p=parammap: getattr(p,a), struct.modetypes)) ],
-    params=[ Struct(name=nm, type=t) for nm,t in zip(struct.params,
-            map(lambda a,p=parammap: getattr(p,a), struct.paramtypes)) ],
-    page=Struct(name=struct.page,index=struct.pageindex),
-    height=struct.height,type=struct.type,
-    longnm=struct.longnm,shortnm=struct.shortnm
+            for nm, t in zip(struct.outputs, struct.outputtypes) ],
+    modes=[ Struct(name=nm, type=t) for nm, t in zip(struct.modes,
+            [ getattr(parammap, a) for a in struct.modetypes]) ],
+    params=[ Struct(name=nm, type=t) for nm, t in zip(struct.params,
+            [ getattr(parammap, a) for a in struct.paramtypes]) ],
+    page=Struct(name=struct.page, index=struct.pageindex),
+    height=struct.height, type=struct.type,
+    longnm=struct.longnm, shortnm=struct.shortnm
   )
 
 #del params

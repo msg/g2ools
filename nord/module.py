@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # module.py - create a module from it's type
 #
@@ -20,6 +20,7 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+from nord import printf
 
 class Member(object):
   '''Member abstract class for all Module members.'''
@@ -33,7 +34,7 @@ class IOMember(Member):
   '''IOMember abstract Member subclass for all Module Input/Output objects.'''
   def __init__(self, module, type, index):
     '''IOMember(module, type, index) -> IOMember object'''
-    super(IOMember,self).__init__(module, type, index)
+    super(IOMember, self).__init__(module, type, index)
     self.rate = type.type
     self.cables = []
     self.net = None
@@ -59,7 +60,7 @@ class Param(Member):
 \tlabels\tif module type parameter has labels, this is an array of those.
 '''
     super(Param, self).__init__(module, type, index)
-    self.variations = [ type.type.default for variation in range(9) ]
+    self.variations = [ type.type.default ] * 9
     self.knob = None
     self.ctrl = None
     self.morph = None
@@ -70,14 +71,14 @@ class Mode(Member):
   '''Mode class representing static parameters for a nord modular Module.'''
   def __init__(self, module, type, index):
     '''Mode(module, type, index) -> Mode object'''
-    super(Mode,self).__init__(module, type, index)
+    super(Mode, self).__init__(module, type, index)
     self.value = type.type.default
 
-def sattr(obj,nm,val):
-  '''sattr(obj,nm,val) -> None  helper function for Array (internal).'''
-  if hasattr(obj,nm):
+def sattr(obj, nm, val):
+  '''sattr(obj, nm, val) -> None  helper function for Array (internal).'''
+  if hasattr(obj, nm):
     printf('  %s name "%s" exists\n', obj.__class__.__name__, nm)
-  setattr(obj,nm,val)
+  setattr(obj, nm, val)
 
 class Array(list):
   '''Array class for managing arrays within a Module object (internal).'''
@@ -103,7 +104,7 @@ class Module(object):
     self.type = type
     self.area = area
     self.__dict__.update(kw)
-    for nm,cls in Module.Groups:
+    for nm, cls in Module.Groups:
       t = getattr(type, nm)
       a = Array([ None ] * len(t))
       setattr(self, nm, a)
@@ -112,7 +113,7 @@ class Module(object):
         a.add(t[i].name, o, i)
     if type.type == 121: # SeqNote mag/octave additions
       # [0, 1, mag, 0, 1, octave]
-      # mag: 0=3-octaves,1=2-octaves,2=1-octave
+      # mag: 0=3-octaves, 1=2-octaves, 2=1-octave
       # octave: 0-9 (c0-c9)
-      self.editmodes=[ 0, 1, 1, 0, 1, 5]
+      self.editmodes = [ 0, 1, 1, 0, 1, 5]
 

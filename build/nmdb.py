@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -21,53 +21,52 @@
 
 import sys
 sys.path.append('..')
-from string import *
 import re
 from nord import printf
 
 class Module:
   pass
 
-commentre=re.compile(';.*$')
-modulere=re.compile('(\d+)\s+(\S+)')
-remarkre=re.compile('remark\s+(\S+)')
-namedblre=re.compile('(\w+)\s+(\d+.\d+)')
-nameintre=re.compile('(\w+)\s+(\d+)')
-parameterre=re.compile('(\d+)\s+"([^"]+)"\s+(\d+)\.\.(\d+)\s+"([^"]*)"')
-inoutre=re.compile('(\d+)\s+"([^"]+)"\s+(\S+)')
-customre=parameterre
+commentre = re.compile(';.*$')
+modulere = re.compile('(\d+)\s+(\S+)')
+remarkre = re.compile('remark\s+(\S+)')
+namedblre = re.compile('(\w+)\s+(\d+.\d+)')
+nameintre = re.compile('(\w+)\s+(\d+)')
+parameterre = re.compile('(\d+)\s+"([^"]+)"\s+(\d+)\.\.(\d+)\s+"([^"]*)"')
+inoutre = re.compile('(\d+)\s+"([^"]+)"\s+(\S+)')
+customre = parameterre
 
-entries=open('patch303.txt','r').read().split('----------\r\n')
+entries = open('patch303.txt', 'r').read().split('----------\r\n')
 entries.pop(0)
-fromtype={}
-fromname={}
-modules=[]
+fromtype = {}
+fromname = {}
+modules = []
 for entry in entries:
-  data=entry.split('\r\n')
-  m=modulere.match(data.pop(0))
+  data = entry.split('\r\n')
+  m = modulere.match(data.pop(0))
   if m:
     #printf('%s %s\n', m.group(1), m.group(2))
-    mod=Module()
+    mod = Module()
     mod.type = m.group(1)
     mod.name = m.group(2)
     # remove remark
     data.pop(0)
     # get float attributes
-    for i in range(2,8):
-      mnd=namedblre.match(data.pop(0))
+    for i in range(2, 8):
+      mnd = namedblre.match(data.pop(0))
       if mnd:
-        setattr(mod,mnd.group(1),float(mnd.group(2)))
+        setattr(mod, mnd.group(1), float(mnd.group(2)))
         #printf('%s %s\n', mnd.group(1), mnd.group(2))
-    mni=nameintre.match(data.pop(0))
+    mni = nameintre.match(data.pop(0))
     if mni:
-      setattr(mod,mni.group(1),int(mni.group(2)))
+      setattr(mod, mni.group(1), int(mni.group(2)))
     # the rest is parameters, inputs, outpus, custom
     mod.parameters = []
     mod.inputs = []
     mod.outputs = []
     mod.custom = []
     while len(data):
-      s=data.pop(0)
+      s = data.pop(0)
       if s == 'parameters':
         section = mod.parameters
         sectionre = parameterre
@@ -88,18 +87,20 @@ for entry in entries:
     fromname[mod.name] = mod
     modules.append(mod)
 
-out = open('../nord/nm1/modules.py','w')
-out.write('''#!/usr/bin/env python
+out = open('../nord/nm1/modules.py', 'w')
+out.write('''#!/usr/bin/env python2
 
-from nord import printf
+from nord import printf, Struct
 from nord.types import *
 from nord.nm1.colors import nm1conncolors
 
-class ParameterDef(Struct): pass
+class ParameterDef(Struct):
+  pass
 
-class ModuleMap(Struct): pass
+class ModuleMap(Struct):
+  pass
 
-audio,control,logic,slave = range(4)
+audio, control, logic, slave = range(4)
 
 modules = [
 ''')
@@ -114,10 +115,10 @@ for module in modules:
     s += '''    inputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      InputType(%-16snm1conncolors.%s)," % (
-          "'%s'," %  nm.title().replace(' ',''),
-          t.lower().replace(' ',''))
-          for (n,nm,t) in module.inputs
+        '\n'.join(["      InputType(%-16snm1conncolors.%s), " % (
+          "'%s', " %  nm.title().replace(' ', ''),
+          t.lower().replace(' ', ''))
+          for (n, nm, t) in module.inputs
         ])
     )
   else:
@@ -126,10 +127,10 @@ for module in modules:
     s += '''    outputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      OutputType(%-16snm1conncolors.%s)," % (
-          "'%s'," %  nm.title().replace(' ',''),
-          t.lower().replace(' ',''))
-          for (n,nm,t) in module.outputs
+        '\n'.join(["      OutputType(%-16snm1conncolors.%s), " % (
+          "'%s', " %  nm.title().replace(' ', ''),
+          t.lower().replace(' ', ''))
+          for (n, nm, t) in module.outputs
         ])
     )
   else:
@@ -141,9 +142,9 @@ for module in modules:
         '\n'.join(
         ['''      ParamType('%s',
         ParamDef(  default=%s, low=%s, high=%s, comment='%s'),
-      ),''' % (
-          nm.title().replace(' ',''), l, l, h, c)
-          for (n,nm,l,h,c) in module.parameters
+      ), ''' % (
+          nm.title().replace(' ', ''), l, l, h, c)
+          for (n, nm, l, h, c) in module.parameters
         ])
     )
   else:
@@ -159,9 +160,9 @@ for module in modules:
           high=%s,
           comment='%s'
         ),
-      ),''' % (
-          nm.title().replace(' ',''), l, l, h, c)
-          for (n,nm,h,l,c) in module.custom
+      ), ''' % (
+          nm.title().replace(' ', ''), l, l, h, c)
+          for (n, nm, h, l, c) in module.custom
         ])
     )
   else:
@@ -179,7 +180,7 @@ modulemap = ModuleMap()
 for module in modules:
   __fromname[module.shortnm.lower()] = module
   __fromtype[module.type] = module
-  name = module.shortnm.replace('-','_').replace('&','n')
+  name = module.shortnm.replace('-', '_').replace('&', 'n')
   setattr(modulemap, name, module)
 
 def fromname(name): return __fromname[name.lower()]

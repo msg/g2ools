@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -19,13 +19,12 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import re, string, sys
+import sys
 
 from nord import printf
 from nord.net import NetList
-from nord.module import Module
-from nord.file import *
-from modules import fromname, fromtype
+from nord.file import Patch, Note, Cable, Knob, Ctrl, MorphMap
+from nord.nm1.modules import fromname, fromtype
 
 NMORPHS = 4
 
@@ -34,6 +33,9 @@ class NM1Error(Exception):
     self.value = value
   def __str__(self):
     return repr(self.value)
+
+def eval_fields(s):
+  return [ eval(f.capitalize()) for f in s.split() ]
 
 class Section(object):
   def __init__(self, patch, lines):
@@ -53,21 +55,28 @@ class HeaderV3(Section):
       line = lines.pop(0)
       if 'Version=' in line:
         self.version = line
-	if self.version.find('patch 3') < 0:
+        if self.version.find('patch 3') < 0:
           raise NM1Error('Header: version "%s" invalid' % self.version)
         break
-    values = map(int,lines[0].split()) + [1]*23 # make sure we have enough
-    (self.keymin,self.keymax, self.velmin,self.velmax,
-     self.bend,self.porta,self.portatime,self.voices,self.areasep,
-     self.octshift,self.voiceretrig,self.commonretrig,
-     self.unk1,self.unk2,self.unk3,self.unk4,
-     self.red,self.blue,self.yellow,self.gray,self.green,self.purple,self.white
+
+    # make sure we have enough
+    if len(lines) > 0:
+      values = eval_fields(lines[0]) + [1] * 23
+    else:
+      values = [1] * 23
+
+    (self.keymin, self.keymax, self.velmin, self.velmax,
+     self.bend, self.porta, self.portatime, self.voices, self.areasep,
+     self.octshift, self.voiceretrig, self.commonretrig,
+     self.unk1, self.unk2, self.unk3, self.unk4,
+     self.red, self.blue, self.yellow, self.gray,
+     self.green, self.purple, self.white
     ) = values[:23]
 
 class ModuleDumpV3(Section):
   def parse(self):
     for line in self.lines:
-      values = map(int, line.split())
+      values = eval_fields(line)
       if len(values) == 1 or len(values) > 4:
         sect = values.pop(0)
         if sect:
@@ -76,11 +85,11 @@ class ModuleDumpV3(Section):
           area = self.patch.fx
         if not len(values):
           continue
-      (index,type,horiz,vert) = values
+      (index, type, horiz, vert) = values
       module = area.findmodule(index)
       if not module:
         module = area.addmodule(fromtype(type).shortnm)
-      module.index,module.horiz,module.vert=index,horiz,vert
+      module.index, module.horiz, module.vert = index, horiz, vert
 
 class CurrentNoteDumpV3(Section):
   def parse(self):
@@ -88,21 +97,21 @@ class CurrentNoteDumpV3(Section):
     # 1 note              0..127  7         midi note number: 64~middle E
     # 2 attack velocity   0..127  7
     # 3 release velocity  0..127  7
-    values = map(int, self.lines[0].split())
+    values = eval_fields(self.lines[0])
     l = len(values)/3
     lastnote = self.patch.lastnote = Note()
-    lastnote.note,lastnote.attack,lastnote.release = values[:3]
+    lastnote.note, lastnote.attack, lastnote.release = values[:3]
     values = values[3:]
-    l-=1
+    l -= 1
     currentnotes = []
-    for i in range(0,l,3):
+    for i in range(0, l, 3):
       if values[i] in currentnotes:
         continue
       currentnotes.append(values[i])
     l = len(currentnotes)
     notes = self.patch.notes = [ Note() for i in range(l) ]
     for i in range(l):
-      note,attack,release = values[i*3:i*3+3]
+      note, attack, release = values[i*3:i*3+3]
       notes[i].note = note
       notes[i].attack = attack
       notes[i].release = release
@@ -111,14 +120,15 @@ class CableDumpV3(Section):
   def parse(self):
     lines = self.lines
     line = lines.pop(0)
-    if len(line) > 1:
-      if len(line.split()) == 8:
-        l = line.split()[0]
-        line = ' '.join(line.split()[1:])
-        lines.insert(0,line)
+    fields = line.split()
+    if len(fields) > 1:
+      if len(fields) == 8:
+        l = fields[0]
+        line = ' '.join(fields[1:])
+        lines.insert(0, line)
       sect = int(l)
     else:
-      sect = int(line)
+      sect = eval(line.capitalize())
     if sect:
       area = self.patch.voice
     else:
@@ -127,7 +137,9 @@ class CableDumpV3(Section):
     area.netlist = NetList()
     area.cables = [ None ] * len(self.lines)
     for i in range(len(self.lines)):
-      color,dmod,dconn,ddir,smod,sconn,sdir = map(int, lines[i].split())
+      values = eval_fields(lines[i])
+      c = Cable(area)
+      c.color, dmod, dconn, ddir, smod, sconn, sdir = values
       dmodule = area.findmodule(dmod)
       smodule = area.findmodule(smod)
       if ddir:
@@ -141,11 +153,10 @@ class CableDumpV3(Section):
 
       # if dest is an output, make it the source
       if dest.direction:
-        dest,source = source,dest
+        dest, source = source, dest
 
-      c = Cable(area)
       area.cables[i] = c
-      c.color,c.source,c.dest = color,source,dest
+      c.source, c.dest = source, dest
 
       source.cables.append(c)
       dest.cables.append(c)
@@ -156,14 +167,13 @@ class CableDumpV3(Section):
 class ParameterDumpV3(Section):
   def parse(self):
     lines = self.lines[:]
-    sect = int(lines.pop(0))
+    sect = eval(lines.pop(0).capitalize())
     if sect:
       area = self.patch.voice
     else:
       area = self.patch.fx
     while lines:
-      line = lines.pop(0)
-      values = map(int, line.split())
+      values = eval_fields(lines.pop(0))
       index = values.pop(0)
       typecode = int(values.pop(0))
       module = area.findmodule(index)
@@ -172,8 +182,8 @@ class ParameterDumpV3(Section):
       module.index = index
       count = values.pop(0)
       if len(values) < count:
-        values.extend(map(int,lines.pop(0).split()))
-      for i in range(min(len(values),len(module.params))):
+        values.extend(eval_fields(lines.pop(0)))
+      for i in range(min(len(values), len(module.params))):
         module.params[i].variations = [ values[i] for variations in range(9) ]
 
 class CustomDumpV3(Section):
@@ -184,7 +194,7 @@ class CustomDumpV3(Section):
     else:
       area = self.patch.fx
     for line in self.lines[1:]:
-      values = map(int, line.split())
+      values = eval_fields(line)
       index = values.pop(0)
       module = area.findmodule(index)
       if not module:
@@ -196,15 +206,15 @@ class CustomDumpV3(Section):
 class MorphMapDumpV3(Section):
   def parse(self):
     morphs = self.patch.morphs
-    dials = map(int, self.lines[0].split())
+    dials = eval_fields(self.lines[0])
     for i in range(NMORPHS):
       morphs[i].dial = dials[i]
     values = []
     for line in self.lines[1:]:
-      values.extend(map(int, line.split()))
+      values.extend(eval_fields(line))
     for i in range(len(values)/5):
       morphmap = MorphMap()
-      sect,index,param,morph,morphmap.range = values[i*5:i*5+5]
+      sect, index, param, morph, morphmap.range = values[i*5:i*5+5]
       if sect:
         area = self.patch.voice
       else:
@@ -217,7 +227,7 @@ class MorphMapDumpV3(Section):
 
 class KeyboardAssignmentV3(Section):
   def parse(self):
-    keyassign = map(int, self.lines[0].split())
+    keyassign = eval_fields(self.lines[0])
     morphs = self.patch.morphs
     for i in range(NMORPHS):
       morphs[i].keyassign = keyassign[i]
@@ -226,8 +236,8 @@ class KnobMapDumpV3(Section):
   def parse(self):
     knobs = self.patch.knobs = [ Knob() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
-      vals = map(int, self.lines[i].split())
-      sect,index,param,knob = vals
+      values = eval_fields(self.lines[i])
+      sect, index, param, knob = values
       knobs[i].knob = knob
       if sect == 1:
         knobs[i].param = self.patch.voice.findmodule(index).params[param]
@@ -241,7 +251,7 @@ class CtrlMapDumpV3(Section):
   def parse(self):
     ctrls = self.patch.ctrls = [ Ctrl() for i in range(len(self.lines)) ]
     for i in range(len(self.lines)):
-      sect,index,param,midicc = map(int, self.lines[i].split())
+      sect, index, param, midicc = eval_fields(self.lines[i])
       if sect == 1:
         ctrls[i].param = self.patch.voice.findmodule(index).params[param]
       elif sect == 0:
@@ -261,7 +271,7 @@ class NameDumpV3(Section):
     else:
       area = self.patch.fx
     for line in self.lines[1:]:
-      vals = line.split(' ',1)
+      vals = line.split(' ', 1)
       if len(vals) > 1:
         name = vals[1]
       else:
@@ -293,10 +303,16 @@ class V2Section(object):
     pass
 
 def getv2moduledefs(defines):
-  def ismodule(define): return define[1].title[:6] == 'Module'
-  def bymoduleindex(a, b): return cmp(int(a[1].title[6:]), int(b[1].title[6:]))
-  moduledefs = [ (int(define[0][6:]),define[1]) for define in defines.items()
-  			if ismodule(define) ]
+
+  def ismodule(define):
+    return define.title[:6] == 'Module' and not 'Dump' in define.title
+
+  def bymoduleindex(a, b):
+    return cmp(int(a[1].title[6:]), int(b[1].title[6:]))
+
+  moduledefs = [ (int(define[0][6:]), define[1])
+      for define in defines.items() if ismodule(define[1])
+  ]
   moduledefs.sort(bymoduleindex)
   return moduledefs
 
@@ -305,13 +321,18 @@ def findv2moduledef(defines, index):
     if define[0] == index:
       return define
   return None
-  
+
 def getv2params(define, leader):
-  def isparam(leader, key): return key[:len(leader)] == leader
-  def byparamindex(a, b, l=len(leader)): return cmp(int(a[l:]),int(b[l:]))
+  l = len(leader)
+  def isparam(leader, key, l=l):
+    return key[:l] == leader
+
+  def byparamindex(a, b, l=l):
+    return cmp(int(a[l:]), int(b[l:]))
+
   keys = [ key for key in define.__dict__.keys() if isparam(leader, key) ]
   keys.sort(byparamindex)
-  return [ [int(key[len(leader):]),getattr(define,key)] for key in keys ]
+  return [ [int(key[l:]), getattr(define, key)] for key in keys ]
 
 MORPH_TYPE = 6
 MAX_MODULES = 127
@@ -326,23 +347,23 @@ class ModulesV2(V2Section):
     self.create_cables()
 
   def update_module_params(self, moduledef, module):
-    params = getv2params(moduledef,'p')
+    params = getv2params(moduledef, 'p')
     lp, lmp = len(params), len(module.params)
-    for i in range(min(lp,lmp)):
+    for i in range(min(lp, lmp)):
       val = int(params[i][1])
-      val = max(val,module.params[i].type.type.low)
-      val = min(val,module.params[i].type.type.high)
+      val = max(val, module.params[i].type.type.low)
+      val = min(val, module.params[i].type.type.high)
       module.params[i].variations = [ val for variations in range(9) ]
 
     if module.type.type == 17: # event seq has bp0 as triggers
       val = int(moduledef.bp0)
       for i in range(16):
         step = getattr(module.params, 'Seq1Step%d' % (i+1))
-	on = (val >> i) & 1
-	step.variations = [on] * 9
+        on = (val >> i) & 1
+        step.variations = [on] * 9
         step = getattr(module.params, 'Seq2Step%d' % (i+1))
-	on = (val >> (i+16)) & 1
-	step.variations = [on] * 9
+        on = (val >> (i+16)) & 1
+        step.variations = [on] * 9
     seqmodules = [ 15, 90, 91 ]
     if module.type.type in seqmodules:
       if moduledef.bp0 != 0:
@@ -353,10 +374,10 @@ class ModulesV2(V2Section):
 
     mutereversed = [ 9, 96, 10, 11, 12, 13, 85, 95, 58 ]
     if module.type.type == 106: # sine bank has mutes reversed
-      for i in range(1,7):
-	param = getattr(module.params,'Osc%dMute' % i)
-	mute = 1 - param.variations[0]
-	param.variations = [mute]*9
+      for i in range(1, 7):
+        param = getattr(module.params, 'Osc%dMute' % i)
+        mute = 1 - param.variations[0]
+        param.variations = [mute]*9
     elif module.type.type in mutereversed:
       mute = 1 - module.params.Mute.variations[0]
       module.params.Mute.variations = [mute]*9
@@ -369,8 +390,8 @@ class ModulesV2(V2Section):
         continue
 
       module = area.addmodule(fromtype(moduledef.type).shortnm)
-      module.index,module.name = (index, str(moduledef.name))
-      module.horiz,module.vert = (moduledef.col, moduledef.row*2)
+      module.index, module.name = index, str(moduledef.name)
+      module.horiz, module.vert = moduledef.col, moduledef.row*2
 
       self.update_module_params(moduledef, module)
 
@@ -382,25 +403,24 @@ class ModulesV2(V2Section):
       if moduledef.type == MORPH_TYPE: # handle this later
         continue
       module = area.findmodule(index)
-      ims = getv2params(moduledef,'im') # module to connect to
-      ihs = getv2params(moduledef,'ih') # port (0x40=output) rest index
-      ics = getv2params(moduledef,'ic') # cable color
+      ims = getv2params(moduledef, 'im') # module to connect to
+      ihs = getv2params(moduledef, 'ih') # port (0x40=output) rest index
+      ics = getv2params(moduledef, 'ic') # cable color
       for j in range(len(ims)):
         dconn, smod = ims[j]
-	sconn, color = ihs[j][1], ics[j][1]
-	smoduledef = findv2moduledef(self.moduledefs, smod)
-	if not smoduledef or smoduledef[1].type == MORPH_TYPE:
-	  continue
+        sconn, color = ihs[j][1], ics[j][1]
+        smoduledef = findv2moduledef(self.moduledefs, smod)
+        if not smoduledef or smoduledef[1].type == MORPH_TYPE:
+          continue
 
-	dest = module.inputs[dconn]
-	smodule = area.findmodule(smod)
-	if sconn & OUTPUT:
-	  source = smodule.outputs[sconn & ~OUTPUT]
-	else:
-	  source = smodule.inputs[sconn]
-        
-	self.patch.voice.connect(source, dest, color)
+        dest = module.inputs[dconn]
+        smodule = area.findmodule(smod)
+        if sconn & OUTPUT:
+          source = smodule.outputs[sconn & ~OUTPUT]
+        else:
+          source = smodule.inputs[sconn]
 
+        self.patch.voice.connect(source, dest, color)
 
 class HeaderV2(V2Section):
   def parse(self):
@@ -427,17 +447,21 @@ class HeaderV2(V2Section):
 
 class VoicesV2(V2Section):
   def parse(self):
+
     def getnote(value):
       return (value & 0x7f, (value>>8)&0x7f, (value>>16)&0x7f)
+
     define = self.defines.get('Voices', None)
-    if define == None: return
-    voices = getv2params(define,'v')
+    if define == None:
+      return
+
+    voices = getv2params(define, 'v')
     values = [ getnote(voice[1]) for voice in voices ]
     l = len(values)
     lastnote = self.patch.lastnote = Note()
-    lastnote.note,lastnote.attack,lastnote.release = values[0]
+    lastnote.note, lastnote.attack, lastnote.release = values[0]
     values = values[1:]
-    l-=1
+    l -= 1
     currentnotes = []
     for i in range(l):
       if values[i] in currentnotes:
@@ -446,14 +470,16 @@ class VoicesV2(V2Section):
     l = len(currentnotes)
     notes = self.patch.notes = [ Note() for i in range(l) ]
     for i in range(l):
-      notes[i].note,notes[i].attack,notes[i].release = values[i]
+      notes[i].note, notes[i].attack, notes[i].release = values[i]
 
 class ControllersV2(V2Section):
   def parse(self):
     define = self.defines.get('Controllers', None)
-    if define == None: return
-    modules = getv2params(define,'m')   # module to connect to
-    params = getv2params(define,'p')    # parameters to connecto to
+    if define == None:
+      return
+
+    modules = getv2params(define, 'm')   # module to connect to
+    params = getv2params(define, 'p')    # parameters to connecto to
     for i in range(len(modules)):
       midicc, modindex = modules[i]
       midicc, param = params[i]
@@ -472,11 +498,13 @@ class MorphsV2(V2Section):
       for i in range(NMORPHS):
         morphs[i].dial = getattr(morphmod, 'p%d' % i)
     define = self.defines.get('Morphs', None)
-    if define == None: return
-    modules = getv2params(define,'m') # module to connect to
-    params = getv2params(define,'p')  # parameters to connecto to
-    dials = getv2params(define,'d')   # morph dial of parameter
-    groups = getv2params(define,'g')  # morph groups
+    if define == None:
+      return
+
+    modules = getv2params(define, 'm') # module to connect to
+    params = getv2params(define, 'p')  # parameters to connecto to
+    dials = getv2params(define, 'd')   # morph dial of parameter
+    groups = getv2params(define, 'g')  # morph groups
     area = self.patch.voice
     for i in range(len(modules)):
       morph, index = modules[i]
@@ -485,7 +513,7 @@ class MorphsV2(V2Section):
       morph, group  = groups[i]
       if not morph in range(25): ### HACK
         #raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
-	continue
+        continue
       morphmap = MorphMap()
       morphmap.range = dial
       mod = area.findmodule(index)
@@ -498,10 +526,11 @@ class MorphsV2(V2Section):
 class KnobsV2(V2Section):
   def parse(self):
     define = self.defines.get('Knobs', None)
-    if define == None: return
+    if define == None:
+      return
 
-    modules = getv2params(define,'m') # module to connect to
-    params = getv2params(define,'p')  # parameters to connecto to
+    modules = getv2params(define, 'm') # module to connect to
+    params = getv2params(define, 'p')  # parameters to connecto to
     knobs = self.patch.knobs = [ Knob() for i in range(len(modules)) ]
     for i in range(len(modules)):
       knob, index = modules[i]
@@ -510,26 +539,27 @@ class KnobsV2(V2Section):
       knobs[i].knob = knob
       if moduledef and moduledef[1].type == MORPH_TYPE:
         if param > 3: #### HACK
-	  param &= 3
+          param &= 3
         knobs[i].param = self.patch.morphs[param]
       else:
-	if moduledef and moduledef[1].type == 106 and param > 23: ### HACK
-	  param -= 13
-	mod = self.patch.voice.findmodule(index)
-	if param > len(mod.params) - 1: ### HACK
-	  param = 0
+        if moduledef and moduledef[1].type == 106 and param > 23: ### HACK
+          param -= 13
+        mod = self.patch.voice.findmodule(index)
+        if param > len(mod.params) - 1: ### HACK
+          param = 0
         knobs[i].param = mod.params[param]
       knobs[i].param.knob = knobs[i]
 
 class NotesV2(V2Section):
   def parse(self):
     define = self.defines.get('Notes', None)
-    if define == None: return
+    if define == None:
+      return
     lines = [ getattr(define, 'l%d' % i) for i in range(define.count) ]
     self.patch.textpad = '\r\n'.join(lines)
 
 class Morph(object):
-  def __init__(self,index):
+  def __init__(self, index):
     self.maps = []
     self.index = index
     self.dial = 0
@@ -538,50 +568,54 @@ class Morph(object):
     self.ctrl = None
 
 class NM1Patch(Patch):
-  def __init__(self,fromname):
-    super(NM1Patch,self).__init__(fromname)
+  def __init__(self, fromname_):
+    super(NM1Patch, self).__init__(fromname_)
     self.morphs = [ Morph(i+1) for i in range(NMORPHS) ]
     self.knobs = []
     self.textpad = ''
 
 class PchFile(object):
   v3tags = [
-    'Header','ModuleDump','CurrentNoteDump','CableDump','ParameterDump',
-    'CustomDump','MorphMapDump','KeyboardAssignment','KnobMapDump',
-    'CtrlMapDump','NameDump','Notes'
+    'Header', 'ModuleDump', 'CurrentNoteDump', 'CableDump', 'ParameterDump',
+    'CustomDump', 'MorphMapDump', 'KeyboardAssignment', 'KnobMapDump',
+    'CtrlMapDump', 'NameDump', 'Notes'
   ]
   v3counts = [ 1, 2, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1 ]
   v2tags = [
     'Modules', 'Header', 'Voices', 'Controllers', 'Morphs', 'Knobs', 'Notes'
   ]
 
-  def __init__(self, fname=None):
+  def __init__(self, filename=None):
     self.patch = NM1Patch(fromname)
-    if fname:
-      self.read(fname)
+    if filename:
+      self.read(filename)
 
-  def read(self, fname):
-    self.fname = fname
-    data = open(fname).read()
+  def read(self, filename):
+    self.filename = filename
+    data = open(filename).read()
     v2 = data.find('Nord Modular patch 2.10')
     v3 = data.find('Nord Modular patch 3.0')
     if v2 < 0 and v3 < 0:
-      raise NM1Error('%s not valid .pch file' % fname)
-    lines = filter(lambda s: s!='', map(string.strip, open(fname).readlines()))
+      raise NM1Error('%s not valid .pch file' % filename)
+    data = open(filename).read()
+    if data.find('\r\r') > -1:
+      data = data.replace('\r\r','\n\n')
+    data = data.replace('\r','')
+    lines = [ line.strip() for line in data.split('\n') ]
+    lines = filter(lambda s: s != '', lines)
     if not len(lines):
-      raise NM1Error('%s no valid data: not parsing' % fname)
+      raise NM1Error('%s no valid data: not parsing' % filename)
     if lines[0] != '[Header]':
       printf('added missing [Header]\n')
-      lines.insert(0,'[Header]')
+      lines.insert(0, '[Header]')
 
-    if fname[-4:].lower() != '.pch':
-      self.fname += '.pch'
-
-    if v2 > -1:
-      self.readv2(data)
+    if filename[-4:].lower() != '.pch':
+      self.filename += '.pch'
 
     if v3 > -1:
       self.readv3(data)
+    elif v2 > -1:
+      self.readv2(data)
 
   def findv3sections(self, data):
     sections = []
@@ -592,15 +626,15 @@ class PchFile(object):
       endtag = '[/' + tag + ']'
       off = start = 0
       while start > -1 and count > 0:
-	start = data.find(starttag, off)
-	if start < 0:
-	  continue
-	end = data.find(endtag, start)
-	if end > -1:
-	  end += len(endtag)
-	sections.append([tag, start, end])
-	off = start + len(starttag)
-	count -= 1
+        start = data.find(starttag, off)
+        if start < 0:
+          continue
+        end = data.find(endtag, start)
+        if end > -1:
+          end += len(endtag)
+        sections.append([tag, start, end])
+        off = start + len(starttag)
+        count -= 1
     return sections
 
   def parsev3data(self, data, sections):
@@ -612,22 +646,23 @@ class PchFile(object):
         continue
       if end < 0:
         if i < l-1:
-	  ntag, nstart, nend = sections[i+1]
-	  end = nstart
-	else:
-	  end = None
-      lines = map(string.strip, data[start:end].split('\n'))
+          ntag, nstart, nend = sections[i+1]
+          end = nstart
+        else:
+          end = None
+      lines = [ f.strip() for f in data[start:end].split('\n') ]
       lines = [ line for line in lines if line ]
       if len(lines) > 2:
-        sect = eval('%sV3(self.patch,lines[1:-1])' % tag)
+        sect = eval('%sV3(self.patch, lines[1:-1])' % tag)
 
   def readv3(self, data):
     sections = self.findv3sections(data)
     self.parsev3data(data, sections)
 
   def findv2defines(self, data):
-    sections = data.split('\r\n[')
-    sections = [ ('[' + section.strip()).split('\r\n') for section in sections ]
+    data = data.replace('\r','')
+    sections = data.split('\n[')
+    sections = [ ('['+section.strip()).split('\n') for section in sections ]
     sections[0][0] = sections[0][0][1:] # fix [[Header] to [Header]
     # create dictionary of sections with
     # each line in each section set to a parameter in a class object
@@ -635,13 +670,13 @@ class PchFile(object):
     def fixparam(v):
       name, value = v
       try:
-        y = int(name)
-	name = 'v'+name
+        y = int(name) # cause exception if it's not a number
+        name = 'v' + name
       except:
         pass
       try:
         if name != 'name':
-	  value = int(value)
+          value = int(value)
       except:
         pass
       return name.lower(), value
@@ -649,7 +684,7 @@ class PchFile(object):
     defines = { }
     for section in sections:
       title = section[0][1:-1].replace(' ', '')  # remove [ ]
-      values = [ line.split('=',1) for line in section[1:] if line.strip() ]
+      values = [ line.split('=', 1) for line in section[1:] if line.strip() ]
       values = [ fixparam(v) for v in values if len(v) > 1 ]
       pairs = dict(values)
       defines[title] = V2Define(title, section, **pairs)
@@ -667,10 +702,10 @@ class PchFile(object):
 if __name__ == '__main__':
   prog = sys.argv.pop(0)
   while sys.argv:
-    fname = sys.argv.pop(0)
-    printf('"%s"\n', fname)
+    filename = sys.argv.pop(0)
+    printf('"%s"\n', filename)
     try:
-      nm1 = PchFile(fname)
+      nm1 = PchFile(filename)
     except NM1Error, s:
       printf('%s\n', s)
 

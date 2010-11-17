@@ -24,10 +24,10 @@
 # mod conversion table calculated by 3phase
 # kbt conversion table calculated by 3phase 
 amodsens = [ # [dxamod, g2mod]
-  [  0,  0],  [  1,  2],  [  2,  3],  [  3,  4],
+ [  0,   0], [  1,   2], [  2,   3], [  3,   4],
 ]
 
-lfo = [ # [lforange,lforate,lfomod,lfoattack]
+lfo = [ # [lforange, lforate, lfomod, lfoattack]
   [  1, 21, 55,  0], [  1, 34, 55,  4], [  1, 47, 55,  7], [  1, 51, 55, 11],
   [  1, 55, 55, 14], [  1, 59, 55, 18], [  1, 64, 55, 21], [  1, 68, 55, 23],
   [  1, 72, 55, 26], [  1, 76, 55, 28], [  1, 80, 55, 29], [  1, 81, 55, 30],

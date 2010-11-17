@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -19,7 +19,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from nord.g2.file import Pch2File
 from nord.g2.categories import G2Categories
 from nord import printf
 
@@ -27,7 +26,7 @@ def printdescription(patch):
   printf('patchdescription:\n')
   desc = patch.description
   printf(' category: %s\n', G2Categories[desc.category])
-  printf(' voices: %d\n', desc.nvoices)
+  printf(' voices: %d\n', desc.voices)
   printf(' height: %d\n', desc.height)
   printf(' monopoly: %d\n', desc.monopoly)
   printf(' variation: %d\n', desc.variation)
@@ -40,11 +39,11 @@ def printdescription(patch):
 def printvariations(patch):
   settings = patch.settings
   printf('variations:\n')
-  for attr in [ 'activemuted','patchvol','glide','glidetime','bend', 'semi',
-                'vibrato','cents','rate',
-                'arpeggiator','arptime','arptype','octaves',
-                'octaveshift','sustain' ]:
-    printf(' %-16s %s\n', (attr+':'), getattr(settings,attr).variations)
+  for attr in [ 'activemuted', 'patchvol', 'glide', 'glidetime', 'bend', 'semi',
+                'vibrato', 'cents', 'rate',
+                'arpeggiator', 'arptime', 'arptype', 'octaves',
+                'octaveshift', 'sustain' ]:
+    printf(' %-16s %s\n', (attr+':'), getattr(settings, attr).variations)
 
 def printmodules(patch):
   printf('modules:\n')
@@ -65,19 +64,19 @@ def printmodules(patch):
         param = module.params[p]
         ptype = module.type.params[p]
         printf('  %-16s %r\n', ptype.name+':', param.variations)
-        if hasattr(param,'labels'):
+        if hasattr(param, 'labels'):
           printf('   %r\n', param.labels)
 
 def printcables(patch):
   printf('cables:\n')
   for cable in patch.voice.cables:
-    source,dest = cable.source,cable.dest
-    smod,dmod = source.module,dest.module
-    stype,dtype = smod.type, dmod.type
+    source, dest = cable.source, cable.dest
+    smod, dmod = source.module, dest.module
+    stype, dtype = smod.type, dmod.type
     snm = source.type.name
     dnm = dest.type.name
-    printf(' %s.%s -%s %s.%s: c=%d\n',
-      stype.shortnm,snm,'->'[source.direction],dtype.shortnm,dnm,cable.color)
+    printf(' %s.%s -%s %s.%s: c=%d\n', stype.shortnm, snm,
+        '->'[source.direction], dtype.shortnm, dnm, cable.color)
 
 def printknobs(patch):
   printf('knobs:\n')
@@ -85,9 +84,9 @@ def printknobs(patch):
     knob = patch.knobs[i]
     if knob.assigned:
       printf(' %s%d:%d ', 'ABCDE'[i/24], (i/8)%3, i&7)
-      if hasattr(knob.param,'module'):
+      if hasattr(knob.param, 'module'):
         printf('%s:"%s":%s isled=0x%02x\n',
-            ['fx','voice'][knob.param.module.area.index],
+            ['fx', 'voice'][knob.param.module.area.index],
             knob.param.module.name, knob.param.type.name,
             knob.isled)
       else:
@@ -138,9 +137,9 @@ def printmidicc(patch):
       s = '"' + midicctable[ctrl.midicc] + '"'
     else:
       s = ''
-    printf(' %-8s midicc=%2d %s(%d,%d) %s\n',
-        {0:'fx',1:'voice',2:'settings'}[ctrl.type], ctrl.midicc,
-	name, index, param, s)
+    printf(' %-8s midicc=%2d %s(%d, %d) %s\n',
+        {0:'fx', 1:'voice', 2:'settings'}[ctrl.type], ctrl.midicc,
+        name, index, param, s)
 
 def printmorphs(patch):
   settings = patch.settings
@@ -152,7 +151,7 @@ def printmorphs(patch):
   for i in range(len(settings.morphs)):
     printf(' %s\n', settings.morphs[i].modes.variations)
   printf(' names:\n')
-  printf(' %s\n', ','.join(
+  printf(' %s\n', ', '.join(
       [ settings.morphs[i].label for i in range(len(settings.morphs))]))
   printf(' parameters:\n')
   for i in range(len(settings.morphs)):
@@ -163,7 +162,7 @@ def printmorphs(patch):
       for k in range(len(morph.maps[j])):
         map = morph.maps[j][k]
         printf('    %s:%s range=%d\n', map.param.module.name,
-	    map.param.type.name, map.range)
+            map.param.type.name, map.range)
 
 def printpatch(patch):
   printdescription(patch)

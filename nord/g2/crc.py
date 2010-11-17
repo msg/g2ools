@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -22,18 +22,18 @@
 def crc16(val, icrc):
   '''crc16(val, ircr) - calculate crc of 1 char.'''
   k = (((icrc>>8)^val)&0xff)<<8
-  crc = 0
+  crc_ = 0
   for bits in range(8):
-    if (crc^k)&0x8000 != 0:
-      crc = (crc<<1)^0x1021
+    if (crc_^k)&0x8000 != 0:
+      crc_ = (crc_<<1)^0x1021
     else:
-      crc <<= 1
+      crc_ <<= 1
     k <<= 1
-  return (icrc<<8)^crc
+  return (icrc<<8)^crc_
 
 def crc(s):
   '''crc(s) - calculate crc of whole string.'''
-  return reduce(lambda a,b: crc16(ord(b),a),s,0) & 0xffff
+  return reduce(lambda a, b: crc16(ord(b), a), s, 0) & 0xffff
 
 # calculated via:
 # ./pycrc.py --model zmodem --algorithm table-driven --table-idx-width 8 \
@@ -73,13 +73,13 @@ crctab = [
   0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
 ]
 
-def crc(s):
+def crc_(s):
   '''crc(s) - calculate crc of whole string fast.'''
-  return reduce(lambda crc,c: (crctab[((crc>>8)^ord(c))&0xff]^(crc << 8)),s,0)&0xffff
+  return reduce(lambda crc, c:
+      (crctab[((crc>>8)^ord(c))&0xff]^(crc << 8)), s, 0)&0xffff
 
 try:
   from nord.g2._bits import crc
 except:
-  print 'crc no _bits'
-  pass
+  crc = crc_
 

@@ -24,3 +24,40 @@ def printf(fmt, *a):
 def sprintf(fmt, *a):
   return fmt % a
 
+class Struct(object):
+  '''Struct class for creating objects with named parameters.'''
+  def __init__(self, **kw):
+    '''Struct(**kw) -> Struct object
+
+\tmembers become **kw keys.
+'''
+    self.__dict__ = kw
+
+class Mapping(object):
+  '''Mapping class for creating objects with named/value mappings.'''
+  def __init__(self, **kw):
+    '''Mapping(**kw) -> Mapping object
+
+\tname/value and value/name become **kw keys.
+'''
+    self.__dict = {}
+    for name, value in kw.items():
+      self.add_mapping(name, value)
+
+  def add_mappings(self, **kw):
+    for name, value in kw.items():
+      self.add_mapping(name, value)
+
+  def add_mapping(self, name, value):
+    self.__dict__[name] = value
+    self.__dict[value] = name
+
+  def __getattr__(self, name):
+    try:
+      return self.__dict__[name]
+    except:
+      return self.__dict[name]
+
+  def __getitem__(self, name):
+    return self.__getattr__(name)
+

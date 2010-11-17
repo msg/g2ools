@@ -1,24 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
-import string
-
-def getnumbers(fname):
-  lines = map(string.strip, open(fname).readlines())
+def getnumbers(filename):
+  lines = [ line.strip() for line in open(filename).readlines() ]
   return map(lambda line: map(lambda n: eval(n), line.split()), lines)
   #return map(lambda a: eval(a.split()[-1]), lines)
 
 def interpolate(indexvals):
-  lastindex,lastval = indexvals[0]
-  interpolated = [[lastindex,lastval]]
+  lastindex, lastval = indexvals[0]
+  interpolated = [[lastindex, lastval]]
   for indexval in indexvals[1:]:
-    index,val = indexval
+    index, val = indexval
     slope = float(val-lastval)/(index-lastindex)
-    if index-lastindex>1:
-      for i in range(lastindex,index):
-        interpolated.append([i,int(lastval+slope*(i-lastindex)+0.5)])
+    if index - lastindex > 1:
+      for i in range(lastindex, index):
+        interpolated.append([i, int(lastval+slope*(i-lastindex)+0.5)])
     else:
-      interpolated.append([index,val])
-    lastindex,lastval=index,val
+      interpolated.append([index, val])
+    lastindex, lastval = index, val
   return interpolated
 
 mix21b = getnumbers('mix2-1b.txt')    # val, mix %
@@ -32,9 +30,9 @@ glides = interpolate(glideindexes)
 fmb = getnumbers('fmb.txt')           # val, g2phasemod, mix %, inv %
 wavewrap = getnumbers('wavewrap.txt') # val, g2wrap
 logicdel = getnumbers('logicdel.txt') # val, g2del
-lphpfreq = getnumbers('lphpfreq.txt') # nmlpfreq,g2lpfrew,nmhpfreq,g2hpfreq
+lphpfreq = getnumbers('lphpfreq.txt') # nmlpfreq, g2lpfrew, nmhpfreq, g2hpfreq
 
-f=open('../nord/convert/table.py','w')
+f = open('../nord/convert/table.py', 'w')
 f.write('''
 #
 # table.py - convertion tables
@@ -61,7 +59,7 @@ f.write('''
 # mod conversion table calculated by 3phase
 # kbt conversion table calculated by 3phase 
 ''')
-f.write('fmamod = [ # [fmmod,mix,inv]\n')
+f.write('fmamod = [ # [fmmod, mix, inv]\n')
 for i in range(128):
   if i and i % 4 == 0:
     f.write('\n')
@@ -70,11 +68,11 @@ for i in range(128):
       mix = j
     if int(10*mix21b[j][1]) == int(10*spectral[i][4]):
       inv = j
-  f.write('  [%3d,%3d,%3d],' % (spectral[i][1],mix,inv))
+  f.write('  [%3d, %3d, %3d], ' % (spectral[i][1], mix, inv))
 f.write('''
 ]
 
-modtable = [ # [pitchmod,mix,inv]
+modtable = [ # [pitchmod, mix, inv]
 ''')
 for i in range(128):
   if i and i % 4 == 0:
@@ -84,25 +82,25 @@ for i in range(128):
       mix = j
     if int(10*mix21b[j][1]) == int(10*pitchmod[i][3]):
       inv = j
-  f.write('  [%3d,%3d,%3d],' % (pitchmod[i][1],mix,inv))
+  f.write('  [%3d, %3d, %3d], ' % (pitchmod[i][1], mix, inv))
 f.write('''
 ]
 
-kbttable = [ # [lev1,lev2]
+kbttable = [ # [lev1, lev2]
 ''')
 for i in range(128):
   if i and i % 4 == 0:
     f.write('\n')
-  f.write('  [%3d,%3d],' % (kbt[i][1],kbt[i][2]))
+  f.write('  [%3d, %3d], ' % (kbt[i][1], kbt[i][2]))
 f.write('''
 ]
 
-notescale = [ # [24g2,8g2]
+notescale = [ # [24g2, 8g2]
 ''')
 for i in range(len(notescale)):
   if i and i % 4 == 0:
     f.write('\n')
-  f.write(' [%3d,%3d],' % (notescale[i][1],notescale[i][2]))
+  f.write(' [%3d, %3d], ' % (notescale[i][1], notescale[i][2]))
 f.write('''
 ]
 
@@ -111,16 +109,16 @@ glide = [
 for i in range(len(glides)):
   if i and i % 16 == 0:
     f.write('\n ')
-  f.write('%3d,' % (glides[i][1]))
+  f.write('%3d, ' % (glides[i][1]))
 f.write('''
 ]
 
-fmbmod = [ # [phasemod,mix,inv]
+fmbmod = [ # [phasemod, mix, inv]
 ''')
 for i in range(128):
   if i and i % 4 == 0:
     f.write('\n')
-  f.write(' [%3d,%3d,%3d],' % (fmb[i][1],fmb[i][2],fmb[i][3]))
+  f.write(' [%3d, %3d, %3d], ' % (fmb[i][1], fmb[i][2], fmb[i][3]))
 f.write('''
 ]
 
@@ -129,7 +127,7 @@ wavewrap = [
 for i in range(len(glides)):
   if i and i % 16 == 0:
     f.write('\n ')
-  f.write('%3d,' % (wavewrap[i][1]))
+  f.write('%3d, ' % (wavewrap[i][1]))
 f.write('''
 ]
 
@@ -138,7 +136,7 @@ logicdel = [
 for i in range(len(glides)):
   if i and i % 16 == 0:
     f.write('\n ')
-  f.write('%3d,' % (logicdel[i][1]))
+  f.write('%3d, ' % (logicdel[i][1]))
 f.write('''
 ]
 
@@ -147,7 +145,7 @@ lphpfreq = [
 for i in range(len(lphpfreq)):
   if i and i % 4 == 0:
     f.write('\n')
-  f.write(' [%3d,%3d],' % (lphpfreq[i][1],lphpfreq[i][3]))
+  f.write(' [%3d, %3d], ' % (lphpfreq[i][1], lphpfreq[i][3]))
 
 f.write('''
 ]

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -21,7 +21,8 @@
 from nord.g2.colors import g2conncolors
 
 def midicc_reserved(cc):
-  reservedmidiccs = [ 0,1,7,11,17,18,19,32,64,70,80,96,97 ]+range(120,128)
+  reservedmidiccs = [ 0, 1, 7, 11, 17, 18, 19, 32, 64, 70, 80, 96, 97 ] + \
+      range(120, 128)
   return cc in reservedmidiccs
 
 def handle_uprate(g2area):
@@ -33,31 +34,31 @@ def handle_uprate(g2area):
     modified = 0
     for module in g2area.modules:
       #debug('%s:%s' % (module.name, module.type.shortnm))
-      for input in module.inputs:
-	if not input.net:
-	  continue
-	#debug(' %s:%d' % (input.type.name, input.rate))
-	# try and make all logic run at control rate.
-	if input.rate == g2conncolors.yellow_orange:
-	  input.rate = g2conncolors.yellow
-	  continue
-	if input.rate != g2conncolors.blue_red:
-	  continue
-	if not input.net.output:
-	  continue
-	if input.net.output.rate == g2conncolors.red:
-	  #debug('%s:%s %s' % (
-	  #     module.name,input.type.name,input.net.output.type.name))
-	  modified = 1
-	  module.uprate = 1
-	  input.rate = g2conncolors.red
-	  # change all outputs to red for next iteration
-	  for output in module.outputs:
-	    if output.rate == g2conncolors.blue_red:
-	      output.rate = g2conncolors.red
-	    if output.rate == g2conncolors.yellow_orange:
-	      output.rate = g2conncolors.orange
-	  break
+      for minput in module.inputs:
+        if not minput.net:
+          continue
+        #debug(' %s:%d' % (minput.type.name, minput.rate))
+        # try and make all logic run at control rate.
+        if minput.rate == g2conncolors.yellow_orange:
+          minput.rate = g2conncolors.yellow
+          continue
+        if minput.rate != g2conncolors.blue_red:
+          continue
+        if not minput.net.output:
+          continue
+        if minput.net.output.rate == g2conncolors.red:
+          #debug('%s:%s %s' % (
+          #     module.name, minput.type.name, minput.net.output.type.name))
+          modified = 1
+          module.uprate = 1
+          minput.rate = g2conncolors.red
+          # change all outputs to red for next iteration
+          for output in module.outputs:
+            if output.rate == g2conncolors.blue_red:
+              output.rate = g2conncolors.red
+            if output.rate == g2conncolors.yellow_orange:
+              output.rate = g2conncolors.orange
+          break
     if not modified:
       done = 1
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -19,14 +19,14 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import string, sys
+import sys
 sys.path.append('..')
 from nord import printf
 
 def formatarray(data):
   s = ''
   for i in range(len(data)):
-    if i%8 ==0:
+    if i % 8 == 0:
       s += '\n  '
     s += '%7s,' % data[i]
   return s
@@ -57,9 +57,9 @@ def formatfreq(freqs):
     data.append(t)
   return formatarray(data)
 
-def getnumbers(fname):
-  lines = map(string.strip, open(fname).readlines())
-  return map(lambda a: eval(a.split()[-1]), lines)
+def getnumbers(filename):
+  lines = [ line.strip() for line in open(filename).readlines() ]
+  return [ eval(a.split()[-1]) for a in lines ]
 
 nm1adsrtime = getnumbers('nm1adsrtime.txt')
 g2adsrtime = getnumbers('g2adsrtime.txt')
@@ -79,7 +79,7 @@ g2glidetime = getnumbers('g2glidetime.txt')
 nm1smoothtime = getnumbers('nm1smoothtime.txt')
 
 f = open('../nord/units.py','w')
-s = '''#
+contents = '''#
 # units.py - unit convertion tables and functions
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
@@ -148,9 +148,9 @@ nm1smoothtime = [%s
        formatfreq(nm1fltfreq), formatfreq(g2fltfreq),
        formatfreq(nm1logictime), formatfreq(g2logictime),
        formatfreq(nm1levamp), formatfreq(g2levamp),
-       formatarray([ '%.4f' % ratios[i] for i in range(len(ratios))]),
+       formatarray([ '%.4f' % ratio for ratio in ratios]),
        formattimes(g2glidetime),formattimes(nm1smoothtime))
 
-printf('%s\n', s)
-f.write(s)
+printf('%s\n', contents)
+f.write(contents)
 f.close()

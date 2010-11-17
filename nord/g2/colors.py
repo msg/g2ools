@@ -19,59 +19,60 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-class g2modulecolors(object):
-  grey     =  0
-  red1     =  6
-  red2     = 13
-  red3     = 14
-  red4     =  1
-  yellow1  =  9
-  yellow2  = 11
-  yellow3  = 15
-  yellow4  =  4
-  green1   = 10
-  green2   =  8
-  green3   = 16
-  green4   =  2
-  cyan1    = 17
-  cyan2    =  7
-  cyan3    = 18
-  cyan4    = 19
-  blue1    =  5
-  blue2    = 20
-  blue3    = 12
-  blue4    =  3
-  magenta1 = 21
-  magenta2 = 22
-  magenta3 = 23
+
+from nord import Mapping
+
+g2modulecolors = Mapping(
+  grey     =  0,
+  red1     =  6,
+  red2     = 13,
+  red3     = 14,
+  red4     =  1,
+  yellow1  =  9,
+  yellow2  = 11,
+  yellow3  = 15,
+  yellow4  =  4,
+  green1   = 10,
+  green2   =  8,
+  green3   = 16,
+  green4   =  2,
+  cyan1    = 17,
+  cyan2    =  7,
+  cyan3    = 18,
+  cyan4    = 19,
+  blue1    =  5,
+  blue2    = 20,
+  blue3    = 12,
+  blue4    =  3,
+  magenta1 = 21,
+  magenta2 = 22,
+  magenta3 = 23,
   magenta4 = 24
+)
 
-  def fromname(name): return getattr(g2modulecolors, name.lower())
-
-class g2cablecolors(object):
-  red = 0
-  blue = 1
-  yellow = 2
-  orange = 3
-  green = 4
-  purple = 5
+g2cablecolors = Mapping(
+  red = 0,
+  blue = 1,
+  yellow = 2,
+  orange = 3,
+  green = 4,
+  purple = 5,
   white = 6
+)
+g2cablecolors.add_mappings(
+  audio = g2cablecolors.red,
+  control = g2cablecolors.blue,
+  logic_bg = g2cablecolors.yellow,
+  logic_fg = g2cablecolors.orange,
+  user1 = g2cablecolors.green,
+  user2 = g2cablecolors.purple
+)
 
-  audio = red
-  control = blue
-  logic_bg = yellow
-  logic_fg = orange
-  user1 = green
-  user2 = purple
-
-  def fromname(name): return getattr(g2cablecolors, name.lower())
-
-class g2conncolors(object):
-  red = 0
-  blue = 1
-  yellow = 2
-  orange = 3
-  blue_red = 4
+g2conncolors = Mapping(
+  red = 0,
+  blue = 1,
+  yellow = 2,
+  orange = 3,
+  blue_red = 4,
   yellow_orange = 5
-
-  def fromname(name): return getattr(g2conncolors, name.lower())
+)

@@ -19,16 +19,8 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+from nord import Struct
 from nord.module import Input, Output, Param, Mode, Module
-
-class Struct(object):
-  '''Struct class for creating objects with named parameters.'''
-  def __init__(self, **kw):
-    '''Struct(**kw) -> Struct object
-
-\tmembers become **kw keys.
-'''
-    self.__dict__ = kw
 
 class ParamDef(Struct):
   '''ParamDef Struct subclass for handling module parameter definitions.'''
@@ -44,7 +36,7 @@ class Type(object):
 
 class TypeList(list):
   def __init__(self, types):
-    super(TypeList,self).__init__(types)
+    super(TypeList, self).__init__(types)
     for type in types:
       setattr(self, type.name, type)
 
@@ -63,9 +55,11 @@ OutputList = TypeList
 class ParamType(object):
   '''ParamType Type subclass maintaining module type Parameters.'''
   cls = Param
-  def __init__(self, name, type, labels=[]):
+  def __init__(self, name, type, labels=None):
     self.name = name
     self.type = type
+    if labels == None:
+      labels = []
     self.labels = labels
 
 ParamList = TypeList

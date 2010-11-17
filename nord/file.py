@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -18,15 +18,16 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-from nord import printf
-from net import NetList
+#from nord import printf
+from nord.net import NetList
 from nord.module import Module
 
-def hexdump(bytes,addr=0,size=1):
-  from array import array
-  '''hexdump(bytes,addr,size) -> return hex dump of size itmes using addr as address'''
+from array import array
+def hexdump(data, addr=0, size=1):
+  '''hexdump(data, addr, size) -> return hex dump
+  of size itmes using addr as address'''
   def out(x):
-    return [chr(x),'.'][x < 32 or x > 127]
+    return [chr(x), '.'][x < 32 or x > 127]
 
   s = []
   if size == 4:
@@ -35,25 +36,27 @@ def hexdump(bytes,addr=0,size=1):
     a, fmt, l = array('H', []), '%04x', 19
   else:
     a, fmt, l = array('B', []), '%02x', 23
-  a.fromstring(bytes)
-  for off in range(0,len(bytes),16):
-    hex = [fmt % i for i in a[off/size:(off+16)/size]]
+  a.fromstring(data)
+  for off in range(0, len(data), 16):
+    hexs = [fmt % i for i in a[off/size:(off+16)/size]]
     s.append('%06x: %-*s  %-*s | %s' % (addr+off,
-      l, ' '.join(hex[:8/size]), l, ' '.join(hex[8/size:]),
-      ''.join([out(ord(byte)) for byte in bytes[off:off+16]])))
+      l, ' '.join(hexs[:8/size]), l, ' '.join(hexs[8/size:]),
+      ''.join([out(ord(byte)) for byte in data[off:off+16]])))
   return '\n'.join(s)
 
-def binhexdump(bytes, addr=0, bits=[]):
-  from array import array
-  def bin(byte):
+def binhexdump(data, addr=0, bits=None):
+  def bins(byte):
     return ''.join([ '01'[(byte>>(7-i))&1] for i in range(8) ])
-  def hex(byte):
+  def hexs(byte):
     return '%x   %x   ' % (byte>>4, byte&0xf)
-  a = array('B', bytes)
+
+  if bits == None:
+    bits = []
+  a = array('B', data)
   s = []
-  for off in range(0,len(a),8):
-    s.append('%04x: %s' % (addr+off, ' '.join([hex(b) for b in a[off:off+8]])))
-    s.append('      %s' % (' '.join([bin(b) for b in a[off:off+8]])))
+  for off in range(0, len(a), 8):
+    s.append('%04x: %s' % (addr+off, ' '.join([hexs(b) for b in a[off:off+8]])))
+    s.append('      %s' % (' '.join([bins(b) for b in a[off:off+8]])))
   # add bits
   # single bits represented by: 0 or 1
   # two bits represented by: [0 thru [3
@@ -115,10 +118,10 @@ for the voice and fx areas of a nord modules g2 patch.
         return module
     return None
 
-  modmembers = [ 'name','index','color','horiz','vert','uprate','leds' ]
+  modmembers = [ 'name', 'index', 'color', 'horiz', 'vert', 'uprate', 'leds' ]
 
   def freeindexes(self, nindexes):
-    possibles = range(1,MAX_MODULES+1)
+    possibles = range(1, MAX_MODULES+1)
     for m in self.modules:
       possibles.remove(m.index)
     return possibles[:nindexes]
@@ -137,13 +140,13 @@ for the voice and fx areas of a nord modules g2 patch.
       return None
 
     type = self.fromname(shortnm)
-    m = Module(type,self)
+    m = Module(type, self)
     m.name = type.shortnm
     m.index = self.freeindexes(1)[0]
     m.color = m.horiz = m.vert = m.uprate = m.leds = 0
     for member in Area.modmembers:
       if kw.has_key(member):
-        setattr(m,member,kw[member])
+        setattr(m, member, kw[member])
     self.modules.append(m)
     return m
 
@@ -166,7 +169,7 @@ for the voice and fx areas of a nord modules g2 patch.
     sid = (source.module.index << 16) + source.index
     did = (dest.module.index << 16) + dest.index
     if source.direction == dest.direction and sid > did:
-      source,dest = dest,source
+      source, dest = dest, source
 
     cable = Cable(self)
     self.cables.append(cable)
@@ -186,13 +189,12 @@ for the voice and fx areas of a nord modules g2 patch.
 
 \tdisconnect a input or output port - update all cables connected to port
 '''
-    source,dest = cable.source,cable.dest
+    source, dest = cable.source, cable.dest
 
     #printf('disconnect %s:%s -> %s:%s\n' (
-    #  cable.source.module.name,cable.source.type.name,
-    #  cable.dest.module.name,cable.dest.type.name)
-    #printf(' cable ')
-    #self.netlist.printnet(cable.source.net)
+    #  cable.source.module.name, cable.source.type.name,
+    #  cable.dest.module.name, cable.dest.type.name)
+    #printf(' cable %s', self.netlist.nettos(cable.source.net))
 
     # collect all the cables on the net
     cables = []
@@ -209,16 +211,12 @@ for the voice and fx areas of a nord modules g2 patch.
 
     source.net = dest.net = None
     for c in cables:
-      #printf('connect\n source')
-      #self.printnet(c.source.net)
-      #printf(' dest ')
-      #self.printnet(c.dest.net)
+      #printf('connect\n source %s\n', self.netlist.nettos(c.source.net))
+      #printf(' dest %s\n', self.netlist.nettos(c.dest.net))
       self.netlist.add(c.source, c.dest)
 
-    #printf('after disconnect\n source')
-    #self.printnet(source.net)
-    #printf(' dest')
-    #self.printnet(dest.net)
+    #printf('after disconnect\n source %s\n', self.netlist.nettos(source.net))
+    #printf(' dest %s\n', self.netlist.nettos(dest.net))
 
   def removeconnector(self, connector):
     '''removeconnector(connector) -> connector
@@ -230,18 +228,18 @@ for the voice and fx areas of a nord modules g2 patch.
     minconn = None
     mindist = 1000000
 
-    #printf('removeconnector %s:%s\n', connector.module.name,connector.type.name)
-    #printf('before remove ')
-    #self.printnet(connector.net)
+    #printf('removeconnector %s:%s\n', connector.module.name,
+    #       connector.type.name)
+    #printf('before remove %s\n', self.netlist.nettos(connector.net))
     while len(connector.cables):
       cable = connector.cables[0]
-      source,dest = cable.source,cable.dest
+      source, dest = cable.source, cable.dest
       self.disconnect(cable)
       if connector == source:
         other = dest
       else:
         other = source
-      dist = self.connectionlength(connector,other)
+      dist = self.connectionlength(connector, other)
       if dist < mindist:
         if minconn:
           connectors.append(minconn)
@@ -252,18 +250,15 @@ for the voice and fx areas of a nord modules g2 patch.
 
     if len(connectors) != 0:
       for connector in connectors:
-        #printf(' new %s:%s -> %s:%s\n', minconn.module.name,minconn.type.name,
-        #    connector.module.name,connector.type.name)
+        #printf(' new %s:%s -> %s:%s\n', minconn.module.name, minconn.type.name,
+        #    connector.module.name, connector.type.name)
         if minconn.direction:
-          self.connect(minconn,connector,0)
+          self.connect(minconn, connector, 0)
         else:
-          self.connect(connector,minconn,0)
-        #printf(' done ')
-        #self.printnet(connector.net)
+          self.connect(connector, minconn, 0)
+        #printf(' done %s\n', self.netlist.nettos(connector.net))
 
-    #printf('after remove ')
-    #self.printnet(minconn.net)
-    #printf('\n')
+    #printf('after remove %s\n', self.netlist.nettos(minconn.net))
     return minconn
 
   # quick cable length calculation
@@ -275,7 +270,7 @@ for the voice and fx areas of a nord modules g2 patch.
   def connectionlength(self, start, end):
     '''connectionlength(start, end) -> distance from start port to end port'''
     # horiz coordinates about 20 times bigger.
-    sm,em=start.module,end.module
+    sm, em = start.module, end.module
     dh = (19*em.horiz+end.type.horiz)-(19*sm.horiz+start.type.horiz)
     dv = (em.vert+end.type.vert)-(sm.vert+start.type.vert)
     return (dh**2)+(dv**2)
@@ -295,15 +290,15 @@ for the voice and fx areas of a nord modules g2 patch.
       cable.source.net.color = cable.color
       self.disconnect(cable)
 
-    def findclosest(g2area,fromlist,tolist):
+    def findclosest(g2area, fromlist, tolist):
       mincablelen = 1000000
       mincable = None
       for fromconn in fromlist:
         for toconn in tolist:
-          cablelen = g2area.connectionlength(fromconn,toconn)
+          cablelen = g2area.connectionlength(fromconn, toconn)
           if cablelen < mincablelen:
             mincablelen = cablelen
-            mincable = [fromconn,toconn]
+            mincable = [fromconn, toconn]
       return mincable
 
     # on each net, successively connect closet connector
@@ -311,16 +306,16 @@ for the voice and fx areas of a nord modules g2 patch.
     for net in netlist.nets:
       inputs = net.inputs
       if net.output:
-        fromconn, toconn = findclosest(self,[net.output],inputs)
+        fromconn, toconn = findclosest(self, [net.output], inputs)
       else:
         conn = inputs.pop(0)
-        fromconn, toconn = findclosest(self,[conn],inputs)
-      self.connect(fromconn,toconn,net.color)
+        fromconn, toconn = findclosest(self, [conn], inputs)
+      self.connect(fromconn, toconn, net.color)
       inputs.remove(toconn)
-      connected = [fromconn,toconn]
+      connected = [fromconn, toconn]
       while len(inputs):
-        fromconn, toconn = findclosest(self,connected,inputs)
-        self.connect(fromconn,toconn,net.color)
+        fromconn, toconn = findclosest(self, connected, inputs)
+        self.connect(fromconn, toconn, net.color)
         inputs.remove(toconn)
         connected.append(toconn)
 
@@ -334,7 +329,7 @@ This class is normally not instanced directly but reimplemented in
 the nm1 and g2 implementations.
 '''
 
-  def __init__(self,fromname):
+  def __init__(self, fromname):
     '''Patch(fromname) -> Patch object
 
 \tfromname is a list names to module types.
@@ -352,6 +347,6 @@ class Performance(object):
 Basically a holder for 4 patches, one each for slot a, slot b,
 slot c, and slot d.
 '''
-  def __init__(self,fromname):
+  def __init__(self, fromname):
     self.patches = [ Patch(fromname) for slot in range(4) ]
 

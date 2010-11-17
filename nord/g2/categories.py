@@ -43,8 +43,8 @@ for key in G2Categories:
   nm = G2Categories[key]
   __names[nm.lower()] = key
 
-def namefromtype(type):
-  return G2Categories[type]
+def namefromtype(type_):
+  return G2Categories[type_]
 
 def typefromname(name):
   return __names[name.lower()]

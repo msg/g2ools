@@ -1,13 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
-import string
 import sys
-sys.path.append('..')
+sys.path += [ '.', '..' ]
 import dxian
 from nord import printf
 
-def getnumbers(fname):
-  lines = map(string.strip, open(fname).readlines())
+def getnumbers(filename):
+  lines = [ line.strip() for line in open(filename).readlines() ]
   def emptyzero(s):
     s = s.strip().upper()
     if not s:
@@ -24,45 +23,48 @@ def getnumbers(fname):
   return a
 
 def interpolate(indexvals):
-  lastindex,lastval = indexvals[0]
-  interpolated = [[lastindex,lastval]]
+  lastindex, lastval = indexvals[0]
+  interpolated = [[lastindex, lastval]]
   for indexval in indexvals[1:]:
-    index,val = indexval
+    index, val = indexval
     slope = float(val-lastval)/(index-lastindex)
-    if index-lastindex>1:
-      for i in range(lastindex+1,index+1):
-        interpolated.append([i,int(lastval+slope*(i-lastindex)+0.5)])
+    if index - lastindex > 1:
+      for i in range(lastindex+1, index+1):
+        interpolated.append([i, int(lastval+slope*(i-lastindex)+0.5)])
     else:
-      interpolated.append([index,val])
-    lastindex,lastval=index,val
+      interpolated.append([index, val])
+    lastindex, lastval = index, val
   return interpolated
 
 dxamodsens = getnumbers('dxamodsens.txt')[1:]
 dxlfo = getnumbers('dxlfo.txt')
 dxlfomod = interpolate(
-   [ [l[0],l[2]] for l in filter(lambda a: len(a) > 2, dxlfo[1:])])
+   [ [l[0], l[2]] for l in filter(lambda a: len(a) > 2, dxlfo[1:])])
 dxlforate = interpolate(
-   [ [l[0],l[3]] for l in filter(lambda a: len(a) > 3, dxlfo[1:])])
+   [ [l[0], l[3]] for l in filter(lambda a: len(a) > 3, dxlfo[1:])])
 dxlfodelay = getnumbers('dxlfodelay.txt')
 dxlfoattack = interpolate(
    [ l for l in filter(lambda a: len(a) > 1, dxlfodelay[1:])])
  
-printf('%d %d %d %d\n', len(dxlfo),len(dxlforate),len(dxlfomod),len(dxlfoattack))
-dxlfo = [ [dxlfo[i+1][1],dxlforate[i][1],dxlfomod[i][1],dxlfoattack[i][1]]
+printf('%d %d %d %d\n', len(dxlfo), len(dxlforate),
+    len(dxlfomod), len(dxlfoattack))
+dxlfo = [ [dxlfo[i+1][1], dxlforate[i][1], dxlfomod[i][1], dxlfoattack[i][1]]
     for i in range(len(dxlfo)-1)]
 
 #dxpitchegrate = getnumbers('dxpitchegrate.txt')[1:]
 #dxpitcheg = getnumbers('dxpitcheg.txt')
 #dxpitcheglev = interpolate(
-#   [ [l[0],l[1]] for l in filter(lambda a: len(a)>1 and a[1], dxpitcheg[1:])])
+#   [ [l[0], l[1]] for l in filter(lambda a: len(a)>1 and a[1], dxpitcheg[1:])])
 #dxpitchegtime = interpolate(
-#   [ [l[0],l[2]] for l in filter(lambda a: len(a)>2 and a[2]!='', dxpitcheg[1:])])
-#printf('%d %d\n', len(dxpitcheglev),len(dxpitchegtime))
+#   [ [l[0], l[2]] for l in filter(lambda a: len(a)>2 and a[2]!='',
+#       dxpitcheg[1:])])
+#printf('%d %d\n', len(dxpitcheglev), len(dxpitchegtime))
 #dxpitcheg = [
-#  [dxpitcheglev[i][1]+64,dxpitchegrate[i][0]] for i in range(len(dxpitcheglev))]
+#  [dxpitcheglev[i][1]+64, dxpitchegrate[i][0]]
+#      for i in range(len(dxpitcheglev))]
 dxpmodsens = getnumbers('dxpmodsens.txt')[1:]
 
-f=open('../nord/convert/dx7/dxtable.py','w')
+f = open('../nord/convert/dx7/dxtable.py', 'w')
 f.write('''
 #
 # dxtable.py - DX7 convertion tables
@@ -93,11 +95,11 @@ f.write('amodsens = [ # [dxamod, g2mod]\n')
 for i in range(len(dxamodsens)):
   if i and i % 4 == 0:
     f.write('\n')
-  f.write('  [%3d,%3d],' % tuple(dxamodsens[i]))
+  f.write(' [%3d, %3d],' % tuple(dxamodsens[i]))
 f.write('''
 ]
 
-lfo = [ # [lforange,lforate,lfomod,lfoattack]
+lfo = [ # [lforange, lforate, lfomod, lfoattack]
  ''')
 for i in range(len(dxlfo)):
   if i and i % 4 == 0:
@@ -141,3 +143,4 @@ for i in range(len(dxian.crclist)):
   f.write(' 0x%04x,' % dxian.crclist[i])
 
 f.write('\n]\n')
+

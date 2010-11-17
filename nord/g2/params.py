@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
-from nord import printf
-from nord.types import Struct
+from nord import Struct
 from nord.types import ParamDef
 
-class ParamMap(Struct): pass
+class ParamMap(Struct):
+  pass
 
 params = [
   ParamDef(name='Dst_2',
@@ -1287,7 +1287,7 @@ def setup_map(param):
     map = { }
     for nmval in param.definitions[i].split(','):
       val, name = [ s.strip() for s in nmval.split('~') ]
-      name = name.replace(' ','_').lower()
+      name = name.replace(' ', '_').lower()
       map[name] = val
     param.map.append(map)
 
