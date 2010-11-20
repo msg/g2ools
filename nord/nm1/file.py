@@ -24,7 +24,7 @@ import sys
 from nord import printf
 from nord.net import NetList
 from nord.file import Patch, Note, Cable, Knob, Ctrl, MorphMap
-from nord.nm1.modules import fromname, fromtype
+from nord.nm1.modules import fromname, fromid
 
 NMORPHS = 4
 
@@ -85,10 +85,10 @@ class ModuleDumpV3(Section):
           area = self.patch.fx
         if not len(values):
           continue
-      (index, type, horiz, vert) = values
+      (index, id, horiz, vert) = values
       module = area.findmodule(index)
       if not module:
-        module = area.addmodule(fromtype(type).shortnm)
+        module = area.addmodule(fromid(id).shortnm)
       module.index, module.horiz, module.vert = index, horiz, vert
 
 class CurrentNoteDumpV3(Section):
@@ -355,7 +355,7 @@ class ModulesV2(V2Section):
       val = min(val, module.params[i].type.type.high)
       module.params[i].variations = [ val for variations in range(9) ]
 
-    if module.type.type == 17: # event seq has bp0 as triggers
+    if module.type.id == 17: # event seq has bp0 as triggers
       val = int(moduledef.bp0)
       for i in range(16):
         step = getattr(module.params, 'Seq1Step%d' % (i+1))
@@ -365,7 +365,7 @@ class ModulesV2(V2Section):
         on = (val >> (i+16)) & 1
         step.variations = [on] * 9
     seqmodules = [ 15, 90, 91 ]
-    if module.type.type in seqmodules:
+    if module.type.id in seqmodules:
       if moduledef.bp0 != 0:
         loop = 1
       else:
@@ -373,12 +373,12 @@ class ModulesV2(V2Section):
       module.params.Loop.variations = [ loop ] * 9
 
     mutereversed = [ 9, 96, 10, 11, 12, 13, 85, 95, 58 ]
-    if module.type.type == 106: # sine bank has mutes reversed
+    if module.type.id == 106: # sine bank has mutes reversed
       for i in range(1, 7):
         param = getattr(module.params, 'Osc%dMute' % i)
         mute = 1 - param.variations[0]
         param.variations = [mute]*9
-    elif module.type.type in mutereversed:
+    elif module.type.id in mutereversed:
       mute = 1 - module.params.Mute.variations[0]
       module.params.Mute.variations = [mute]*9
 
@@ -386,10 +386,10 @@ class ModulesV2(V2Section):
     area = self.patch.voice
     for i in range(len(self.moduledefs)):
       index, moduledef = self.moduledefs[i]
-      if moduledef.type == MORPH_TYPE: # handle this later
+      if moduledef.id == MORPH_TYPE: # handle this later
         continue
 
-      module = area.addmodule(fromtype(moduledef.type).shortnm)
+      module = area.addmodule(fromid(moduledef.id).shortnm)
       module.index, module.name = index, str(moduledef.name)
       module.horiz, module.vert = moduledef.col, moduledef.row*2
 
@@ -400,7 +400,7 @@ class ModulesV2(V2Section):
     area = self.patch.voice
     for i in range(len(self.moduledefs)):
       index, moduledef = self.moduledefs[i]
-      if moduledef.type == MORPH_TYPE: # handle this later
+      if moduledef.id == MORPH_TYPE: # handle this later
         continue
       module = area.findmodule(index)
       ims = getv2params(moduledef, 'im') # module to connect to
@@ -410,7 +410,7 @@ class ModulesV2(V2Section):
         dconn, smod = ims[j]
         sconn, color = ihs[j][1], ics[j][1]
         smoduledef = findv2moduledef(self.moduledefs, smod)
-        if not smoduledef or smoduledef[1].type == MORPH_TYPE:
+        if not smoduledef or smoduledef[1].id == MORPH_TYPE:
           continue
 
         dest = module.inputs[dconn]
@@ -484,7 +484,7 @@ class ControllersV2(V2Section):
       midicc, modindex = modules[i]
       midicc, param = params[i]
       moduledef = findv2moduledef(self.moduledefs, modindex)
-      if moduledef and moduledef[1].type == MORPH_TYPE:
+      if moduledef and moduledef[1].id == MORPH_TYPE:
         continue # add midicc to morph, param is morph group
 
 class MorphsV2(V2Section):
@@ -492,7 +492,7 @@ class MorphsV2(V2Section):
     morphs = self.patch.morphs
     morphmod = None
     for i in range(len(self.moduledefs)):
-      if self.moduledefs[i][1].type == MORPH_TYPE:
+      if self.moduledefs[i][1].id == MORPH_TYPE:
         morphdmod = self.moduledefs[i][1]
     if morphmod:
       for i in range(NMORPHS):
@@ -537,12 +537,12 @@ class KnobsV2(V2Section):
       knob, param = params[i]
       moduledef = findv2moduledef(self.moduledefs, index)
       knobs[i].knob = knob
-      if moduledef and moduledef[1].type == MORPH_TYPE:
+      if moduledef and moduledef[1].id == MORPH_TYPE:
         if param > 3: #### HACK
           param &= 3
         knobs[i].param = self.patch.morphs[param]
       else:
-        if moduledef and moduledef[1].type == 106 and param > 23: ### HACK
+        if moduledef and moduledef[1].id == 106 and param > 23: ### HACK
           param -= 13
         mod = self.patch.voice.findmodule(index)
         if param > len(mod.params) - 1: ### HACK

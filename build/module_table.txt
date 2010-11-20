@@ -3,7 +3,7 @@ ModuleKnowledge(
   OSVersion('1.40')
   OSBuild(266)
   module(
-    type(1)
+    id(1)
     page('In/Out')
     pageindex(5)
     shortnm('Keyboard')
@@ -23,7 +23,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(3)
+    id(3)
     page('In/Out')
     pageindex(1)
     shortnm('4-Out')
@@ -43,7 +43,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(4)
+    id(4)
     page('In/Out')
     pageindex(0)
     shortnm('2-Out')
@@ -63,7 +63,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(5)
+    id(5)
     page('Logic')
     pageindex(1)
     shortnm('Invert')
@@ -83,7 +83,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(7)
+    id(7)
     page('Osc')
     pageindex(1)
     shortnm('OscB')
@@ -105,7 +105,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(8)
+    id(8)
     page('Osc')
     pageindex(6)
     shortnm('OscShpB')
@@ -125,7 +125,7 @@ ModuleKnowledge(
     modetypes(['OscWaveform_3'])
   )
   module(
-    type(9)
+    id(9)
     page('Osc')
     pageindex(2)
     shortnm('OscC')
@@ -145,7 +145,7 @@ ModuleKnowledge(
     modetypes(['OscWaveform_2'])
   )
   module(
-    type(12)
+    id(12)
     page('FX')
     pageindex(7)
     shortnm('Reverb')
@@ -165,7 +165,7 @@ ModuleKnowledge(
     modetypes(['RoomType'])
   )
   module(
-    type(13)
+    id(13)
     page('Osc')
     pageindex(13)
     shortnm('OscString')
@@ -185,7 +185,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(15)
+    id(15)
     page('Switch')
     pageindex(5)
     shortnm('Sw8-1')
@@ -205,7 +205,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(17)
+    id(17)
     page('Switch')
     pageindex(11)
     shortnm('ValSw1-2')
@@ -225,7 +225,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(18)
+    id(18)
     page('Mixer')
     pageindex(13)
     shortnm('X-Fade')
@@ -245,7 +245,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(19)
+    id(19)
     page('Mixer')
     pageindex(5)
     shortnm('Mix4-1B')
@@ -265,7 +265,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(20)
+    id(20)
     page('Env')
     pageindex(0)
     shortnm('EnvADSR')
@@ -285,7 +285,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(21)
+    id(21)
     page('Switch')
     pageindex(14)
     shortnm('Mux1-8')
@@ -305,7 +305,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(22)
+    id(22)
     page('Note')
     pageindex(2)
     shortnm('PartQuant')
@@ -325,7 +325,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(23)
+    id(23)
     page('Env')
     pageindex(8)
     shortnm('ModADSR')
@@ -345,7 +345,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(24)
+    id(24)
     page('LFO')
     pageindex(2)
     shortnm('LfoC')
@@ -365,7 +365,7 @@ ModuleKnowledge(
     modetypes(['LfoWaveform_1'])
   )
   module(
-    type(25)
+    id(25)
     page('LFO')
     pageindex(3)
     shortnm('LfoShpA')
@@ -385,7 +385,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(26)
+    id(26)
     page('LFO')
     pageindex(0)
     shortnm('LfoA')
@@ -405,7 +405,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(27)
+    id(27)
     page('Osc')
     pageindex(16)
     shortnm('OscMaster')
@@ -425,7 +425,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(28)
+    id(28)
     page('Shaper')
     pageindex(2)
     shortnm('Saturate')
@@ -445,7 +445,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(29)
+    id(29)
     page('Osc')
     pageindex(10)
     shortnm('MetNoise')
@@ -465,7 +465,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(30)
+    id(30)
     page('In/Out')
     pageindex(7)
     shortnm('Device')
@@ -485,7 +485,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(31)
+    id(31)
     page('Osc')
     pageindex(9)
     shortnm('Noise')
@@ -505,7 +505,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(32)
+    id(32)
     page('Filter')
     pageindex(12)
     shortnm('Eq2Band')
@@ -525,7 +525,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(33)
+    id(33)
     page('Filter')
     pageindex(13)
     shortnm('Eq3Band')
@@ -545,7 +545,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(34)
+    id(34)
     page('Shaper')
     pageindex(3)
     shortnm('ShpExp')
@@ -565,7 +565,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(36)
+    id(36)
     page('Switch')
     pageindex(0)
     shortnm('SwOnOffM')
@@ -585,7 +585,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(38)
+    id(38)
     page('Logic')
     pageindex(4)
     shortnm('Pulse')
@@ -605,7 +605,7 @@ ModuleKnowledge(
     modetypes(['PulseMode'])
   )
   module(
-    type(40)
+    id(40)
     page('Mixer')
     pageindex(9)
     shortnm('Mix8-1B')
@@ -625,7 +625,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(41)
+    id(41)
     page('Env')
     pageindex(1)
     shortnm('EnvH')
@@ -645,7 +645,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(42)
+    id(42)
     page('Logic')
     pageindex(5)
     shortnm('Delay')
@@ -665,7 +665,7 @@ ModuleKnowledge(
     modetypes(['LogicDelayMode'])
   )
   module(
-    type(43)
+    id(43)
     page('Level')
     pageindex(0)
     shortnm('Constant')
@@ -685,7 +685,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(44)
+    id(44)
     page('Level')
     pageindex(6)
     shortnm('LevMult')
@@ -705,7 +705,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(45)
+    id(45)
     page('Filter')
     pageindex(9)
     shortnm('FltVoice')
@@ -725,7 +725,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(46)
+    id(46)
     page('Env')
     pageindex(4)
     shortnm('EnvAHD')
@@ -745,7 +745,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(47)
+    id(47)
     page('Mixer')
     pageindex(12)
     shortnm('Pan')
@@ -765,7 +765,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(48)
+    id(48)
     page('Mixer')
     pageindex(11)
     shortnm('MixStereo')
@@ -785,7 +785,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(49)
+    id(49)
     page('Filter')
     pageindex(4)
     shortnm('FltMulti')
@@ -805,7 +805,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(50)
+    id(50)
     page('Level')
     pageindex(2)
     shortnm('ConstSwT')
@@ -825,7 +825,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(51)
+    id(51)
     page('Filter')
     pageindex(2)
     shortnm('FltNord')
@@ -845,7 +845,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(52)
+    id(52)
     page('Env')
     pageindex(6)
     shortnm('EnvMulti')
@@ -865,7 +865,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(53)
+    id(53)
     page('Switch')
     pageindex(16)
     shortnm('S&H')
@@ -885,7 +885,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(54)
+    id(54)
     page('Filter')
     pageindex(5)
     shortnm('FltStatic')
@@ -905,7 +905,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(55)
+    id(55)
     page('Env')
     pageindex(2)
     shortnm('EnvD')
@@ -925,7 +925,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(57)
+    id(57)
     page('MIDI')
     pageindex(6)
     shortnm('Automate')
@@ -945,7 +945,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(58)
+    id(58)
     page('Osc')
     pageindex(12)
     shortnm('DrumSynth')
@@ -965,7 +965,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(59)
+    id(59)
     page('Level')
     pageindex(10)
     shortnm('CompLev')
@@ -985,7 +985,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(60)
+    id(60)
     page('Switch')
     pageindex(15)
     shortnm('Mux8-1X')
@@ -1005,7 +1005,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(61)
+    id(61)
     page('Shaper')
     pageindex(0)
     shortnm('Clip')
@@ -1025,7 +1025,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(62)
+    id(62)
     page('Shaper')
     pageindex(1)
     shortnm('Overdrive')
@@ -1045,7 +1045,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(63)
+    id(63)
     page('FX')
     pageindex(6)
     shortnm('Scratch')
@@ -1065,7 +1065,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(64)
+    id(64)
     page('Logic')
     pageindex(0)
     shortnm('Gate')
@@ -1085,7 +1085,7 @@ ModuleKnowledge(
     modetypes(['GateMode', 'GateMode'])
   )
   module(
-    type(66)
+    id(66)
     page('Mixer')
     pageindex(3)
     shortnm('Mix2-1B')
@@ -1105,7 +1105,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(68)
+    id(68)
     page('LFO')
     pageindex(4)
     shortnm('ClkGen')
@@ -1125,7 +1125,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(69)
+    id(69)
     page('Logic')
     pageindex(3)
     shortnm('ClkDiv')
@@ -1145,7 +1145,7 @@ ModuleKnowledge(
     modetypes(['ClkDivMode'])
   )
   module(
-    type(71)
+    id(71)
     page('Level')
     pageindex(8)
     shortnm('EnvFollow')
@@ -1165,7 +1165,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(72)
+    id(72)
     page('Note')
     pageindex(3)
     shortnm('NoteScaler')
@@ -1185,7 +1185,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(74)
+    id(74)
     page('Shaper')
     pageindex(4)
     shortnm('WaveWrap')
@@ -1205,7 +1205,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(75)
+    id(75)
     page('Note')
     pageindex(0)
     shortnm('NoteQuant')
@@ -1225,7 +1225,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(76)
+    id(76)
     page('Switch')
     pageindex(1)
     shortnm('SwOnOffT')
@@ -1245,7 +1245,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(78)
+    id(78)
     page('Switch')
     pageindex(9)
     shortnm('Sw1-8')
@@ -1265,7 +1265,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(79)
+    id(79)
     page('Switch')
     pageindex(4)
     shortnm('Sw4-1')
@@ -1285,7 +1285,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(81)
+    id(81)
     page('Level')
     pageindex(5)
     shortnm('LevAmp')
@@ -1305,7 +1305,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(82)
+    id(82)
     page('Shaper')
     pageindex(6)
     shortnm('Rect')
@@ -1325,7 +1325,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(83)
+    id(83)
     page('Shaper')
     pageindex(5)
     shortnm('ShpStatic')
@@ -1345,7 +1345,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(84)
+    id(84)
     page('Env')
     pageindex(3)
     shortnm('EnvADR')
@@ -1365,7 +1365,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(85)
+    id(85)
     page('Switch')
     pageindex(12)
     shortnm('WindSw')
@@ -1385,7 +1385,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(86)
+    id(86)
     page('Logic')
     pageindex(6)
     shortnm('8Counter')
@@ -1405,7 +1405,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(87)
+    id(87)
     page('Filter')
     pageindex(0)
     shortnm('FltLP')
@@ -1425,7 +1425,7 @@ ModuleKnowledge(
     modetypes(['HpLpSlopeMode'])
   )
   module(
-    type(88)
+    id(88)
     page('Switch')
     pageindex(8)
     shortnm('Sw1-4')
@@ -1445,7 +1445,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(89)
+    id(89)
     page('FX')
     pageindex(2)
     shortnm('Flanger')
@@ -1465,7 +1465,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(90)
+    id(90)
     page('Switch')
     pageindex(7)
     shortnm('Sw1-2')
@@ -1485,7 +1485,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(91)
+    id(91)
     page('Logic')
     pageindex(2)
     shortnm('FlipFlop')
@@ -1505,7 +1505,7 @@ ModuleKnowledge(
     modetypes(['FlipFlopMode'])
   )
   module(
-    type(92)
+    id(92)
     page('Filter')
     pageindex(3)
     shortnm('FltClassic')
@@ -1525,7 +1525,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(94)
+    id(94)
     page('FX')
     pageindex(0)
     shortnm('StChorus')
@@ -1545,7 +1545,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(96)
+    id(96)
     page('Osc')
     pageindex(3)
     shortnm('OscD')
@@ -1565,7 +1565,7 @@ ModuleKnowledge(
     modetypes(['OscWaveform_2'])
   )
   module(
-    type(97)
+    id(97)
     page('Osc')
     pageindex(0)
     shortnm('OscA')
@@ -1585,7 +1585,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(98)
+    id(98)
     page('FX')
     pageindex(4)
     shortnm('FreqShift')
@@ -1605,7 +1605,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(100)
+    id(100)
     page('Switch')
     pageindex(3)
     shortnm('Sw2-1')
@@ -1625,7 +1625,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(102)
+    id(102)
     page('Filter')
     pageindex(6)
     shortnm('FltPhase')
@@ -1645,7 +1645,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(103)
+    id(103)
     page('Filter')
     pageindex(11)
     shortnm('EqPeak')
@@ -1665,7 +1665,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(105)
+    id(105)
     page('Switch')
     pageindex(10)
     shortnm('ValSw2-1')
@@ -1685,7 +1685,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(106)
+    id(106)
     page('Osc')
     pageindex(8)
     shortnm('OscNoise')
@@ -1705,7 +1705,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(108)
+    id(108)
     page('Filter')
     pageindex(10)
     shortnm('Vocoder')
@@ -1725,7 +1725,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(112)
+    id(112)
     page('Level')
     pageindex(3)
     shortnm('LevAdd')
@@ -1745,7 +1745,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(113)
+    id(113)
     page('Mixer')
     pageindex(14)
     shortnm('Fade1-2')
@@ -1765,7 +1765,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(114)
+    id(114)
     page('Mixer')
     pageindex(15)
     shortnm('Fade2-1')
@@ -1785,7 +1785,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(115)
+    id(115)
     page('Note')
     pageindex(7)
     shortnm('LevScaler')
@@ -1805,7 +1805,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(116)
+    id(116)
     page('Mixer')
     pageindex(8)
     shortnm('Mix8-1A')
@@ -1825,7 +1825,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(117)
+    id(117)
     page('Level')
     pageindex(7)
     shortnm('LevMod')
@@ -1845,7 +1845,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(118)
+    id(118)
     page('FX')
     pageindex(3)
     shortnm('Digitizer')
@@ -1865,7 +1865,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(119)
+    id(119)
     page('Env')
     pageindex(5)
     shortnm('EnvADDSR')
@@ -1885,7 +1885,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(121)
+    id(121)
     page('Seq')
     pageindex(3)
     shortnm('SeqNote')
@@ -1905,7 +1905,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(123)
+    id(123)
     page('Mixer')
     pageindex(6)
     shortnm('Mix4-1C')
@@ -1925,7 +1925,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(124)
+    id(124)
     page('Switch')
     pageindex(13)
     shortnm('Mux8-1')
@@ -1945,7 +1945,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(125)
+    id(125)
     page('Filter')
     pageindex(8)
     shortnm('WahWah')
@@ -1965,7 +1965,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(126)
+    id(126)
     page('In/Out')
     pageindex(10)
     shortnm('Name')
@@ -1985,7 +1985,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(127)
+    id(127)
     page('In/Out')
     pageindex(4)
     shortnm('Fx-In')
@@ -2004,7 +2004,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(128)
+    id(128)
     page('Level')
     pageindex(12)
     shortnm('MinMax')
@@ -2024,7 +2024,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(130)
+    id(130)
     page('Logic')
     pageindex(7)
     shortnm('BinCounter')
@@ -2044,7 +2044,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(131)
+    id(131)
     page('Logic')
     pageindex(8)
     shortnm('ADConv')
@@ -2064,7 +2064,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(132)
+    id(132)
     page('Logic')
     pageindex(9)
     shortnm('DAConv')
@@ -2084,7 +2084,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(134)
+    id(134)
     page('Filter')
     pageindex(1)
     shortnm('FltHP')
@@ -2104,7 +2104,7 @@ ModuleKnowledge(
     modetypes(['HpLpSlopeMode'])
   )
   module(
-    type(139)
+    id(139)
     page('Switch')
     pageindex(17)
     shortnm('T&H')
@@ -2124,7 +2124,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(140)
+    id(140)
     page('Mixer')
     pageindex(7)
     shortnm('Mix4-1S')
@@ -2144,7 +2144,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(141)
+    id(141)
     page('MIDI')
     pageindex(0)
     shortnm('CtrlSend')
@@ -2164,7 +2164,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(142)
+    id(142)
     page('MIDI')
     pageindex(1)
     shortnm('PCSend')
@@ -2184,7 +2184,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(143)
+    id(143)
     page('MIDI')
     pageindex(2)
     shortnm('NoteSend')
@@ -2204,7 +2204,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(144)
+    id(144)
     page('Seq')
     pageindex(0)
     shortnm('SeqEvent')
@@ -2224,7 +2224,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(145)
+    id(145)
     page('Seq')
     pageindex(1)
     shortnm('SeqVal')
@@ -2244,7 +2244,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(146)
+    id(146)
     page('Seq')
     pageindex(2)
     shortnm('SeqLev')
@@ -2264,7 +2264,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(147)
+    id(147)
     page('MIDI')
     pageindex(3)
     shortnm('CtrlRcv')
@@ -2284,7 +2284,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(148)
+    id(148)
     page('MIDI')
     pageindex(4)
     shortnm('NoteRcv')
@@ -2304,7 +2304,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(149)
+    id(149)
     page('MIDI')
     pageindex(5)
     shortnm('NoteZone')
@@ -2322,7 +2322,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(150)
+    id(150)
     page('FX')
     pageindex(8)
     shortnm('Compressor')
@@ -2342,7 +2342,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(152)
+    id(152)
     page('Note')
     pageindex(1)
     shortnm('KeyQuant')
@@ -2362,7 +2362,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(154)
+    id(154)
     page('Seq')
     pageindex(4)
     shortnm('SeqCtr')
@@ -2382,7 +2382,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(156)
+    id(156)
     page('In/Out')
     pageindex(9)
     shortnm('NoteDet')
@@ -2402,7 +2402,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(157)
+    id(157)
     page('Level')
     pageindex(4)
     shortnm('LevConv')
@@ -2422,7 +2422,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(158)
+    id(158)
     page('Note')
     pageindex(4)
     shortnm('Glide')
@@ -2442,7 +2442,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(159)
+    id(159)
     page('Level')
     pageindex(11)
     shortnm('CompSig')
@@ -2462,7 +2462,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(160)
+    id(160)
     page('Note')
     pageindex(6)
     shortnm('ZeroCnt')
@@ -2482,7 +2482,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(161)
+    id(161)
     page('Mixer')
     pageindex(10)
     shortnm('MixFader')
@@ -2502,7 +2502,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(162)
+    id(162)
     page('Filter')
     pageindex(7)
     shortnm('FltComb')
@@ -2522,7 +2522,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(163)
+    id(163)
     page('Osc')
     pageindex(5)
     shortnm('OscShpA')
@@ -2542,7 +2542,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(164)
+    id(164)
     page('Osc')
     pageindex(7)
     shortnm('OscDual')
@@ -2562,7 +2562,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(165)
+    id(165)
     page('Osc')
     pageindex(15)
     shortnm('DXRouter')
@@ -2582,7 +2582,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(167)
+    id(167)
     page('FX')
     pageindex(5)
     shortnm('PShift')
@@ -2602,7 +2602,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(169)
+    id(169)
     page('Env')
     pageindex(7)
     shortnm('ModAHD')
@@ -2622,7 +2622,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(170)
+    id(170)
     page('In/Out')
     pageindex(2)
     shortnm('2-In')
@@ -2642,7 +2642,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(171)
+    id(171)
     page('In/Out')
     pageindex(3)
     shortnm('4-In')
@@ -2662,7 +2662,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(172)
+    id(172)
     page('Delay')
     pageindex(0)
     shortnm('DlySingleA')
@@ -2682,7 +2682,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_3'])
   )
   module(
-    type(173)
+    id(173)
     page('Delay')
     pageindex(1)
     shortnm('DlySingleB')
@@ -2702,7 +2702,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_3'])
   )
   module(
-    type(174)
+    id(174)
     page('Delay')
     pageindex(2)
     shortnm('DelayDual')
@@ -2722,7 +2722,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_3'])
   )
   module(
-    type(175)
+    id(175)
     page('Delay')
     pageindex(3)
     shortnm('DelayQuad')
@@ -2742,7 +2742,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_3'])
   )
   module(
-    type(176)
+    id(176)
     page('Delay')
     pageindex(7)
     shortnm('DelayA')
@@ -2762,7 +2762,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_2'])
   )
   module(
-    type(177)
+    id(177)
     page('Delay')
     pageindex(8)
     shortnm('DelayB')
@@ -2782,7 +2782,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_2'])
   )
   module(
-    type(178)
+    id(178)
     page('Delay')
     pageindex(6)
     shortnm('DlyClock')
@@ -2802,7 +2802,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(179)
+    id(179)
     page('Delay')
     pageindex(5)
     shortnm('DlyShiftReg')
@@ -2822,7 +2822,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(180)
+    id(180)
     page('Osc')
     pageindex(14)
     shortnm('Operator')
@@ -2842,7 +2842,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(181)
+    id(181)
     page('Delay')
     pageindex(4)
     shortnm('DlyEight')
@@ -2862,7 +2862,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_3'])
   )
   module(
-    type(182)
+    id(182)
     page('Delay')
     pageindex(9)
     shortnm('DlyStereo')
@@ -2882,7 +2882,7 @@ ModuleKnowledge(
     modetypes(['DelayRange_1'])
   )
   module(
-    type(183)
+    id(183)
     page('Osc')
     pageindex(4)
     shortnm('OscPM')
@@ -2902,7 +2902,7 @@ ModuleKnowledge(
     modetypes(['OscWaveform_1'])
   )
   module(
-    type(184)
+    id(184)
     page('Mixer')
     pageindex(0)
     shortnm('Mix1-1A')
@@ -2922,7 +2922,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(185)
+    id(185)
     page('Mixer')
     pageindex(1)
     shortnm('Mix1-1S')
@@ -2942,7 +2942,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(186)
+    id(186)
     page('Switch')
     pageindex(6)
     shortnm('Sw1-2M')
@@ -2962,7 +2962,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(187)
+    id(187)
     page('Switch')
     pageindex(2)
     shortnm('Sw2-1M')
@@ -2982,7 +2982,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(188)
+    id(188)
     page('Level')
     pageindex(1)
     shortnm('ConstSwM')
@@ -3002,7 +3002,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(189)
+    id(189)
     page('Level')
     pageindex(9)
     shortnm('NoiseGate')
@@ -3022,7 +3022,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(190)
+    id(190)
     page('LFO')
     pageindex(1)
     shortnm('LfoB')
@@ -3042,7 +3042,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(192)
+    id(192)
     page('FX')
     pageindex(1)
     shortnm('Phaser')
@@ -3062,7 +3062,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(193)
+    id(193)
     page('Mixer')
     pageindex(4)
     shortnm('Mix4-1A')
@@ -3082,7 +3082,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(194)
+    id(194)
     page('Mixer')
     pageindex(2)
     shortnm('Mix2-1A')
@@ -3102,7 +3102,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(195)
+    id(195)
     page('Level')
     pageindex(13)
     shortnm('ModAmt')
@@ -3122,7 +3122,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(196)
+    id(196)
     page('Osc')
     pageindex(11)
     shortnm('OscPerc')
@@ -3142,7 +3142,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(197)
+    id(197)
     page('In/Out')
     pageindex(8)
     shortnm('Status')
@@ -3162,7 +3162,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(198)
+    id(198)
     page('Note')
     pageindex(5)
     shortnm('PitchTrack')
@@ -3182,7 +3182,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(199)
+    id(199)
     page('In/Out')
     pageindex(6)
     shortnm('MonoKey')
@@ -3202,7 +3202,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(200)
+    id(200)
     page('Rnd')
     pageindex(0)
     shortnm('RandomA')
@@ -3222,7 +3222,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(202)
+    id(202)
     page('Rnd')
     pageindex(1)
     shortnm('RandomB')
@@ -3242,7 +3242,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(204)
+    id(204)
     page('Rnd')
     pageindex(2)
     shortnm('RndClkA')
@@ -3262,7 +3262,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(205)
+    id(205)
     page('Rnd')
     pageindex(4)
     shortnm('RndTrig')
@@ -3282,7 +3282,7 @@ ModuleKnowledge(
     modetypes([])
   )
   module(
-    type(206)
+    id(206)
     page('Rnd')
     pageindex(3)
     shortnm('RndClkB')
@@ -3302,7 +3302,7 @@ ModuleKnowledge(
     modetypes(['Rnd_1'])
   )
   module(
-    type(208)
+    id(208)
     page('Rnd')
     pageindex(5)
     shortnm('RndPattern')

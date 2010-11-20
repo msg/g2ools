@@ -116,8 +116,8 @@ class ModuleList(Section):
 
     area.modules = [ None ] * nmodules
     for i in range(nmodules):
-      bit, type       = getbits(bit, 8, data)
-      m = Module(modules.fromtype(type), area)
+      bit, id = getbits(bit, 8, data)
+      m = Module(modules.fromid(id), area)
       area.modules[i] = m
 
       bit, m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved = \
@@ -135,7 +135,7 @@ class ModuleList(Section):
         bit, m.modes[mode].value = getbits(bit, 6, data)
 
       # add missing mode data. some .pch2 versions didn't contain
-      #   the all the modes in version 23 BUILD 266
+      #   all the modes in version 23 BUILD 266
       mt = m.type
       if len(m.modes) < len(mt.modes):
         for i in range(len(m.modes), len(mt.modes)):
@@ -153,7 +153,7 @@ class ModuleList(Section):
   def fixleds(self, module):
     module.leds = 0
     return
-    #if module.type.type in ModuleList.ledtypes:
+    #if module.type.id in ModuleList.ledtypes:
     #  module.leds = 1
     #else:
     #  module.leds = 0
@@ -168,7 +168,7 @@ class ModuleList(Section):
 
     for i in range(len(area.modules)):
       m = area.modules[i]
-      bit = setbits(bit, 8, data, m.type.type)
+      bit = setbits(bit, 8, data, m.type.id)
       values = [m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, 0]
       bit = setbitsa(bit, self.module_bit_sizes, data, values)
       # NOTE: .leds seems to related to a group of modules. i cannot
@@ -696,7 +696,7 @@ class ParameterLabels(Section):
       m = area.findmodule(index)
 
       bit, modlen   = getbits(bit, 8, data)
-      if m.type.type == 121: # SeqNote
+      if m.type.id == 121: # SeqNote
         # extra editor parameters 
         # [0, 1, mag, 0, 1, octave]
         # mag: 0=3-octaves, 1=2-octaves, 2=1-octave
@@ -755,7 +755,7 @@ class ParameterLabels(Section):
       m = modules[mod]
 
       s = ''
-      if m.type.type == 121: # SeqNote
+      if m.type.id == 121: # SeqNote
         for ep in m.editmodes:
           s += chr(ep)
       else:

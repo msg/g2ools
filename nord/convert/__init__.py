@@ -32,7 +32,7 @@ from nord.convert import ctrl
 from nord.convert import logic
 from nord.convert import seq
 
-typetable = {
+id_table = {
     1: inout.ConvKeyboard, 
    63: inout.ConvKeyboardPatch,
    65: inout.ConvMIDIGlobal,

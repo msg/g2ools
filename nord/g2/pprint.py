@@ -51,7 +51,7 @@ def printmodules(patch):
     printf(' %-18s %-16s %2d:(%d,%2d)%3d type=%3d uprate=%d leds=%d\n', 
         '"%s"' % module.name, module.type.shortnm,
         module.index, module.horiz, module.vert, module.color,
-        module.type.type, module.uprate, module.leds)
+        module.type.id, module.uprate, module.leds)
     if hasattr(module, 'modes') and len(module.modes):
       printf('  modes:\n')
       for m in range(len(module.modes)):

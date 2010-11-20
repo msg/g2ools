@@ -11,7 +11,7 @@ class ModuleMap(Struct):
 
 modules = [
   ModuleType(
-    type=1,
+    id=1,
     height=2,
     longnm='Keyboard',
     shortnm='Keyboard',
@@ -29,7 +29,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=3,
+    id=3,
     height=2,
     longnm='4 outputs',
     shortnm='4-Out',
@@ -49,7 +49,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=4,
+    id=4,
     height=2,
     longnm='2 outputs',
     shortnm='2-Out',
@@ -67,7 +67,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=5,
+    id=5,
     height=2,
     longnm='Logic Inverter',
     shortnm='Invert',
@@ -84,7 +84,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=7,
+    id=7,
     height=5,
     longnm='Osc B',
     shortnm='OscB',
@@ -115,7 +115,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=8,
+    id=8,
     height=4,
     longnm='Osc Shape B',
     shortnm='OscShpB',
@@ -147,7 +147,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=9,
+    id=9,
     height=3,
     longnm='Osc C',
     shortnm='OscC',
@@ -176,7 +176,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=12,
+    id=12,
     height=3,
     longnm='reverb',
     shortnm='Reverb',
@@ -200,7 +200,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=13,
+    id=13,
     height=3,
     longnm='Osc String',
     shortnm='OscString',
@@ -226,7 +226,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=15,
+    id=15,
     height=4,
     longnm='Switch 8-1',
     shortnm='Sw8-1',
@@ -253,7 +253,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=17,
+    id=17,
     height=2,
     longnm='Value Switch 1-2',
     shortnm='ValSw1-2',
@@ -274,7 +274,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=18,
+    id=18,
     height=2,
     longnm='Cross Fader',
     shortnm='X-Fade',
@@ -295,7 +295,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=19,
+    id=19,
     height=2,
     longnm='Mixer 4-1 B',
     shortnm='Mix4-1B',
@@ -320,7 +320,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=20,
+    id=20,
     height=4,
     longnm='Envelop ADSR',
     shortnm='EnvADSR',
@@ -347,7 +347,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=21,
+    id=21,
     height=2,
     longnm='Multiplexer 1-8',
     shortnm='Mux1-8',
@@ -370,7 +370,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=22,
+    id=22,
     height=2,
     longnm='Partial Quantizer',
     shortnm='PartQuant',
@@ -387,7 +387,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=23,
+    id=23,
     height=5,
     longnm='Envelope Modulation ADSR',
     shortnm='ModADSR',
@@ -420,7 +420,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=24,
+    id=24,
     height=2,
     longnm='LFO C',
     shortnm='LfoC',
@@ -443,7 +443,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=25,
+    id=25,
     height=5,
     longnm='LFO Shape A',
     shortnm='LfoShpA',
@@ -477,7 +477,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=26,
+    id=26,
     height=3,
     longnm='LFO A',
     shortnm='LfoA',
@@ -502,7 +502,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=27,
+    id=27,
     height=3,
     longnm='Osc Master',
     shortnm='OscMaster',
@@ -524,7 +524,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=28,
+    id=28,
     height=2,
     longnm='Saturate',
     shortnm='Saturate',
@@ -545,7 +545,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=29,
+    id=29,
     height=2,
     longnm='Metallic Noise Oscillator',
     shortnm='MetNoise',
@@ -567,7 +567,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=30,
+    id=30,
     height=3,
     longnm='Device',
     shortnm='Device',
@@ -586,7 +586,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=31,
+    id=31,
     height=2,
     longnm='Noise',
     shortnm='Noise',
@@ -602,7 +602,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=32,
+    id=32,
     height=3,
     longnm='Eq 2 Band',
     shortnm='Eq2Band',
@@ -624,7 +624,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=33,
+    id=33,
     height=4,
     longnm='Eq 3 Band',
     shortnm='Eq3Band',
@@ -648,7 +648,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=34,
+    id=34,
     height=2,
     longnm='Shape Exp',
     shortnm='ShpExp',
@@ -669,7 +669,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=36,
+    id=36,
     height=2,
     longnm='Switch On/Off Momentary',
     shortnm='SwOnOffM',
@@ -689,7 +689,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=38,
+    id=38,
     height=2,
     longnm='Pulse',
     shortnm='Pulse',
@@ -711,7 +711,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=40,
+    id=40,
     height=4,
     longnm='Mixer 8-1 B',
     shortnm='Mix8-1B',
@@ -745,7 +745,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=41,
+    id=41,
     height=2,
     longnm='Envelope Hold',
     shortnm='EnvH',
@@ -766,7 +766,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=42,
+    id=42,
     height=2,
     longnm='Logic Delay',
     shortnm='Delay',
@@ -788,7 +788,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=43,
+    id=43,
     height=2,
     longnm='Constant Value',
     shortnm='Constant',
@@ -804,7 +804,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=44,
+    id=44,
     height=2,
     longnm='Level Multiplier',
     shortnm='LevMult',
@@ -820,7 +820,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=45,
+    id=45,
     height=4,
     longnm='Filter Voice',
     shortnm='FltVoice',
@@ -848,7 +848,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=46,
+    id=46,
     height=4,
     longnm='Envelope AHD',
     shortnm='EnvAHD',
@@ -874,7 +874,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=47,
+    id=47,
     height=2,
     longnm='Pan',
     shortnm='Pan',
@@ -895,7 +895,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=48,
+    id=48,
     height=5,
     longnm='Mixer Stereo',
     shortnm='MixStereo',
@@ -930,7 +930,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=49,
+    id=49,
     height=4,
     longnm='Filter Multi-mode',
     shortnm='FltMulti',
@@ -957,7 +957,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=50,
+    id=50,
     height=2,
     longnm='Constant Switch Toggling',
     shortnm='ConstSwT',
@@ -976,7 +976,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=51,
+    id=51,
     height=5,
     longnm='Filter Nord',
     shortnm='FltNord',
@@ -1006,7 +1006,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=52,
+    id=52,
     height=6,
     longnm='Envelope Multi',
     shortnm='EnvMulti',
@@ -1038,7 +1038,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=53,
+    id=53,
     height=2,
     longnm='Sample & Hold',
     shortnm='S&H',
@@ -1054,7 +1054,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=54,
+    id=54,
     height=3,
     longnm='Filter Static',
     shortnm='FltStatic',
@@ -1075,7 +1075,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=55,
+    id=55,
     height=2,
     longnm='Envelope Decay',
     shortnm='EnvD',
@@ -1096,7 +1096,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=57,
+    id=57,
     height=2,
     longnm='MIDI Control Automate',
     shortnm='Automate',
@@ -1116,7 +1116,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=58,
+    id=58,
     height=8,
     longnm='Drum Synthesizer',
     shortnm='DrumSynth',
@@ -1150,7 +1150,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=59,
+    id=59,
     height=2,
     longnm='Compare to Level',
     shortnm='CompLev',
@@ -1167,7 +1167,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=60,
+    id=60,
     height=3,
     longnm='Multiplexer 8-1 with variable X-Fade',
     shortnm='Mux8-1X',
@@ -1192,7 +1192,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=61,
+    id=61,
     height=2,
     longnm='Clip',
     shortnm='Clip',
@@ -1213,7 +1213,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=62,
+    id=62,
     height=2,
     longnm='Overdrive',
     shortnm='Overdrive',
@@ -1235,7 +1235,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=63,
+    id=63,
     height=3,
     longnm='Scratch',
     shortnm='Scratch',
@@ -1256,7 +1256,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=64,
+    id=64,
     height=2,
     longnm='Gate',
     shortnm='Gate',
@@ -1278,7 +1278,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=66,
+    id=66,
     height=2,
     longnm='Scratch',
     shortnm='Mix2-1B',
@@ -1301,7 +1301,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=68,
+    id=68,
     height=4,
     longnm='Clock Generator',
     shortnm='ClkGen',
@@ -1325,7 +1325,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=69,
+    id=69,
     height=2,
     longnm='Clock Divider',
     shortnm='ClkDiv',
@@ -1345,7 +1345,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=71,
+    id=71,
     height=2,
     longnm='Envelope Follower',
     shortnm='EnvFollow',
@@ -1363,7 +1363,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=72,
+    id=72,
     height=2,
     longnm='Note Scaler',
     shortnm='NoteScaler',
@@ -1380,7 +1380,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=74,
+    id=74,
     height=2,
     longnm='Wave Wrapper',
     shortnm='WaveWrap',
@@ -1400,7 +1400,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=75,
+    id=75,
     height=2,
     longnm='Note Quantizer',
     shortnm='NoteQuant',
@@ -1418,7 +1418,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=76,
+    id=76,
     height=2,
     longnm='Switch On/Off Toggle',
     shortnm='SwOnOffT',
@@ -1438,7 +1438,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=78,
+    id=78,
     height=4,
     longnm='Switch 1-8',
     shortnm='Sw1-8',
@@ -1465,7 +1465,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=79,
+    id=79,
     height=3,
     longnm='Switch 4-1',
     shortnm='Sw4-1',
@@ -1488,7 +1488,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=81,
+    id=81,
     height=2,
     longnm='Level Amplifier',
     shortnm='LevAmp',
@@ -1506,7 +1506,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=82,
+    id=82,
     height=2,
     longnm='Rectifier',
     shortnm='Rect',
@@ -1524,7 +1524,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=83,
+    id=83,
     height=2,
     longnm='Shape Static',
     shortnm='ShpStatic',
@@ -1542,7 +1542,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=84,
+    id=84,
     height=3,
     longnm='Envelope ADR',
     shortnm='EnvADR',
@@ -1570,7 +1570,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=85,
+    id=85,
     height=2,
     longnm='Window Switch',
     shortnm='WindSw',
@@ -1590,7 +1590,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=86,
+    id=86,
     height=2,
     longnm='8 Counter',
     shortnm='8Counter',
@@ -1613,7 +1613,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=87,
+    id=87,
     height=2,
     longnm='Filter Lowpass',
     shortnm='FltLP',
@@ -1636,7 +1636,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=88,
+    id=88,
     height=3,
     longnm='Switch 1-4',
     shortnm='Sw1-4',
@@ -1659,7 +1659,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=89,
+    id=89,
     height=3,
     longnm='Flanger',
     shortnm='Flanger',
@@ -1679,7 +1679,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=90,
+    id=90,
     height=2,
     longnm='Switch 1-2',
     shortnm='Sw1-2',
@@ -1698,7 +1698,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=91,
+    id=91,
     height=2,
     longnm='Flip Flop',
     shortnm='FlipFlop',
@@ -1718,7 +1718,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=92,
+    id=92,
     height=4,
     longnm='Filter Classic',
     shortnm='FltClassic',
@@ -1742,7 +1742,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=94,
+    id=94,
     height=3,
     longnm='Stereo Chorus',
     shortnm='StChorus',
@@ -1762,7 +1762,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=96,
+    id=96,
     height=2,
     longnm='Osc D',
     shortnm='OscD',
@@ -1785,7 +1785,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=97,
+    id=97,
     height=3,
     longnm='Osc A',
     shortnm='OscA',
@@ -1809,7 +1809,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=98,
+    id=98,
     height=3,
     longnm='Frequency Shifter',
     shortnm='FreqShift',
@@ -1831,7 +1831,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=100,
+    id=100,
     height=2,
     longnm='Switch 2-1',
     shortnm='Sw2-1',
@@ -1852,7 +1852,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=102,
+    id=102,
     height=5,
     longnm='Filter Phase',
     shortnm='FltPhase',
@@ -1883,7 +1883,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=103,
+    id=103,
     height=4,
     longnm='Eq Peak',
     shortnm='EqPeak',
@@ -1904,7 +1904,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=105,
+    id=105,
     height=2,
     longnm='Value Switch 2-1',
     shortnm='ValSw2-1',
@@ -1923,7 +1923,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=106,
+    id=106,
     height=3,
     longnm='Oscillator Noise',
     shortnm='OscNoise',
@@ -1949,7 +1949,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=108,
+    id=108,
     height=8,
     longnm='Vocoder',
     shortnm='Vocoder',
@@ -1984,7 +1984,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=112,
+    id=112,
     height=2,
     longnm='Level Add',
     shortnm='LevAdd',
@@ -2002,7 +2002,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=113,
+    id=113,
     height=2,
     longnm='Fade 1-2',
     shortnm='Fade1-2',
@@ -2022,7 +2022,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=114,
+    id=114,
     height=2,
     longnm='Fade 2-1',
     shortnm='Fade2-1',
@@ -2042,7 +2042,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=115,
+    id=115,
     height=3,
     longnm='Level Scaler',
     shortnm='LevScaler',
@@ -2064,7 +2064,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=116,
+    id=116,
     height=2,
     longnm='Mix 8-1 A',
     shortnm='Mix8-1A',
@@ -2088,7 +2088,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=117,
+    id=117,
     height=3,
     longnm='Level Modulator',
     shortnm='LevMod',
@@ -2108,7 +2108,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=118,
+    id=118,
     height=3,
     longnm='Digitizer',
     shortnm='Digitizer',
@@ -2129,7 +2129,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=119,
+    id=119,
     height=5,
     longnm='Envelope ADDSR',
     shortnm='EnvADDSR',
@@ -2159,7 +2159,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=121,
+    id=121,
     height=9,
     longnm='Sequencer Note',
     shortnm='SeqNote',
@@ -2221,7 +2221,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=123,
+    id=123,
     height=4,
     longnm='Mixer 4-1 C',
     shortnm='Mix4-1C',
@@ -2259,7 +2259,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=124,
+    id=124,
     height=2,
     longnm='Multiplexer 8-1',
     shortnm='Mux8-1',
@@ -2282,7 +2282,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=125,
+    id=125,
     height=2,
     longnm='Wah-Wah',
     shortnm='WahWah',
@@ -2302,7 +2302,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=126,
+    id=126,
     height=1,
     longnm='Name Bar',
     shortnm='Name',
@@ -2313,7 +2313,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=127,
+    id=127,
     height=2,
     longnm='Fx Input',
     shortnm='Fx-In',
@@ -2331,7 +2331,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=128,
+    id=128,
     height=2,
     longnm='Min/Max Compare',
     shortnm='MinMax',
@@ -2348,7 +2348,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=130,
+    id=130,
     height=2,
     longnm='Binary Counter',
     shortnm='BinCounter',
@@ -2371,7 +2371,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=131,
+    id=131,
     height=2,
     longnm='A/D Converter',
     shortnm='ADConv',
@@ -2393,7 +2393,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=132,
+    id=132,
     height=2,
     longnm='D/A Converter',
     shortnm='DAConv',
@@ -2415,7 +2415,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=134,
+    id=134,
     height=2,
     longnm='Filter Highpass',
     shortnm='FltHP',
@@ -2438,7 +2438,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=139,
+    id=139,
     height=2,
     longnm='Track & Hold',
     shortnm='T&H',
@@ -2454,7 +2454,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=140,
+    id=140,
     height=4,
     longnm='Mixer 4-1 Stereo',
     shortnm='Mix4-1S',
@@ -2497,7 +2497,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=141,
+    id=141,
     height=2,
     longnm='MIDI Control Send',
     shortnm='CtrlSend',
@@ -2517,7 +2517,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=142,
+    id=142,
     height=2,
     longnm='MIDI Program Change Send',
     shortnm='PCSend',
@@ -2536,7 +2536,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=143,
+    id=143,
     height=2,
     longnm='MIDI Note Send',
     shortnm='NoteSend',
@@ -2555,7 +2555,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=144,
+    id=144,
     height=5,
     longnm='Seq Event',
     shortnm='SeqEvent',
@@ -2614,7 +2614,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=145,
+    id=145,
     height=8,
     longnm='Sequencer Values',
     shortnm='SeqVal',
@@ -2675,7 +2675,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=146,
+    id=146,
     height=8,
     longnm='Sequencer Level',
     shortnm='SeqLev',
@@ -2736,7 +2736,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=147,
+    id=147,
     height=2,
     longnm='MIDI Control Receive',
     shortnm='CtrlRcv',
@@ -2753,7 +2753,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=148,
+    id=148,
     height=2,
     longnm='MIDI Note Receive',
     shortnm='NoteRcv',
@@ -2771,7 +2771,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=149,
+    id=149,
     height=3,
     longnm='MIDI Note Zone',
     shortnm='NoteZone',
@@ -2789,7 +2789,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=150,
+    id=150,
     height=5,
     longnm='Compressor',
     shortnm='Compressor',
@@ -2815,7 +2815,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=152,
+    id=152,
     height=2,
     longnm='Key Quantizer',
     shortnm='KeyQuant',
@@ -2845,7 +2845,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=154,
+    id=154,
     height=8,
     longnm='Sequencer Controlled',
     shortnm='SeqCtr',
@@ -2901,7 +2901,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=156,
+    id=156,
     height=2,
     longnm='Note Detector',
     shortnm='NoteDet',
@@ -2918,7 +2918,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=157,
+    id=157,
     height=2,
     longnm='Level Converter',
     shortnm='LevConv',
@@ -2936,7 +2936,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=158,
+    id=158,
     height=2,
     longnm='Glide',
     shortnm='Glide',
@@ -2956,7 +2956,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=159,
+    id=159,
     height=2,
     longnm='Compare to Signal',
     shortnm='CompSig',
@@ -2972,7 +2972,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=160,
+    id=160,
     height=2,
     longnm='Zero Crossing Counter',
     shortnm='ZeroCnt',
@@ -2987,7 +2987,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=161,
+    id=161,
     height=9,
     longnm='Mixer 8-1 Fader',
     shortnm='MixFader',
@@ -3045,7 +3045,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=162,
+    id=162,
     height=4,
     longnm='Filter Comb',
     shortnm='FltComb',
@@ -3072,7 +3072,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=163,
+    id=163,
     height=5,
     longnm='Osc Shape A',
     shortnm='OscShpA',
@@ -3103,7 +3103,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=164,
+    id=164,
     height=5,
     longnm='Osc Dual',
     shortnm='OscDual',
@@ -3137,7 +3137,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=165,
+    id=165,
     height=6,
     longnm='DX Style Router',
     shortnm='DXRouter',
@@ -3166,7 +3166,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=167,
+    id=167,
     height=3,
     longnm='Pitch Shifter',
     shortnm='PShift',
@@ -3188,7 +3188,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=169,
+    id=169,
     height=5,
     longnm='Envelope Modulation AHD',
     shortnm='ModAHD',
@@ -3218,7 +3218,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=170,
+    id=170,
     height=2,
     longnm='2 inputs',
     shortnm='2-In',
@@ -3236,7 +3236,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=171,
+    id=171,
     height=2,
     longnm='4 inputs',
     shortnm='4-In',
@@ -3256,7 +3256,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=172,
+    id=172,
     height=2,
     longnm='Delay Static',
     shortnm='DlySingleA',
@@ -3275,7 +3275,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=173,
+    id=173,
     height=2,
     longnm='Delay Single',
     shortnm='DlySingleB',
@@ -3296,7 +3296,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=174,
+    id=174,
     height=3,
     longnm='Delay Dual',
     shortnm='DelayDual',
@@ -3321,7 +3321,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=175,
+    id=175,
     height=5,
     longnm='Delay Quad',
     shortnm='DelayQuad',
@@ -3356,7 +3356,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=176,
+    id=176,
     height=3,
     longnm='Delay A',
     shortnm='DelayA',
@@ -3380,7 +3380,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=177,
+    id=177,
     height=4,
     longnm='Delay B',
     shortnm='DelayB',
@@ -3409,7 +3409,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=178,
+    id=178,
     height=2,
     longnm='Delay Clocked',
     shortnm='DlyClock',
@@ -3427,7 +3427,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=179,
+    id=179,
     height=2,
     longnm='Shift Register',
     shortnm='DlyShiftReg',
@@ -3450,7 +3450,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=180,
+    id=180,
     height=12,
     longnm='FM Operator',
     shortnm='Operator',
@@ -3497,7 +3497,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=181,
+    id=181,
     height=3,
     longnm='Delay 8 Tap',
     shortnm='DlyEight',
@@ -3523,7 +3523,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=182,
+    id=182,
     height=5,
     longnm='Delay Stereo',
     shortnm='DlyStereo',
@@ -3553,7 +3553,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=183,
+    id=183,
     height=3,
     longnm='Osc Phase Mod',
     shortnm='OscPM',
@@ -3581,7 +3581,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=184,
+    id=184,
     height=2,
     longnm='Mixer 1-1 A',
     shortnm='Mix1-1A',
@@ -3603,7 +3603,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=185,
+    id=185,
     height=2,
     longnm='Mixer 1-1 Stereo',
     shortnm='Mix1-1S',
@@ -3628,7 +3628,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=186,
+    id=186,
     height=2,
     longnm='Switch 1-2 Momentary',
     shortnm='Sw1-2M',
@@ -3649,7 +3649,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=187,
+    id=187,
     height=2,
     longnm='Switch 2-1 Momentary',
     shortnm='Sw2-1M',
@@ -3670,7 +3670,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=188,
+    id=188,
     height=2,
     longnm='Constant Switch Momentary',
     shortnm='ConstSwM',
@@ -3689,7 +3689,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=189,
+    id=189,
     height=3,
     longnm='Noise Gate',
     shortnm='NoiseGate',
@@ -3710,7 +3710,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=190,
+    id=190,
     height=4,
     longnm='LFO B',
     shortnm='LfoB',
@@ -3740,7 +3740,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=192,
+    id=192,
     height=2,
     longnm='Phaser',
     shortnm='Phaser',
@@ -3760,7 +3760,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=193,
+    id=193,
     height=2,
     longnm='Mixer 4-1 A',
     shortnm='Mix4-1A',
@@ -3778,7 +3778,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=194,
+    id=194,
     height=2,
     longnm='Mixer 2-1 A',
     shortnm='Mix2-1A',
@@ -3805,7 +3805,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=195,
+    id=195,
     height=2,
     longnm='Modulation Amount',
     shortnm='ModAmt',
@@ -3828,7 +3828,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=196,
+    id=196,
     height=3,
     longnm='Osc Percussion',
     shortnm='OscPerc',
@@ -3855,7 +3855,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=197,
+    id=197,
     height=2,
     longnm='Status',
     shortnm='Status',
@@ -3870,7 +3870,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=198,
+    id=198,
     height=2,
     longnm='Pitch Tracker',
     shortnm='PitchTrack',
@@ -3889,7 +3889,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=199,
+    id=199,
     height=2,
     longnm='Monophonic Keyboard',
     shortnm='MonoKey',
@@ -3906,7 +3906,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=200,
+    id=200,
     height=2,
     longnm='Random A',
     shortnm='RandomA',
@@ -3929,7 +3929,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=202,
+    id=202,
     height=3,
     longnm='Random B',
     shortnm='RandomB',
@@ -3955,7 +3955,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=204,
+    id=204,
     height=2,
     longnm='Random Clock A',
     shortnm='RndClkA',
@@ -3978,7 +3978,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=205,
+    id=205,
     height=2,
     longnm='Random Trig',
     shortnm='RndTrig',
@@ -4001,7 +4001,7 @@ modules = [
     modes=ModeList([]),
   ),
   ModuleType(
-    type=206,
+    id=206,
     height=3,
     longnm='Random Clock B',
     shortnm='RndClkB',
@@ -4027,7 +4027,7 @@ modules = [
     ]),
   ),
   ModuleType(
-    type=208,
+    id=208,
     height=3,
     longnm='Random Pattern',
     shortnm='RndPattern',
@@ -4058,15 +4058,15 @@ modules = [
 ]
 
 namemap = {}
-typemap = {}
+idmap = {}
 modulemap = ModuleMap()
 for module in modules:
   namemap[module.shortnm.lower()] = module
-  typemap[module.type] = module
+  idmap[module.id] = module
   name = module.shortnm.replace('-', '_').replace('&', 'n')
   setattr(modulemap, name, module)
 
-def fromtype(type): return typemap[type]
+def fromid(id): return idmap[id]
 def fromname(name): return namemap[name.lower()]
 
 if __name__ == '__main__':
@@ -4074,7 +4074,7 @@ if __name__ == '__main__':
   __builtins__.printf = printf
 
   for module in modules:
-    printf('%s.type: %d(0x%02x)\n', module.shortnm, module.type, module.type)
+    printf('%s.type: %d(0x%02x)\n', module.shortnm, module.id, module.id)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
       printf(' .inputs[%d] .%s\n', i, input.name)

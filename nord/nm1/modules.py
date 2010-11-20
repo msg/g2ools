@@ -4,16 +4,18 @@ from nord import printf, Struct
 from nord.types import *
 from nord.nm1.colors import nm1conncolors
 
-class ParameterDef(Struct): pass
+class ParameterDef(Struct):
+  pass
 
-class ModuleMap(Struct): pass
+class ModuleMap(Struct):
+  pass
 
-audio,control,logic,slave = range(4)
+audio, control, logic, slave = range(4)
 
 modules = [
   ModuleType(
     shortnm='Keyboard',
-    type=1,
+    id=1,
     height=2,
     inputs=[],
     outputs=[
@@ -27,7 +29,7 @@ modules = [
   ),
   ModuleType(
     shortnm='AudioIn',
-    type=2,
+    id=2,
     height=2,
     inputs=[],
     outputs=[
@@ -39,7 +41,7 @@ modules = [
   ),
   ModuleType(
     shortnm='4Output',
-    type=3,
+    id=3,
     height=3,
     inputs=[
       InputType('Out1',         nm1conncolors.audio),
@@ -57,7 +59,7 @@ modules = [
   ),
   ModuleType(
     shortnm='2Output',
-    type=4,
+    id=4,
     height=3,
     inputs=[
       InputType('OutLeft',      nm1conncolors.audio),
@@ -79,7 +81,7 @@ modules = [
   ),
   ModuleType(
     shortnm='1Output',
-    type=5,
+    id=5,
     height=3,
     inputs=[
       InputType('Out',          nm1conncolors.audio),
@@ -100,7 +102,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscA',
-    type=7,
+    id=7,
     height=6,
     inputs=[
       InputType('Sync',         nm1conncolors.audio),
@@ -158,7 +160,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscB',
-    type=8,
+    id=8,
     height=6,
     inputs=[
       InputType('FmMod',        nm1conncolors.audio),
@@ -212,7 +214,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscC',
-    type=9,
+    id=9,
     height=4,
     inputs=[
       InputType('FmMod',        nm1conncolors.audio),
@@ -256,7 +258,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSlvB',
-    type=10,
+    id=10,
     height=3,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -295,7 +297,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSlvC',
-    type=11,
+    id=11,
     height=3,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -331,7 +333,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSlvD',
-    type=12,
+    id=12,
     height=3,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -367,7 +369,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSlvE',
-    type=13,
+    id=13,
     height=3,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -404,7 +406,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSlvA',
-    type=14,
+    id=14,
     height=4,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -445,7 +447,7 @@ modules = [
   ),
   ModuleType(
     shortnm='NoteSeqA',
-    type=15,
+    id=15,
     height=7,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -526,7 +528,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PortamentoB',
-    type=16,
+    id=16,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -544,7 +546,7 @@ modules = [
   ),
   ModuleType(
     shortnm='EventSeq',
-    type=17,
+    id=17,
     height=5,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -670,7 +672,7 @@ modules = [
   ),
   ModuleType(
     shortnm='X-Fade',
-    type=18,
+    id=18,
     height=3,
     inputs=[
       InputType('In1',          nm1conncolors.audio),
@@ -692,7 +694,7 @@ modules = [
   ),
   ModuleType(
     shortnm='3Mixer',
-    type=19,
+    id=19,
     height=2,
     inputs=[
       InputType('In1',          nm1conncolors.audio),
@@ -717,7 +719,7 @@ modules = [
   ),
   ModuleType(
     shortnm='ADSR-Env',
-    type=20,
+    id=20,
     height=5,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -753,7 +755,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Compressor',
-    type=21,
+    id=21,
     height=7,
     inputs=[
       InputType('Left',         nm1conncolors.audio),
@@ -797,7 +799,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PartialGen',
-    type=22,
+    id=22,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -814,7 +816,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Mod-Env',
-    type=23,
+    id=23,
     height=6,
     inputs=[
       InputType('Gate',         nm1conncolors.logic),
@@ -863,7 +865,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOA',
-    type=24,
+    id=24,
     height=5,
     inputs=[
       InputType('Rate',         nm1conncolors.control),
@@ -903,7 +905,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOB',
-    type=25,
+    id=25,
     height=5,
     inputs=[
       InputType('Rate',         nm1conncolors.control),
@@ -944,7 +946,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOC',
-    type=26,
+    id=26,
     height=4,
     inputs=[
       InputType('Rate',         nm1conncolors.control),
@@ -977,7 +979,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOSlvB',
-    type=27,
+    id=27,
     height=2,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -1003,7 +1005,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOSlvC',
-    type=28,
+    id=28,
     height=2,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -1029,7 +1031,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOSlvD',
-    type=29,
+    id=29,
     height=2,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -1055,7 +1057,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOSlvE',
-    type=30,
+    id=30,
     height=2,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -1081,7 +1083,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Noise',
-    type=31,
+    id=31,
     height=2,
     inputs=[],
     outputs=[
@@ -1096,7 +1098,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterBank',
-    type=32,
+    id=32,
     height=7,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1155,7 +1157,7 @@ modules = [
   ),
   ModuleType(
     shortnm='ClkRndGen',
-    type=33,
+    id=33,
     height=2,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -1175,7 +1177,7 @@ modules = [
   ),
   ModuleType(
     shortnm='RndStepGen',
-    type=34,
+    id=34,
     height=2,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -1192,7 +1194,7 @@ modules = [
   ),
   ModuleType(
     shortnm='RndPulsGen',
-    type=35,
+    id=35,
     height=2,
     inputs=[],
     outputs=[
@@ -1207,7 +1209,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PosEdgeDelay',
-    type=36,
+    id=36,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.logic),
@@ -1224,7 +1226,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LogicDelay',
-    type=37,
+    id=37,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.logic),
@@ -1241,7 +1243,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Pulse',
-    type=38,
+    id=38,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.logic),
@@ -1258,7 +1260,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Smooth',
-    type=39,
+    id=39,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -1275,7 +1277,7 @@ modules = [
   ),
   ModuleType(
     shortnm='8Mixer',
-    type=40,
+    id=40,
     height=4,
     inputs=[
       InputType('In1',          nm1conncolors.audio),
@@ -1323,7 +1325,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Constant',
-    type=43,
+    id=43,
     height=2,
     inputs=[],
     outputs=[
@@ -1341,7 +1343,7 @@ modules = [
   ),
   ModuleType(
     shortnm='GainControl',
-    type=44,
+    id=44,
     height=2,
     inputs=[
       InputType('Control',      nm1conncolors.audio),
@@ -1359,7 +1361,7 @@ modules = [
   ),
   ModuleType(
     shortnm='VocalFilter',
-    type=45,
+    id=45,
     height=5,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1402,7 +1404,7 @@ modules = [
   ),
   ModuleType(
     shortnm='AHD-Env',
-    type=46,
+    id=46,
     height=5,
     inputs=[
       InputType('Trig',         nm1conncolors.logic),
@@ -1440,7 +1442,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Pan',
-    type=47,
+    id=47,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1462,7 +1464,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PortamentoA',
-    type=48,
+    id=48,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -1480,7 +1482,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterD',
-    type=49,
+    id=49,
     height=5,
     inputs=[
       InputType('FreqMod',      nm1conncolors.control),
@@ -1518,7 +1520,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterC',
-    type=50,
+    id=50,
     height=4,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1552,7 +1554,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterE',
-    type=51,
+    id=51,
     height=6,
     inputs=[
       InputType('FreqMod1',     nm1conncolors.audio),
@@ -1608,7 +1610,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Multi-Env',
-    type=52,
+    id=52,
     height=7,
     inputs=[
       InputType('Gate',         nm1conncolors.logic),
@@ -1658,7 +1660,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Sample&Hold',
-    type=53,
+    id=53,
     height=2,
     inputs=[
       InputType('Trig',         nm1conncolors.logic),
@@ -1672,7 +1674,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Quantizer',
-    type=54,
+    id=54,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1689,7 +1691,7 @@ modules = [
   ),
   ModuleType(
     shortnm='InvLevShift',
-    type=57,
+    id=57,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1709,7 +1711,7 @@ modules = [
   ),
   ModuleType(
     shortnm='DrumSynth',
-    type=58,
+    id=58,
     height=9,
     inputs=[
       InputType('Trig',         nm1conncolors.logic),
@@ -1773,7 +1775,7 @@ modules = [
   ),
   ModuleType(
     shortnm='CompareLev',
-    type=59,
+    id=59,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -1790,7 +1792,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Clip',
-    type=61,
+    id=61,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1814,7 +1816,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Overdrive',
-    type=62,
+    id=62,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -1835,7 +1837,7 @@ modules = [
   ),
   ModuleType(
     shortnm='KeyboardPatch',
-    type=63,
+    id=63,
     height=3,
     inputs=[],
     outputs=[
@@ -1849,7 +1851,7 @@ modules = [
   ),
   ModuleType(
     shortnm='NegEdgeDelay',
-    type=64,
+    id=64,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.logic),
@@ -1866,7 +1868,7 @@ modules = [
   ),
   ModuleType(
     shortnm='MIDIGlobal',
-    type=65,
+    id=65,
     height=2,
     inputs=[],
     outputs=[
@@ -1879,7 +1881,7 @@ modules = [
   ),
   ModuleType(
     shortnm='ControlMixer',
-    type=66,
+    id=66,
     height=2,
     inputs=[
       InputType('In1',          nm1conncolors.control),
@@ -1909,13 +1911,13 @@ modules = [
   ),
   ModuleType(
     shortnm='NoteDetect',
-    type=67,
+    id=67,
     height=2,
     inputs=[],
     outputs=[
       OutputType('Gate',         nm1conncolors.logic),
       OutputType('Velocity',     nm1conncolors.control),
-      OutputType('Releasevelocity',nm1conncolors.control),
+      OutputType('Releasevelocity', nm1conncolors.control),
     ],
     params=[
       ParamType('Note',
@@ -1926,13 +1928,13 @@ modules = [
   ),
   ModuleType(
     shortnm='ClkGen',
-    type=68,
+    id=68,
     height=3,
     inputs=[
       InputType('Rst',          nm1conncolors.logic),
     ],
     outputs=[
-      OutputType('24Pulses/Beat',nm1conncolors.logic),
+      OutputType('24Pulses/Beat', nm1conncolors.logic),
       OutputType('4Pulses/Beat', nm1conncolors.logic),
       OutputType('Slv',          nm1conncolors.slave),
       OutputType('Sync',         nm1conncolors.logic),
@@ -1949,7 +1951,7 @@ modules = [
   ),
   ModuleType(
     shortnm='ClkDiv',
-    type=69,
+    id=69,
     height=2,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -1967,7 +1969,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LogicInv',
-    type=70,
+    id=70,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.logic),
@@ -1980,7 +1982,7 @@ modules = [
   ),
   ModuleType(
     shortnm='EnvFollower',
-    type=71,
+    id=71,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2000,7 +2002,7 @@ modules = [
   ),
   ModuleType(
     shortnm='NoteScaler',
-    type=72,
+    id=72,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -2017,7 +2019,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LogicProc',
-    type=73,
+    id=73,
     height=2,
     inputs=[
       InputType('In1',          nm1conncolors.logic),
@@ -2035,7 +2037,7 @@ modules = [
   ),
   ModuleType(
     shortnm='WaveWrap',
-    type=74,
+    id=74,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2056,7 +2058,7 @@ modules = [
   ),
   ModuleType(
     shortnm='NoteQuant',
-    type=75,
+    id=75,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -2076,7 +2078,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OnOff',
-    type=76,
+    id=76,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2093,7 +2095,7 @@ modules = [
   ),
   ModuleType(
     shortnm='ClkDivFix',
-    type=77,
+    id=77,
     height=2,
     inputs=[
       InputType('Reset',        nm1conncolors.logic),
@@ -2109,7 +2111,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Delay',
-    type=78,
+    id=78,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2117,7 +2119,7 @@ modules = [
     ],
     outputs=[
       OutputType('FixedDelay',   nm1conncolors.audio),
-      OutputType('VariableDelayOut',nm1conncolors.audio),
+      OutputType('VariableDelayOut', nm1conncolors.audio),
     ],
     params=[
       ParamType('Modulation',
@@ -2131,7 +2133,7 @@ modules = [
   ),
   ModuleType(
     shortnm='4-1Switch',
-    type=79,
+    id=79,
     height=3,
     inputs=[
       InputType('In1',          nm1conncolors.audio),
@@ -2166,7 +2168,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LFOSlvA',
-    type=80,
+    id=80,
     height=4,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -2205,7 +2207,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Amplifier',
-    type=81,
+    id=81,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2222,7 +2224,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Diode',
-    type=82,
+    id=82,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2239,7 +2241,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Shaper',
-    type=83,
+    id=83,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2256,7 +2258,7 @@ modules = [
   ),
   ModuleType(
     shortnm='AD-Env',
-    type=84,
+    id=84,
     height=3,
     inputs=[
       InputType('Trigger',      nm1conncolors.logic),
@@ -2282,7 +2284,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSlvFM',
-    type=85,
+    id=85,
     height=3,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -2322,7 +2324,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterA',
-    type=86,
+    id=86,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2339,7 +2341,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterB',
-    type=87,
+    id=87,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2356,7 +2358,7 @@ modules = [
   ),
   ModuleType(
     shortnm='1-4Switch',
-    type=88,
+    id=88,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2382,7 +2384,7 @@ modules = [
   ),
   ModuleType(
     shortnm='CompareAB',
-    type=89,
+    id=89,
     height=2,
     inputs=[
       InputType('A',            nm1conncolors.control),
@@ -2396,7 +2398,7 @@ modules = [
   ),
   ModuleType(
     shortnm='NoteSeqB',
-    type=90,
+    id=90,
     height=9,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -2494,7 +2496,7 @@ modules = [
   ),
   ModuleType(
     shortnm='CtrlSeq',
-    type=91,
+    id=91,
     height=7,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -2568,7 +2570,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FilterF',
-    type=92,
+    id=92,
     height=6,
     inputs=[
       InputType('FreqMod1',     nm1conncolors.control),
@@ -2614,7 +2616,7 @@ modules = [
   ),
   ModuleType(
     shortnm='StereoChorus',
-    type=94,
+    id=94,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2638,7 +2640,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PercOsc',
-    type=95,
+    id=95,
     height=4,
     inputs=[
       InputType('Trig',         nm1conncolors.audio),
@@ -2684,7 +2686,7 @@ modules = [
   ),
   ModuleType(
     shortnm='FormantOsc',
-    type=96,
+    id=96,
     height=4,
     inputs=[
       InputType('PitchMod1',    nm1conncolors.control),
@@ -2731,7 +2733,7 @@ modules = [
   ),
   ModuleType(
     shortnm='MasterOsc',
-    type=97,
+    id=97,
     height=3,
     inputs=[
       InputType('PitchMod1',    nm1conncolors.control),
@@ -2770,7 +2772,7 @@ modules = [
   ),
   ModuleType(
     shortnm='KeyQuant',
-    type=98,
+    id=98,
     height=4,
     inputs=[
       InputType('In',           nm1conncolors.control),
@@ -2826,7 +2828,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PatternGen',
-    type=99,
+    id=99,
     height=4,
     inputs=[
       InputType('Clk',          nm1conncolors.logic),
@@ -2857,7 +2859,7 @@ modules = [
   ),
   ModuleType(
     shortnm='KeyboardSplit',
-    type=100,
+    id=100,
     height=3,
     inputs=[
       InputType('Note',         nm1conncolors.control),
@@ -2881,7 +2883,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Phaser',
-    type=102,
+    id=102,
     height=7,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2930,7 +2932,7 @@ modules = [
   ),
   ModuleType(
     shortnm='EqMid',
-    type=103,
+    id=103,
     height=4,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2959,7 +2961,7 @@ modules = [
   ),
   ModuleType(
     shortnm='EqShelving',
-    type=104,
+    id=104,
     height=4,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -2988,7 +2990,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Expander',
-    type=105,
+    id=105,
     height=7,
     inputs=[
       InputType('InLeft',       nm1conncolors.audio),
@@ -3032,7 +3034,7 @@ modules = [
   ),
   ModuleType(
     shortnm='OscSineBank',
-    type=106,
+    id=106,
     height=10,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -3126,7 +3128,7 @@ modules = [
   ),
   ModuleType(
     shortnm='SpectralOsc',
-    type=107,
+    id=107,
     height=5,
     inputs=[
       InputType('FmMod',        nm1conncolors.audio),
@@ -3183,7 +3185,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Vocoder',
-    type=108,
+    id=108,
     height=8,
     inputs=[
       InputType('Control',      nm1conncolors.audio),
@@ -3255,7 +3257,7 @@ modules = [
   ),
   ModuleType(
     shortnm='RandomGen',
-    type=110,
+    id=110,
     height=2,
     inputs=[
       InputType('Mst',          nm1conncolors.slave),
@@ -3272,7 +3274,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LevMult',
-    type=111,
+    id=111,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -3292,7 +3294,7 @@ modules = [
   ),
   ModuleType(
     shortnm='LevAdd',
-    type=112,
+    id=112,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -3312,7 +3314,7 @@ modules = [
   ),
   ModuleType(
     shortnm='1to2Fade',
-    type=113,
+    id=113,
     height=2,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -3330,7 +3332,7 @@ modules = [
   ),
   ModuleType(
     shortnm='2to1Fade',
-    type=114,
+    id=114,
     height=2,
     inputs=[
       InputType('In1',          nm1conncolors.audio),
@@ -3348,7 +3350,7 @@ modules = [
   ),
   ModuleType(
     shortnm='NoteVelScal',
-    type=115,
+    id=115,
     height=4,
     inputs=[
       InputType('Velocity',     nm1conncolors.control),
@@ -3375,7 +3377,7 @@ modules = [
   ),
   ModuleType(
     shortnm='RingMod',
-    type=117,
+    id=117,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -3397,7 +3399,7 @@ modules = [
   ),
   ModuleType(
     shortnm='Digitizer',
-    type=118,
+    id=118,
     height=3,
     inputs=[
       InputType('In',           nm1conncolors.audio),
@@ -3427,7 +3429,7 @@ modules = [
   ),
   ModuleType(
     shortnm='PolyAreaIn',
-    type=127,
+    id=127,
     height=2,
     inputs=[],
     outputs=[
@@ -3443,21 +3445,21 @@ modules = [
   ),
 ]
 
-__fromtype = {}
+__fromid = {}
 __fromname = {}
 modulemap = ModuleMap()
 for module in modules:
   __fromname[module.shortnm.lower()] = module
-  __fromtype[module.type] = module
-  name = module.shortnm.replace('-','_').replace('&','n')
+  __fromid[module.id] = module
+  name = module.shortnm.replace('-', '_').replace('&', 'n')
   setattr(modulemap, name, module)
 
 def fromname(name): return __fromname[name.lower()]
-def fromtype(type): return __fromtype[type]
+def fromid(id): return __fromid[id]
 
 if __name__ == '__main__':
   for module in modules:
-    printf('%s.type: %d(0x%02x)\n', module.shortnm, module.type, module.type)
+    printf('%s.id: %d(0x%02x)\n', module.shortnm, module.id, module.id)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
       printf(' .inputs[%d] .%s\n', i, input.name)

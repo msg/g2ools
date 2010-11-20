@@ -31,7 +31,7 @@ from nord.g2.colors import g2modulecolors, g2cablecolors, g2conncolors
 from nord.nm1.file import PchFile
 from nord.nm1.colors import nm1cablecolors, nm1conncolors
 from nord.nm1.file import NM1Error
-from nord.convert import typetable
+from nord.convert import id_table
 from nord.convert.version import version as g2oolsversion
 from nord.utils import setv, toascii
 from nord.convert import osc
@@ -143,16 +143,16 @@ class NM2G2Converter:
   def doconverters(self, nmarea, g2area):
     converters = []
     for module in nmarea.modules:
-      if module.type.type in typetable:
+      if module.type.id in id_table:
         self.log.debug('%s: %s %d(0x%02x)' % (module.type.shortnm, module.name,
-            module.type.type, module.type.type))
-        conv = typetable[module.type.type](nmarea, g2area, module, self.options)
+            module.type.id, module.type.id))
+        conv = id_table[module.type.id](nmarea, g2area, module, self.options)
         converters.append(conv)
         #g2m = conv.g2module
         #printf('%s (%d, %d)\n', g2m.type.shortnm, g2m.horiz, g2m.vert)
       else:
         self.log.warning('No converter for module "%s" type %d(0x%02x)' % (
-            module.type.shortnm, module.type.type, module.type.type))
+            module.type.shortnm, module.type.id, module.type.id))
     return converters
 
 
@@ -160,7 +160,7 @@ class NM2G2Converter:
     self.log.info('domodule:')
     for conv in converters:
       self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type, conv.nmmodule.type.type))
+          conv.nmmodule.name, conv.nmmodule.type.id, conv.nmmodule.type.id))
       conv.domodule()
 
 
@@ -245,7 +245,7 @@ class NM2G2Converter:
     self.log.info('precables:')
     for conv in converters:
       self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
-          conv.nmmodule.name, conv.nmmodule.type.type, conv.nmmodule.type.type))
+          conv.nmmodule.name, conv.nmmodule.type.id, conv.nmmodule.type.id))
       conv.precables()
 
 
@@ -600,7 +600,7 @@ class NM2G2Converter:
       for conv in getattr(self, '%sconverters' % areanm):
         self.log.debug('%s: %s %d(0x%02x)' % (conv.nmmodule.type.shortnm,
             conv.nmmodule.name,
-            conv.nmmodule.type.type, conv.nmmodule.type.type))
+            conv.nmmodule.type.id, conv.nmmodule.type.id))
         conv.finalize()
 
 

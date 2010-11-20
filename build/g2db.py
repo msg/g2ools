@@ -138,12 +138,12 @@ modules = [
 for struct in modulestructs:
   printf('%s\n', struct.shortnm)
   s = '''  ModuleType(
-    type=%s,
+    id=%s,
     height=%s,
     longnm='%s',
     shortnm='%s',
     page=PageType('%s', %s),
-''' % (struct.type, struct.height, struct.longnm, struct.shortnm,
+''' % (struct.id, struct.height, struct.longnm, struct.shortnm,
        struct.page, struct.pageindex)
 
   if len(struct.inputs):
@@ -183,9 +183,9 @@ for struct in modulestructs:
       nm, t = struct.params[p], struct.paramtypes[p]
       s += '      ParamType(%-16sparammap.%s' % ("'%s', " % nm, t)
       # add param labels
-      if paramlabels.has_key(struct.type):
-        if paramlabels[struct.type].has_key(p):
-          labels = paramlabels[struct.type][p]
+      if paramlabels.has_key(struct.id):
+        if paramlabels[struct.id].has_key(p):
+          labels = paramlabels[struct.id][p]
           s += ',\n        labels=[%s]\n      ' % ', '.join(
               [ "'%s'" % label for label in labels ])
       s += '),\n'
@@ -210,15 +210,15 @@ for struct in modulestructs:
 f.write(''']
 
 namemap = {}
-typemap = {}
+idmap = {}
 modulemap = ModuleMap()
 for module in modules:
   namemap[module.shortnm.lower()] = module
-  typemap[module.type] = module
+  idmap[module.id] = module
   name = module.shortnm.replace('-', '_').replace('&', 'n')
   setattr(modulemap, name, module)
 
-def fromtype(type): return typemap[type]
+def fromid(id): return idmap[id]
 def fromname(name): return namemap[name.lower()]
 
 if __name__ == '__main__':
@@ -226,7 +226,7 @@ if __name__ == '__main__':
   __builtins__.printf = printf
 
   for module in modules:
-    printf('%s.type: %d(0x%02x)\\n', module.shortnm, module.type, module.type)
+    printf('%s.type: %d(0x%02x)\\n', module.shortnm, module.id, module.id)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
       printf(' .inputs[%d] .%s\\n', i, input.name)
@@ -242,12 +242,12 @@ if __name__ == '__main__':
 ''')
 
 
-fromtype = {}
+fromid = {}
 fromname = {}
 
 for struct in modulestructs:
   #printf('%s\\n', struct.longnm)
-  fromname[struct.shortnm] = fromtype[struct.type] = Struct(
+  fromname[struct.shortnm] = fromid[struct.id] = Struct(
     inputs=[ Struct(name=nm, type=t)
             for nm, t in zip(struct.inputs, struct.inputtypes) ],
     outputs=[ Struct(name=nm, type=t)
@@ -257,7 +257,7 @@ for struct in modulestructs:
     params=[ Struct(name=nm, type=t) for nm, t in zip(struct.params,
             [ getattr(parammap, a) for a in struct.paramtypes]) ],
     page=Struct(name=struct.page, index=struct.pageindex),
-    height=struct.height, type=struct.type,
+    height=struct.height, id=struct.id,
     longnm=struct.longnm, shortnm=struct.shortnm
   )
 
@@ -266,7 +266,7 @@ for struct in modulestructs:
 #del modules
 #del modulestructs
 
-# moduledef=moduledb.fromtype[x)
+# moduledef=moduledb.fromid[x)
 # input = moduledef.inputs[i]
 #   input.name
 #   input.type

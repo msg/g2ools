@@ -38,7 +38,7 @@ customre = parameterre
 
 entries = open('patch303.txt', 'r').read().split('----------\r\n')
 entries.pop(0)
-fromtype = {}
+fromid = {}
 fromname = {}
 modules = []
 for entry in entries:
@@ -47,7 +47,7 @@ for entry in entries:
   if m:
     #printf('%s %s\n', m.group(1), m.group(2))
     mod = Module()
-    mod.type = m.group(1)
+    mod.id = m.group(1)
     mod.name = m.group(2)
     # remove remark
     data.pop(0)
@@ -83,7 +83,7 @@ for entry in entries:
         ms = sectionre.match(s)
         if ms:
           section.append(ms.groups()[:])
-    fromtype[mod.type] = mod
+    fromid[mod.id] = mod
     fromname[mod.name] = mod
     modules.append(mod)
 
@@ -108,14 +108,14 @@ modules = [
 for module in modules:
   s = '''  ModuleType(
     shortnm='%s',
-    type=%s,
+    id=%s,
     height=%s,
-''' % (module.name, module.type, module.height)
+''' % (module.name, module.id, module.height)
   if len(module.inputs):
     s += '''    inputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      InputType(%-16snm1conncolors.%s), " % (
+        '\n'.join(["      InputType(%-16snm1conncolors.%s)," % (
           "'%s', " %  nm.title().replace(' ', ''),
           t.lower().replace(' ', ''))
           for (n, nm, t) in module.inputs
@@ -127,7 +127,7 @@ for module in modules:
     s += '''    outputs=[
 %s
     ],\n''' % (
-        '\n'.join(["      OutputType(%-16snm1conncolors.%s), " % (
+        '\n'.join(["      OutputType(%-16snm1conncolors.%s)," % (
           "'%s', " %  nm.title().replace(' ', ''),
           t.lower().replace(' ', ''))
           for (n, nm, t) in module.outputs
@@ -142,7 +142,7 @@ for module in modules:
         '\n'.join(
         ['''      ParamType('%s',
         ParamDef(  default=%s, low=%s, high=%s, comment='%s'),
-      ), ''' % (
+      ),''' % (
           nm.title().replace(' ', ''), l, l, h, c)
           for (n, nm, l, h, c) in module.parameters
         ])
@@ -160,7 +160,7 @@ for module in modules:
           high=%s,
           comment='%s'
         ),
-      ), ''' % (
+      ),''' % (
           nm.title().replace(' ', ''), l, l, h, c)
           for (n, nm, h, l, c) in module.custom
         ])
@@ -174,21 +174,21 @@ for module in modules:
 
 out.write(''']
 
-__fromtype = {}
+__fromid = {}
 __fromname = {}
 modulemap = ModuleMap()
 for module in modules:
   __fromname[module.shortnm.lower()] = module
-  __fromtype[module.type] = module
+  __fromid[module.id] = module
   name = module.shortnm.replace('-', '_').replace('&', 'n')
   setattr(modulemap, name, module)
 
 def fromname(name): return __fromname[name.lower()]
-def fromtype(type): return __fromtype[type]
+def fromid(id): return __fromid[id]
 
 if __name__ == '__main__':
   for module in modules:
-    printf('%s.type: %d(0x%02x)\\n', module.shortnm, module.type, module.type)
+    printf('%s.id: %d(0x%02x)\\n', module.shortnm, module.id, module.id)
     for i in range(len(module.inputs)):
       input = module.inputs[i]
       printf(' .inputs[%d] .%s\\n', i, input.name)
