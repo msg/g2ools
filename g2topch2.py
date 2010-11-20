@@ -3,8 +3,6 @@
 import os, string, sys, traceback
 from nord.g2.file import Pch2File, Prf2File
 from nord.g2.misc import handle_uprate, midicc_reserved
-from nord import types
-import nord.g2.modules
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf
 from nord.file import Ctrl
@@ -48,11 +46,13 @@ class G2Module(object):
   def __init__(self, module):
     self.module = module
     self.height = self.module.type.height
+    self.params = { }
+    self.ports = { }
     self.setup()
 
   def setup(self):
-    module = self.module
     self.params = { }
+    module = self.module
     for param in module.params:
       self.params[param.type.name.lower()] = G2ModuleParam(param)
 
@@ -153,8 +153,8 @@ class G2GroupParam(object):
 
   def add_calc(self, param, equation):
     self.calcs.append(G2GroupParamCalc(param, equation))
-    vars = self.variations[:]
-    self.set(*vars)
+    variations = self.variations[:]
+    self.set(*variations)
 
   def setupvars(self, variation, value):
     paramvars = { }
@@ -179,9 +179,10 @@ class G2GroupParam(object):
 
 class G2Group(G2Section):
   def __init__(self, section):
-    super(G2Group,self).__init__(section)
+    super(G2Group, self).__init__(section)
     self.params = { }
     self.ports = { }
+    self.height = 0
 
   def add(self, typename, name):
     self.modules[name] = self.addmodule(typename, name)
@@ -234,6 +235,7 @@ class G2Group(G2Section):
 class G2ModuleType(object):
   def __init__(self, shortnm):
     self.shortnm = shortnm
+    self.height = 0
 
   def add(self, area, **kw):
     m = G2Module(area.addmodule(self.shortnm, **kw))
@@ -428,7 +430,7 @@ class G2Patch(G2Section):
     elif command == 'add':
       pass
 
-  def table(self, name, file):
+  def table(self, name, filename):
     pass
 
   def setting(self, setting, *variations):
@@ -446,6 +448,7 @@ class G2File(object):
     self.g2patch = G2Patch(filename)
     self.topfile = filename
     self.files = { }
+    self.file_stack = [ ]
     self.include_path = [ '.' ]
 
   def parse(self):
@@ -471,7 +474,6 @@ class G2File(object):
     if path in self.file_stack:
       raise G2Exception('%s include loop.\ncurrent stack %s' % (path,
           self.file_stack))
-      return
     self.file_stack.append(path)
     if not path in self.files:
       self.build_files(path)
@@ -480,7 +482,7 @@ class G2File(object):
   def build_files(self, filename):
     lines = [ line.rstrip() for line in open(filename).readlines() ]
     self.file_stack = [ filename ]
-    self.files[filename] = zip(range(1,1+len(lines)),lines)
+    self.files[filename] = zip(range(1, 1+len(lines)), lines)
     inmodule = False
     for lineno, line in self.files[filename]:
       line = cleanline(line)
