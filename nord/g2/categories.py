@@ -19,32 +19,25 @@
 # along with Foobar; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-G2Categories = {
-  0: 'No Cat',
-  1: 'Acoustic',
-  2: 'Sequencer',
-  3: 'Bass',
-  4: 'Classic',
-  5: 'Drum',
-  6: 'Fantasy',
-  7: 'FX',
-  8: 'Lead',
-  9: 'Organ',
-  10: 'Pad',
-  11: 'Piano',
-  12: 'Synth',
-  13: 'Audio In',
-  14: 'User 1',
-  15: 'User 2',
-}
 
-__names = {}
-for key in G2Categories:
-  nm = G2Categories[key]
-  __names[nm.lower()] = key
+from nord import Mapping
 
-def namefromtype(type_):
-  return G2Categories[type_]
+g2categories = Mapping(
+  no_cat    = 0,
+  acoustic  = 1,
+  sequencer = 2,
+  bass      = 3,
+  classic   = 4,
+  drum      = 5,
+  fantasy   = 6,
+  fx        = 7,
+  lead      = 8,
+  organ     = 9,
+  pad       = 10,
+  piano     = 11,
+  synth     = 12,
+  audio_in  = 13,
+  user_1    = 14,
+  user_2    = 15,
+)
 
-def typefromname(name):
-  return __names[name.lower()]

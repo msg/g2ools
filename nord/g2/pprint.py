@@ -19,13 +19,13 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from nord.g2.categories import G2Categories
+from nord.g2.categories import g2categories
 from nord import printf
 
 def printdescription(patch):
   printf('patchdescription:\n')
   desc = patch.description
-  printf(' category: %s\n', G2Categories[desc.category])
+  printf(' category: %s\n', g2categories[desc.category])
   printf(' voices: %d\n', desc.voices)
   printf(' height: %d\n', desc.height)
   printf(' monopoly: %d\n', desc.monopoly)
