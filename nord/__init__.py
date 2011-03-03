@@ -52,6 +52,12 @@ class Mapping(object):
     self.__dict__[name] = value
     self.__dict[value] = name
 
+  def name(self, value):
+    return self.__dict[value]
+
+  def value(self, name):
+    return self.__dict[name]
+
   def __getattr__(self, name):
     try:
       return self.__dict__[name]
