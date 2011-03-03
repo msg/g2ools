@@ -2,8 +2,9 @@
 #
 # g 2 c t l
 #
-import os, re, string, sys, time
+import os, struct, sys
 from nord import printf
+from nord.g2.categories import g2categories
 from array import array
 
 # vim: set sw=2:
@@ -23,7 +24,7 @@ def debug(fmt, *a):
 
 commands = {}
 commandlist = []
-def add_command(name,params,desc,func):
+def add_command(name, params, desc, func):
   command = Command(name, params, desc, func)
   commands[name] = command
   commandlist.append(command)
@@ -37,15 +38,15 @@ def run(name, args):
     a = args[:l]
     if len(a) < l:
       printf('error: %s missing %s\n', name,
-	  ' '.join([ '<%s>' % p for p in command.params[len(a):]]))
+          ' '.join([ '<%s>' % p for p in command.params[len(a):]]))
       error = -1
     else:
       args[:l] = []
       printf('%s %s\n', name, ' '.join(a))
-      error = func(command,*a)
+      error = func(command, *a)
     if error:
        printf('usage: %s %s\n', name,
-	    ' '.join(['<%s>' % p for p in command.params ]))
+            ' '.join(['<%s>' % p for p in command.params ]))
     printf('\n')
   else:
     printf('error: bad command "%s"\n', name)
@@ -88,11 +89,11 @@ def clean_line(line):
   return line.strip()
 
 # default script command
-def cmd_script(command, file):
-  lines = map(clean_line, open(file, 'r').readlines())
+def cmd_script(command, filename):
+  lines = map(clean_line, open(filename, 'r').readlines())
   newargs = ' '.join(lines).split()
   return process(newargs)
-add_command('script',['file'],'execute command from <file>', cmd_script)
+add_command('script', ['file'], 'execute command from <file>', cmd_script)
 
 def wrap_lines(s, maxlen=80):
   lines = []
@@ -114,7 +115,8 @@ def cmd_help(command):
   printf('  commands:\n')
   for command in commandlist:
     sep = ''
-    if len(command.params): sep = ' '
+    if len(command.params):
+      sep = ' '
     params = [ '<%s>' % p for p in command.params ]
     usage = '%s%s%s:' % (command.name, sep, ' '.join(params))
     desc = wrap_lines(command.description, 80-30)
@@ -123,22 +125,21 @@ def cmd_help(command):
       printf('    %-25s %s\n', '', desc.pop(0))
   printf('\n  multiple commands are executed consecutively\n')
   return 0
-add_command('help',[],'display list of commands', cmd_help)
+add_command('help', [], 'display list of commands', cmd_help)
 
 ######################## g2ctl functions ########################
 
 import struct
-from array import array
 import usb
 
-def hexdump(bytes,addr=0,size=1):
+def hexdump(bytes, addr=0, size=1):
   def out(x):
     if x < 32 or x >= 127:
       return '.'
     return chr(x)
 
-  from array import array
-  '''hexdump(bytes,addr,size) -> return hex dump of size itmes using addr as address'''
+  '''hexdump(bytes,addr,size) -> string
+  return hex dump of size itmes using addr as address'''
   s = []
   if size == 4:
     a = array('L', [])
@@ -153,9 +154,8 @@ def hexdump(bytes,addr=0,size=1):
     fmt = '%02x'
     l = 23
   a.fromstring(bytes)
-  hl = max(2,len('%x' % len(bytes)))
   ofmt = '%04x: %-*s  %-*s | %s'
-  for off in range(0,len(bytes),16):
+  for off in range(0, len(bytes), 16):
     hex = [fmt % i for i in a[off/size:(off+16)/size]]
     s.append(ofmt % (addr+off,
       l, ' '.join(hex[:8/size]), l, ' '.join(hex[8/size:]),
@@ -174,14 +174,15 @@ def crc16(val, icrc):
   return (icrc<<8)^crc
 
 def crc(s):
-  return  reduce(lambda a,b: crc16(ord(b),a),s,0) & 0xffff
+  return reduce(lambda a, b: crc16(ord(b), a), s, 0) & 0xffff
 
-CMD_A	 = 0x08
-CMD_B	 = 0x09
-CMD_C	 = 0x0a
-CMD_SYS	 = 0x0c
+CMD_A    = 0x08
+CMD_B    = 0x09
+CMD_C    = 0x0a
+CMD_D    = 0x0b
+CMD_SYS  = 0x0c
 CMD_INIT = 0x80
-CMD_REQ	 = 0x20
+CMD_REQ  = 0x20
 CMD_RESP = 0x00
 
 class G2USBInterface:
@@ -192,10 +193,10 @@ class G2USBInterface:
     g2dev = None
     for bus in usb.busses():
       for device in bus.devices:
-	if device.idVendor == vendorid and device.idProduct == productid:
-	  g2dev = device
+        if device.idVendor == vendorid and device.idProduct == productid:
+          g2dev = device
     if not g2dev:
-      raise 'No g2 device found'
+      raise Exception('No g2 device found')
     self.g2dev = g2dev
 
     # get 3 endpoints
@@ -211,22 +212,22 @@ class G2USBInterface:
     self.g2h.reset()
 
   def bwrite(self, addr, data):
-    return self.g2h.bulkWrite(addr,data.tostring())
+    return self.g2h.bulkWrite(addr, data.tostring())
 
   def bread(self, addr, len, timeout=100):
     try:
       data = self.g2h.bulkRead(addr, len, timeout)
-      return array('B',[ byte & 0xff for byte in data ])
+      return array('B', [ byte & 0xff for byte in data ])
     except:
       return []
 
   def iread(self, addr, len, timeout=100):
     data = self.g2h.interruptRead(addr, len, timeout)
-    return array('B',[ byte & 0xff for byte in data ])
+    return array('B', [ byte & 0xff for byte in data ])
 
-  def readmsg(self):
+  def read_message(self):
     try:
-      diin = self.iread(self.g2iin,16,100)
+      diin = self.iread(self.g2iin, 16, 100)
       s =  hexdump(diin.tostring()).replace('\n','\n       ')
       debug('<%d %s\n', self.g2iin & 0x7f, s)
     except:
@@ -237,14 +238,14 @@ class G2USBInterface:
     # handle 0x80 (init) messages specially
     if data[0] == CMD_INIT:
       # message 0x80 is just itself
-      s = array('B',data).tostring()
+      s = array('B', data).tostring()
     else:
       # messages start with 0x01 0xRC 0xDD 0xDD .. 0xDD
       # C: command (usually just the lower nibble)
       # R: 0x2 when request, 0x0 for response
       #    0x3 ? maybe response-less request
       # DD: data for command
-      s = array('B',[0x01]+[data[0]|CMD_REQ]+data[1:]).tostring()
+      s = array('B', [0x01]+[data[0]|CMD_REQ]+data[1:]).tostring()
 
     # messages are sent formatted as bytes:
     # SS SS MM MM MM .. MM CC CC
@@ -254,9 +255,9 @@ class G2USBInterface:
     l = len(s)+4  # length includes SS SS and CC CC (add 4 bytes)
     c = crc(s)    # calculate the crc
     # encode and send the message to be sent
-    ns = array('B',struct.pack('>H%dsH' % len(s),l,s,c))
+    ns = array('B', struct.pack('>H%dsH' % len(s), l, s, c))
     # max message len 4096, break message into 4096 byte chunks
-    return [ ns[i:i+4096] for i in range(0,len(ns),4096) ]
+    return [ ns[i:i+4096] for i in range(0, len(ns), 4096) ]
 
   def extended_message(self, din, data):
     sz = (din[1]<<8)|din[2]
@@ -268,7 +269,7 @@ class G2USBInterface:
     s = hexdump(bin.tostring()).replace('\n','\n   ')
     debug('<%d %s\n', self.g2bin & 0x7f, s)
     if retries == 0:
-      raise 'Could not get result'
+      raise Exception('Could not get result')
     elif bin[0] == CMD_INIT: # 0x80 special case
       pass
     elif bin[1] == data[0]: # if result is same as command we got message
@@ -283,19 +284,20 @@ class G2USBInterface:
     return bin
 
   def embedded_message(self, din, data):
-    if din[2] == data[0]: # if this isn't the response we expect, toss it.
-      return din
     dil = din.pop(0)>>4 # length encoded in upper nibble of header byte
     ecrc = crc(din[:dil-2].tostring()) # expected crc
     acrc = (din[dil-2]<<8)|din[dil-1]  # actual crc
     if ecrc != acrc:
       printf('bad crc exp: 0x%04x act: 0x%04x\n', ecrc, acrc)
-    return din
+    return din[:dil]
 
-  def isextended(self, data): return data[0] & 0xf == 1
-  def isembedded(self, data): return data[0] & 0xf == 2
+  def is_extended(self, data):
+    return data[0] & 0xf == 1
 
-  def sendmsg(self, data):
+  def is_embedded(self, data):
+    return data[0] & 0xf == 2
+
+  def send_message(self, data):
 
     packets = self.format_message(data)
     for packet in packets:
@@ -307,9 +309,9 @@ class G2USBInterface:
     # which is usually the command without the request bit (0x20) set
     result = None
     for retries in range(5):
-      din = self.bread(self.g2iin,16,100)
+      din = self.bread(self.g2iin, 16, 100)
       if len(din) == 0:
-	continue
+        continue
 
       # result message first byte:
       #   0xLT 0xDD 0xDD .. 0xDD 0xCC 0xCC (16 0xDD bytes)
@@ -318,104 +320,113 @@ class G2USBInterface:
       #   0xDD
       s = hexdump(din.tostring()).replace('\n','\n   ')
       debug('<%d %s\n', self.g2iin & 0x7f, s)
-      if self.isextended(din):
-	result = self.extended_message(din, data)
-      elif self.isembedded(din):
-	result = self.embedded_message(din, data)
+      if self.is_extended(din):
+        result = self.extended_message(din, data)
+      elif self.is_embedded(din):
+        result = self.embedded_message(din, data)
 
       if result:
-	break
+        break
 
     return result
 
-def parsename(data):
-  null = data[:16].find('\0')
+def parse_name(data):
+  s = data[:16]
+  if type(s) != type(''):
+    s = s.tostring()
+  null = s.find('\0')
   if null < 0:
-    return data[:16], data[16:]
+    return s, data[16:]
   else:
-    return data[:null], data[null+1:]
+    return s[:null], data[null+1:]
 
-def formatname(name):
+def format_name(name):
   if len(name) < 16:
     return name + '\0'
   else:
     return name[:16]
 
 ###################### commands ########################
-class G2Interface:
-  def __init__(self):
-    self.usb = None
+class G2Interface(object):
 
-  def __setattribute__(self, name, value):
-    if self.usb == None:
-      self.usb = G2USBInterface()
+  def __setattr__(self, name, value):
+    if self.__dict__.get('usb', None) == None:
+      self.__dict__['usb'] = G2USBInterface()
     setattr(self.usb, name, value)
 
-  def __getattribute__(self, name):
-    if self.usb == None:
-      self.usb = G2USBInterface()
+  def __getattr__(self, name):
+    if self.__dict__.get('usb', None) == None:
+      self.__dict__['usb'] = G2USBInterface()
     return getattr(self.usb, name)
 
 g2usb = G2Interface()
 
 def cmd_list(command):
-  JUMP_PATCH, NEXT_BANK, NEXT_MODE, CONTINUE = map(chr, range(1,5))
+  JUMP, SKIP, BANK, MODE, CONTINUE = [1, 2, 3, 4, 5]
+  LAST = CONTINUE
   PATCH_MODE, PERFORMANCE_MODE, END_MODE = range(3)
-  mode = 0
+  modes = ['Pch2', 'Prf2']
+  mode = PATCH_MODE
   bank = 0
   patch = 0
   while mode < END_MODE:
-    data = g2usb.sendmsg([CMD_SYS, 0x41, 0x14, mode, bank, patch])
-    data = data[0x0c:-2].tostring()
+    cmd = [CMD_SYS, 0x41, 0x14, mode, bank, patch]
+    data = g2usb.send_message(cmd)
+    data = data[9:-2].tostring()
     while len(data):
-      name, data = parsename(data)
-      if name[0] == JUMP_PATCH:   # jump to patch
-        patch = ord(name[1])
-	data = formatname(name[2:]) + data
-      elif name[0] == NEXT_BANK: # next bank
-        bank, patch = ord(name[1]), 0
-      elif name[0] == NEXT_MODE: # next mode (from patch to performance)
-        mode, bank, patch = mode+1, 0, 0
-      elif name[0] == CONTINUE: # continuation name
-        pass
-      else:
-	category, data = ord(data[0]), data[1:]
-	printf('%s %d:%d %d %s\n', ['Patch','Peformance'][mode==1],
-		bank+1,patch+1, category, name)
-	patch += 1
+      c = ord(data[0])
+      if c > LAST:
+        name, data = parse_name(data)
+        category, data = ord(data[0]), data[1:]
+        printf('%s %-6s %-9s %s\n', modes[mode],
+                '%d:%d' % (bank+1, patch+1), g2categories[category], name)
+        patch += 1
+      elif c == CONTINUE:
+        data = data[1:]
+      elif c == BANK:
+        bank, patch, data = ord(data[1]), ord(data[2]), data[3:]
+      elif c == JUMP:
+        patch, data = ord(data[1]), data[2:]
+      elif c == SKIP:
+        patch, data = patch+1, data[1:]
+      elif c == MODE:
+        mode, bank, patch, data = mode+1, 0, 0, data[1:]
   return 0
-add_command('list',[],'list all patches and performances', cmd_list)
+add_command('list', [], 'list all patches and performances', cmd_list)
 
 def cmd_dump(command, bank):
   printf('unimplimented\n')
   return 0
-add_command('dump',['bank'],'dump patches from bank', cmd_dump)
+add_command('dump', ['bank'], 'dump patches from bank', cmd_dump)
 
-def getpatchdata(file):
-  data = open(file).read()
+def read_g2_file(filename):
+  data = open(filename).read()
   null = data.find('\0')
   if null < 0:
-    printf('invalid pch2 %s\n', file)
+    printf('invalid pch2 %s\n', filename)
     return []
   return data[null:]
 
 def cmd_loadslot(command, slot, filename):
-  data = getpatchdata(filename)
+  data = read_g2_file(filename)
   if len(data) == 0:
     return -1
   data = data[3:-2]
-  patchname = formatname(os.path.splitext(os.path.basename(filename))[0])
+  patchname = format_name(os.path.splitext(os.path.basename(filename))[0])
 
   slot = 'abcd'.find(slot.lower())
-  a = array('B',[CMD_A+slot, 0x53, 0x37, 0x00, 0x00, 0x00]) 
+  if slot < 0:
+    return -1
+  a = array('B', [CMD_A+slot, 0x53, 0x37, 0x00, 0x00, 0x00]) 
   a.fromstring(patchname)
   a.fromstring(data)
-  g2usb.sendmsg(a.tolist())
+  g2usb.send_message(a.tolist())
   return 0
-add_command('loadslot',['slot','file'],'load a slot with patch', cmd_loadslot)
+add_command('loadslot', ['slot', 'file'], 'load patch into a slot',
+    cmd_loadslot)
 
-def bankpatch(location):
-  bank,patch = map(int, location.split(':'))
+def parse_bank_patch(location):
+  bank, patch = map(int, location.split(':'))
   if bank < 1 or bank > 32:
     printf('invalid bank %d, must be 1 to 32\n', bank)
     return -1, -1
@@ -425,15 +436,15 @@ def bankpatch(location):
   return bank, patch
 
 def cmd_store(command, location, filename):
-  data = getpatchdata(filename)
+  data = read_g2_file(filename)
   l = len(data)
   if l == 0:
     return -1
-  bank,patch = bankpatch(location)
+  bank, patch = parse_bank_patch(location)
   if bank < 0:
     return -1
-  name,ext = os.path.splitext(os.path.basename(filename))
-  name = formatname(name)
+  name, ext = os.path.splitext(os.path.basename(filename))
+  name = format_name(name)
   print name, ext
   if ext.lower() == 'prf2':
     mode = 1
@@ -444,77 +455,107 @@ def cmd_store(command, location, filename):
   a.fromstring(name)
   a.extend([ (l>>8)&0xff, l&0xff, 0x17 ])
   a.fromstring(data)
-  g2usb.sendmsg(a.tolist())
+  g2usb.send_message(a.tolist())
   return 0
-add_command('store',['loc','file'],'store file at location', cmd_store)
+add_command('store', ['loc', 'file'], 'store file at location', cmd_store)
 
 def cmd_clear(command, location):
-  bank,patch = bankpatch(location)
-  if bank < 0:
+  bank, patch = parse_bank_patch(location)
+  if bank < 1:
     return -1
-  g2usb.sendmsg([CMD_SYS, 0x41, 0x0c, 0x00, bank-1, patch-1, 0x00])
+  if patch < 1 or 128 < patch:
+    return -1
+  g2usb.send_message([CMD_SYS, 0x41, 0x0c, 0x00, bank-1, patch-1, 0x00])
   return 0
-add_command('clear',['loc'],'clear location', cmd_clear)
+add_command('clear', ['loc'], 'clear location', cmd_clear)
 
-def cmd_slotsettings(command):
-  g2usb.sendmsg([CMD_SYS, 0x41, 0x35, 0x04])
-  g2usb.sendmsg([CMD_SYS, 0x41, 0x02])
-  sels = g2usb.sendmsg([CMD_SYS, 0x41, 0x81])
-  data = g2usb.sendmsg([CMD_SYS, sels[2], 0x10])
-  perfname = data[:20].tostring()
-  null = perfname.find('\0')
-  if null > -1:
-    perfname, data = perfname[4:null], data[null+1:]
+def cmd_settings(command):
+  g2usb.send_message([CMD_SYS, 0x41, 0x35, 0x04])
+  syst = g2usb.send_message([CMD_SYS, 0x41, 0x02])
+  synthname, syst = parse_name(syst[4:])
+  printf('%s:\n', synthname)
+  printf(' mode: %s\n', ['Patch', 'Performance'][syst[0]>>7])
+  printf(' midi:\n')
+  printf('  slota: %d\n', syst[5]+1) 
+  printf('  slotb: %d\n', syst[6]+1) 
+  printf('  slotc: %d\n', syst[7]+1) 
+  printf('  slotd: %d\n', syst[8]+1) 
+  printf('  glob : %d\n', syst[9]+1)
+  printf('  sysex: %d\n', syst[10]+1)
+  printf('  local: %s\n', ['off','on'][syst[11]>>7])
+  printf('  prgch: %s\n', ['off','send','recv','send/recv'][syst[12]])
+  printf('  clkse: %s\n', ['on','off'][(syst[13]>>6)&1])
+  printf('  clkre: %s\n', ['on','off'][(syst[13]>>5)&1])
+  printf(' tune semi: %d\n', struct.unpack('b',chr(syst[18]))[0])
+  printf(' tune cent: %d\n', struct.unpack('b',chr(syst[15]))[0])
+  printf(' pedal polarity: %s\n', ['open','closed'][syst[20]>>7])
+  printf(' pedal gain: %.2f\n', 1.0 + 0.5*syst[21]/32)
+  sels = g2usb.send_message([CMD_SYS, 0x41, 0x81])
+  data = g2usb.send_message([CMD_SYS, sels[2], 0x10])
+  perfname, data = parse_name(data[4:])
+  if syst[0] >> 7:
+    printf('Performance: %s\n', perfname)
   else:
-    perfname, data = perfname[4:20], data[20:]
-  print hexdump(data.tostring())
-  printf('\n%s:\n', perfname)
+    printf('Patches:\n')
   printf(' focus: %s\n', 'abcd'[(data[4]>>2)&3])
   printf(' range enable: %s\n', ['off','on'][0x01 & data[5]])
   printf(' master clock: %d BPM: %s\n', data[6], ['stop','run'][data[8]&0x01])
   printf(' kb split: %s\n', ['off','on'][0x01 & data[7]])
-  data = data[11:].tostring()
+  data = data[11:]
   for slot in range(4):
-    name,data = parsename(data)
-    printf(' slot %s:\n', 'abcd'[slot])
-    printf('  active: %s\n', ['off','on'][ord(data[0])])
-    printf('  key: %s\n', ['off','on'][ord(data[1])])
-    printf('  hold: %s\n', ['off','on'][ord(data[2])])
-    printf('  range: %d-%d\n', ord(data[5]), ord(data[6]))
+    name, data = parse_name(data)
+    fields = data[:10]
+    active, key, hold, bank, patch, low, high = fields[:7]
+    printf(' slot %s: %d:%d "%-16s"\n', 'abcd'[slot], bank+1, patch+1, name)
+    printf('  active: %-3s, ', ['off','on'][active])
+    printf('key: %-3s, ', ['off','on'][key])
+    printf('hold: %-3s, ', ['off','on'][hold])
+    printf('range: %d-%d\n', low, high)
     data = data[10:]
   return 0
-add_command('slotsettings',[],'print patch performance settings',
-    cmd_slotsettings)
+add_command('settings', [], 'print patch performance settings',
+    cmd_settings)
 
 def cmd_slot(command, slot):
-  ion = g2usb.sendmsg([CMD_SYS, 0x41, 0x7d, 0x00])
+  ion = g2usb.send_message([CMD_SYS, 0x41, 0x7d, 0x00])
   slot = 'abcd'.find(slot.lower())
-  slot &= 0x3
-  g2usb.sendmsg([CMD_SYS, ion[3], 0x07, 0x08>>slot, 0x0f, 0x08>>slot])
-  g2usb.sendmsg([CMD_SYS, ion[3], 0x09, slot])
-  g2usb.sendmsg([CMD_A+slot, 0x0a, 0x70])
+  if slot < 0:
+    retur -1
+  g2usb.send_message([CMD_SYS, ion[3], 0x07, 0x08>>slot, 0x0f, 0x08>>slot])
+  g2usb.send_message([CMD_SYS, ion[3], 0x09, slot])
+  g2usb.send_message([CMD_A+slot, 0x0a, 0x70])
   return 0
-add_command('slot',['slot'],'select slot (A,B,C,D)', cmd_slot)
+add_command('slot', ['slot'], 'select slot (A,B,C,D)', cmd_slot)
 
 def cmd_variation(command, variation):
-  g2usb.sendmsg([CMD_A, 0x3c, 0x6a, variation-1])
+  variation = int(variation)
+  if variation < 1 or 8 < variation:
+    return -1
+  slota = g2usb.send_message([CMD_SYS, 0x41, 0x35, 0x00])
+  g2usb.send_message([CMD_A, slota[5], 0x6a, variation-1])
   return 0
-add_command('variation',['variation'],'select variation', cmd_variation)
+add_command('variation', ['variation'], 'select variation', cmd_variation)
  
 def cmd_parameterpage(command, page):
   row = 'abcde'.find(page[0].lower())
   if row < 0:
     printf('Invalid row %s\n', page[0].lower())
-    return
+    return -1
   col = int(page[1]) - 1
-  if col < 0 or col > 2:
+  if col < 0 or 2 < col:
     printf('Invalid col %d\n', col)
-    return
-  slota = g2usb.sendmsg([0x0c, 0x41, 0x35, 0x00])
-  g2usb.sendmsg([0x08, slota[6], 0x2d, (row*3)+col])
+    return -1
+  slota = g2usb.send_message([CMD_SYS, 0x41, 0x35, 0x00])
+  g2usb.send_message([0x08, slota[6], 0x2d, (row*3)+col])
   return 0
-add_command('parameterpage',['page'],'select parameterpage', cmd_parameterpage)
+add_command('parameterpage', ['page'], 'select parameterpage',
+    cmd_parameterpage)
 
+def cmd_sleep(command, seconds):
+  import time
+  seconds = float(seconds)
+  time.sleep(seconds)
+add_command('sleep', ['seconds'], 'sleep for seconds', cmd_sleep)
 if __name__ == '__main__':
   main(sys.argv)
 
