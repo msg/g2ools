@@ -58,7 +58,7 @@ def getbitsa(bit, sizes, data):
   return [bit] + values
 
 def setbitsa(bit, sizes, data, values):
-  '''getbitsa(bit, sizes, data, values) -> bit'''
+  '''setbitsa(bit, sizes, data, values) -> bit'''
   for size, value in zip(sizes, values):
     bit = setbits(bit, size, data, value)
   return bit
@@ -345,7 +345,7 @@ class PatchSettings(Section):
 
     bit, section  = getbits(bit, 8, data) # 1 for morph settings
     bit, nentries = getbits(bit, 7, data) # 16 parameters per variation
-
+                                          # 8 dials, 8 modes 
     for i in range(nvariations): # morph groups
       bit, variation = getbits(bit, 8, data) # variation number
       for morph in range(NMORPHS):
@@ -494,7 +494,6 @@ class MorphParameters(Section):
           mmap.param = patch.voice.findmodule(index).params[param]
         else:
           mmap.param = patch.fx.findmodule(index).params[param]
-        mmap.param.mmap = mmap
         mmap.morph = morphs[morph]
         morphs[morph].maps[variation].append(mmap)
 
@@ -607,6 +606,7 @@ class CtrlAssignments(Section):
       bit, index = getbits(bit, 8, data)
       bit, param = getbits(bit, 7, data)
       m.index = index
+      m.param_index = param
       if m.type == FX:
         m.param = patch.fx.findmodule(index).params[param]
       elif m.type == VOICE:
