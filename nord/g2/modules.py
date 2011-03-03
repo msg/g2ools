@@ -8,6 +8,11 @@ from params import parammap
 class ModuleMap(Struct):
   pass
 
+red = g2conncolors.red
+blue = g2conncolors.blue
+yellow = g2conncolors.yellow
+blue_red = g2conncolors.blue_red
+yellow_orange = g2conncolors.yellow_orange
 
 modules = [
   ModuleType(
@@ -18,12 +23,12 @@ modules = [
     page=PageType('In/Out', 5),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Pitch',        g2conncolors. blue,        horiz=2, vert=1),
-      OutputType('Gate',         g2conncolors. yellow,      horiz=5, vert=1),
-      OutputType('Lin',          g2conncolors. blue,        horiz=9, vert=1),
-      OutputType('Release',      g2conncolors. blue,        horiz=12, vert=1),
-      OutputType('Note',         g2conncolors. blue,        horiz=15, vert=1),
-      OutputType('Exp',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Pitch',       blue,          horiz=2, vert=1),
+      OutputType('Gate',        yellow,        horiz=5, vert=1),
+      OutputType('Lin',         blue,          horiz=9, vert=1),
+      OutputType('Release',     blue,          horiz=12, vert=1),
+      OutputType('Note',        blue,          horiz=15, vert=1),
+      OutputType('Exp',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -35,10 +40,10 @@ modules = [
     shortnm='4-Out',
     page=PageType('In/Out', 1),
     inputs=InputList([
-      InputType('In1',          g2conncolors.red,          horiz=13, vert=1),
-      InputType('In2',          g2conncolors.red,          horiz=15, vert=1),
-      InputType('In3',          g2conncolors.red,          horiz=17, vert=1),
-      InputType('In4',          g2conncolors.red,          horiz=19, vert=1),
+      InputType('In1',          red,           horiz=13, vert=1),
+      InputType('In2',          red,           horiz=15, vert=1),
+      InputType('In3',          red,           horiz=17, vert=1),
+      InputType('In4',          red,           horiz=19, vert=1),
     ]),
     outputs=OutputList([]),
     params=ParamList([
@@ -55,8 +60,8 @@ modules = [
     shortnm='2-Out',
     page=PageType('In/Out', 0),
     inputs=InputList([
-      InputType('InL',          g2conncolors.red,          horiz=17, vert=1),
-      InputType('InR',          g2conncolors.red,          horiz=19, vert=1),
+      InputType('InL',          red,           horiz=17, vert=1),
+      InputType('InR',          red,           horiz=19, vert=1),
     ]),
     outputs=OutputList([]),
     params=ParamList([
@@ -73,12 +78,12 @@ modules = [
     shortnm='Invert',
     page=PageType('Logic', 1),
     inputs=InputList([
-      InputType('In1',          g2conncolors.yellow_orange, horiz=7, vert=1),
-      InputType('In2',          g2conncolors.yellow_orange, horiz=15, vert=1),
+      InputType('In1',          yellow_orange, horiz=7, vert=1),
+      InputType('In2',          yellow_orange, horiz=15, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. yellow_orange, horiz=11, vert=1),
-      OutputType('Out2',         g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out1',        yellow_orange, horiz=11, vert=1),
+      OutputType('Out2',        yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -90,14 +95,14 @@ modules = [
     shortnm='OscB',
     page=PageType('Osc', 1),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=4),
-      InputType('Sync',         g2conncolors.red,          horiz=0, vert=1),
-      InputType('FmMod',        g2conncolors.red,          horiz=9, vert=4),
-      InputType('ShapeMod',     g2conncolors.red,          horiz=14, vert=4),
+      InputType('Pitch',        blue_red,      horiz=0, vert=3),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=4),
+      InputType('Sync',         red,           horiz=0, vert=1),
+      InputType('FmMod',        red,           horiz=9, vert=4),
+      InputType('ShapeMod',     red,           horiz=14, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=4),
+      OutputType('Out',         red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -121,14 +126,14 @@ modules = [
     shortnm='OscShpB',
     page=PageType('Osc', 6),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('Sync',         g2conncolors.red,          horiz=0, vert=1),
-      InputType('FmMod',        g2conncolors.red,          horiz=10, vert=3),
-      InputType('ShapeMod',     g2conncolors.red,          horiz=15, vert=3),
+      InputType('Pitch',        blue_red,      horiz=0, vert=2),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=3),
+      InputType('Sync',         red,           horiz=0, vert=1),
+      InputType('FmMod',        red,           horiz=10, vert=3),
+      InputType('ShapeMod',     red,           horiz=15, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -143,7 +148,7 @@ modules = [
       ParamType('FmMode',       parammap.FmLinTrk),
     ]),
     modes=ModeList([
-      ModeType('Waveform',     parammap.OscWaveform_3),
+      ModeType('Waveform',      parammap.OscWaveform_3),
     ]),
   ),
   ModuleType(
@@ -153,13 +158,13 @@ modules = [
     shortnm='OscC',
     page=PageType('Osc', 2),
     inputs=InputList([
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('Sync',         g2conncolors.red,          horiz=12, vert=2),
-      InputType('FmMod',        g2conncolors.red,          horiz=14, vert=2),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
+      InputType('Sync',         red,           horiz=12, vert=2),
+      InputType('FmMod',        red,           horiz=14, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -172,7 +177,7 @@ modules = [
       ParamType('PitchMod',     parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('Waveform',     parammap.OscWaveform_2),
+      ModeType('Waveform',      parammap.OscWaveform_2),
     ]),
   ),
   ModuleType(
@@ -182,12 +187,12 @@ modules = [
     shortnm='Reverb',
     page=PageType('FX', 7),
     inputs=InputList([
-      InputType('InL',          g2conncolors.red,          horiz=17, vert=0),
-      InputType('InR',          g2conncolors.red,          horiz=19, vert=0),
+      InputType('InL',          red,           horiz=17, vert=0),
+      InputType('InR',          red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. red,         horiz=17, vert=2),
-      OutputType('OutR',         g2conncolors. red,         horiz=19, vert=2),
+      OutputType('OutL',        red,           horiz=17, vert=2),
+      OutputType('OutR',        red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.ReverbTime),
@@ -196,7 +201,7 @@ modules = [
       ParamType('Active',       parammap.ActiveMonitor),
     ]),
     modes=ModeList([
-      ModeType('RoomType',     parammap.RoomType),
+      ModeType('RoomType',      parammap.RoomType),
     ]),
   ),
   ModuleType(
@@ -206,12 +211,12 @@ modules = [
     shortnm='OscString',
     page=PageType('Osc', 13),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('Pitch',        g2conncolors.blue,         horiz=0, vert=1),
-      InputType('PitchVar',     g2conncolors.blue,         horiz=0, vert=2),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('Pitch',        blue,          horiz=0, vert=1),
+      InputType('PitchVar',     blue,          horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -232,18 +237,18 @@ modules = [
     shortnm='Sw8-1',
     page=PageType('Switch', 5),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=6, vert=0),
-      InputType('In2',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=9, vert=0),
-      InputType('In4',          g2conncolors.blue_red,     horiz=11, vert=1),
-      InputType('In5',          g2conncolors.blue_red,     horiz=13, vert=0),
-      InputType('In6',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('In7',          g2conncolors.blue_red,     horiz=15, vert=0),
-      InputType('In8',          g2conncolors.blue_red,     horiz=18, vert=1),
+      InputType('In1',          blue_red,      horiz=6, vert=0),
+      InputType('In2',          blue_red,      horiz=7, vert=1),
+      InputType('In3',          blue_red,      horiz=9, vert=0),
+      InputType('In4',          blue_red,      horiz=11, vert=1),
+      InputType('In5',          blue_red,      horiz=13, vert=0),
+      InputType('In6',          blue_red,      horiz=14, vert=1),
+      InputType('In7',          blue_red,      horiz=15, vert=0),
+      InputType('In8',          blue_red,      horiz=18, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=3),
-      OutputType('Control',      g2conncolors. blue,        horiz=9, vert=3),
+      OutputType('Out',         blue_red,      horiz=19, vert=3),
+      OutputType('Control',     blue,          horiz=9, vert=3),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.sw_3,
@@ -259,12 +264,12 @@ modules = [
     shortnm='ValSw1-2',
     page=PageType('Switch', 11),
     inputs=InputList([
-      InputType('Input',        g2conncolors.blue_red,     horiz=14, vert=2),
-      InputType('Ctrl',         g2conncolors.blue_red,     horiz=0, vert=2),
+      InputType('Input',        blue_red,      horiz=14, vert=2),
+      InputType('Ctrl',         blue_red,      horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('OutOn',        g2conncolors. blue_red,    horiz=16, vert=2),
-      OutputType('OutOff',       g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('OutOn',       blue_red,      horiz=16, vert=2),
+      OutputType('OutOff',      blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Val',          parammap.ValSwVal,
@@ -280,12 +285,12 @@ modules = [
     shortnm='X-Fade',
     page=PageType('Mixer', 13),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=14, vert=2),
-      InputType('In2',          g2conncolors.blue_red,     horiz=16, vert=2),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=6, vert=2),
+      InputType('In1',          blue_red,      horiz=14, vert=2),
+      InputType('In2',          blue_red,      horiz=16, vert=2),
+      InputType('Mod',          blue_red,      horiz=6, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('MixMod',       parammap.Level_100),
@@ -301,14 +306,14 @@ modules = [
     shortnm='Mix4-1B',
     page=PageType('Mixer', 5),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=8, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=12, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In1',          blue_red,      horiz=5, vert=1),
+      InputType('In2',          blue_red,      horiz=8, vert=1),
+      InputType('In3',          blue_red,      horiz=12, vert=1),
+      InputType('In4',          blue_red,      horiz=14, vert=1),
+      InputType('Chain',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.MixLevel),
@@ -326,13 +331,13 @@ modules = [
     shortnm='EnvADSR',
     page=PageType('Env', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('AM',           g2conncolors.blue,         horiz=0, vert=3),
+      InputType('In',           blue_red,      horiz=19, vert=0),
+      InputType('Gate',         yellow,        horiz=0, vert=2),
+      InputType('AM',           blue,          horiz=0, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=18, vert=3),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=3),
+      OutputType('Env',         blue,          horiz=18, vert=3),
+      OutputType('Out',         blue_red,      horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Shape',        parammap.EnvShape_3),
@@ -353,18 +358,18 @@ modules = [
     shortnm='Mux1-8',
     page=PageType('Switch', 14),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=6, vert=1),
-      InputType('Ctrl',         g2conncolors.blue,         horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=6, vert=1),
+      InputType('Ctrl',         blue,          horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. blue_red,    horiz=7, vert=1),
-      OutputType('Out2',         g2conncolors. blue_red,    horiz=9, vert=1),
-      OutputType('Out3',         g2conncolors. blue_red,    horiz=11, vert=1),
-      OutputType('Out4',         g2conncolors. blue_red,    horiz=12, vert=1),
-      OutputType('Out5',         g2conncolors. blue_red,    horiz=14, vert=1),
-      OutputType('Out6',         g2conncolors. blue_red,    horiz=16, vert=1),
-      OutputType('Out7',         g2conncolors. blue_red,    horiz=18, vert=1),
-      OutputType('Out8',         g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out1',        blue_red,      horiz=7, vert=1),
+      OutputType('Out2',        blue_red,      horiz=9, vert=1),
+      OutputType('Out3',        blue_red,      horiz=11, vert=1),
+      OutputType('Out4',        blue_red,      horiz=12, vert=1),
+      OutputType('Out5',        blue_red,      horiz=14, vert=1),
+      OutputType('Out6',        blue_red,      horiz=16, vert=1),
+      OutputType('Out7',        blue_red,      horiz=18, vert=1),
+      OutputType('Out8',        blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -376,10 +381,10 @@ modules = [
     shortnm='PartQuant',
     page=PageType('Note', 2),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue,         horiz=16, vert=1),
+      InputType('In',           blue,          horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Range',        parammap.PartialRange),
@@ -393,17 +398,17 @@ modules = [
     shortnm='ModADSR',
     page=PageType('Env', 8),
     inputs=InputList([
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=4),
-      InputType('AttackMod',    g2conncolors.blue,         horiz=2, vert=4),
-      InputType('DecayMod',     g2conncolors.blue,         horiz=5, vert=4),
-      InputType('SustainMod',   g2conncolors.blue,         horiz=8, vert=4),
-      InputType('ReleaseMod',   g2conncolors.blue,         horiz=11, vert=4),
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
-      InputType('AM',           g2conncolors.blue,         horiz=0, vert=4),
+      InputType('Gate',         yellow,        horiz=0, vert=4),
+      InputType('AttackMod',    blue,          horiz=2, vert=4),
+      InputType('DecayMod',     blue,          horiz=5, vert=4),
+      InputType('SustainMod',   blue,          horiz=8, vert=4),
+      InputType('ReleaseMod',   blue,          horiz=11, vert=4),
+      InputType('In',           blue_red,      horiz=19, vert=0),
+      InputType('AM',           blue,          horiz=0, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=19, vert=4),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=17, vert=4),
+      OutputType('Env',         blue,          horiz=19, vert=4),
+      OutputType('Out',         blue_red,      horiz=17, vert=4),
     ]),
     params=ParamList([
       ParamType('Attack',       parammap.EnvTime),
@@ -426,10 +431,10 @@ modules = [
     shortnm='LfoC',
     page=PageType('LFO', 2),
     inputs=InputList([
-      InputType('Rate',         g2conncolors.blue,         horiz=0, vert=1),
+      InputType('Rate',         blue,          horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.LfoRate_3),
@@ -439,7 +444,7 @@ modules = [
       ParamType('Active',       parammap.ActiveMonitor),
     ]),
     modes=ModeList([
-      ModeType('Waveform',     parammap.LfoWaveform_1),
+      ModeType('Waveform',      parammap.LfoWaveform_1),
     ]),
   ),
   ModuleType(
@@ -449,16 +454,16 @@ modules = [
     shortnm='LfoShpA',
     page=PageType('LFO', 3),
     inputs=InputList([
-      InputType('Rate',         g2conncolors.blue,         horiz=1, vert=4),
-      InputType('RateVar',      g2conncolors.blue,         horiz=2, vert=4),
-      InputType('Rst',          g2conncolors.blue,         horiz=0, vert=1),
-      InputType('ShapeMod',     g2conncolors.blue,         horiz=9, vert=4),
-      InputType('PhaseMod',     g2conncolors.blue,         horiz=12, vert=4),
-      InputType('Dir',          g2conncolors.blue,         horiz=1, vert=1),
+      InputType('Rate',         blue,          horiz=1, vert=4),
+      InputType('RateVar',      blue,          horiz=2, vert=4),
+      InputType('Rst',          blue,          horiz=0, vert=1),
+      InputType('ShapeMod',     blue,          horiz=9, vert=4),
+      InputType('PhaseMod',     blue,          horiz=12, vert=4),
+      InputType('Dir',          blue,          horiz=1, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=4),
-      OutputType('Snc',          g2conncolors. blue,        horiz=0, vert=4),
+      OutputType('Out',         blue,          horiz=19, vert=4),
+      OutputType('Snc',         blue,          horiz=0, vert=4),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.LfoRate_4),
@@ -483,11 +488,11 @@ modules = [
     shortnm='LfoA',
     page=PageType('LFO', 0),
     inputs=InputList([
-      InputType('Rate',         g2conncolors.blue,         horiz=0, vert=1),
-      InputType('RateVar',      g2conncolors.blue,         horiz=0, vert=2),
+      InputType('Rate',         blue,          horiz=0, vert=1),
+      InputType('RateVar',      blue,          horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=2),
+      OutputType('Out',         blue,          horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.LfoRate_3),
@@ -508,11 +513,11 @@ modules = [
     shortnm='OscMaster',
     page=PageType('Osc', 16),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -530,11 +535,11 @@ modules = [
     shortnm='Saturate',
     page=PageType('Shaper', 2),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=8, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=8, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Amount',       parammap.Level_100),
@@ -551,11 +556,11 @@ modules = [
     shortnm='MetNoise',
     page=PageType('Osc', 10),
     inputs=InputList([
-      InputType('FreqMod',      g2conncolors.blue_red,     horiz=4, vert=1),
-      InputType('ColorMod',     g2conncolors.blue_red,     horiz=11, vert=1),
+      InputType('FreqMod',      blue_red,      horiz=4, vert=1),
+      InputType('ColorMod',     blue_red,      horiz=11, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Color',        parammap.Level_100),
@@ -574,13 +579,13 @@ modules = [
     page=PageType('In/Out', 7),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Wheel',        g2conncolors. blue,        horiz=0, vert=2),
-      OutputType('AftTouch',     g2conncolors. blue,        horiz=3, vert=2),
-      OutputType('ControlPedal', g2conncolors. blue,        horiz=6, vert=2),
-      OutputType('SustainPedal', g2conncolors. yellow,      horiz=10, vert=2),
-      OutputType('PitchStick',   g2conncolors. blue,        horiz=13, vert=2),
-      OutputType('GlobalWheel1', g2conncolors. blue,        horiz=16, vert=2),
-      OutputType('GlobalWheel2', g2conncolors. blue,        horiz=19, vert=2),
+      OutputType('Wheel',       blue,          horiz=0, vert=2),
+      OutputType('AftTouch',    blue,          horiz=3, vert=2),
+      OutputType('ControlPedal', blue,          horiz=6, vert=2),
+      OutputType('SustainPedal', yellow,        horiz=10, vert=2),
+      OutputType('PitchStick',  blue,          horiz=13, vert=2),
+      OutputType('GlobalWheel1', blue,          horiz=16, vert=2),
+      OutputType('GlobalWheel2', blue,          horiz=19, vert=2),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -593,7 +598,7 @@ modules = [
     page=PageType('Osc', 9),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Color',        parammap.NoiseColor),
@@ -608,10 +613,10 @@ modules = [
     shortnm='Eq2Band',
     page=PageType('Filter', 12),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('LoSlope',      parammap.EqdB),
@@ -630,10 +635,10 @@ modules = [
     shortnm='Eq3Band',
     page=PageType('Filter', 13),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('LoSlope',      parammap.EqdB),
@@ -654,11 +659,11 @@ modules = [
     shortnm='ShpExp',
     page=PageType('Shaper', 3),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=8, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=8, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Amount',       parammap.Level_100),
@@ -675,11 +680,11 @@ modules = [
     shortnm='SwOnOffM',
     page=PageType('Switch', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
+      OutputType('Ctrl',        blue,          horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('On',           parammap.OffOn,
@@ -695,11 +700,11 @@ modules = [
     shortnm='Pulse',
     page=PageType('Logic', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.yellow_orange, horiz=15, vert=0),
-      InputType('Time',         g2conncolors.blue_red,     horiz=4, vert=1),
+      InputType('In',           yellow_orange, horiz=15, vert=0),
+      InputType('Time',         blue_red,      horiz=4, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out',         yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.LogicTime),
@@ -707,7 +712,7 @@ modules = [
       ParamType('Range',        parammap.LogicRange),
     ]),
     modes=ModeList([
-      ModeType('Mode',         parammap.PulseMode),
+      ModeType('Mode',          parammap.PulseMode),
     ]),
   ),
   ModuleType(
@@ -717,18 +722,18 @@ modules = [
     shortnm='Mix8-1B',
     page=PageType('Mixer', 9),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=3, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('In5',          g2conncolors.blue_red,     horiz=11, vert=1),
-      InputType('In6',          g2conncolors.blue_red,     horiz=13, vert=1),
-      InputType('In7',          g2conncolors.blue_red,     horiz=15, vert=1),
-      InputType('In8',          g2conncolors.blue_red,     horiz=17, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('In1',          blue_red,      horiz=3, vert=1),
+      InputType('In2',          blue_red,      horiz=5, vert=1),
+      InputType('In3',          blue_red,      horiz=7, vert=1),
+      InputType('In4',          blue_red,      horiz=9, vert=1),
+      InputType('In5',          blue_red,      horiz=11, vert=1),
+      InputType('In6',          blue_red,      horiz=13, vert=1),
+      InputType('In7',          blue_red,      horiz=15, vert=1),
+      InputType('In8',          blue_red,      horiz=17, vert=1),
+      InputType('Chain',        blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=3),
+      OutputType('Out',         blue_red,      horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.MixLevel),
@@ -751,13 +756,13 @@ modules = [
     shortnm='EnvH',
     page=PageType('Env', 1),
     inputs=InputList([
-      InputType('Trig',         g2conncolors.yellow,       horiz=0, vert=1),
-      InputType('AM',           g2conncolors.blue,         horiz=3, vert=1),
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('Trig',         yellow,        horiz=0, vert=1),
+      InputType('AM',           blue,          horiz=3, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=15, vert=1),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Env',         blue,          horiz=15, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Hold',         parammap.EnvTime),
@@ -772,11 +777,11 @@ modules = [
     shortnm='Delay',
     page=PageType('Logic', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.yellow_orange, horiz=15, vert=0),
-      InputType('TimeMod',      g2conncolors.blue_red,     horiz=4, vert=1),
+      InputType('In',           yellow_orange, horiz=15, vert=0),
+      InputType('TimeMod',      blue_red,      horiz=4, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out',         yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.LogicTime),
@@ -784,7 +789,7 @@ modules = [
       ParamType('Range',        parammap.LogicRange),
     ]),
     modes=ModeList([
-      ModeType('Mode',         parammap.LogicDelayMode),
+      ModeType('Mode',          parammap.LogicDelayMode),
     ]),
   ),
   ModuleType(
@@ -795,7 +800,7 @@ modules = [
     page=PageType('Level', 0),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Level',        parammap.LevBipUni),
@@ -810,11 +815,11 @@ modules = [
     shortnm='LevMult',
     page=PageType('Level', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=14, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=14, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -826,12 +831,12 @@ modules = [
     shortnm='FltVoice',
     page=PageType('Filter', 9),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('VowelMod',     g2conncolors.blue,         horiz=9, vert=3),
-      InputType('FreqMod',      g2conncolors.red,          horiz=0, vert=3),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('VowelMod',     blue,          horiz=9, vert=3),
+      InputType('FreqMod',      red,           horiz=0, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Vowel1',       parammap.Vowel),
@@ -854,13 +859,13 @@ modules = [
     shortnm='EnvAHD',
     page=PageType('Env', 4),
     inputs=InputList([
-      InputType('Trig',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('AM',           g2conncolors.blue,         horiz=0, vert=3),
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('Trig',         yellow,        horiz=0, vert=2),
+      InputType('AM',           blue,          horiz=0, vert=3),
+      InputType('In',           blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=18, vert=0),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=0),
+      OutputType('Env',         blue,          horiz=18, vert=0),
+      OutputType('Out',         blue_red,      horiz=19, vert=0),
     ]),
     params=ParamList([
       ParamType('Shape',        parammap.EnvShape_3),
@@ -880,12 +885,12 @@ modules = [
     shortnm='Pan',
     page=PageType('Mixer', 12),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=6, vert=1),
+      InputType('In',           blue_red,      horiz=14, vert=1),
+      InputType('Mod',          blue_red,      horiz=6, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. blue_red,    horiz=16, vert=1),
-      OutputType('OutR',         g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('OutL',        blue_red,      horiz=16, vert=1),
+      OutputType('OutR',        blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('PanMod',       parammap.Level_100),
@@ -901,16 +906,16 @@ modules = [
     shortnm='MixStereo',
     page=PageType('Mixer', 11),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('In2',          g2conncolors.blue_red,     horiz=2, vert=2),
-      InputType('In3',          g2conncolors.blue_red,     horiz=5, vert=2),
-      InputType('In4',          g2conncolors.blue_red,     horiz=8, vert=2),
-      InputType('In5',          g2conncolors.blue_red,     horiz=10, vert=2),
-      InputType('In6',          g2conncolors.blue_red,     horiz=13, vert=2),
+      InputType('In1',          blue_red,      horiz=0, vert=2),
+      InputType('In2',          blue_red,      horiz=2, vert=2),
+      InputType('In3',          blue_red,      horiz=5, vert=2),
+      InputType('In4',          blue_red,      horiz=8, vert=2),
+      InputType('In5',          blue_red,      horiz=10, vert=2),
+      InputType('In6',          blue_red,      horiz=13, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. blue_red,    horiz=17, vert=4),
-      OutputType('OutR',         g2conncolors. blue_red,    horiz=19, vert=4),
+      OutputType('OutL',        blue_red,      horiz=17, vert=4),
+      OutputType('OutR',        blue_red,      horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.Level_100),
@@ -936,14 +941,14 @@ modules = [
     shortnm='FltMulti',
     page=PageType('Filter', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=3),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('LP',           g2conncolors. red,         horiz=19, vert=1),
-      OutputType('BP',           g2conncolors. red,         horiz=19, vert=2),
-      OutputType('HP',           g2conncolors. red,         horiz=19, vert=3),
+      OutputType('LP',          red,           horiz=19, vert=1),
+      OutputType('BP',          red,           horiz=19, vert=2),
+      OutputType('HP',          red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.FltFreq),
@@ -964,7 +969,7 @@ modules = [
     page=PageType('Level', 2),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Lev',          parammap.LevBipUni),
@@ -982,14 +987,14 @@ modules = [
     shortnm='FltNord',
     page=PageType('Filter', 2),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=4),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('FMLin',        g2conncolors.blue_red,     horiz=3, vert=4),
-      InputType('Res',          g2conncolors.blue_red,     horiz=9, vert=4),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=4),
+      InputType('Pitch',        blue_red,      horiz=0, vert=3),
+      InputType('FMLin',        blue_red,      horiz=3, vert=4),
+      InputType('Res',          blue_red,      horiz=9, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=4),
+      OutputType('Out',         red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.FltFreq),
@@ -1012,13 +1017,13 @@ modules = [
     shortnm='EnvMulti',
     page=PageType('Env', 6),
     inputs=InputList([
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=0),
-      InputType('AM',           g2conncolors.blue,         horiz=2, vert=2),
+      InputType('Gate',         yellow,        horiz=0, vert=2),
+      InputType('In',           blue_red,      horiz=16, vert=0),
+      InputType('AM',           blue,          horiz=2, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=19, vert=1),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=0),
+      OutputType('Env',         blue,          horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=0),
     ]),
     params=ParamList([
       ParamType('Level1',       parammap.EnvLevel),
@@ -1044,11 +1049,11 @@ modules = [
     shortnm='S&H',
     page=PageType('Switch', 16),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=15, vert=1),
-      InputType('Ctrl',         g2conncolors.yellow_orange, horiz=12, vert=1),
+      InputType('In',           blue_red,      horiz=15, vert=1),
+      InputType('Ctrl',         yellow_orange, horiz=12, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -1060,10 +1065,10 @@ modules = [
     shortnm='FltStatic',
     page=PageType('Filter', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.FltFreq),
@@ -1081,13 +1086,13 @@ modules = [
     shortnm='EnvD',
     page=PageType('Env', 2),
     inputs=InputList([
-      InputType('Trig',         g2conncolors.yellow,       horiz=0, vert=1),
-      InputType('AM',           g2conncolors.blue,         horiz=3, vert=1),
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('Trig',         yellow,        horiz=0, vert=1),
+      InputType('AM',           blue,          horiz=3, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=15, vert=1),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Env',         blue,          horiz=15, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Decay',        parammap.EnvTime),
@@ -1102,10 +1107,10 @@ modules = [
     shortnm='Automate',
     page=PageType('MIDI', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.yellow,       horiz=0, vert=1),
+      InputType('In',           yellow,        horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow,      horiz=4, vert=1),
+      OutputType('Out',         yellow,        horiz=4, vert=1),
     ]),
     params=ParamList([
       ParamType('Ctrl',         parammap.MidiData),
@@ -1122,12 +1127,12 @@ modules = [
     shortnm='DrumSynth',
     page=PageType('Osc', 12),
     inputs=InputList([
-      InputType('Trig',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('Vel',          g2conncolors.blue,         horiz=0, vert=7),
-      InputType('Pitch',        g2conncolors.blue,         horiz=0, vert=4),
+      InputType('Trig',         yellow,        horiz=0, vert=2),
+      InputType('Vel',          blue,          horiz=0, vert=7),
+      InputType('Pitch',        blue,          horiz=0, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=8),
+      OutputType('Out',         red,           horiz=19, vert=8),
     ]),
     params=ParamList([
       ParamType('Masterfreq',   parammap.DrumSynthFreq),
@@ -1156,10 +1161,10 @@ modules = [
     shortnm='CompLev',
     page=PageType('Level', 10),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=9, vert=1),
+      InputType('In',           blue_red,      horiz=9, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out',         yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('C',            parammap.Bipolar_127),
@@ -1173,18 +1178,18 @@ modules = [
     shortnm='Mux8-1X',
     page=PageType('Switch', 15),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=10, vert=1),
-      InputType('In5',          g2conncolors.blue_red,     horiz=12, vert=1),
-      InputType('In6',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('In7',          g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('In8',          g2conncolors.blue_red,     horiz=17, vert=1),
-      InputType('Ctrl',         g2conncolors.blue,         horiz=0, vert=1),
+      InputType('In1',          blue_red,      horiz=5, vert=1),
+      InputType('In2',          blue_red,      horiz=7, vert=1),
+      InputType('In3',          blue_red,      horiz=9, vert=1),
+      InputType('In4',          blue_red,      horiz=10, vert=1),
+      InputType('In5',          blue_red,      horiz=12, vert=1),
+      InputType('In6',          blue_red,      horiz=14, vert=1),
+      InputType('In7',          blue_red,      horiz=16, vert=1),
+      InputType('In8',          blue_red,      horiz=17, vert=1),
+      InputType('Ctrl',         blue,          horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('XFade',        parammap.Level_100),
@@ -1198,11 +1203,11 @@ modules = [
     shortnm='Clip',
     page=PageType('Shaper', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=5, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=5, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('ClipLevMod',   parammap.Level_100),
@@ -1219,11 +1224,11 @@ modules = [
     shortnm='Overdrive',
     page=PageType('Shaper', 1),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=8, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=8, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('AmountMod',    parammap.Level_100),
@@ -1241,11 +1246,11 @@ modules = [
     shortnm='Scratch',
     page=PageType('FX', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('Mod',          g2conncolors.blue,         horiz=0, vert=2),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('Mod',          blue,          horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Ratio',        parammap.ScratchRatio),
@@ -1262,19 +1267,19 @@ modules = [
     shortnm='Gate',
     page=PageType('Logic', 0),
     inputs=InputList([
-      InputType('In1_1',        g2conncolors.yellow_orange, horiz=6, vert=0),
-      InputType('In1_2',        g2conncolors.yellow_orange, horiz=5, vert=1),
-      InputType('In2_1',        g2conncolors.yellow_orange, horiz=13, vert=0),
-      InputType('In2_2',        g2conncolors.yellow_orange, horiz=12, vert=1),
+      InputType('In1_1',        yellow_orange, horiz=6, vert=0),
+      InputType('In1_2',        yellow_orange, horiz=5, vert=1),
+      InputType('In2_1',        yellow_orange, horiz=13, vert=0),
+      InputType('In2_2',        yellow_orange, horiz=12, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. yellow_orange, horiz=11, vert=1),
-      OutputType('Out2',         g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out1',        yellow_orange, horiz=11, vert=1),
+      OutputType('Out2',        yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([
-      ModeType('GateMode1',    parammap.GateMode),
-      ModeType('GateMode2',    parammap.GateMode),
+      ModeType('GateMode1',     parammap.GateMode),
+      ModeType('GateMode2',     parammap.GateMode),
     ]),
   ),
   ModuleType(
@@ -1284,12 +1289,12 @@ modules = [
     shortnm='Mix2-1B',
     page=PageType('Mixer', 3),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=12, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In1',          blue_red,      horiz=5, vert=1),
+      InputType('In2',          blue_red,      horiz=12, vert=1),
+      InputType('Chain',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Inv1',         parammap.MixInvert),
@@ -1307,13 +1312,13 @@ modules = [
     shortnm='ClkGen',
     page=PageType('LFO', 4),
     inputs=InputList([
-      InputType('Rst',          g2conncolors.yellow,       horiz=0, vert=1),
+      InputType('Rst',          yellow,        horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('1/96',         g2conncolors. yellow,      horiz=19, vert=1),
-      OutputType('1/16',         g2conncolors. yellow,      horiz=19, vert=2),
-      OutputType('ClkActive',    g2conncolors. yellow,      horiz=19, vert=0),
-      OutputType('Sync',         g2conncolors. yellow,      horiz=19, vert=3),
+      OutputType('1/96',        yellow,        horiz=19, vert=1),
+      OutputType('1/16',        yellow,        horiz=19, vert=2),
+      OutputType('ClkActive',   yellow,        horiz=19, vert=0),
+      OutputType('Sync',        yellow,        horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.RateBpm),
@@ -1331,17 +1336,17 @@ modules = [
     shortnm='ClkDiv',
     page=PageType('Logic', 3),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=8, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=5, vert=1),
+      InputType('Clk',          yellow_orange, horiz=8, vert=1),
+      InputType('Rst',          yellow_orange, horiz=5, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out',         yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Divider',      parammap.Range_128),
     ]),
     modes=ModeList([
-      ModeType('DivMode',      parammap.ClkDivMode),
+      ModeType('DivMode',       parammap.ClkDivMode),
     ]),
   ),
   ModuleType(
@@ -1351,10 +1356,10 @@ modules = [
     shortnm='EnvFollow',
     page=PageType('Level', 8),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Attack',       parammap.EnvFollowAttack),
@@ -1369,10 +1374,10 @@ modules = [
     shortnm='NoteScaler',
     page=PageType('Note', 3),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue,         horiz=16, vert=1),
+      InputType('In',           blue,          horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Range',        parammap.NoteRange),
@@ -1386,11 +1391,11 @@ modules = [
     shortnm='WaveWrap',
     page=PageType('Shaper', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=8, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=8, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('AmountMod',    parammap.Level_100),
@@ -1406,10 +1411,10 @@ modules = [
     shortnm='NoteQuant',
     page=PageType('Note', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue,         horiz=16, vert=1),
+      InputType('In',           blue,          horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Range',        parammap.NoteRange),
@@ -1424,11 +1429,11 @@ modules = [
     shortnm='SwOnOffT',
     page=PageType('Switch', 1),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
+      OutputType('Ctrl',        blue,          horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('On',           parammap.OffOn,
@@ -1444,18 +1449,18 @@ modules = [
     shortnm='Sw1-8',
     page=PageType('Switch', 9),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=3, vert=3),
+      InputType('In',           blue_red,      horiz=3, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. blue_red,    horiz=6, vert=2),
-      OutputType('Out2',         g2conncolors. blue_red,    horiz=8, vert=3),
-      OutputType('Out3',         g2conncolors. blue_red,    horiz=10, vert=2),
-      OutputType('Out4',         g2conncolors. blue_red,    horiz=12, vert=3),
-      OutputType('Out5',         g2conncolors. blue_red,    horiz=13, vert=2),
-      OutputType('Out6',         g2conncolors. blue_red,    horiz=15, vert=3),
-      OutputType('Out7',         g2conncolors. blue_red,    horiz=17, vert=2),
-      OutputType('Out8',         g2conncolors. blue_red,    horiz=19, vert=3),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=3),
+      OutputType('Out1',        blue_red,      horiz=6, vert=2),
+      OutputType('Out2',        blue_red,      horiz=8, vert=3),
+      OutputType('Out3',        blue_red,      horiz=10, vert=2),
+      OutputType('Out4',        blue_red,      horiz=12, vert=3),
+      OutputType('Out5',        blue_red,      horiz=13, vert=2),
+      OutputType('Out6',        blue_red,      horiz=15, vert=3),
+      OutputType('Out7',        blue_red,      horiz=17, vert=2),
+      OutputType('Out8',        blue_red,      horiz=19, vert=3),
+      OutputType('Ctrl',        blue,          horiz=0, vert=3),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.sw_3,
@@ -1471,14 +1476,14 @@ modules = [
     shortnm='Sw4-1',
     page=PageType('Switch', 4),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=6, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=13, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In1',          blue_red,      horiz=6, vert=1),
+      InputType('In2',          blue_red,      horiz=9, vert=1),
+      InputType('In3',          blue_red,      horiz=13, vert=1),
+      InputType('In4',          blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
+      OutputType('Ctrl',        blue,          horiz=0, vert=2),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.sw_2,
@@ -1494,10 +1499,10 @@ modules = [
     shortnm='LevAmp',
     page=PageType('Level', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Gain',         parammap.LevAmpGain),
@@ -1512,10 +1517,10 @@ modules = [
     shortnm='Rect',
     page=PageType('Shaper', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Mode',         parammap.RectMode),
@@ -1530,10 +1535,10 @@ modules = [
     shortnm='ShpStatic',
     page=PageType('Shaper', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Mode',         parammap.ShpStaticMode),
@@ -1548,14 +1553,14 @@ modules = [
     shortnm='EnvADR',
     page=PageType('Env', 3),
     inputs=InputList([
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
-      InputType('AM',           g2conncolors.blue,         horiz=3, vert=2),
+      InputType('Gate',         yellow,        horiz=0, vert=2),
+      InputType('In',           blue_red,      horiz=19, vert=0),
+      InputType('AM',           blue,          horiz=3, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=17, vert=2),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
-      OutputType('End',          g2conncolors. yellow,      horiz=16, vert=2),
+      OutputType('Env',         blue,          horiz=17, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
+      OutputType('End',         yellow,        horiz=16, vert=2),
     ]),
     params=ParamList([
       ParamType('Shape',        parammap.EnvShape_3),
@@ -1576,12 +1581,12 @@ modules = [
     shortnm='WindSw',
     page=PageType('Switch', 12),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Ctrl',         g2conncolors.blue_red,     horiz=14, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Ctrl',         blue_red,      horiz=14, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('Gate',         g2conncolors. yellow_orange, horiz=0, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
+      OutputType('Gate',        yellow_orange, horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('ValFrom',      parammap.Range_64),
@@ -1596,18 +1601,18 @@ modules = [
     shortnm='8Counter',
     page=PageType('Logic', 6),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=3, vert=1),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=3, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. yellow_orange, horiz=5, vert=1),
-      OutputType('Out2',         g2conncolors. yellow_orange, horiz=7, vert=1),
-      OutputType('Out3',         g2conncolors. yellow_orange, horiz=9, vert=1),
-      OutputType('Out4',         g2conncolors. yellow_orange, horiz=11, vert=1),
-      OutputType('Out5',         g2conncolors. yellow_orange, horiz=13, vert=1),
-      OutputType('Out6',         g2conncolors. yellow_orange, horiz=15, vert=1),
-      OutputType('Out7',         g2conncolors. yellow_orange, horiz=17, vert=1),
-      OutputType('Out8',         g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out1',        yellow_orange, horiz=5, vert=1),
+      OutputType('Out2',        yellow_orange, horiz=7, vert=1),
+      OutputType('Out3',        yellow_orange, horiz=9, vert=1),
+      OutputType('Out4',        yellow_orange, horiz=11, vert=1),
+      OutputType('Out5',        yellow_orange, horiz=13, vert=1),
+      OutputType('Out6',        yellow_orange, horiz=15, vert=1),
+      OutputType('Out7',        yellow_orange, horiz=17, vert=1),
+      OutputType('Out8',        yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -1619,11 +1624,11 @@ modules = [
     shortnm='FltLP',
     page=PageType('Filter', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=16, vert=1),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=4, vert=1),
+      InputType('In',           red,           horiz=16, vert=1),
+      InputType('Pitch',        blue_red,      horiz=4, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.FltFreq),
@@ -1632,7 +1637,7 @@ modules = [
       ParamType('Active',       parammap.ActiveMonitor),
     ]),
     modes=ModeList([
-      ModeType('SlopeMode',    parammap.HpLpSlopeMode),
+      ModeType('SlopeMode',     parammap.HpLpSlopeMode),
     ]),
   ),
   ModuleType(
@@ -1642,14 +1647,14 @@ modules = [
     shortnm='Sw1-4',
     page=PageType('Switch', 8),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=3, vert=2),
+      InputType('In',           blue_red,      horiz=3, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. blue_red,    horiz=6, vert=2),
-      OutputType('Out2',         g2conncolors. blue_red,    horiz=10, vert=2),
-      OutputType('Out3',         g2conncolors. blue_red,    horiz=13, vert=2),
-      OutputType('Out4',         g2conncolors. blue_red,    horiz=17, vert=2),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=2),
+      OutputType('Out1',        blue_red,      horiz=6, vert=2),
+      OutputType('Out2',        blue_red,      horiz=10, vert=2),
+      OutputType('Out3',        blue_red,      horiz=13, vert=2),
+      OutputType('Out4',        blue_red,      horiz=17, vert=2),
+      OutputType('Ctrl',        blue,          horiz=0, vert=2),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.sw_2,
@@ -1665,10 +1670,10 @@ modules = [
     shortnm='Flanger',
     page=PageType('FX', 2),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.FlangerRate),
@@ -1685,12 +1690,12 @@ modules = [
     shortnm='Sw1-2',
     page=PageType('Switch', 7),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=14, vert=1),
+      InputType('In',           blue_red,      horiz=14, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out2',         g2conncolors. blue_red,    horiz=16, vert=1),
-      OutputType('Out1',         g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=1),
+      OutputType('Out2',        blue_red,      horiz=16, vert=1),
+      OutputType('Out1',        blue_red,      horiz=19, vert=1),
+      OutputType('Ctrl',        blue,          horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.Sw_1),
@@ -1704,13 +1709,13 @@ modules = [
     shortnm='FlipFlop',
     page=PageType('Logic', 2),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=8, vert=1),
-      InputType('In',           g2conncolors.yellow_orange, horiz=11, vert=0),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=5, vert=1),
+      InputType('Clk',          yellow_orange, horiz=8, vert=1),
+      InputType('In',           yellow_orange, horiz=11, vert=0),
+      InputType('Rst',          yellow_orange, horiz=5, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('NotQ',         g2conncolors. yellow_orange, horiz=17, vert=1),
-      OutputType('Q',            g2conncolors. yellow_orange, horiz=19, vert=0),
+      OutputType('NotQ',        yellow_orange, horiz=17, vert=1),
+      OutputType('Q',           yellow_orange, horiz=19, vert=0),
     ]),
     params=ParamList([]),
     modes=ModeList([
@@ -1724,12 +1729,12 @@ modules = [
     shortnm='FltClassic',
     page=PageType('Filter', 3),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=2),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=3),
+      InputType('Pitch',        blue_red,      horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.FltFreq),
@@ -1748,11 +1753,11 @@ modules = [
     shortnm='StChorus',
     page=PageType('FX', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=18, vert=1),
+      InputType('In',           red,           horiz=18, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. red,         horiz=17, vert=2),
-      OutputType('OutR',         g2conncolors. red,         horiz=19, vert=2),
+      OutputType('OutL',        red,           horiz=17, vert=2),
+      OutputType('OutR',        red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Detune',       parammap.Level_100),
@@ -1768,10 +1773,10 @@ modules = [
     shortnm='OscD',
     page=PageType('Osc', 3),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -1781,7 +1786,7 @@ modules = [
       ParamType('Active',       parammap.ActiveMonitor),
     ]),
     modes=ModeList([
-      ModeType('Waveform',     parammap.OscWaveform_2),
+      ModeType('Waveform',      parammap.OscWaveform_2),
     ]),
   ),
   ModuleType(
@@ -1791,11 +1796,11 @@ modules = [
     shortnm='OscA',
     page=PageType('Osc', 0),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -1815,12 +1820,12 @@ modules = [
     shortnm='FreqShift',
     page=PageType('FX', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=18, vert=0),
-      InputType('Shift',        g2conncolors.blue,         horiz=1, vert=2),
+      InputType('In',           red,           horiz=18, vert=0),
+      InputType('Shift',        blue,          horiz=1, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Dn',           g2conncolors. red,         horiz=17, vert=1),
-      OutputType('Up',           g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Dn',          red,           horiz=17, vert=1),
+      OutputType('Up',          red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('FreqShift',    parammap.FreqShiftFreq),
@@ -1837,12 +1842,12 @@ modules = [
     shortnm='Sw2-1',
     page=PageType('Switch', 3),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=14, vert=0),
-      InputType('In2',          g2conncolors.blue_red,     horiz=16, vert=0),
+      InputType('In1',          blue_red,      horiz=14, vert=0),
+      InputType('In2',          blue_red,      horiz=16, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
+      OutputType('Ctrl',        blue,          horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.Sw_1,
@@ -1858,14 +1863,14 @@ modules = [
     shortnm='FltPhase',
     page=PageType('Filter', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=4),
-      InputType('Spr',          g2conncolors.blue,         horiz=6, vert=4),
-      InputType('FB',           g2conncolors.blue,         horiz=9, vert=4),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=3),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=4),
+      InputType('Spr',          blue,          horiz=6, vert=4),
+      InputType('FB',           blue,          horiz=9, vert=4),
+      InputType('Pitch',        blue_red,      horiz=0, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=4),
+      OutputType('Out',         red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('PitchMod',     parammap.Level_100),
@@ -1889,10 +1894,10 @@ modules = [
     shortnm='EqPeak',
     page=PageType('Filter', 11),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.Freq_3),
@@ -1910,12 +1915,12 @@ modules = [
     shortnm='ValSw2-1',
     page=PageType('Switch', 10),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Ctrl',         g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In1',          blue_red,      horiz=14, vert=1),
+      InputType('In2',          blue_red,      horiz=16, vert=1),
+      InputType('Ctrl',         blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Val',          parammap.ValSwVal),
@@ -1929,12 +1934,12 @@ modules = [
     shortnm='OscNoise',
     page=PageType('Osc', 8),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('Width',        g2conncolors.blue_red,     horiz=12, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
+      InputType('Width',        blue_red,      horiz=12, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -1955,11 +1960,11 @@ modules = [
     shortnm='Vocoder',
     page=PageType('Filter', 10),
     inputs=InputList([
-      InputType('Ctrl',         g2conncolors.red,          horiz=0, vert=2),
-      InputType('In',           g2conncolors.red,          horiz=16, vert=7),
+      InputType('Ctrl',         red,           horiz=0, vert=2),
+      InputType('In',           red,           horiz=16, vert=7),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=7),
+      OutputType('Out',         red,           horiz=19, vert=7),
     ]),
     params=ParamList([
       ParamType('Band1',        parammap.VocoderBand),
@@ -1990,10 +1995,10 @@ modules = [
     shortnm='LevAdd',
     page=PageType('Level', 3),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Level',        parammap.LevBipUni),
@@ -2008,12 +2013,12 @@ modules = [
     shortnm='Fade1-2',
     page=PageType('Mixer', 14),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=6, vert=1),
+      InputType('In',           blue_red,      horiz=14, vert=1),
+      InputType('Mod',          blue_red,      horiz=6, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. blue_red,    horiz=17, vert=1),
-      OutputType('Out2',         g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out1',        blue_red,      horiz=17, vert=1),
+      OutputType('Out2',        blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Mix',          parammap.Fade12Mix),
@@ -2028,12 +2033,12 @@ modules = [
     shortnm='Fade2-1',
     page=PageType('Mixer', 15),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=6, vert=1),
+      InputType('In1',          blue_red,      horiz=14, vert=1),
+      InputType('In2',          blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=6, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Mix',          parammap.Fade21Mix),
@@ -2048,12 +2053,12 @@ modules = [
     shortnm='LevScaler',
     page=PageType('Note', 7),
     inputs=InputList([
-      InputType('Note',         g2conncolors.blue,         horiz=0, vert=2),
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('Note',         blue,          horiz=0, vert=2),
+      InputType('In',           blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Level',        g2conncolors. blue,        horiz=16, vert=2),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('Level',       blue,          horiz=16, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('L',            parammap.LevScaledB),
@@ -2070,17 +2075,17 @@ modules = [
     shortnm='Mix8-1A',
     page=PageType('Mixer', 8),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=8, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=10, vert=1),
-      InputType('In5',          g2conncolors.blue_red,     horiz=12, vert=1),
-      InputType('In6',          g2conncolors.blue_red,     horiz=13, vert=1),
-      InputType('In7',          g2conncolors.blue_red,     horiz=15, vert=1),
-      InputType('In8',          g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In1',          blue_red,      horiz=5, vert=1),
+      InputType('In2',          blue_red,      horiz=7, vert=1),
+      InputType('In3',          blue_red,      horiz=8, vert=1),
+      InputType('In4',          blue_red,      horiz=10, vert=1),
+      InputType('In5',          blue_red,      horiz=12, vert=1),
+      InputType('In6',          blue_red,      horiz=13, vert=1),
+      InputType('In7',          blue_red,      horiz=15, vert=1),
+      InputType('In8',          blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Pad',          parammap.Pad_3),
@@ -2094,12 +2099,12 @@ modules = [
     shortnm='LevMod',
     page=PageType('Level', 7),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=2),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=16, vert=0),
-      InputType('ModDepth',     g2conncolors.blue_red,     horiz=6, vert=2),
+      InputType('In',           blue_red,      horiz=16, vert=2),
+      InputType('Mod',          blue_red,      horiz=16, vert=0),
+      InputType('ModDepth',     blue_red,      horiz=6, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('ModDepth',     parammap.Level_100),
@@ -2114,11 +2119,11 @@ modules = [
     shortnm='Digitizer',
     page=PageType('FX', 3),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
-      InputType('Rate',         g2conncolors.blue_red,     horiz=19, vert=2),
+      InputType('In',           blue_red,      horiz=19, vert=0),
+      InputType('Rate',         blue_red,      horiz=19, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=1, vert=2),
+      OutputType('Out',         blue_red,      horiz=1, vert=2),
     ]),
     params=ParamList([
       ParamType('Bits',         parammap.DigitizerBits),
@@ -2135,13 +2140,13 @@ modules = [
     shortnm='EnvADDSR',
     page=PageType('Env', 5),
     inputs=InputList([
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('AM',           g2conncolors.blue,         horiz=0, vert=3),
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('Gate',         yellow,        horiz=0, vert=2),
+      InputType('AM',           blue,          horiz=0, vert=3),
+      InputType('In',           blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=17, vert=3),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=3),
+      OutputType('Env',         blue,          horiz=17, vert=3),
+      OutputType('Out',         blue_red,      horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('KB',           parammap.OffOn),
@@ -2165,19 +2170,19 @@ modules = [
     shortnm='SeqNote',
     page=PageType('Seq', 3),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=2),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=0, vert=4),
-      InputType('Loop',         g2conncolors.yellow_orange, horiz=0, vert=6),
-      InputType('Park',         g2conncolors.yellow_orange, horiz=16, vert=0),
-      InputType('Note',         g2conncolors.blue_red,     horiz=0, vert=7),
-      InputType('Trig',         g2conncolors.yellow_orange, horiz=0, vert=8),
-      InputType('RecVal',       g2conncolors.blue_red,     horiz=7, vert=0),
-      InputType('RecEnable',    g2conncolors.yellow_orange, horiz=8, vert=0),
+      InputType('Clk',          yellow_orange, horiz=0, vert=2),
+      InputType('Rst',          yellow_orange, horiz=0, vert=4),
+      InputType('Loop',         yellow_orange, horiz=0, vert=6),
+      InputType('Park',         yellow_orange, horiz=16, vert=0),
+      InputType('Note',         blue_red,      horiz=0, vert=7),
+      InputType('Trig',         yellow_orange, horiz=0, vert=8),
+      InputType('RecVal',       blue_red,      horiz=7, vert=0),
+      InputType('RecEnable',    yellow_orange, horiz=8, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Link',         g2conncolors. yellow_orange, horiz=19, vert=1),
-      OutputType('Note',         g2conncolors. blue_red,    horiz=19, vert=7),
-      OutputType('Trig',         g2conncolors. yellow_orange, horiz=19, vert=8),
+      OutputType('Link',        yellow_orange, horiz=19, vert=1),
+      OutputType('Note',        blue_red,      horiz=19, vert=7),
+      OutputType('Trig',        yellow_orange, horiz=19, vert=8),
     ]),
     params=ParamList([
       ParamType('Seq1Step1',    parammap.FreqCoarse),
@@ -2227,14 +2232,14 @@ modules = [
     shortnm='Mix4-1C',
     page=PageType('Mixer', 6),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=3, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=11, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=15, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('In1',          blue_red,      horiz=3, vert=1),
+      InputType('In2',          blue_red,      horiz=7, vert=1),
+      InputType('In3',          blue_red,      horiz=11, vert=1),
+      InputType('In4',          blue_red,      horiz=15, vert=1),
+      InputType('Chain',        blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=3),
+      OutputType('Out',         blue_red,      horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.MixLevel),
@@ -2265,18 +2270,18 @@ modules = [
     shortnm='Mux8-1',
     page=PageType('Switch', 13),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=4, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=11, vert=1),
-      InputType('In5',          g2conncolors.blue_red,     horiz=12, vert=1),
-      InputType('In6',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('In7',          g2conncolors.blue_red,     horiz=15, vert=1),
-      InputType('In8',          g2conncolors.blue_red,     horiz=17, vert=1),
-      InputType('Ctrl',         g2conncolors.blue,         horiz=0, vert=1),
+      InputType('In1',          blue_red,      horiz=4, vert=1),
+      InputType('In2',          blue_red,      horiz=7, vert=1),
+      InputType('In3',          blue_red,      horiz=9, vert=1),
+      InputType('In4',          blue_red,      horiz=11, vert=1),
+      InputType('In5',          blue_red,      horiz=12, vert=1),
+      InputType('In6',          blue_red,      horiz=14, vert=1),
+      InputType('In7',          blue_red,      horiz=15, vert=1),
+      InputType('In8',          blue_red,      horiz=17, vert=1),
+      InputType('Ctrl',         blue,          horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2288,11 +2293,11 @@ modules = [
     shortnm='WahWah',
     page=PageType('Filter', 8),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=16, vert=1),
-      InputType('Sweep',        g2conncolors.blue,         horiz=7, vert=1),
+      InputType('In',           red,           horiz=16, vert=1),
+      InputType('Sweep',        blue,          horiz=7, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('SweepMod',     parammap.Level_100),
@@ -2320,8 +2325,8 @@ modules = [
     page=PageType('In/Out', 4),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. red,         horiz=16, vert=1),
-      OutputType('OutR',         g2conncolors. red,         horiz=19, vert=1),
+      OutputType('OutL',        red,           horiz=16, vert=1),
+      OutputType('OutR',        red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Source',       parammap.Source_1),
@@ -2337,12 +2342,12 @@ modules = [
     shortnm='MinMax',
     page=PageType('Level', 12),
     inputs=InputList([
-      InputType('A',            g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('B',            g2conncolors.blue_red,     horiz=11, vert=1),
+      InputType('A',            blue_red,      horiz=9, vert=1),
+      InputType('B',            blue_red,      horiz=11, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Min',          g2conncolors. blue_red,    horiz=17, vert=1),
-      OutputType('Max',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Min',         blue_red,      horiz=17, vert=1),
+      OutputType('Max',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2354,18 +2359,18 @@ modules = [
     shortnm='BinCounter',
     page=PageType('Logic', 7),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=2, vert=1),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=2, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out001',       g2conncolors. yellow_orange, horiz=5, vert=1),
-      OutputType('Out002',       g2conncolors. yellow_orange, horiz=7, vert=1),
-      OutputType('Out004',       g2conncolors. yellow_orange, horiz=9, vert=1),
-      OutputType('Out008',       g2conncolors. yellow_orange, horiz=11, vert=1),
-      OutputType('Out016',       g2conncolors. yellow_orange, horiz=13, vert=1),
-      OutputType('Out032',       g2conncolors. yellow_orange, horiz=15, vert=1),
-      OutputType('Out064',       g2conncolors. yellow_orange, horiz=17, vert=1),
-      OutputType('Out128',       g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out001',      yellow_orange, horiz=5, vert=1),
+      OutputType('Out002',      yellow_orange, horiz=7, vert=1),
+      OutputType('Out004',      yellow_orange, horiz=9, vert=1),
+      OutputType('Out008',      yellow_orange, horiz=11, vert=1),
+      OutputType('Out016',      yellow_orange, horiz=13, vert=1),
+      OutputType('Out032',      yellow_orange, horiz=15, vert=1),
+      OutputType('Out064',      yellow_orange, horiz=17, vert=1),
+      OutputType('Out128',      yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2377,17 +2382,17 @@ modules = [
     shortnm='ADConv',
     page=PageType('Logic', 8),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('D0',           g2conncolors. yellow_orange, horiz=5, vert=1),
-      OutputType('D1',           g2conncolors. yellow_orange, horiz=7, vert=1),
-      OutputType('D2',           g2conncolors. yellow_orange, horiz=9, vert=1),
-      OutputType('D3',           g2conncolors. yellow_orange, horiz=11, vert=1),
-      OutputType('D4',           g2conncolors. yellow_orange, horiz=13, vert=1),
-      OutputType('D5',           g2conncolors. yellow_orange, horiz=15, vert=1),
-      OutputType('D6',           g2conncolors. yellow_orange, horiz=17, vert=1),
-      OutputType('D7',           g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('D0',          yellow_orange, horiz=5, vert=1),
+      OutputType('D1',          yellow_orange, horiz=7, vert=1),
+      OutputType('D2',          yellow_orange, horiz=9, vert=1),
+      OutputType('D3',          yellow_orange, horiz=11, vert=1),
+      OutputType('D4',          yellow_orange, horiz=13, vert=1),
+      OutputType('D5',          yellow_orange, horiz=15, vert=1),
+      OutputType('D6',          yellow_orange, horiz=17, vert=1),
+      OutputType('D7',          yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2399,17 +2404,17 @@ modules = [
     shortnm='DAConv',
     page=PageType('Logic', 9),
     inputs=InputList([
-      InputType('D0',           g2conncolors.yellow_orange, horiz=5, vert=1),
-      InputType('D1',           g2conncolors.yellow_orange, horiz=7, vert=1),
-      InputType('D2',           g2conncolors.yellow_orange, horiz=9, vert=1),
-      InputType('D3',           g2conncolors.yellow_orange, horiz=11, vert=1),
-      InputType('D4',           g2conncolors.yellow_orange, horiz=12, vert=1),
-      InputType('D5',           g2conncolors.yellow_orange, horiz=13, vert=1),
-      InputType('D6',           g2conncolors.yellow_orange, horiz=15, vert=1),
-      InputType('D7',           g2conncolors.yellow_orange, horiz=17, vert=1),
+      InputType('D0',           yellow_orange, horiz=5, vert=1),
+      InputType('D1',           yellow_orange, horiz=7, vert=1),
+      InputType('D2',           yellow_orange, horiz=9, vert=1),
+      InputType('D3',           yellow_orange, horiz=11, vert=1),
+      InputType('D4',           yellow_orange, horiz=12, vert=1),
+      InputType('D5',           yellow_orange, horiz=13, vert=1),
+      InputType('D6',           yellow_orange, horiz=15, vert=1),
+      InputType('D7',           yellow_orange, horiz=17, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2421,11 +2426,11 @@ modules = [
     shortnm='FltHP',
     page=PageType('Filter', 1),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=16, vert=1),
-      InputType('Pitch',        g2conncolors.blue,         horiz=4, vert=1),
+      InputType('In',           red,           horiz=16, vert=1),
+      InputType('Pitch',        blue,          horiz=4, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.FltFreq),
@@ -2434,7 +2439,7 @@ modules = [
       ParamType('Active',       parammap.ActiveMonitor),
     ]),
     modes=ModeList([
-      ModeType('SlopeMode',    parammap.HpLpSlopeMode),
+      ModeType('SlopeMode',     parammap.HpLpSlopeMode),
     ]),
   ),
   ModuleType(
@@ -2444,11 +2449,11 @@ modules = [
     shortnm='T&H',
     page=PageType('Switch', 17),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=15, vert=1),
-      InputType('Ctrl',         g2conncolors.yellow_orange, horiz=12, vert=1),
+      InputType('In',           blue_red,      horiz=15, vert=1),
+      InputType('Ctrl',         yellow_orange, horiz=12, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2460,20 +2465,20 @@ modules = [
     shortnm='Mix4-1S',
     page=PageType('Mixer', 7),
     inputs=InputList([
-      InputType('In1L',         g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('In1R',         g2conncolors.blue_red,     horiz=1, vert=1),
-      InputType('In2L',         g2conncolors.blue_red,     horiz=4, vert=1),
-      InputType('In2R',         g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In3L',         g2conncolors.blue_red,     horiz=8, vert=1),
-      InputType('In3R',         g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('In4L',         g2conncolors.blue_red,     horiz=13, vert=1),
-      InputType('In4R',         g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('ChainL',       g2conncolors.blue_red,     horiz=17, vert=0),
-      InputType('ChainR',       g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('In1L',         blue_red,      horiz=0, vert=1),
+      InputType('In1R',         blue_red,      horiz=1, vert=1),
+      InputType('In2L',         blue_red,      horiz=4, vert=1),
+      InputType('In2R',         blue_red,      horiz=5, vert=1),
+      InputType('In3L',         blue_red,      horiz=8, vert=1),
+      InputType('In3R',         blue_red,      horiz=9, vert=1),
+      InputType('In4L',         blue_red,      horiz=13, vert=1),
+      InputType('In4R',         blue_red,      horiz=14, vert=1),
+      InputType('ChainL',       blue_red,      horiz=17, vert=0),
+      InputType('ChainR',       blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. blue_red,    horiz=17, vert=3),
-      OutputType('OutR',         g2conncolors. blue_red,    horiz=19, vert=3),
+      OutputType('OutL',        blue_red,      horiz=17, vert=3),
+      OutputType('OutR',        blue_red,      horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.MixLevel),
@@ -2503,11 +2508,11 @@ modules = [
     shortnm='CtrlSend',
     page=PageType('MIDI', 0),
     inputs=InputList([
-      InputType('Send',         g2conncolors.yellow,       horiz=1, vert=1),
-      InputType('Value',        g2conncolors.blue,         horiz=11, vert=1),
+      InputType('Send',         yellow,        horiz=1, vert=1),
+      InputType('Value',        blue,          horiz=11, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Send',         g2conncolors. yellow,      horiz=4, vert=1),
+      OutputType('Send',        yellow,        horiz=4, vert=1),
     ]),
     params=ParamList([
       ParamType('Ctrl',         parammap.MidiData),
@@ -2523,11 +2528,11 @@ modules = [
     shortnm='PCSend',
     page=PageType('MIDI', 1),
     inputs=InputList([
-      InputType('Send',         g2conncolors.yellow,       horiz=1, vert=1),
-      InputType('Program',      g2conncolors.blue,         horiz=11, vert=1),
+      InputType('Send',         yellow,        horiz=1, vert=1),
+      InputType('Program',      blue,          horiz=11, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Send',         g2conncolors. yellow,      horiz=4, vert=1),
+      OutputType('Send',        yellow,        horiz=4, vert=1),
     ]),
     params=ParamList([
       ParamType('Program',      parammap.MidiData),
@@ -2542,9 +2547,9 @@ modules = [
     shortnm='NoteSend',
     page=PageType('MIDI', 2),
     inputs=InputList([
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=1),
-      InputType('Vel',          g2conncolors.blue,         horiz=4, vert=1),
-      InputType('Note',         g2conncolors.blue,         horiz=10, vert=1),
+      InputType('Gate',         yellow,        horiz=0, vert=1),
+      InputType('Vel',          blue,          horiz=4, vert=1),
+      InputType('Note',         blue,          horiz=10, vert=1),
     ]),
     outputs=OutputList([]),
     params=ParamList([
@@ -2561,17 +2566,17 @@ modules = [
     shortnm='SeqEvent',
     page=PageType('Seq', 0),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('Loop',         g2conncolors.yellow,       horiz=0, vert=4),
-      InputType('Park',         g2conncolors.yellow,       horiz=16, vert=0),
-      InputType('Trig1',        g2conncolors.yellow,       horiz=1, vert=3),
-      InputType('Trig2',        g2conncolors.yellow,       horiz=1, vert=4),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow,        horiz=0, vert=2),
+      InputType('Loop',         yellow,        horiz=0, vert=4),
+      InputType('Park',         yellow,        horiz=16, vert=0),
+      InputType('Trig1',        yellow,        horiz=1, vert=3),
+      InputType('Trig2',        yellow,        horiz=1, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Link',         g2conncolors. yellow,      horiz=19, vert=1),
-      OutputType('Trig1',        g2conncolors. yellow_orange, horiz=19, vert=3),
-      OutputType('Trig2',        g2conncolors. yellow_orange, horiz=19, vert=4),
+      OutputType('Link',        yellow,        horiz=19, vert=1),
+      OutputType('Trig1',       yellow_orange, horiz=19, vert=3),
+      OutputType('Trig2',       yellow_orange, horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('Seq1Step1',    parammap.OffOn),
@@ -2620,17 +2625,17 @@ modules = [
     shortnm='SeqVal',
     page=PageType('Seq', 1),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow,       horiz=0, vert=3),
-      InputType('Loop',         g2conncolors.yellow,       horiz=0, vert=4),
-      InputType('Park',         g2conncolors.yellow,       horiz=16, vert=0),
-      InputType('Val',          g2conncolors.blue_red,     horiz=0, vert=5),
-      InputType('Trig',         g2conncolors.yellow,       horiz=0, vert=7),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow,        horiz=0, vert=3),
+      InputType('Loop',         yellow,        horiz=0, vert=4),
+      InputType('Park',         yellow,        horiz=16, vert=0),
+      InputType('Val',          blue_red,      horiz=0, vert=5),
+      InputType('Trig',         yellow,        horiz=0, vert=7),
     ]),
     outputs=OutputList([
-      OutputType('Link',         g2conncolors. yellow,      horiz=19, vert=1),
-      OutputType('Val',          g2conncolors. blue_red,    horiz=19, vert=5),
-      OutputType('Trig',         g2conncolors. yellow_orange, horiz=19, vert=7),
+      OutputType('Link',        yellow,        horiz=19, vert=1),
+      OutputType('Val',         blue_red,      horiz=19, vert=5),
+      OutputType('Trig',        yellow_orange, horiz=19, vert=7),
     ]),
     params=ParamList([
       ParamType('Seq1Step1',    parammap.LevBipUni),
@@ -2681,17 +2686,17 @@ modules = [
     shortnm='SeqLev',
     page=PageType('Seq', 2),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=0, vert=3),
-      InputType('Loop',         g2conncolors.yellow_orange, horiz=0, vert=4),
-      InputType('Park',         g2conncolors.yellow_orange, horiz=16, vert=0),
-      InputType('Val',          g2conncolors.blue_red,     horiz=0, vert=6),
-      InputType('Trig',         g2conncolors.yellow_orange, horiz=0, vert=7),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=0, vert=3),
+      InputType('Loop',         yellow_orange, horiz=0, vert=4),
+      InputType('Park',         yellow_orange, horiz=16, vert=0),
+      InputType('Val',          blue_red,      horiz=0, vert=6),
+      InputType('Trig',         yellow_orange, horiz=0, vert=7),
     ]),
     outputs=OutputList([
-      OutputType('Link',         g2conncolors. yellow_orange, horiz=19, vert=1),
-      OutputType('Val',          g2conncolors. blue_red,    horiz=19, vert=6),
-      OutputType('Trig',         g2conncolors. yellow_orange, horiz=19, vert=7),
+      OutputType('Link',        yellow_orange, horiz=19, vert=1),
+      OutputType('Val',         blue_red,      horiz=19, vert=6),
+      OutputType('Trig',        yellow_orange, horiz=19, vert=7),
     ]),
     params=ParamList([
       ParamType('Seq1Step1',    parammap.LevBipUni),
@@ -2743,8 +2748,8 @@ modules = [
     page=PageType('MIDI', 3),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Rcv',          g2conncolors. yellow,      horiz=16, vert=1),
-      OutputType('Val',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Rcv',         yellow,        horiz=16, vert=1),
+      OutputType('Val',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Ctrl',         parammap.MidiData),
@@ -2760,9 +2765,9 @@ modules = [
     page=PageType('MIDI', 4),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Gate',         g2conncolors. yellow,      horiz=14, vert=1),
-      OutputType('Vel',          g2conncolors. blue,        horiz=16, vert=1),
-      OutputType('RelVel',       g2conncolors. blue,        horiz=18, vert=1),
+      OutputType('Gate',        yellow,        horiz=14, vert=1),
+      OutputType('Vel',         blue,          horiz=16, vert=1),
+      OutputType('RelVel',      blue,          horiz=18, vert=1),
     ]),
     params=ParamList([
       ParamType('Note',         parammap.MidiData),
@@ -2795,13 +2800,13 @@ modules = [
     shortnm='Compressor',
     page=PageType('FX', 8),
     inputs=InputList([
-      InputType('InL',          g2conncolors.red,          horiz=18, vert=1),
-      InputType('InR',          g2conncolors.red,          horiz=19, vert=1),
-      InputType('SideChain',    g2conncolors.red,          horiz=5, vert=0),
+      InputType('InL',          red,           horiz=18, vert=1),
+      InputType('InR',          red,           horiz=19, vert=1),
+      InputType('SideChain',    red,           horiz=5, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('OutR',         g2conncolors. red,         horiz=18, vert=4),
-      OutputType('OutL',         g2conncolors. red,         horiz=19, vert=4),
+      OutputType('OutR',        red,           horiz=18, vert=4),
+      OutputType('OutL',        red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('Threshold',    parammap.Threshold_42),
@@ -2821,10 +2826,10 @@ modules = [
     shortnm='KeyQuant',
     page=PageType('Note', 1),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue,         horiz=16, vert=1),
+      InputType('In',           blue,          horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Range',        parammap.NoteRange),
@@ -2851,13 +2856,13 @@ modules = [
     shortnm='SeqCtr',
     page=PageType('Seq', 4),
     inputs=InputList([
-      InputType('Ctrl',         g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('Val',          g2conncolors.blue_red,     horiz=0, vert=5),
-      InputType('Trig',         g2conncolors.yellow_orange, horiz=0, vert=7),
+      InputType('Ctrl',         blue_red,      horiz=0, vert=1),
+      InputType('Val',          blue_red,      horiz=0, vert=5),
+      InputType('Trig',         yellow_orange, horiz=0, vert=7),
     ]),
     outputs=OutputList([
-      OutputType('Val',          g2conncolors. blue_red,    horiz=19, vert=5),
-      OutputType('Trig',         g2conncolors. yellow_orange, horiz=19, vert=7),
+      OutputType('Val',         blue_red,      horiz=19, vert=5),
+      OutputType('Trig',        yellow_orange, horiz=19, vert=7),
     ]),
     params=ParamList([
       ParamType('Seq1Step1',    parammap.LevBipUni),
@@ -2908,9 +2913,9 @@ modules = [
     page=PageType('In/Out', 9),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Gate',         g2conncolors. yellow,      horiz=13, vert=1),
-      OutputType('Vel',          g2conncolors. blue,        horiz=16, vert=1),
-      OutputType('RelVel',       g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Gate',        yellow,        horiz=13, vert=1),
+      OutputType('Vel',         blue,          horiz=16, vert=1),
+      OutputType('RelVel',      blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Note',         parammap.FreqCoarse),
@@ -2924,10 +2929,10 @@ modules = [
     shortnm='LevConv',
     page=PageType('Level', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('OutputType',   parammap.PosNegInvBipInv),
@@ -2942,11 +2947,11 @@ modules = [
     shortnm='Glide',
     page=PageType('Note', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('On',           g2conncolors.yellow_orange, horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('On',           yellow_orange, horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.GlideTime),
@@ -2962,11 +2967,11 @@ modules = [
     shortnm='CompSig',
     page=PageType('Level', 11),
     inputs=InputList([
-      InputType('A',            g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('B',            g2conncolors.blue_red,     horiz=11, vert=1),
+      InputType('A',            blue_red,      horiz=9, vert=1),
+      InputType('B',            blue_red,      horiz=11, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out',         yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2978,10 +2983,10 @@ modules = [
     shortnm='ZeroCnt',
     page=PageType('Note', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -2993,18 +2998,18 @@ modules = [
     shortnm='MixFader',
     page=PageType('Mixer', 10),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=1, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=2, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('In5',          g2conncolors.blue_red,     horiz=10, vert=1),
-      InputType('In6',          g2conncolors.blue_red,     horiz=12, vert=1),
-      InputType('In7',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('In8',          g2conncolors.blue_red,     horiz=17, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('In1',          blue_red,      horiz=1, vert=1),
+      InputType('In2',          blue_red,      horiz=2, vert=1),
+      InputType('In3',          blue_red,      horiz=5, vert=1),
+      InputType('In4',          blue_red,      horiz=7, vert=1),
+      InputType('In5',          blue_red,      horiz=10, vert=1),
+      InputType('In6',          blue_red,      horiz=12, vert=1),
+      InputType('In7',          blue_red,      horiz=14, vert=1),
+      InputType('In8',          blue_red,      horiz=17, vert=1),
+      InputType('Chain',        blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=8),
+      OutputType('Out',         blue_red,      horiz=19, vert=8),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.MixLevel),
@@ -3051,13 +3056,13 @@ modules = [
     shortnm='FltComb',
     page=PageType('Filter', 7),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('FB',           g2conncolors.blue,         horiz=9, vert=3),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('Pitch',        blue_red,      horiz=0, vert=2),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=3),
+      InputType('FB',           blue,          horiz=9, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Freq',         parammap.Freq_1),
@@ -3078,14 +3083,14 @@ modules = [
     shortnm='OscShpA',
     page=PageType('Osc', 5),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=4),
-      InputType('Sync',         g2conncolors.red,          horiz=0, vert=1),
-      InputType('FmMod',        g2conncolors.red,          horiz=8, vert=3),
-      InputType('ShapeMod',     g2conncolors.red,          horiz=14, vert=3),
+      InputType('Pitch',        blue_red,      horiz=0, vert=3),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=4),
+      InputType('Sync',         red,           horiz=0, vert=1),
+      InputType('FmMod',        red,           horiz=8, vert=3),
+      InputType('ShapeMod',     red,           horiz=14, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=4),
+      OutputType('Out',         red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -3109,14 +3114,14 @@ modules = [
     shortnm='OscDual',
     page=PageType('Osc', 7),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=3),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=4),
-      InputType('Sync',         g2conncolors.red,          horiz=0, vert=1),
-      InputType('PW',           g2conncolors.red,          horiz=9, vert=1),
-      InputType('Phase',        g2conncolors.red,          horiz=9, vert=4),
+      InputType('Pitch',        blue_red,      horiz=0, vert=3),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=4),
+      InputType('Sync',         red,           horiz=0, vert=1),
+      InputType('PW',           red,           horiz=9, vert=1),
+      InputType('Phase',        red,           horiz=9, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=4),
+      OutputType('Out',         red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -3143,21 +3148,21 @@ modules = [
     shortnm='DXRouter',
     page=PageType('Osc', 15),
     inputs=InputList([
-      InputType('In1',          g2conncolors.red,          horiz=0, vert=5),
-      InputType('In2',          g2conncolors.red,          horiz=2, vert=5),
-      InputType('In3',          g2conncolors.red,          horiz=5, vert=5),
-      InputType('In4',          g2conncolors.red,          horiz=9, vert=5),
-      InputType('In5',          g2conncolors.red,          horiz=12, vert=5),
-      InputType('In6',          g2conncolors.red,          horiz=15, vert=5),
+      InputType('In1',          red,           horiz=0, vert=5),
+      InputType('In2',          red,           horiz=2, vert=5),
+      InputType('In3',          red,           horiz=5, vert=5),
+      InputType('In4',          red,           horiz=9, vert=5),
+      InputType('In5',          red,           horiz=12, vert=5),
+      InputType('In6',          red,           horiz=15, vert=5),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. red,         horiz=1, vert=5),
-      OutputType('Out2',         g2conncolors. red,         horiz=4, vert=5),
-      OutputType('Out3',         g2conncolors. red,         horiz=7, vert=5),
-      OutputType('Out4',         g2conncolors. red,         horiz=10, vert=5),
-      OutputType('Out5',         g2conncolors. red,         horiz=13, vert=5),
-      OutputType('Out6',         g2conncolors. red,         horiz=16, vert=5),
-      OutputType('Main',         g2conncolors. red,         horiz=19, vert=5),
+      OutputType('Out1',        red,           horiz=1, vert=5),
+      OutputType('Out2',        red,           horiz=4, vert=5),
+      OutputType('Out3',        red,           horiz=7, vert=5),
+      OutputType('Out4',        red,           horiz=10, vert=5),
+      OutputType('Out5',        red,           horiz=13, vert=5),
+      OutputType('Out6',        red,           horiz=16, vert=5),
+      OutputType('Main',        red,           horiz=19, vert=5),
     ]),
     params=ParamList([
       ParamType('Algorithm',    parammap.DxAlgorithm),
@@ -3172,11 +3177,11 @@ modules = [
     shortnm='PShift',
     page=PageType('FX', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('Pitch',        g2conncolors.blue,         horiz=1, vert=2),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('Pitch',        blue,          horiz=1, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('ShiftSemi',    parammap.PShiftCoarse),
@@ -3194,16 +3199,16 @@ modules = [
     shortnm='ModAHD',
     page=PageType('Env', 7),
     inputs=InputList([
-      InputType('Trig',         g2conncolors.yellow,       horiz=0, vert=2),
-      InputType('AttackMod',    g2conncolors.blue,         horiz=4, vert=4),
-      InputType('HoldMod',      g2conncolors.blue,         horiz=8, vert=4),
-      InputType('DecayMod',     g2conncolors.blue,         horiz=12, vert=4),
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
-      InputType('AM',           g2conncolors.blue,         horiz=0, vert=4),
+      InputType('Trig',         yellow,        horiz=0, vert=2),
+      InputType('AttackMod',    blue,          horiz=4, vert=4),
+      InputType('HoldMod',      blue,          horiz=8, vert=4),
+      InputType('DecayMod',     blue,          horiz=12, vert=4),
+      InputType('In',           blue_red,      horiz=19, vert=0),
+      InputType('AM',           blue,          horiz=0, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('Env',          g2conncolors. blue,        horiz=18, vert=4),
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=4),
+      OutputType('Env',         blue,          horiz=18, vert=4),
+      OutputType('Out',         blue_red,      horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('Attack',       parammap.EnvTime),
@@ -3225,8 +3230,8 @@ modules = [
     page=PageType('In/Out', 2),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. red,         horiz=17, vert=1),
-      OutputType('OutR',         g2conncolors. red,         horiz=19, vert=1),
+      OutputType('OutL',        red,           horiz=17, vert=1),
+      OutputType('OutR',        red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Source',       parammap.Source_2),
@@ -3243,10 +3248,10 @@ modules = [
     page=PageType('In/Out', 3),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. red,         horiz=12, vert=1),
-      OutputType('Out2',         g2conncolors. red,         horiz=14, vert=1),
-      OutputType('Out3',         g2conncolors. red,         horiz=17, vert=1),
-      OutputType('Out4',         g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out1',        red,           horiz=12, vert=1),
+      OutputType('Out2',        red,           horiz=14, vert=1),
+      OutputType('Out3',        red,           horiz=17, vert=1),
+      OutputType('Out4',        red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Source',       parammap.Source_3),
@@ -3262,16 +3267,16 @@ modules = [
     shortnm='DlySingleA',
     page=PageType('Delay', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=16, vert=1),
+      InputType('In',           red,           horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.DelayTime_3),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_3),
+      ModeType('DelayRange',    parammap.DelayRange_3),
     ]),
   ),
   ModuleType(
@@ -3281,18 +3286,18 @@ modules = [
     shortnm='DlySingleB',
     page=PageType('Delay', 1),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=16, vert=1),
-      InputType('Time',         g2conncolors.red,          horiz=7, vert=1),
+      InputType('In',           red,           horiz=16, vert=1),
+      InputType('Time',         red,           horiz=7, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.DelayTime_3),
       ParamType('TimeMod',      parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_3),
+      ModeType('DelayRange',    parammap.DelayRange_3),
     ]),
   ),
   ModuleType(
@@ -3302,13 +3307,13 @@ modules = [
     shortnm='DelayDual',
     page=PageType('Delay', 2),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('Time1',        g2conncolors.red,          horiz=7, vert=2),
-      InputType('Time2',        g2conncolors.red,          horiz=13, vert=2),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('Time1',        red,           horiz=7, vert=2),
+      InputType('Time2',        red,           horiz=13, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. red,         horiz=10, vert=2),
-      OutputType('Out2',         g2conncolors. red,         horiz=17, vert=2),
+      OutputType('Out1',        red,           horiz=10, vert=2),
+      OutputType('Out2',        red,           horiz=17, vert=2),
     ]),
     params=ParamList([
       ParamType('Time1',        parammap.DelayTime_3),
@@ -3317,7 +3322,7 @@ modules = [
       ParamType('Time2Mod',     parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_3),
+      ModeType('DelayRange',    parammap.DelayRange_3),
     ]),
   ),
   ModuleType(
@@ -3327,18 +3332,18 @@ modules = [
     shortnm='DelayQuad',
     page=PageType('Delay', 3),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('Time1',        g2conncolors.red,          horiz=3, vert=4),
-      InputType('Time2',        g2conncolors.red,          horiz=7, vert=4),
-      InputType('Time3',        g2conncolors.red,          horiz=11, vert=4),
-      InputType('Time4',        g2conncolors.red,          horiz=15, vert=4),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('Time1',        red,           horiz=3, vert=4),
+      InputType('Time2',        red,           horiz=7, vert=4),
+      InputType('Time3',        red,           horiz=11, vert=4),
+      InputType('Time4',        red,           horiz=15, vert=4),
     ]),
     outputs=OutputList([
-      OutputType('OutMain',      g2conncolors. red,         horiz=19, vert=4),
-      OutputType('Out1',         g2conncolors. red,         horiz=5, vert=2),
-      OutputType('Out2',         g2conncolors. red,         horiz=9, vert=2),
-      OutputType('Out3',         g2conncolors. red,         horiz=13, vert=2),
-      OutputType('Out4',         g2conncolors. red,         horiz=17, vert=2),
+      OutputType('OutMain',     red,           horiz=19, vert=4),
+      OutputType('Out1',        red,           horiz=5, vert=2),
+      OutputType('Out2',        red,           horiz=9, vert=2),
+      OutputType('Out3',        red,           horiz=13, vert=2),
+      OutputType('Out4',        red,           horiz=17, vert=2),
     ]),
     params=ParamList([
       ParamType('Time1',        parammap.DelayTime_3),
@@ -3352,7 +3357,7 @@ modules = [
       ParamType('TimeClk',      parammap.TimeClk),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_3),
+      ModeType('DelayRange',    parammap.DelayRange_3),
     ]),
   ),
   ModuleType(
@@ -3362,10 +3367,10 @@ modules = [
     shortnm='DelayA',
     page=PageType('Delay', 7),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.DelayTime_2),
@@ -3376,7 +3381,7 @@ modules = [
       ParamType('TimeClk',      parammap.TimeClk),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_2),
+      ModeType('DelayRange',    parammap.DelayRange_2),
     ]),
   ),
   ModuleType(
@@ -3386,12 +3391,12 @@ modules = [
     shortnm='DelayB',
     page=PageType('Delay', 8),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
-      InputType('FBMod',        g2conncolors.blue_red,     horiz=9, vert=3),
-      InputType('DryWetMod',    g2conncolors.blue_red,     horiz=15, vert=3),
+      InputType('In',           red,           horiz=19, vert=0),
+      InputType('FBMod',        blue_red,      horiz=9, vert=3),
+      InputType('DryWetMod',    blue_red,      horiz=15, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.DelayTime_2),
@@ -3405,7 +3410,7 @@ modules = [
       ParamType('HP',           parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_2),
+      ModeType('DelayRange',    parammap.DelayRange_2),
     ]),
   ),
   ModuleType(
@@ -3415,11 +3420,11 @@ modules = [
     shortnm='DlyClock',
     page=PageType('Delay', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Delay',        parammap.Range_128),
@@ -3433,18 +3438,18 @@ modules = [
     shortnm='DlyShiftReg',
     page=PageType('Delay', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=5, vert=1),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. blue_red,    horiz=7, vert=1),
-      OutputType('Out2',         g2conncolors. blue_red,    horiz=9, vert=1),
-      OutputType('Out3',         g2conncolors. blue_red,    horiz=11, vert=1),
-      OutputType('Out4',         g2conncolors. blue_red,    horiz=12, vert=1),
-      OutputType('Out5',         g2conncolors. blue_red,    horiz=14, vert=1),
-      OutputType('Out6',         g2conncolors. blue_red,    horiz=15, vert=1),
-      OutputType('Out7',         g2conncolors. blue_red,    horiz=17, vert=1),
-      OutputType('Out8',         g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out1',        blue_red,      horiz=7, vert=1),
+      OutputType('Out2',        blue_red,      horiz=9, vert=1),
+      OutputType('Out3',        blue_red,      horiz=11, vert=1),
+      OutputType('Out4',        blue_red,      horiz=12, vert=1),
+      OutputType('Out5',        blue_red,      horiz=14, vert=1),
+      OutputType('Out6',        blue_red,      horiz=15, vert=1),
+      OutputType('Out7',        blue_red,      horiz=17, vert=1),
+      OutputType('Out8',        blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -3456,16 +3461,16 @@ modules = [
     shortnm='Operator',
     page=PageType('Osc', 14),
     inputs=InputList([
-      InputType('Freq',         g2conncolors.blue,         horiz=0, vert=3),
-      InputType('FM',           g2conncolors.red,          horiz=19, vert=1),
-      InputType('Gate',         g2conncolors.yellow,       horiz=0, vert=5),
-      InputType('Note',         g2conncolors.blue,         horiz=0, vert=6),
-      InputType('AMod',         g2conncolors.blue,         horiz=0, vert=9),
-      InputType('Vel',          g2conncolors.blue,         horiz=0, vert=11),
-      InputType('Pitch',        g2conncolors.blue,         horiz=0, vert=1),
+      InputType('Freq',         blue,          horiz=0, vert=3),
+      InputType('FM',           red,           horiz=19, vert=1),
+      InputType('Gate',         yellow,        horiz=0, vert=5),
+      InputType('Note',         blue,          horiz=0, vert=6),
+      InputType('AMod',         blue,          horiz=0, vert=9),
+      InputType('Vel',          blue,          horiz=0, vert=11),
+      InputType('Pitch',        blue,          horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=11),
+      OutputType('Out',         red,           horiz=19, vert=11),
     ]),
     params=ParamList([
       ParamType('Kbt',          parammap.Kbt_1),
@@ -3503,23 +3508,23 @@ modules = [
     shortnm='DlyEight',
     page=PageType('Delay', 4),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out1',         g2conncolors. red,         horiz=7, vert=2),
-      OutputType('Out2',         g2conncolors. red,         horiz=9, vert=2),
-      OutputType('Out3',         g2conncolors. red,         horiz=10, vert=2),
-      OutputType('Out4',         g2conncolors. red,         horiz=12, vert=2),
-      OutputType('Out5',         g2conncolors. red,         horiz=14, vert=2),
-      OutputType('Out6',         g2conncolors. red,         horiz=16, vert=2),
-      OutputType('Out7',         g2conncolors. red,         horiz=17, vert=2),
-      OutputType('Out8',         g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out1',        red,           horiz=7, vert=2),
+      OutputType('Out2',        red,           horiz=9, vert=2),
+      OutputType('Out3',        red,           horiz=10, vert=2),
+      OutputType('Out4',        red,           horiz=12, vert=2),
+      OutputType('Out5',        red,           horiz=14, vert=2),
+      OutputType('Out6',        red,           horiz=16, vert=2),
+      OutputType('Out7',        red,           horiz=17, vert=2),
+      OutputType('Out8',        red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Time',         parammap.DelayTime_3),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_3),
+      ModeType('DelayRange',    parammap.DelayRange_3),
     ]),
   ),
   ModuleType(
@@ -3529,11 +3534,11 @@ modules = [
     shortnm='DlyStereo',
     page=PageType('Delay', 9),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=19, vert=0),
+      InputType('In',           red,           horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. red,         horiz=17, vert=4),
-      OutputType('OutR',         g2conncolors. red,         horiz=19, vert=4),
+      OutputType('OutL',        red,           horiz=17, vert=4),
+      OutputType('OutR',        red,           horiz=19, vert=4),
     ]),
     params=ParamList([
       ParamType('TimeLeft',     parammap.DelayTime_1),
@@ -3549,7 +3554,7 @@ modules = [
       ParamType('HP',           parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('DelayRange',   parammap.DelayRange_1),
+      ModeType('DelayRange',    parammap.DelayRange_1),
     ]),
   ),
   ModuleType(
@@ -3559,13 +3564,13 @@ modules = [
     shortnm='OscPM',
     page=PageType('Osc', 4),
     inputs=InputList([
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('Sync',         g2conncolors.red,          horiz=12, vert=2),
-      InputType('PhaseMod',     g2conncolors.red,          horiz=14, vert=2),
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
+      InputType('Sync',         red,           horiz=12, vert=2),
+      InputType('PhaseMod',     red,           horiz=14, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=2),
+      OutputType('Out',         red,           horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -3577,7 +3582,7 @@ modules = [
       ParamType('PitchVar',     parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('Waveform',     parammap.OscWaveform_1),
+      ModeType('Waveform',      parammap.OscWaveform_1),
     ]),
   ),
   ModuleType(
@@ -3587,11 +3592,11 @@ modules = [
     shortnm='Mix1-1A',
     page=PageType('Mixer', 0),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Chain',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Lev',          parammap.MixLevel),
@@ -3609,14 +3614,14 @@ modules = [
     shortnm='Mix1-1S',
     page=PageType('Mixer', 1),
     inputs=InputList([
-      InputType('InL',          g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('InR',          g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('LChain',       g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('RChain',       g2conncolors.blue_red,     horiz=1, vert=1),
+      InputType('InL',          blue_red,      horiz=14, vert=1),
+      InputType('InR',          blue_red,      horiz=16, vert=1),
+      InputType('LChain',       blue_red,      horiz=0, vert=1),
+      InputType('RChain',       blue_red,      horiz=1, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('OutL',         g2conncolors. blue_red,    horiz=17, vert=1),
-      OutputType('OutR',         g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('OutL',        blue_red,      horiz=17, vert=1),
+      OutputType('OutR',        blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Lev',          parammap.MixLevel),
@@ -3634,12 +3639,12 @@ modules = [
     shortnm='Sw1-2M',
     page=PageType('Switch', 6),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=14, vert=1),
+      InputType('In',           blue_red,      horiz=14, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('OutOn',        g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('OutOff',       g2conncolors. blue_red,    horiz=16, vert=1),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=1),
+      OutputType('OutOn',       blue_red,      horiz=19, vert=1),
+      OutputType('OutOff',      blue_red,      horiz=16, vert=1),
+      OutputType('Ctrl',        blue,          horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.OffOn,
@@ -3655,12 +3660,12 @@ modules = [
     shortnm='Sw2-1M',
     page=PageType('Switch', 2),
     inputs=InputList([
-      InputType('InOff',        g2conncolors.blue_red,     horiz=14, vert=1),
-      InputType('InOn',         g2conncolors.blue_red,     horiz=16, vert=1),
+      InputType('InOff',        blue_red,      horiz=14, vert=1),
+      InputType('InOn',         blue_red,      horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
-      OutputType('Ctrl',         g2conncolors. blue,        horiz=0, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
+      OutputType('Ctrl',        blue,          horiz=0, vert=1),
     ]),
     params=ParamList([
       ParamType('Sel',          parammap.OffOn,
@@ -3677,7 +3682,7 @@ modules = [
     page=PageType('Level', 1),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Lev',          parammap.LevBipUni),
@@ -3695,11 +3700,11 @@ modules = [
     shortnm='NoiseGate',
     page=PageType('Level', 9),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=19, vert=0),
+      InputType('In',           blue_red,      horiz=19, vert=0),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
-      OutputType('Env',          g2conncolors. blue,        horiz=17, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
+      OutputType('Env',         blue,          horiz=17, vert=2),
     ]),
     params=ParamList([
       ParamType('Threshold',    parammap.Threshold_127),
@@ -3716,14 +3721,14 @@ modules = [
     shortnm='LfoB',
     page=PageType('LFO', 1),
     inputs=InputList([
-      InputType('Rate',         g2conncolors.blue,         horiz=1, vert=3),
-      InputType('RateVar',      g2conncolors.blue,         horiz=3, vert=3),
-      InputType('Rst',          g2conncolors.blue,         horiz=0, vert=1),
-      InputType('Phase',        g2conncolors.blue,         horiz=10, vert=3),
+      InputType('Rate',         blue,          horiz=1, vert=3),
+      InputType('RateVar',      blue,          horiz=3, vert=3),
+      InputType('Rst',          blue,          horiz=0, vert=1),
+      InputType('Phase',        blue,          horiz=10, vert=3),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=3),
-      OutputType('Sync',         g2conncolors. blue,        horiz=0, vert=3),
+      OutputType('Out',         blue,          horiz=19, vert=3),
+      OutputType('Sync',        blue,          horiz=0, vert=3),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.LfoRate_4),
@@ -3746,10 +3751,10 @@ modules = [
     shortnm='Phaser',
     page=PageType('FX', 1),
     inputs=InputList([
-      InputType('In',           g2conncolors.red,          horiz=16, vert=1),
+      InputType('In',           red,           horiz=16, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=1),
+      OutputType('Out',         red,           horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Type',         parammap.PhaserType),
@@ -3766,13 +3771,13 @@ modules = [
     shortnm='Mix4-1A',
     page=PageType('Mixer', 4),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=5, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=8, vert=1),
-      InputType('In3',          g2conncolors.blue_red,     horiz=11, vert=1),
-      InputType('In4',          g2conncolors.blue_red,     horiz=15, vert=1),
+      InputType('In1',          blue_red,      horiz=5, vert=1),
+      InputType('In2',          blue_red,      horiz=8, vert=1),
+      InputType('In3',          blue_red,      horiz=11, vert=1),
+      InputType('In4',          blue_red,      horiz=15, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -3784,12 +3789,12 @@ modules = [
     shortnm='Mix2-1A',
     page=PageType('Mixer', 2),
     inputs=InputList([
-      InputType('In1',          g2conncolors.blue_red,     horiz=9, vert=1),
-      InputType('In2',          g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Chain',        g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In1',          blue_red,      horiz=9, vert=1),
+      InputType('In2',          blue_red,      horiz=16, vert=1),
+      InputType('Chain',        blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Lev1',         parammap.MixLevel),
@@ -3811,11 +3816,11 @@ modules = [
     shortnm='ModAmt',
     page=PageType('Level', 13),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=16, vert=1),
-      InputType('Mod',          g2conncolors.blue_red,     horiz=15, vert=1),
+      InputType('In',           blue_red,      horiz=16, vert=1),
+      InputType('Mod',          blue_red,      horiz=15, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('ModDepth',     parammap.Level_100),
@@ -3834,12 +3839,12 @@ modules = [
     shortnm='OscPerc',
     page=PageType('Osc', 11),
     inputs=InputList([
-      InputType('Pitch',        g2conncolors.blue_red,     horiz=0, vert=1),
-      InputType('PitchVar',     g2conncolors.blue_red,     horiz=0, vert=2),
-      InputType('Trig',         g2conncolors.red,          horiz=3, vert=2),
+      InputType('Pitch',        blue_red,      horiz=0, vert=1),
+      InputType('PitchVar',     blue_red,      horiz=0, vert=2),
+      InputType('Trig',         red,           horiz=3, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. red,         horiz=19, vert=3),
+      OutputType('Out',         red,           horiz=19, vert=3),
     ]),
     params=ParamList([
       ParamType('FreqCoarse',   parammap.FreqCoarse),
@@ -3862,9 +3867,9 @@ modules = [
     page=PageType('In/Out', 8),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('PatchActive',  g2conncolors. yellow,      horiz=8, vert=1),
-      OutputType('VarActive',    g2conncolors. yellow,      horiz=13, vert=1),
-      OutputType('VoiceNo',      g2conncolors. blue,        horiz=18, vert=1),
+      OutputType('PatchActive', yellow,        horiz=8, vert=1),
+      OutputType('VarActive',   yellow,        horiz=13, vert=1),
+      OutputType('VoiceNo',     blue,          horiz=18, vert=1),
     ]),
     params=ParamList([]),
     modes=ModeList([]),
@@ -3876,12 +3881,12 @@ modules = [
     shortnm='PitchTrack',
     page=PageType('Note', 5),
     inputs=InputList([
-      InputType('In',           g2conncolors.blue_red,     horiz=0, vert=1),
+      InputType('In',           blue_red,      horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Period',       g2conncolors. yellow_orange, horiz=13, vert=1),
-      OutputType('Gate',         g2conncolors. yellow_orange, horiz=15, vert=1),
-      OutputType('Pitch',        g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Period',      yellow_orange, horiz=13, vert=1),
+      OutputType('Gate',        yellow_orange, horiz=15, vert=1),
+      OutputType('Pitch',       blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Threshold',    parammap.Threshold_127),
@@ -3896,9 +3901,9 @@ modules = [
     page=PageType('In/Out', 6),
     inputs=InputList([]),
     outputs=OutputList([
-      OutputType('Pitch',        g2conncolors. blue,        horiz=14, vert=1),
-      OutputType('Gate',         g2conncolors. yellow,      horiz=16, vert=1),
-      OutputType('Vel',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Pitch',       blue,          horiz=14, vert=1),
+      OutputType('Gate',        yellow,        horiz=16, vert=1),
+      OutputType('Vel',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Mode',         parammap.MonoKeyMode),
@@ -3912,10 +3917,10 @@ modules = [
     shortnm='RandomA',
     page=PageType('Rnd', 0),
     inputs=InputList([
-      InputType('Rate',         g2conncolors.blue,         horiz=0, vert=1),
+      InputType('Rate',         blue,          horiz=0, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=1),
+      OutputType('Out',         blue,          horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.LfoRate_3),
@@ -3935,11 +3940,11 @@ modules = [
     shortnm='RandomB',
     page=PageType('Rnd', 1),
     inputs=InputList([
-      InputType('Rate',         g2conncolors.blue,         horiz=0, vert=1),
-      InputType('RateVar',      g2conncolors.blue,         horiz=0, vert=2),
+      InputType('Rate',         blue,          horiz=0, vert=1),
+      InputType('RateVar',      blue,          horiz=0, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue,        horiz=19, vert=2),
+      OutputType('Out',         blue,          horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('Rate',         parammap.LfoRate_3),
@@ -3961,12 +3966,12 @@ modules = [
     shortnm='RndClkA',
     page=PageType('Rnd', 2),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=4, vert=1),
-      InputType('Seed',         g2conncolors.blue_red,     horiz=7, vert=1),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=4, vert=1),
+      InputType('Seed',         blue_red,      horiz=7, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=1),
+      OutputType('Out',         blue_red,      horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('StepProb',     parammap.Level_100),
@@ -3984,13 +3989,13 @@ modules = [
     shortnm='RndTrig',
     page=PageType('Rnd', 4),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=4, vert=1),
-      InputType('Seed',         g2conncolors.blue_red,     horiz=7, vert=1),
-      InputType('Prob',         g2conncolors.blue_red,     horiz=8, vert=1),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=4, vert=1),
+      InputType('Seed',         blue_red,      horiz=7, vert=1),
+      InputType('Prob',         blue_red,      horiz=8, vert=1),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. yellow_orange, horiz=19, vert=1),
+      OutputType('Out',         yellow_orange, horiz=19, vert=1),
     ]),
     params=ParamList([
       ParamType('StepProb',     parammap.Level_100),
@@ -4007,13 +4012,13 @@ modules = [
     shortnm='RndClkB',
     page=PageType('Rnd', 3),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=0, vert=2),
-      InputType('Seed',         g2conncolors.blue_red,     horiz=3, vert=2),
-      InputType('Step',         g2conncolors.blue,         horiz=11, vert=2),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=0, vert=2),
+      InputType('Seed',         blue_red,      horiz=3, vert=2),
+      InputType('Step',         blue,          horiz=11, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('StepProb',     parammap.Level_100),
@@ -4023,7 +4028,7 @@ modules = [
       ParamType('StepProbMod',  parammap.Level_100),
     ]),
     modes=ModeList([
-      ModeType('Character',    parammap.Rnd_1),
+      ModeType('Character',     parammap.Rnd_1),
     ]),
   ),
   ModuleType(
@@ -4033,14 +4038,14 @@ modules = [
     shortnm='RndPattern',
     page=PageType('Rnd', 5),
     inputs=InputList([
-      InputType('Clk',          g2conncolors.yellow_orange, horiz=0, vert=1),
-      InputType('Rst',          g2conncolors.yellow_orange, horiz=0, vert=2),
-      InputType('A',            g2conncolors.blue,         horiz=3, vert=1),
-      InputType('B',            g2conncolors.blue,         horiz=3, vert=2),
-      InputType('StepProb',     g2conncolors.blue,         horiz=9, vert=2),
+      InputType('Clk',          yellow_orange, horiz=0, vert=1),
+      InputType('Rst',          yellow_orange, horiz=0, vert=2),
+      InputType('A',            blue,          horiz=3, vert=1),
+      InputType('B',            blue,          horiz=3, vert=2),
+      InputType('StepProb',     blue,          horiz=9, vert=2),
     ]),
     outputs=OutputList([
-      OutputType('Out',          g2conncolors. blue_red,    horiz=19, vert=2),
+      OutputType('Out',         blue_red,      horiz=19, vert=2),
     ]),
     params=ParamList([
       ParamType('PatternA',     parammap.RangeBip_128),
@@ -4052,7 +4057,7 @@ modules = [
       ParamType('Active',       parammap.ActiveMonitor),
     ]),
     modes=ModeList([
-      ModeType('Waveform',     parammap.RndStepPulse),
+      ModeType('Waveform',      parammap.RndStepPulse),
     ]),
   ),
 ]

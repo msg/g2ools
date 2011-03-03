@@ -131,6 +131,11 @@ from params import parammap
 class ModuleMap(Struct):
   pass
 
+red = g2conncolors.red
+blue = g2conncolors.blue
+yellow = g2conncolors.yellow
+blue_red = g2conncolors.blue_red
+yellow_orange = g2conncolors.yellow_orange
 
 modules = [
 ''')
@@ -150,7 +155,7 @@ for struct in modulestructs:
     ins = []
     for nm, t, loc in zip(struct.inputs, struct.inputtypes, struct.inputlocs):
       h, v = [ eval(l) for l in loc.split(',')]
-      ins.append("      InputType(%-16sg2conncolors.%-14shoriz=%d, vert=%d)," %
+      ins.append("      InputType(%-16s%-15shoriz=%d, vert=%d)," %
           ("'%s', " % nm, '%s, ' % t, h, v))
     s += '''    inputs=InputList([
 %s
@@ -167,8 +172,8 @@ for struct in modulestructs:
     outputlocs = struct.outputlocs
     for nm, t, loc in zip(outputs, outputtypes, outputlocs):
       h, v = [ eval(l) for l in loc.split(',')]
-      outs.append("      OutputType(%-16sg2conncolors.%-14shoriz=%d, vert=%d),"
-          % ("'%s', " % nm, ' % s, ' % t, h, v))
+      outs.append("      OutputType(%-15s%-15shoriz=%d, vert=%d),"
+          % ("'%s', " % nm, '%s, ' % t, h, v))
     s += '''    outputs=OutputList([
 %s
     ]),\n''' % (
@@ -197,7 +202,7 @@ for struct in modulestructs:
     s += '''    modes=ModeList([
 %s
     ]),\n''' % (
-      '\n'.join(["      ModeType(%-16sparammap.%s)," % ("'%s', " % nm, t) 
+      '\n'.join(["      ModeType(%-17sparammap.%s)," % ("'%s', " % nm, t) 
           for nm, t in zip(struct.modes, struct.modetypes) ]),
       )
   else:
