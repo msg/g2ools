@@ -7,14 +7,16 @@ from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf
 from nord.file import Ctrl
 
+DEBUG = 0
+
 def debug(fmt, *a):
-  if 0:
+  if DEBUG:
     printf(fmt, *a)
 
 class G2Exception(Exception):
   pass
 
-def cleanline(line):
+def clean_line(line):
   comment = line.find('#')
   if comment < 0:
     return line.strip()
@@ -71,14 +73,20 @@ class G2Module(object):
         nm += 'out'
       self.ports[nm.lower()] = G2ModulePort(getattr(module.outputs, output))
 
-module_types = { }
+class ModuleTypes(object):
+  def __init__(self):
+    self.types = { }
 
-def get_module_type(name):
-  global module_types
-  if module_types.has_key(name):
-    return module_types[name]
-  else:
-    return G2ModuleType(name)
+  def add(self, name, type):
+    self.types[name] = type
+
+  def get(self, name):
+    if self.types.has_key(name):
+      return self.types[name]
+    else:
+      return G2ModuleType(name)
+
+module_types = ModuleTypes()
 
 class G2Section(object):
   def __init__(self, section):
@@ -89,8 +97,8 @@ class G2Section(object):
     self.horiz = section.horiz
     self.vert = section.vert
 
-  def addmodule(self, typename, name):
-    mt = get_module_type(typename)
+  def add_module(self, typename, name):
+    mt = module_types.get(typename)
     m = mt.add(self.section.current_area, name=name,
         horiz=self.section.horiz, vert=self.section.vert,
         color=self.module_color)
@@ -156,7 +164,7 @@ class G2GroupParam(object):
     variations = self.variations[:]
     self.set(*variations)
 
-  def setupvars(self, variation, value):
+  def setup_vars(self, variation, value):
     paramvars = { }
     for param in self.group.params:
       paramvars[param] = self.group.params[param].variations[variation]
@@ -164,15 +172,16 @@ class G2GroupParam(object):
     return paramvars
 
   def set(self, *variations):
+    for variation in range(len(variations)):
+      value = variations[variation]
+      self.variations[variation] = value
     for calc in self.calcs:
-      vals = []
-      for var in range(len(variations)):
-        variation = variations[var]
-        self.variations[var] = variation
-        paramvars = self.setupvars(var, variation)
-        val = eval(calc.equation, paramvars)
-        vals.append('%s' % val)
-      calc.param.set(vals)
+      values = []
+      for variation in range(len(variations)):
+        paramvars = self.setup_vars(variation, value)
+        value = eval(calc.equation, paramvars)
+        values.append('%s' % value)
+      calc.param.set(values)
 
   def label(self, *a):
     pass
@@ -185,7 +194,7 @@ class G2Group(G2Section):
     self.height = 0
 
   def add(self, typename, name):
-    self.modules[name] = self.addmodule(typename, name)
+    self.modules[name] = self.add_module(typename, name)
 
   def separate(self, rows):
     self.section.vert += int(rows)
@@ -206,10 +215,10 @@ class G2Group(G2Section):
   def param(self, name, default, minimum, maximum):
     self.params[name] = G2GroupParam(self, name, default, minimum, maximum)
 
-  def gparam(self, name, parameter, default):
+  def mparam(self, name, parameter, default):
     modparam = self.parse_parameter(parameter)
-    self.params[name] = G2GroupParam(self, name,
-        default, modparam.param.type.type.low, modparam.param.type.type.high)
+    type = modparam.param.type.type
+    self.params[name] = G2GroupParam(self, name, default, type.low, type.high)
     self.params[name].add_calc(modparam, name)
 
   def calc(self, name, parameter, equation):
@@ -266,11 +275,10 @@ class G2Patch(G2Section):
     global g2oolsdir
     self.horiz = 0
     self.vert = 0
-    pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
     super(G2Patch, self).__init__(self)
-    self.pch2 = pch2
+    self.pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
     self.filename = filename[:filename.rfind('.')]
-    self.current_area = pch2.patch.voice
+    self.current_area = self.pch2.patch.voice
     self.variations = range(9)
     self.voice_modules = { }
     self.fx_modules = { }
@@ -285,13 +293,14 @@ class G2Patch(G2Section):
         continue
 
       color = g2cablecolors.white
-      if net.output.rate == g2conncolors.blue_red:
+      rate = net.output.rate
+      if rate == g2conncolors.blue_red:
         color = [g2cablecolors.blue, g2cablecolors.red][uprate]
-      if net.output.rate == g2conncolors.red:
+      elif rate == g2conncolors.red:
         color = g2cablecolors.red
-      elif net.output.rate == g2conncolors.blue:
+      elif rate == g2conncolors.blue:
         color = g2cablecolors.blue
-      elif net.output.rate == g2conncolors.yellow_orange:
+      elif rate == g2conncolors.yellow_orange:
         color = [g2cablecolors.yellow, g2cablecolors.orange][uprate]
 
       for cable in input.cables:
@@ -344,12 +353,14 @@ class G2Patch(G2Section):
       return -1
     return 0
 
-  def add(self, typename, name, label=None):
+  def add(self, typename, name, *args):
     if self.modules.has_key(name):
       raise G2Exception('Module %s already exists.' % name)
-    if label == None:
+    if len(args) == 0:
       label = name
-    self.modules[name] = self.addmodule(typename, label)
+    else:
+      label = ' '.join(args)
+    self.modules[name] = self.add_module(typename, label)
 
   def label(self, param, *names):
     param = self.parse_parameter(param)
@@ -380,25 +391,26 @@ class G2Patch(G2Section):
     return m
 
   def parse_control(self, control, nomorph=False):
-    area, param = control.split('.', 1)
-    if area == 'voice' or area == 'fx':
+    area_or_module, param = control.split('.', 1)
+    if area_or_module == 'voice' or area_or_module == 'fx':
       saved_area, saved_modules = self.current_area, self.modules
       self.area(area)
       control = self.parse_parameter(param)
       area_type = self.current_area.index
       self.current_area, self.modules = saved_area, saved_modules
-    elif not nomorph and area == 'morph':
+    elif not nomorph and area_or_module == 'morph':
       control = self.parse_morph(param)
       area_type = 2
     else:
-      raise G2Exception('Invalid control %s' % control)
+      control = self.parse_parameter(param)
+      area_type = self.current_area.index
     return control, area_type
 
   def knob(self, knob, control):
     knob, row, col = self.parse_knob(knob)
     index = (col * 24) + (row * 8) + knob
     knob = self.pch2.knobs[index]
-    knob.param = self.parse_control(control)[0]
+    knob.param, area_type = self.parse_control(control)
     knob.assigned = 1
     knob.isled = 0
 
@@ -406,7 +418,6 @@ class G2Patch(G2Section):
     cc = int(cc)
     if midicc_reserved(cc):
       raise G2Exception('midicc %d reserved' % cc)
-    param, area_type = self.parse_control(control)
     m = None
     for ctrl in self.pch2.ctrls:
       if ctrl.midicc == cc:
@@ -416,16 +427,16 @@ class G2Patch(G2Section):
       m = Ctrl()
       self.pch2.ctrls.append(m)
     m.midicc = cc
-    m.param, m.type = param, area_type
+    m.param, m.type = self.parse_control(control)
    
   def morph(self, morph, command, *args):
     #control = self.parse_control(control, nomorph=True)[0]
     command = command.lower()
-    if command == 'dial':
+    if command == 'name':
+      pass
+    elif command == 'dial':
       pass
     elif command == 'mode':
-      pass
-    elif command == 'name':
       pass
     elif command == 'add':
       pass
@@ -438,10 +449,15 @@ class G2Patch(G2Section):
     if setting in nonvariation:
       setattr(self.pch2.patch.description, setting, variations[0])
     elif setting in self.pch2.patch.settings.groups:
-      #getattr(self.pch2.patch.settings, setting).varations = variations
-      pass
-    elif setting == 'colors':
-      pass
+      variations = variations[:] + [variations[-1]] * 9
+      variations = variations[:9]
+      getattr(self.pch2.patch.settings, setting).varations = variations
+    elif setting == 'cables':
+      for color in 'red blue yellow orange green purple white'.split():
+        if color[0] in variations[0]:
+          setattr(self.pch2.patch.description, color, 1)
+        else:
+          setattr(self.pch2.patch.description, color, 0)
 
 class G2File(object):
   def __init__(self, filename):
@@ -485,7 +501,7 @@ class G2File(object):
     self.files[filename] = zip(range(1, 1+len(lines)), lines)
     inmodule = False
     for lineno, line in self.files[filename]:
-      line = cleanline(line)
+      line = clean_line(line)
       if not line:
         continue
       fields = line.strip().split()
@@ -500,7 +516,7 @@ class G2File(object):
           self.handle_include(fields[1])
 
   def build_module(self, name, lines):
-    module_types[name] = G2GroupType(self.g2patch, lines)
+    module_types.add(name, G2GroupType(self.g2patch, lines))
 
   def build_file(self, filename):
     filelines = []
@@ -509,7 +525,7 @@ class G2File(object):
     inmodule = 0
     for lineno, line in self.files[filename]:
       debug('%d: %s\n', lineno, line)
-      args = cleanline(line).split()
+      args = clean_line(line).split()
       debug('args=%s\n', args)
       if len(args) < 1:
         continue
@@ -537,7 +553,7 @@ class G2File(object):
 
   def build(self):
     for lineno, line in self.build_file(self.topfile):
-      self.parse_command(cleanline(line), lineno)
+      self.parse_command(clean_line(line), lineno)
 
   def parse_command(self, line, lineno):
     args = [ l.strip().lower() for l in line.split() ]
