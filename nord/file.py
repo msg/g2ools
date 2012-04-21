@@ -111,8 +111,8 @@ for the voice and fx areas of a nord modules g2 patch.
     self.cables = []
     self.netlist = NetList()
 
-  def findmodule(self, index):
-    '''findmodule(index) -> module at index or None'''
+  def find_module(self, index):
+    '''find_module(index) -> module at index or None'''
     for module in self.modules:
       if module.index == index:
         return module
@@ -120,7 +120,7 @@ for the voice and fx areas of a nord modules g2 patch.
 
   modmembers = [ 'name', 'index', 'color', 'horiz', 'vert', 'uprate', 'leds' ]
 
-  def freeindexes(self, nindexes):
+  def free_indexes(self, nindexes):
     possibles = range(1, MAX_MODULES+1)
     for m in self.modules:
       possibles.remove(m.index)
@@ -142,7 +142,7 @@ for the voice and fx areas of a nord modules g2 patch.
     type = self.fromname(shortnm)
     m = Module(type, self)
     m.name = type.shortnm
-    m.index = self.freeindexes(1)[0]
+    m.index = self.free_indexes(1)[0]
     m.color = m.horiz = m.vert = m.uprate = m.leds = 0
     for member in Area.modmembers:
       v = kw.get(member)
@@ -240,7 +240,7 @@ for the voice and fx areas of a nord modules g2 patch.
         other = dest
       else:
         other = source
-      dist = self.connectionlength(connector, other)
+      dist = self.connection_length(connector, other)
       if dist < mindist:
         if minconn:
           connectors.append(minconn)
@@ -263,21 +263,21 @@ for the voice and fx areas of a nord modules g2 patch.
     return minconn
 
   # quick cable length calculation
-  def cablelength(self, cable):
-    '''cablelength(cable) -> length of cable'''
-    return self.connectionlength(cable.source, cable.dest)
+  def cable_length(self, cable):
+    '''cable_length(cable) -> length of cable'''
+    return self.connection_length(cable.source, cable.dest)
 
   # quick connection length calculation (returns square distance)
-  def connectionlength(self, start, end):
-    '''connectionlength(start, end) -> distance from start port to end port'''
+  def connection_length(self, start, end):
+    '''connection_length(start, end) -> distance from start port to end port'''
     # horiz coordinates about 20 times bigger.
     sm, em = start.module, end.module
     dh = (19*em.horiz+end.type.horiz)-(19*sm.horiz+start.type.horiz)
     dv = (em.vert+end.type.vert)-(sm.vert+start.type.vert)
     return (dh**2)+(dv**2)
 
-  def shortencables(self):
-    '''shortencables()
+  def shorten_cables(self):
+    '''shorten_cables()
 
 \tmake all cable as short as possible.
 '''
@@ -296,7 +296,7 @@ for the voice and fx areas of a nord modules g2 patch.
       mincable = None
       for fromconn in fromlist:
         for toconn in tolist:
-          cablelen = g2area.connectionlength(fromconn, toconn)
+          cablelen = g2area.connection_length(fromconn, toconn)
           if cablelen < mincablelen:
             mincablelen = cablelen
             mincable = [fromconn, toconn]

@@ -254,8 +254,8 @@ class CableList(Section):
       bit, dmod    = getbits(bit, 8, data)
       bit, dconn   = getbits(bit, 6, data)
 
-      smodule     = area.findmodule(smod)
-      dmodule     = area.findmodule(dmod)
+      smodule     = area.find_module(smod)
+      dmodule     = area.find_module(dmod)
 
       if invalidcable(smodule, sconn, dir, dmodule, dconn):
         printf('Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)\n',
@@ -414,7 +414,7 @@ class Parameters(Section):
       bit, index = getbits(bit, 8, data)
       bit, nparams = getbits(bit, 7, data)
 
-      m = area.findmodule(index)
+      m = area.find_module(index)
       params = m.params
       for i in range(nvariations):
         bit, variation = getbits(bit, 8, data)
@@ -498,9 +498,9 @@ class MorphParameters(Section):
         bit, morph      = getbits(bit, 4, data)
         bit, mmap.range = getbits(bit, 8, data, 1)
         if area:
-          mmap.param = patch.voice.findmodule(index).params[param]
+          mmap.param = patch.voice.find_module(index).params[param]
         else:
-          mmap.param = patch.fx.findmodule(index).params[param]
+          mmap.param = patch.fx.find_module(index).params[param]
         mmap.variation = variation
         mmap.morph = morphs[morph]
         mmap.morph.maps[variation].append(mmap)
@@ -567,7 +567,7 @@ class KnobAssignments(Section):
           k.slot = 0
 
         if area == FX or area == VOICE:
-          m = [patch.fx, patch.voice][area].findmodule(index)
+          m = [patch.fx, patch.voice][area].find_module(index)
           if m:
             k.param = m.params[param]
           else:
@@ -616,9 +616,9 @@ class CtrlAssignments(Section):
       bit, param = getbits(bit, 7, data)
       m.index = index
       if m.type == FX:
-        m.param = patch.fx.findmodule(index).params[param]
+        m.param = patch.fx.find_module(index).params[param]
       elif m.type == VOICE:
-        m.param = patch.voice.findmodule(index).params[param]
+        m.param = patch.voice.find_module(index).params[param]
       elif m.type == SETTINGS:
         if index < 2:
           m.param = settings.morphs[param]
@@ -689,7 +689,7 @@ class Labels(Section):
       bit, index = getbits(bit, 8, data)
       bit, modlen = getbits(bit, 8, data)
 
-      m = area.findmodule(index)
+      m = area.find_module(index)
       if m.type.id == 121: # SeqNote
         # extra editor parameters 
         # [0, 1, mag, 0, 1, octave]
@@ -811,7 +811,7 @@ class ModuleNames(Section):
         null = 16
       else:
         name = names[1:null]
-      m = area.findmodule(index)
+      m = area.find_module(index)
       m.name = name
       names = names[null+1:]
 

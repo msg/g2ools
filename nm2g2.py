@@ -426,7 +426,7 @@ class NM2G2Converter:
     if not self.options.shorten:
       return
     self.log.info('cable shorten:')
-    g2area.shortencables()
+    g2area.shorten_cables()
 
 
   def domorphs(self):

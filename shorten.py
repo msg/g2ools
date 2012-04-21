@@ -11,11 +11,11 @@ while len(sys.argv):
     prf2 = Prf2File(filename)
     for p in range(4):
       patch = prf2.performance.patches[p]
-      patch.voice.shortencables()
-      patch.fx.shortencables()
+      patch.voice.shorten_cables()
+      patch.fx.shorten_cables()
     prf2.write(filename)
   else:
     pch2 = Pch2File(filename)
-    pch2.patch.voice.shortencables()
-    pch2.patch.fx.shortencables()
+    pch2.patch.voice.shorten_cables()
+    pch2.patch.fx.shorten_cables()
     pch2.write(filename)

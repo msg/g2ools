@@ -86,7 +86,7 @@ class ModuleDumpV3(Section):
         if not len(values):
           continue
       (index, id, horiz, vert) = values
-      module = area.findmodule(index)
+      module = area.find_module(index)
       if not module:
         module = area.add_module(fromid(id).shortnm)
       module.index, module.horiz, module.vert = index, horiz, vert
@@ -140,8 +140,8 @@ class CableDumpV3(Section):
       values = eval_fields(lines[i])
       c = Cable(area)
       c.color, dmod, dconn, ddir, smod, sconn, sdir = values
-      dmodule = area.findmodule(dmod)
-      smodule = area.findmodule(smod)
+      dmodule = area.find_module(dmod)
+      smodule = area.find_module(smod)
       if ddir:
         dest = dmodule.outputs[dconn]
       else:
@@ -176,7 +176,7 @@ class ParameterDumpV3(Section):
       values = eval_fields(lines.pop(0))
       index = values.pop(0)
       typecode = int(values.pop(0))
-      module = area.findmodule(index)
+      module = area.find_module(index)
       if not module:
         continue
       module.index = index
@@ -196,7 +196,7 @@ class CustomDumpV3(Section):
     for line in self.lines[1:]:
       values = eval_fields(line)
       index = values.pop(0)
-      module = area.findmodule(index)
+      module = area.find_module(index)
       if not module:
         raise NM1Error('CustomDump: invalid module index %s' % index)
       modes = values.pop(0)
@@ -219,7 +219,7 @@ class MorphMapDumpV3(Section):
         area = self.patch.voice
       else:
         area = self.patch.fx
-      morphmap.param = area.findmodule(index).params[param]
+      morphmap.param = area.find_module(index).params[param]
       morphmap.param.morph = morphs[morph]
       if not morph in range(NMORPHS):
         raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
@@ -240,9 +240,9 @@ class KnobMapDumpV3(Section):
       sect, index, param, knob = values
       knobs[i].knob = knob
       if sect == 1:
-        knobs[i].param = self.patch.voice.findmodule(index).params[param]
+        knobs[i].param = self.patch.voice.find_module(index).params[param]
       elif sect == 0:
-        knobs[i].param = self.patch.fx.findmodule(index).params[param]
+        knobs[i].param = self.patch.fx.find_module(index).params[param]
       else:
         knobs[i].param = self.patch.morphs[param]
       knobs[i].param.knob = knobs[i]
@@ -253,9 +253,9 @@ class CtrlMapDumpV3(Section):
     for i in range(len(self.lines)):
       sect, index, param, midicc = eval_fields(self.lines[i])
       if sect == 1:
-        ctrls[i].param = self.patch.voice.findmodule(index).params[param]
+        ctrls[i].param = self.patch.voice.find_module(index).params[param]
       elif sect == 0:
-        ctrls[i].param = self.patch.fx.findmodule(index).params[param]
+        ctrls[i].param = self.patch.fx.find_module(index).params[param]
       else:
         ctrls[i].param = self.patch.morphs[param]
       ctrls[i].midicc = midicc
@@ -276,7 +276,7 @@ class NameDumpV3(Section):
         name = vals[1]
       else:
         name = ''
-      module = area.findmodule(int(vals[0]))
+      module = area.find_module(int(vals[0]))
       if module == None:
         printf("[NameDump]: module index %d not found\n", int(vals[0]))
         continue
@@ -400,9 +400,9 @@ class ModulesV2(V2Section):
     area = self.patch.voice
     for i in range(len(self.moduledefs)):
       index, moduledef = self.moduledefs[i]
-      if moduledef.id == MORPH_TYPE: # handle this later
+      if moduledef.type == MORPH_TYPE: # handle this later
         continue
-      module = area.findmodule(index)
+      module = area.find_module(index)
       ims = getv2params(moduledef, 'im') # module to connect to
       ihs = getv2params(moduledef, 'ih') # port (0x40=output) rest index
       ics = getv2params(moduledef, 'ic') # cable color
@@ -410,11 +410,11 @@ class ModulesV2(V2Section):
         dconn, smod = ims[j]
         sconn, color = ihs[j][1], ics[j][1]
         smoduledef = findv2moduledef(self.moduledefs, smod)
-        if not smoduledef or smoduledef[1].id == MORPH_TYPE:
+        if not smoduledef or smoduledef[1].type == MORPH_TYPE:
           continue
 
         dest = module.inputs[dconn]
-        smodule = area.findmodule(smod)
+        smodule = area.find_module(smod)
         if sconn & OUTPUT:
           source = smodule.outputs[sconn & ~OUTPUT]
         else:
@@ -484,7 +484,7 @@ class ControllersV2(V2Section):
       midicc, modindex = modules[i]
       midicc, param = params[i]
       moduledef = findv2moduledef(self.moduledefs, modindex)
-      if moduledef and moduledef[1].id == MORPH_TYPE:
+      if moduledef and moduledef[1].type == MORPH_TYPE:
         continue # add midicc to morph, param is morph group
 
 class MorphsV2(V2Section):
@@ -492,7 +492,7 @@ class MorphsV2(V2Section):
     morphs = self.patch.morphs
     morphmod = None
     for i in range(len(self.moduledefs)):
-      if self.moduledefs[i][1].id == MORPH_TYPE:
+      if self.moduledefs[i][1].type == MORPH_TYPE:
         morphdmod = self.moduledefs[i][1]
     if morphmod:
       for i in range(NMORPHS):
@@ -516,7 +516,7 @@ class MorphsV2(V2Section):
         continue
       morphmap = MorphMap()
       morphmap.range = dial
-      mod = area.findmodule(index)
+      mod = area.find_module(index)
       if param > len(mod.params) - 1:
         param = 0
       morphmap.param = mod.params[param]
@@ -537,14 +537,14 @@ class KnobsV2(V2Section):
       knob, param = params[i]
       moduledef = findv2moduledef(self.moduledefs, index)
       knobs[i].knob = knob
-      if moduledef and moduledef[1].id == MORPH_TYPE:
+      if moduledef and moduledef[1].type == MORPH_TYPE:
         if param > 3: #### HACK
           param &= 3
         knobs[i].param = self.patch.morphs[param]
       else:
-        if moduledef and moduledef[1].id == 106 and param > 23: ### HACK
+        if moduledef and moduledef[1].type == 106 and param > 23: ### HACK
           param -= 13
-        mod = self.patch.voice.findmodule(index)
+        mod = self.patch.voice.find_module(index)
         if param > len(mod.params) - 1: ### HACK
           param = 0
         knobs[i].param = mod.params[param]
@@ -650,10 +650,10 @@ class PchFile(object):
           end = nstart
         else:
           end = None
-      lines = [ f.strip() for f in data[start:end].split('\n') ]
+      lines = [ f.strip() for f in data[start:end].splitlines() ]
       lines = [ line for line in lines if line ]
       if len(lines) > 2:
-        sect = eval('%sV3(self.patch, lines[1:-1])' % tag)
+        sect = eval(tag + 'V3(self.patch, lines[1:-1])')
 
   def readv3(self, data):
     sections = self.findv3sections(data)
@@ -662,7 +662,7 @@ class PchFile(object):
   def findv2defines(self, data):
     data = data.replace('\r','')
     sections = data.split('\n[')
-    sections = [ ('['+section.strip()).split('\n') for section in sections ]
+    sections = [ ('['+section.strip()).splitlines() for section in sections ]
     sections[0][0] = sections[0][0][1:] # fix [[Header] to [Header]
     # create dictionary of sections with
     # each line in each section set to a parameter in a class object
@@ -670,12 +670,13 @@ class PchFile(object):
     def fixparam(v):
       name, value = v
       try:
-        y = int(name) # cause exception if it's not a number
-        name = 'v' + name
+        y = int(name)           # cause exception if it's not a number
+        name = 'v' + name       # if it is a number prepend a 'v' before it
       except:
         pass
+
       try:
-        if name != 'name':
+        if name != 'name':      # handle the value
           value = int(value)
       except:
         pass
