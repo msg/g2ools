@@ -46,6 +46,7 @@ zeros = '\0' * (16<<10) # [0] * (8<<10)
 class G2Error(Exception):
   '''G2Error - exception for throwing an unrecoverable error.'''
   def __init__(self, value):
+    Exception.__init__(self)
     self.value = value
   def __str__(self):
     return repr(self.value)
@@ -56,7 +57,7 @@ def getbitsa(bit, sizes, data):
   for size in sizes:
     bit, value = getbits(bit, size, data)
     values.append(value)
-  return [bit] + values
+  return bit, values
 
 def setbitsa(bit, sizes, data, values):
   '''setbitsa(bit, sizes, data, values) -> bit'''
@@ -68,9 +69,10 @@ class Section(object):
   '''Section abstract class that represents a section of .pch2 file.
   all sections objects have parse() and format() methods.
 '''
+  default = [0] * (4 << 10) # max 64k section size
   def __init__(self, **kw):
     self.__dict__ = kw
-    self.data = array('B', [0] * (64<<10)) # max 64k section size
+    self.data = array('B', Section.default)
 
 class Description(object):
   '''Description class for patch/performance description.'''
@@ -121,8 +123,8 @@ class ModuleList(Section):
       m = Module(modules.fromid(id), area)
       area.modules[i] = m
 
-      bit, m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved = \
-          getbitsa(bit, self.module_bit_sizes, data)
+      bit, values = getbitsa(bit, self.module_bit_sizes, data)
+      m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved = values
       bit, nmodes = getbits(bit, 4, data)
       # NOTE: .leds seems to related to a group of modules. i cannot
       #       see the relationship but I have got a list of modules
@@ -139,8 +141,8 @@ class ModuleList(Section):
       #   all the modes in version 23 BUILD 266
       mt = m.type
       if len(m.modes) < len(mt.modes):
-        for i in range(len(m.modes), len(mt.modes)):
-          m.modes[i].value = mt.modes[i].type.default
+        for mode in range(len(m.modes), len(mt.modes)):
+          m.modes[mode].value = mt.modes[mode].type.default
 
   # make sure leds bit is set for specific modules
   # - some earlier generated .pch2 files where different
@@ -178,7 +180,7 @@ class ModuleList(Section):
       #       without this property.
       self.fixleds(m)
 
-      nmodes = len(area.modules[i].modes)
+      nmodes = len(m.modes)
       bit = setbits(bit, 4, data, nmodes)
       for mode in range(nmodes):
         bit = setbits(bit, 6, data, area.modules[i].modes[mode].value)
@@ -190,8 +192,8 @@ class CurrentNote(Section):
   type = 0x69
   def parse(self, patch, data):
     lastnote = patch.lastnote = Note()
-    values = getbitsa(0, [7, 7, 7], data)
-    bit, lastnote.note, lastnote.attack, lastnote.release = values
+    bit, values = getbitsa(0, [7, 7, 7], data)
+    lastnote.note, lastnote.attack, lastnote.release = values
     bit, nnotes = getbits(bit, 5, data)
     notes = patch.notes = [ Note() for i in range(nnotes +1) ]
     for i in range(len(notes)):
@@ -305,15 +307,13 @@ class Parameter(object):
 
 class Morph(object):
   '''Morph class for morph settings.'''
-  def __init__(self, param):
+  def __init__(self, index):
     self.dials = Parameter(0, 0, 0)
     self.modes = Parameter(0, 0, 1)
-    self.params = []
     self.maps = [[] for variation in range(NVARIATIONS) ]
-    self.index = 1
-    self.param = param
+    self.index = index
     self.ctrl = None
-    self.name = 'morph%d' % (param+1)
+    self.name = 'morph%d' % (index+1)
 
 class Settings(object):
   '''Settings class for patch settings.'''
@@ -333,9 +333,10 @@ class Settings(object):
         name = group[j]
         setattr(self, name, Parameter(i+2, j, name=name))
     self.morphs = [ Morph(morph) for morph in range(NMORPHS) ]
+    self.morphmaps = [ [] for variation in range(NVARIATIONS) ]
 
-class PatchSettings(Section):
-  '''PatchSettings Section subclass'''
+class Parameters(Section):
+  '''Parameters Section subclass'''
   type = 0x4d
   def parse_patch(self, patch, data, bit):
     settings = patch.settings = Settings()
@@ -351,15 +352,13 @@ class PatchSettings(Section):
       bit, variation = getbits(bit, 8, data) # variation number
       for morph in range(NMORPHS):
         bit, dial = getbits(bit, 7, data)
-        if variation >= NVARIATIONS:
-          continue
-        settings.morphs[morph].dials.variations[variation] = dial
+        if variation < NVARIATIONS:
+          settings.morphs[morph].dials.variations[variation] = dial
 
       for morph in range(NMORPHS):
         bit, mode = getbits(bit, 7, data)
-        if variation >= NVARIATIONS:
-          continue
-        settings.morphs[morph].modes.variations[variation] = mode
+        if variation < NVARIATIONS:
+          settings.morphs[morph].modes.variations[variation] = mode
 
     for group in settings.groups:
       bit, section  = getbits(bit, 8, data)
@@ -368,9 +367,8 @@ class PatchSettings(Section):
         bit, variation = getbits(bit, 8, data)
         for entry in range(nentries):
           bit, value = getbits(bit, 7, data)
-          if variation >= NVARIATIONS:
-            continue
-          getattr(settings, group[entry]).variations[variation] = value
+          if variation < NVARIATIONS:
+            getattr(settings, group[entry]).variations[variation] = value
 
   def format_patch(self, patch):
     data     = self.data
@@ -485,6 +483,7 @@ class MorphParameters(Section):
     # variations seem to be 9 bytes with first nibble variation # from 0 ~ 8
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
     morphs = patch.settings.morphs
+    morphmaps = patch.settings.morphmaps
 
     for i in range(nvariations):
       bit, variation = getbits(bit, 4, data)
@@ -502,8 +501,10 @@ class MorphParameters(Section):
           mmap.param = patch.voice.findmodule(index).params[param]
         else:
           mmap.param = patch.fx.findmodule(index).params[param]
+        mmap.variation = variation
         mmap.morph = morphs[morph]
-        morphs[morph].maps[variation].append(mmap)
+        mmap.morph.maps[variation].append(mmap)
+        morphmaps[variation].append(mmap)
 
       bit, reserved = getbits(bit, 4, data) # always 0
 
@@ -637,7 +638,7 @@ class CtrlAssignments(Section):
       if m.type < SETTINGS:
         index, param = m.param.module.index, m.param.index
       else:
-        index, param = m.param.index, m.param.param
+        index, param = 1, m.param.index
       bit = setbits(bit, 8, data, index)
       bit = setbits(bit, 7, data, param)
 
