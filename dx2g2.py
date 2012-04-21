@@ -14,20 +14,20 @@ from nord.convert.dx7 import dxtable
 class DX7Converter: 
   def __init__(self):
     self.pch2 = Pch2File('dx7.pch2')
-    self.dxrouter = self.modulebyname('DXRouter1')
-    self.operators = [self.modulebyname('Operator%d'%i) for i in range(1, 7)]
-    self.lfo = self.modulebyname('LFO')
-    self.lfosync = self.modulebyname('LFO Sync')
-    self.lfodelay = self.modulebyname('LFO Delay')
-    self.lfopitchmod = self.modulebyname('LFO PM')
-    self.lfoselect = self.modulebyname('LFO Select')
-    self.lfoam = self.modulebyname('LFO AM')
-    self.pitcheg = self.modulebyname('PitchEG')
-    self.pmodsens = self.modulebyname('PmodSens')
-    self.pmodadj = self.modulebyname('PmodAdj')
-    self.transpose = self.modulebyname('Transpose')
+    self.dxrouter = self.module_by_name('DXRouter1')
+    self.operators = [self.module_by_name('Operator%d'%i) for i in range(1, 7)]
+    self.lfo = self.module_by_name('LFO')
+    self.lfosync = self.module_by_name('LFO Sync')
+    self.lfodelay = self.module_by_name('LFO Delay')
+    self.lfopitchmod = self.module_by_name('LFO PM')
+    self.lfoselect = self.module_by_name('LFO Select')
+    self.lfoam = self.module_by_name('LFO AM')
+    self.pitcheg = self.module_by_name('PitchEG')
+    self.pmodsens = self.module_by_name('PmodSens')
+    self.pmodadj = self.module_by_name('PmodAdj')
+    self.transpose = self.module_by_name('Transpose')
 
-  def modulebyname(self, name):
+  def module_by_name(self, name):
     for module in self.pch2.patch.voice.modules:
       if module.name == name:
         return module
@@ -131,7 +131,7 @@ def convert(filename, options):
       dxpatch = group[i]
       nm = '%2d. %s' % (i+1, dxpatch.Name)
       logging.info(nm)
-      dxconv.pch2.patch.voice.addmodule('Name', name=nm,
+      dxconv.pch2.patch.voice.add_module('Name', name=nm,
           horiz=0, vert=i, color=dxpatch.Color)
       # set DXRouter stuff
       dxconv.dxrouter.params.Algorithm.variations[i] = dxpatch.Algorithm
@@ -216,7 +216,7 @@ def convert(filename, options):
     #
     def addnamebars(pch2, lines, horiz, vert):
       for line in lines:
-        m = pch2.patch.voice.addmodule('Name', name=line)
+        m = pch2.patch.voice.add_module('Name', name=line)
         m.horiz = horiz
         m.vert = vert
         vert += 1

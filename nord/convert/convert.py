@@ -61,7 +61,7 @@ class Convert(object):
     self.inputs = []
 
     # create main module and setup size requirements
-    g2m = self.g2module = g2area.addmodule(self.maing2module)
+    g2m = self.g2module = g2area.add_module(self.maing2module)
     g2m.name = toascii(nmm.name)
     self.horiz = g2m.horiz = nmm.horiz
     self.height = g2m.type.height
@@ -95,11 +95,11 @@ class Convert(object):
         output = getattr(g2m.outputs, output)
       self.outputs[i] = output
 
-  def addmodule(self, shortnm, **kw):
-    '''addmodule(shortnm, **kw) -> module
+  def add_module(self, shortnm, **kw):
+    '''add_module(shortnm, **kw) -> module
     add module to pch2, area, and conver object, then update convert height.
     '''
-    mod = self.g2area.addmodule(shortnm, **kw)
+    mod = self.g2area.add_module(shortnm, **kw)
     mod.horiz = self.g2module.horiz
     mod.vert = self.height
     self.height += mod.type.height
@@ -207,11 +207,11 @@ def handlekbt(conv, input, kbt100, addalways=False):
     return None
 
   if not g2m.area.keyboard:
-    g2m.area.keyboard = conv.addmodule('Keyboard')
+    g2m.area.keyboard = conv.add_module('Keyboard')
   keyboard = g2m.area.keyboard
 
   setv(conv.kbt, 0)
-  mix21b = conv.addmodule('Mix2-1B', name='Kbt')
+  mix21b = conv.add_module('Mix2-1B', name='Kbt')
   conv.connect(keyboard.outputs.Note, mix21b.inputs.In1)
   conv.connect(mix21b.inputs.In1, mix21b.inputs.In2)
   conv.connect(mix21b.outputs.Out, input)
@@ -245,26 +245,26 @@ def handleoscmasterslv(conv, mst, left, bp, right, lev1, lev2, sub48=False):
     return mst.outputs.Out
 
   if sub48:
-    sub48 = conv.addmodule('LevAdd', name='-48')
+    sub48 = conv.add_module('LevAdd', name='-48')
     setv(sub48.params.Level, 16)
     conv.connect(out, sub48.inputs.In)
     out = sub48.outputs.Out
     
   # Grey to Blue handling
-  levscaler = conv.addmodule('LevScaler', name='GreyIn')
+  levscaler = conv.add_module('LevScaler', name='GreyIn')
   setv(levscaler.params.Kbt, 0)
   setv(levscaler.params.L, 16)
   setv(levscaler.params.BP, 127)
   setv(levscaler.params.R, 112)
-  levscaler2 = conv.addmodule('LevScaler', name='GreyIn')
+  levscaler2 = conv.add_module('LevScaler', name='GreyIn')
   setv(levscaler2.params.Kbt, 0)
   setv(levscaler2.params.L, left)
   setv(levscaler2.params.BP, bp)
   setv(levscaler2.params.R, right)
-  mix21b = conv.addmodule('Mix2-1B')
+  mix21b = conv.add_module('Mix2-1B')
   setv(mix21b.params.Lev1, lev1)
   setv(mix21b.params.Lev2, lev2)
-  greyout = conv.addmodule('LevAmp', name='GreyOut')
+  greyout = conv.add_module('LevAmp', name='GreyOut')
   setv(greyout.params.Gain, 127)
   conv.connect(out, levscaler.inputs.Note)
   conv.connect(levscaler.inputs.Note, levscaler2.inputs.Note)

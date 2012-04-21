@@ -124,7 +124,7 @@ class ConvClkDivFix(Convert):
     for div, nm, out in clks:
       if len(getattr(nmm.outputs, nm).cables) == 0:
         continue
-      clk = self.addmodule('ClkDiv', name=nm)
+      clk = self.add_module('ClkDiv', name=nm)
       clk.modes.DivMode.value = 1
       setv(clk.params.Divider, div)
       self.connect(rst, clk.inputs.Rst)

@@ -37,17 +37,17 @@ def handlepw(conv, pw, haspw, shape, shapemod):
   else:
     pw = 0
   if len(nmm.inputs.PwMod.cables):
-    clip = conv.addmodule('Clip', name='PWLimit')
+    clip = conv.add_module('Clip', name='PWLimit')
     setv(clip.params.Shape, 1) # Sym
-    mix11a = conv.addmodule('Mix1-1A', name='ShapeMod')
+    mix11a = conv.add_module('Mix1-1A', name='ShapeMod')
     setv(mix11a.params.ExpLin, 1) # Lin
     setv(mix11a.params.On, 1)
     mix11a.params.On.labels = ['Mod']
     if haspw and pw != 64:
-      constswt = conv.addmodule('ConstSwT', name='Shape')
+      constswt = conv.add_module('ConstSwT', name='Shape')
       setv(constswt.params.On, 1)
       constswt.params.On.labels = ['Shape']
-    mix21b = conv.addmodule('Mix2-1B', name='ModIn')
+    mix21b = conv.add_module('Mix2-1B', name='ModIn')
     conv.connect(clip.outputs.Out, g2m.inputs.ShapeMod)
     conv.connect(mix11a.outputs.Out, clip.inputs.In)
     if haspw and pw != 64:
@@ -68,7 +68,7 @@ def handlepw(conv, pw, haspw, shape, shapemod):
       conv.params[shape] = constswt.params.Lev
     return mix21b.inputs.In1
   elif haspw and pw != 64:
-    constswt = conv.addmodule('ConstSwT', name='Shape')
+    constswt = conv.add_module('ConstSwT', name='Shape')
     setv(constswt.params.On, 1)
     constswt.params.On.labels = ['Shape']
     setv(constswt.params.Lev, pw)
@@ -99,7 +99,7 @@ def pitchadj(conv, pitchparam, pitchinput, tableentry):
   setv(pitchparam, tableentry[0])
   if tableentry[1] == 0 and tableentry[2] == 0:
     return pitchinput
-  adj1 = conv.addmodule('Mix2-1B', name='PitchAdj%d' % modindex.pitchadj)
+  adj1 = conv.add_module('Mix2-1B', name='PitchAdj%d' % modindex.pitchadj)
   conv.connect(adj1.inputs.Chain, adj1.inputs.In1)
   conv.connect(adj1.inputs.In1, adj1.inputs.In2)
   conv.connect(adj1.outputs.Out, pitchinput)
@@ -126,7 +126,7 @@ def handledualpitchmod(conv, modinput, modinputparam, mod1param, mod2param):
   if len(nmm.inputs.PitchMod1.cables) and len(nmm.inputs.PitchMod2.cables):
     setv(modinputparam, 127)
 
-    mix21b = conv.addmodule('Mix2-1B', name='PitchMod%d' % modindex.pitchmod)
+    mix21b = conv.add_module('Mix2-1B', name='PitchMod%d' % modindex.pitchmod)
     conv.connect(mix21b.outputs.Out, modinput)
 
     if pmod1 == 0 or pmod1 == 127:
@@ -179,7 +179,7 @@ def handlefm(conv, fminput, fmparam, fmtable):
   if fma:
     if fmtable[fma][1] == 0 and fmtable[fma][2] == 0:
       return fminput
-    mix21b = conv.addmodule('Mix2-1B', name='FmMod%d' % modindex.fmmod)
+    mix21b = conv.add_module('Mix2-1B', name='FmMod%d' % modindex.fmmod)
     conv.connect(mix21b.outputs.Out, fminput)
     conv.connect(mix21b.inputs.Chain, mix21b.inputs.In1)
     conv.connect(mix21b.inputs.In1, mix21b.inputs.In2)
@@ -195,7 +195,7 @@ def handleam(conv):
   aminput = None
   output = g2m.outputs.Out
   if len(nmm.inputs.Am.cables):
-    am = conv.addmodule('LevMult', name='AM%d' % modindex.ammod)
+    am = conv.add_module('LevMult', name='AM%d' % modindex.ammod)
     conv.connect(g2m.outputs.Out, am.inputs.In)
     aminput = am.inputs.Mod
     output = am.outputs.Out
@@ -208,7 +208,7 @@ def handleslv(conv):
   nmm, g2m = conv.nmmodule, conv.g2module
   if len(nmm.outputs.Slv.cables):
     # add a masterosc
-    master = conv.addmodule('OscMaster', name='SlvOut%d' % modindex.slvout)
+    master = conv.add_module('OscMaster', name='SlvOut%d' % modindex.slvout)
     setv(g2m.params.Kbt, 0)
     conv.kbt = master.params.Kbt
     conv.connect(master.outputs.Out, g2m.inputs.Pitch)
@@ -257,20 +257,20 @@ def handlemst(conv, fmmod, fmparam):
     
   if coarsefreq != 64:
     # OscC/ZeroCnt
-    tune = conv.addmodule('Mix2-1B', name='Tune')
+    tune = conv.add_module('Mix2-1B', name='Tune')
     setv(tune.params.Inv2, 1)
     setv(tune.params.Lev1, 32)
     setv(tune.params.Lev2, 11)
     conv.connect(tune.inputs.Chain, tune.inputs.In1)
     conv.connect(tune.inputs.In1, tune.inputs.In2)
 
-    greyto = conv.addmodule('OscC', name='Grey To')
+    greyto = conv.add_module('OscC', name='Grey To')
     setv(greyto.params.FreqCoarse, 0)
     setv(greyto.params.FmAmount, 79)
     greyto.modes.Waveform.value = 0 # Sine
     conv.connect(tune.outputs.Out, greyto.inputs.FmMod)
 
-    zerocnt = conv.addmodule('ZeroCnt', name='Pitch')
+    zerocnt = conv.add_module('ZeroCnt', name='Pitch')
     conv.connect(greyto.outputs.Out, zerocnt.inputs.In)
 
     conv.connect(zerocnt.outputs.Out, g2m.inputs.Pitch)
@@ -281,7 +281,7 @@ def handlemst(conv, fmmod, fmparam):
   setv(g2m.params.FreqCoarse, 0)
 
   mstinnum = modindex.mstin
-  mix11a = conv.addmodule('Mix1-1A', name='MstIn%d' % mstinnum)
+  mix11a = conv.add_module('Mix1-1A', name='MstIn%d' % mstinnum)
   setv(mix11a.params.On, 1)
   setv(mix11a.params.Lev, 79)
   conv.connect(mix11a.outputs.Out, fmmod)
@@ -291,7 +291,7 @@ def handlemst(conv, fmmod, fmparam):
   mst = mix11a.inputs.In
   fmmod, fmparam = None, None
   if hasfmmod:
-    fmmodinput = conv.addmodule('Mix1-1A', name='FMA%d' % mstinnum)
+    fmmodinput = conv.add_module('Mix1-1A', name='FMA%d' % mstinnum)
     setv(fmmodinput.params.On, 1)
     conv.connect(fmmodinput.outputs.Out, mix11a.inputs.Chain)
     fmparam = fmmodinput.params.Lev
@@ -320,7 +320,7 @@ def postmst(conv, mstindex):
   prange = getv(mst.params.Range)
   if prange < 2: # sub or lo
     # insert LevAdd with -48
-    levadd = conv.addmodule('LevAdd', name='-48')
+    levadd = conv.add_module('LevAdd', name='-48')
     conv.connect(levadd.outputs.Out, conv.inputs[mstindex])
     setv(levadd.params.BipUni, 0) # Bip
     setv(levadd.params.Level, 16) # -48
@@ -409,7 +409,7 @@ class ConvOscB(Convert):
     if getv(g2mp.Waveform) == 3:
       pwmod = handlepw(self, 64, 0, -1, 7)
       if pwmod:
-        notequant = self.addmodule('NoteQuant', name='BlueRate')
+        notequant = self.add_module('NoteQuant', name='BlueRate')
         self.connect(notequant.outputs.Out, pwmod)
         setv(notequant.params.Range, 127)
         setv(notequant.params.Notes, 0)
@@ -494,7 +494,7 @@ class ConvSpectralOsc(Convert):
     setv(g2mp.ShapeMod, 125)
     setv(g2mp.Shape, 2)
 
-    shape = self.addmodule('ConstSwT', name='Shape')
+    shape = self.add_module('ConstSwT', name='Shape')
     setv(shape.params.BipUni, 1) # Uni
     setv(shape.params.On, 1)
     shape.params.On.labels = ['Shape']
@@ -503,7 +503,7 @@ class ConvSpectralOsc(Convert):
 
     hasshapemod = len(nmm.inputs.ShapeMod.cables) != 0
     if hasshapemod:
-      shapemod = self.addmodule('Mix1-1A', name='ShapeMod')
+      shapemod = self.add_module('Mix1-1A', name='ShapeMod')
       setv(shapemod.params.ExpLin, 1) # Line
       setv(shapemod.params.On, 1)
       shapemod.params.On.labels = ['Amount']
@@ -511,10 +511,10 @@ class ConvSpectralOsc(Convert):
       self.params[7] = shapemod.params.Lev
       self.inputs[3] = shapemod.inputs.In
 
-    levmult = self.addmodule('LevMult')
-    levmult2 = self.addmodule('LevMult')
+    levmult = self.add_module('LevMult')
+    levmult2 = self.add_module('LevMult')
 
-    out = self.addmodule('Mix2-1A', name='Out')
+    out = self.add_module('Mix2-1A', name='Out')
     setv(out.params.ExpLin, 1) # Lin
     setv(out.params.On1, 1)
     out.params.On1.labels = ['High']
@@ -523,7 +523,7 @@ class ConvSpectralOsc(Convert):
     out.params.On2.labels = ['Low']
     setv(out.params.Lev2, 98)
 
-    output = self.addmodule('Mix1-1A', name='Output')
+    output = self.add_module('Mix1-1A', name='Output')
     setv(output.params.ExpLin, 1) # Line
     setv(output.params.On, 1)
     output.params.On.labels = ['Output']
@@ -573,7 +573,7 @@ class ConvFormantOsc(Convert):
     modules = [ None ] * len(modnms)
     for i in range(len(modnms)):
       modnm = modnms[i]
-      mod = self.addmodule(modnm, name=modnm)
+      mod = self.add_module(modnm, name=modnm)
       modules[i] = mod
 
     if timbreinput:
@@ -737,11 +737,11 @@ def sinepostmst(conv, mstindex):
   mstconv = mstin.net.output.module.conv
 
   if mstin.net.output.rate != nm1conncolors.slave:
-    oscc = conv.addmodule('OscC', name='')
+    oscc = conv.add_module('OscC', name='')
     setv(oscc.params.FreqCoarse, 0)
     setv(oscc.params.FmAmount, 79)
     setv(oscc.params.Kbt, 0)
-    pout = conv.addmodule('ZeroCnt', name='')
+    pout = conv.add_module('ZeroCnt', name='')
     conv.connect(oscc.outputs.Out, pout.inputs.In)
     conv.connect(pout.outputs.Out, conv.inputs[mstindex])
     conv.inputs[mstindex] = oscc.inputs.FmMod
@@ -759,7 +759,7 @@ class ConvOscSineBank(Convert):
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
-    levamp = self.addmodule('LevAmp', name='LevAmp')
+    levamp = self.add_module('LevAmp', name='LevAmp')
     setv(levamp.params.Type, 1)
     setv(levamp.params.Gain, 68)
     self.connect(g2m.outputs.Out, levamp.inputs.In)
@@ -777,7 +777,7 @@ class ConvOscSineBank(Convert):
            len(nmm.inputs.Sync.cables) == 0 and \
            len(nmm.inputs.Mst.cables) == 0:
           continue
-      osc = self.addmodule(osctype, name='Osc%d' % i)
+      osc = self.add_module(osctype, name='Osc%d' % i)
       oscs.append(osc)
       setv(osc.params.Kbt, 0)
       setv(osc.params.FreqCoarse, getv(getattr(nmmp, 'Osc%dCoarse'%i)))
@@ -791,7 +791,7 @@ class ConvOscSineBank(Convert):
       setv(osc.params.Active, 1-getv(getattr(nmmp, 'Osc%dMute'%i)))
       self.params[(i-1)+18] = osc.params.Active
       if len(getattr(nmm.inputs, 'Osc%dAm'%i).cables):
-        mod = self.addmodule('LevMult', name='Am%d' % i)
+        mod = self.add_module('LevMult', name='Am%d' % i)
         self.connect(osc.outputs.Out, mod.inputs.In)
         self.connect(mod.outputs.Out, getattr(g2m.inputs, 'In%d'%i))
         self.inputs[2+i] = mod.inputs.Mod
@@ -838,7 +838,7 @@ class ConvOscSlvFM(Convert):
       else:
         offset = 36
       if g2freqcoarse - offset < 0:
-        constswt = self.addmodule('ConstSwT', name='Offset')
+        constswt = self.add_module('ConstSwT', name='Offset')
         setv(constswt.params.On, 1)
         constswt.params.On.labels = ['Offset']
         setv(constswt.params.Lev, g2freqcoarse-offset)
@@ -875,8 +875,8 @@ class ConvPercOsc(Convert):
 
     # add AM if needed
     if len(nmm.inputs.Am.cables):
-      sh = self.addmodule('S&H', name='Amp In')
-      levmult = self.addmodule('LevMult', name='Out')
+      sh = self.add_module('S&H', name='Amp In')
+      levmult = self.add_module('LevMult', name='Out')
       self.connect(g2m.inputs.Trig, sh.inputs.Ctrl)
       self.connect(g2m.outputs.Out, levmult.inputs.In)
       self.connect(sh.outputs.Out, levmult.inputs.Mod)
@@ -885,7 +885,7 @@ class ConvPercOsc(Convert):
       
     # add pitchmod if needed
     if len(nmm.inputs.PitchMod.cables):
-      adj = self.addmodule('Mix2-1B', name='PitchAdj1-%d' % modindex.pitchmod)
+      adj = self.add_module('Mix2-1B', name='PitchAdj1-%d' % modindex.pitchmod)
       self.connect(adj.outputs.Out, g2m.inputs.PitchVar)
       self.connect(adj.inputs.Chain, adj.inputs.In1)
       self.connect(adj.inputs.In1, adj.inputs.In2)

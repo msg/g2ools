@@ -88,7 +88,7 @@ class ModuleDumpV3(Section):
       (index, id, horiz, vert) = values
       module = area.findmodule(index)
       if not module:
-        module = area.addmodule(fromid(id).shortnm)
+        module = area.add_module(fromid(id).shortnm)
       module.index, module.horiz, module.vert = index, horiz, vert
 
 class CurrentNoteDumpV3(Section):
@@ -386,10 +386,10 @@ class ModulesV2(V2Section):
     area = self.patch.voice
     for i in range(len(self.moduledefs)):
       index, moduledef = self.moduledefs[i]
-      if moduledef.id == MORPH_TYPE: # handle this later
+      if moduledef.type == MORPH_TYPE: # handle this later
         continue
 
-      module = area.addmodule(fromid(moduledef.id).shortnm)
+      module = area.add_module(fromid(moduledef.type).shortnm)
       module.index, module.name = index, str(moduledef.name)
       module.horiz, module.vert = moduledef.col, moduledef.row*2
 

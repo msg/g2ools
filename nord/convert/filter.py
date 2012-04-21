@@ -72,7 +72,7 @@ class ConvFilterD(ConvFilter):
 def fltdualpitchmod(nmm, g2m, conv, mod1, mod2):
   p1 = p2 = None
   if len(nmm.inputs.FreqMod1.cables) and len(nmm.inputs.FreqMod2.cables):
-    mix21b = conv.addmodule('Mix2-1B', name='FreqMod')
+    mix21b = conv.add_module('Mix2-1B', name='FreqMod')
     setv(mix21b.params.ExpLin, 1) # lin
     conv.connect(mix21b.outputs.Out, g2m.inputs.PitchVar)
     setv(g2m.params.PitchMod, 127)
@@ -164,100 +164,100 @@ class ConvFilterBank(Convert):
     setv(g2mp.Type, 0) # Lin
     setv(g2mp.Gain, 44)
 
-    hc18 = self.addmodule('FltLP', name='HC 1-8')
+    hc18 = self.add_module('FltLP', name='HC 1-8')
     hc18.modes.SlopeMode.value = 2 # 18
     setv(hc18.params.Kbt, 0)
     setv(hc18.params.Freq, 87)
     self.connect(g2m.outputs.Out, hc18.inputs.In)
 
-    lp1 = self.addmodule('FltLP', name='')
+    lp1 = self.add_module('FltLP', name='')
     lp1.modes.SlopeMode.value = 1 # 12
     setv(lp1.params.Kbt, 0)
     setv(lp1.params.Freq, 55)
     self.connect(hc18.outputs.Out, lp1.inputs.In)
 
-    band13 = self.addmodule('FltLP', name='1-3')
+    band13 = self.add_module('FltLP', name='1-3')
     band13.modes.SlopeMode.value = 2 # 18
     setv(band13.params.Kbt, 0)
     setv(band13.params.Freq, 36)
     self.connect(lp1.outputs.Out, band13.inputs.In)
 
-    band45 = self.addmodule('FltStatic', name='4-5')
+    band45 = self.add_module('FltStatic', name='4-5')
     setv(band45.params.Freq, 51)
     setv(band45.params.Res, 44)
     setv(band45.params.FilterType, 1) # BP
     setv(band45.params.GC, 1)
     self.connect(band13.inputs.In, band45.inputs.In)
 
-    band45out = self.addmodule('LevConv', name='4-5 Out')
+    band45out = self.add_module('LevConv', name='4-5 Out')
     setv(band45out.params.InputType, 0) # Bip
     setv(band45out.params.OutputType, 5) # BipInv
     self.connect(band45.outputs.Out, band45out.inputs.In)
 
-    lc68 = self.addmodule('FltHP', name='LC 6-8')
+    lc68 = self.add_module('FltHP', name='LC 6-8')
     lc68.modes.SlopeMode.value = 1 # 12
     setv(lc68.params.Kbt, 0)
     setv(lc68.params.Freq, 57)
     self.connect(lp1.inputs.In, lc68.inputs.In)
 
-    levconv1 = self.addmodule('LevConv', name='')
+    levconv1 = self.add_module('LevConv', name='')
     setv(levconv1.params.InputType, 0) # Bip
     setv(levconv1.params.OutputType, 5) # BipInv
     self.connect(lc68.outputs.Out, levconv1.inputs.In)
 
-    band6 = self.addmodule('FltStatic', name='6')
+    band6 = self.add_module('FltStatic', name='6')
     setv(band6.params.Freq, 57)
     setv(band6.params.Res, 75)
     setv(band6.params.FilterType, 1) # BP
     setv(band6.params.GC, 0)
     self.connect(levconv1.outputs.Out, band6.inputs.In)
 
-    band7 = self.addmodule('FltStatic', name='7')
+    band7 = self.add_module('FltStatic', name='7')
     setv(band7.params.Freq, 65)
     setv(band7.params.Res, 74)
     setv(band7.params.FilterType, 1) # BP
     setv(band7.params.GC, 1)
     self.connect(band6.inputs.In, band7.inputs.In)
 
-    band8 = self.addmodule('FltStatic', name='8')
+    band8 = self.add_module('FltStatic', name='8')
     setv(band8.params.Freq, 71)
     setv(band8.params.Res, 74)
     setv(band8.params.FilterType, 1) # BP
     setv(band8.params.GC, 1)
     self.connect(band7.inputs.In, band8.inputs.In)
 
-    lc914 = self.addmodule('FltHP', name='LC 9-14')
+    lc914 = self.add_module('FltHP', name='LC 9-14')
     lc914.modes.SlopeMode.value = 3 # 24
     setv(lc914.params.Kbt, 0)
     setv(lc914.params.Freq, 76)
     self.connect(hc18.inputs.In, lc914.inputs.In)
 
-    band910 = self.addmodule('FltStatic', name='9-10')
+    band910 = self.add_module('FltStatic', name='9-10')
     setv(band910.params.Freq, 83)
     setv(band910.params.Res, 29)
     setv(band910.params.FilterType, 1) # BP
     setv(band910.params.GC, 0)
     self.connect(lc914.outputs.Out, band910.inputs.In)
 
-    band1112 = self.addmodule('FltStatic', name='11-12')
+    band1112 = self.add_module('FltStatic', name='11-12')
     setv(band1112.params.Freq, 97)
     setv(band1112.params.Res, 30)
     setv(band1112.params.FilterType, 1) # BP
     setv(band1112.params.GC, 0)
     self.connect(band910.inputs.In, band1112.inputs.In)
 
-    band1314 = self.addmodule('FltHP', name='13-14')
+    band1314 = self.add_module('FltHP', name='13-14')
     band1314.modes.SlopeMode.value = 3 # 24
     setv(band1314.params.Kbt, 0)
     setv(band1314.params.Freq, 99)
     self.connect(band910.inputs.In, band1314.inputs.In)
 
-    band1314out = self.addmodule('LevConv', name='13-14 Out')
+    band1314out = self.add_module('LevConv', name='13-14 Out')
     setv(band1314out.params.InputType, 0) # Bip
     setv(band1314out.params.OutputType, 5) # BipInv
     self.connect(band1314.outputs.Out, band1314out.inputs.In)
 
-    mixfader = self.addmodule('MixFader', name='FilterBank')
+    mixfader = self.add_module('MixFader', name='FilterBank')
     mixfaderp = mixfader.params
     onnms = ['1-3', '4-5', '6', '7', '8', '9-10', '11-12', '13-14']
     setv(mixfaderp.ExpLin, 2) # dB
@@ -284,7 +284,7 @@ class ConvFilterBank(Convert):
     self.connect(band1112.outputs.Out, mixfader.inputs.In7)
     self.connect(band1314out.outputs.Out, mixfader.inputs.In8)
 
-    mix11a = self.addmodule('Mix1-1A', name='Out/Boost')
+    mix11a = self.add_module('Mix1-1A', name='Out/Boost')
     setv(mix11a.params.On, 1)
     mix11a.params.On.labels = ['Out']
     setv(mix11a.params.Lev, 110)

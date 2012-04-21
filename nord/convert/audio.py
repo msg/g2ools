@@ -56,7 +56,7 @@ class ConvOverdrive(Convert):
     setv(g2mp.ClipLevMod, 91)
 
     if len(nmm.inputs.OverdriveMod.cables) != 0:
-      modin = self.addmodule('Mix1-1A', name='Mod In')
+      modin = self.add_module('Mix1-1A', name='Mod In')
       setv(modin.params.On, 1)
       modin.params.On.labels = ['Mod']
       setv(modin.params.ExpLin, 1) # Lin
@@ -71,7 +71,7 @@ class ConvOverdrive(Convert):
 
     if not modout or getv(nmmp.Overdrive) != 0 or \
        nmmp.Overdrive.knob or nmmp.Overdrive.morph or nmmp.Overdrive.ctrl:
-      overdrive = self.addmodule('ConstSwT', name='Overdrive')
+      overdrive = self.add_module('ConstSwT', name='Overdrive')
       setv(overdrive.params.On, 1)
       overdrive.params.On.labels = ['Drive']
       setv(overdrive.params.BipUni, 1) # Uni
@@ -85,15 +85,15 @@ class ConvOverdrive(Convert):
     else:
       overdrivelev = None
     
-    shpstatic = self.addmodule('ShpStatic', name='')
+    shpstatic = self.add_module('ShpStatic', name='')
     setv(shpstatic.params.Mode, 0) # Inv x3
     self.connect(modout, shpstatic.inputs.In)
     self.connect(shpstatic.outputs.Out, g2m.inputs.Mod)
 
-    levmult = self.addmodule('LevMult', name='')
+    levmult = self.add_module('LevMult', name='')
     self.connect(shpstatic.outputs.Out, levmult.inputs.Mod)
 
-    mix21b = self.addmodule('Mix2-1B', name='')
+    mix21b = self.add_module('Mix2-1B', name='')
     setv(mix21b.params.ExpLin, 0) # Exp
     setv(mix21b.params.Inv1, 1)
     setv(mix21b.params.Lev1, 53)
@@ -102,13 +102,13 @@ class ConvOverdrive(Convert):
     self.connect(levmult.outputs.Out, mix21b.inputs.In2)
     self.connect(mix21b.outputs.Out, levmult.inputs.In)
 
-    mix11a = self.addmodule('Mix1-1A', name='')
+    mix11a = self.add_module('Mix1-1A', name='')
     setv(mix11a.params.ExpLin, 0) # Exp
     setv(mix11a.params.On, 1)
     setv(mix11a.params.Lev, 96)
     self.connect(mix21b.outputs.Out, mix11a.inputs.In)
 
-    xfade = self.addmodule('X-Fade', name='')
+    xfade = self.add_module('X-Fade', name='')
     setv(xfade.params.LogLin, 0) # Log
     setv(xfade.params.Mix, 0)
     setv(xfade.params.MixMod, 127)
@@ -116,11 +116,11 @@ class ConvOverdrive(Convert):
     self.connect(xfade.inputs.In1, g2m.inputs.In)
     self.connect(mix11a.outputs.Out, xfade.inputs.In2)
 
-    shpstatic2 = self.addmodule('ShpStatic', name='')
+    shpstatic2 = self.add_module('ShpStatic', name='')
     setv(shpstatic2.params.Mode, 1) # Inv x2
     self.connect(xfade.outputs.Out, shpstatic2.inputs.In)
 
-    mix21b2 = self.addmodule('Mix2-1B', name='')
+    mix21b2 = self.add_module('Mix2-1B', name='')
     setv(mix21b2.params.ExpLin, 0) # Exp
     setv(mix21b2.params.Lev1, 112)
     setv(mix21b2.params.Lev2, 106)
@@ -128,7 +128,7 @@ class ConvOverdrive(Convert):
     self.connect(mix21b2.outputs.Out, mix21b.inputs.In1)
     self.connect(mix21b2.outputs.Out, mix21b2.inputs.In2)
 
-    out = self.addmodule('X-Fade', name='Out')
+    out = self.add_module('X-Fade', name='Out')
     setv(out.params.LogLin, 1) # Lin
     setv(out.params.Mix, 0)
     setv(out.params.MixMod, 127)
@@ -240,7 +240,7 @@ class ConvPhaser(Convert):
     
     if len(nmm.inputs.FreqMod.cables):
       # add mixer
-      mix = self.addmodule('Mix2-1B', name='FreqMod')
+      mix = self.add_module('Mix2-1B', name='FreqMod')
       self.connect(mix.outputs.Out, g2m.inputs.PitchVar)
       modinp = mix.inputs.In1
       self.inputs[1] = mix.inputs.In2
@@ -250,7 +250,7 @@ class ConvPhaser(Convert):
     else:
       modinp = g2m.inputs.PitchVar
       depthparam = g2mp.PitchMod
-    lfo = self.addmodule('LfoC')
+    lfo = self.add_module('LfoC')
     setv(lfo.params.Rate, getv(nmmp.Rate))
     self.params[0] = lfo.params.Rate
     setv(lfo.params.Active, getv(nmmp.Lfo))
@@ -316,16 +316,16 @@ class ConvExpander(Convert):
     g2mp.Sel.labels = ['In', 'SideAct']
     setv(g2mp.Sel, getv(nmmp.Act))
     self.params[6] = g2mp.Sel
-    envfollow = self.addmodule('EnvFollow')
+    envfollow = self.add_module('EnvFollow')
     setv(envfollow.params.Attack, getv(nmmp.Attack))
     setv(envfollow.params.Release, getv(nmmp.Release))
     self.params[:2] = envfollow.params.Attack, envfollow.params.Release
-    ratio = self.addmodule('ShpExp', name='Ratio/Thresh')
+    ratio = self.add_module('ShpExp', name='Ratio/Thresh')
     setv(ratio.params.Curve, 2) # x4
     setv(ratio.params.Amount, getv(nmmp.Ratio))
     self.params[3] = ratio.params.Amount
-    left = self.addmodule('LevMult', name='Left')
-    right = self.addmodule('LevMult', name='Right')
+    left = self.add_module('LevMult', name='Left')
+    right = self.add_module('LevMult', name='Right')
     # MISSING Gate, Hold, Mon, and Bypass  parameters
 
     self.connect(g2m.inputs.In1, left.inputs.In)

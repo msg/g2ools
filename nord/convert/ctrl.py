@@ -63,7 +63,7 @@ class ConvPortamentoB(ConvPortamentoA):
     ConvPortamentoA.domodule(self)
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
-    invert = self.addmodule('Invert')
+    invert = self.add_module('Invert')
     self.connect(invert.outputs.Out1, g2m.inputs.On)
     self.inputs[1] = invert.inputs.In1
 
@@ -140,7 +140,7 @@ class ConvNoteVelScal(Convert):
       setv(g2mp.Kbt, 0) 
       setv(g2mp.L, notescale[l][0])
       setv(g2mp.R, notescale[r][0])
-      levmult1 = self.addmodule('LevMult', name='24db')
+      levmult1 = self.add_module('LevMult', name='24db')
       self.connect(g2m.outputs.Level, g2m.inputs.In)
       self.connect(g2m.outputs.Level, levmult1.inputs.Mod)
       self.connect(g2m.outputs.Out, levmult1.inputs.In)
@@ -151,14 +151,14 @@ class ConvNoteVelScal(Convert):
     else:
       out = g2m.outputs.Level
 
-    mix21b = self.addmodule('Mix2-1B', name='Vel')
+    mix21b = self.add_module('Mix2-1B', name='Vel')
     setv(mix21b.params.Inv2, 1)
     setv(mix21b.params.Lev1, 88)
     setv(mix21b.params.Lev2, 16)
     self.connect(mix21b.inputs.Chain, mix21b.inputs.In1)
     self.connect(mix21b.inputs.In1, mix21b.inputs.In2)
-    levmult2 = self.addmodule('LevMult', name='')
-    xfade = self.addmodule('X-Fade', name='VelSens')
+    levmult2 = self.add_module('LevMult', name='')
+    xfade = self.add_module('X-Fade', name='VelSens')
     setv(xfade.params.LogLin, 1) # Lin
     self.connect(mix21b.outputs.Out, levmult2.inputs.Mod)
     self.connect(out, levmult2.inputs.In)

@@ -633,7 +633,7 @@ class NM2G2Converter:
 
     def addnamebars(lines, horiz, vert):
       for line in lines:
-        m = area.addmodule('Name', name=toascii(line))
+        m = area.add_module('Name', name=toascii(line))
         m.horiz = horiz
         m.vert = vert
         vert += 1

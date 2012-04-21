@@ -31,12 +31,13 @@ from nord.g2 import modules
 from nord.g2.crc import crc
 from nord.g2.bits import setbits, getbits
 
-sectiondebug = 0 # outputs section debug 
-titlesection = 0 # replace end of section with section title
+section_debug = 0 # outputs section debug 
+title_section = 0 # replace end of section with section title
 
 NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
 NKNOBS = 120    # 120 knob settings
+NMORPHMAPS = 25 # max morphmaps per variation
 
 FX, VOICE, SETTINGS = 0, 1, 2
 
@@ -336,7 +337,7 @@ class Settings(object):
 class PatchSettings(Section):
   '''PatchSettings Section subclass'''
   type = 0x4d
-  def parse(self, patch, data):
+  def parse_patch(self, patch, data, bit):
     settings = patch.settings = Settings()
 
     bit, self.area   = getbits(0, 2, data)
@@ -371,7 +372,7 @@ class PatchSettings(Section):
             continue
           getattr(settings, group[entry]).variations[variation] = value
 
-  def format(self, patch):
+  def format_patch(self, patch):
     data     = self.data
     settings = patch.settings
 
@@ -405,11 +406,7 @@ class PatchSettings(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-class ModuleParameters(Section):
-  '''ModuleParameters Section subclass'''
-  type = 0x4d
-  def parse(self, patch, data):
-    bit, self.area   = getbits(0, 2, data)
+  def parse_module(self, patch, data, bit):
     bit, nmodules    = getbits(bit, 8, data)
     bit, nvariations = getbits(bit, 8, data) # if any modules=9, otherwise=0
 
@@ -417,20 +414,18 @@ class ModuleParameters(Section):
 
     for i in range(nmodules):
       bit, index = getbits(bit, 8, data)
-      m = area.findmodule(index)
-
       bit, nparams = getbits(bit, 7, data)
 
+      m = area.findmodule(index)
       params = m.params
       for i in range(nvariations):
         bit, variation = getbits(bit, 8, data)
         for param in range(nparams):
-          if param < len(m.params):
-            bit, params[param].variations[variation] = getbits(bit, 7, data)
-          else:
-            bit, junk = getbits(bit, 7, data)
+          bit, value = getbits(bit, 7, data)
+          if param < len(params) and variation < NVARIATIONS:
+            params[param].variations[variation] = value
             
-  def format(self, patch):
+  def format_module(self, patch):
     data = self.data
 
     area = [patch.fx, patch.voice][self.area]
@@ -464,6 +459,19 @@ class ModuleParameters(Section):
           bit = setbits(bit, 7, data, params[param].variations[variation])
 
     return data[:(bit+7)>>3].tostring()
+
+  def parse(self, patch, data):
+    bit, self.area = getbits(0, 2, data)
+    if self.area < 2:
+      self.parse_module(patch, data, bit)
+    else:
+      self.parse_patch(patch, data, bit)
+
+  def format(self, patch):
+    if self.area < 2:
+      return self.format_module(patch)
+    else:
+      return self.format_patch(patch)
 
 class MorphParameters(Section):
   '''MorphParameters Section subclass'''
@@ -606,7 +614,6 @@ class CtrlAssignments(Section):
       bit, index = getbits(bit, 8, data)
       bit, param = getbits(bit, 7, data)
       m.index = index
-      m.param_index = param
       if m.type == FX:
         m.param = patch.fx.findmodule(index).params[param]
       elif m.type == VOICE:
@@ -636,15 +643,15 @@ class CtrlAssignments(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-class MorphLabels(Section):
-  '''MorphLabels Section subclass'''
+class Labels(Section):
+  '''Labels Section subclass'''
   type = 0x5b
-  def parse(self, patch, data):
-    bit, self.area = getbits(0, 2, data)
+  def parse_morph(self, patch, data, bit):
+    bit, nentries = getbits(bit, 8, data)
 
-    bit, nentries, entry, length = getbitsa(bit, [8, 8, 8], data) # 1, 1, 0x50
+    bit, (entry, length) = getbitsa(bit, [8, 8], data) # 1, 1, 0x50
     for i in range(NMORPHS):
-      bit, morph, morphlen, entry = getbitsa(bit, [8, 8, 8], data)
+      bit, (morph, morphlen, entry) = getbitsa(bit, [8, 8, 8], data)
       morphlen -= 1
       s = ''
       for l in range(morphlen):
@@ -653,7 +660,7 @@ class MorphLabels(Section):
           s += chr(c&0xff)
       patch.settings.morphs[i].label = s
 
-  def format(self, patch):
+  def format_morph(self, patch):
     data = self.data
 
     bit = setbits(  0, 2, data, self.area)
@@ -671,31 +678,17 @@ class MorphLabels(Section):
 
     return data[:(bit+7)>>3].tostring()
 
-class ParameterLabels(Section):
-  '''ParameterLabels Section subclass'''
-  type = 0x5b
-  def parse(self, patch, data):
-
-    bit, self.area = getbits(0, 2, data)
+  def parse_parameter(self, patch, data, bit):
     bit, nmodules = getbits(bit, 8, data)
-
-    if sectiondebug:
-      b = bit
-      s = chr(nmodules)
-      while b/8 < len(data):
-        b, c = getbits(b, 8, data)
-        s += chr(c)
-      printf('paramlabels:\n')
-      printf('%s\n', hexdump(s))
 
     area = [patch.fx, patch.voice][self.area]
 
     for mod in range(nmodules):
 
       bit, index = getbits(bit, 8, data)
-      m = area.findmodule(index)
+      bit, modlen = getbits(bit, 8, data)
 
-      bit, modlen   = getbits(bit, 8, data)
+      m = area.findmodule(index)
       if m.type.id == 121: # SeqNote
         # extra editor parameters 
         # [0, 1, mag, 0, 1, octave]
@@ -707,7 +700,7 @@ class ParameterLabels(Section):
           m.editmodes.append(c)
         continue
       while modlen > 0:
-        bit, stri, paramlen, param = getbitsa(bit, [8, 8, 8], data) 
+        bit, (stri, paramlen, param) = getbitsa(bit, [8, 8, 8], data) 
         modlen -= 3
 
         p = m.params[param]
@@ -727,11 +720,11 @@ class ParameterLabels(Section):
             p.labels.append(s)
         else:
           p.labels.append('')
-        if sectiondebug:
+        if section_debug:
           printf('%d %s %d %d %s\n', index, m.type.shortnm,
               paramlen, param, p.labels)
 
-  def format(self, patch):
+  def format_parameter(self, patch):
     data = self.data
 
     area = [patch.fx, patch.voice][self.area]
@@ -764,7 +757,7 @@ class ParameterLabels(Section):
           param = m.params[i]
           if not hasattr(param, 'labels'):
             continue
-          if sectiondebug:
+          if section_debug:
             printf('%d %s %d %d %s\n', m.index, m.type.shortnm,
                 7*len(param.labels), i, param.labels)
           ps = ''
@@ -776,7 +769,7 @@ class ParameterLabels(Section):
 
       t += chr(m.index) + chr(len(s)) + s
 
-    if sectiondebug:
+    if section_debug:
       printf('paramlabels:\n')
       printf('%s\n', hexdump(t))
 
@@ -784,6 +777,19 @@ class ParameterLabels(Section):
       bit = setbits(bit, 8, data, ord(c))
 
     return data[:(bit+7)>>3].tostring()
+
+  def parse(self, patch, data):
+    bit, self.area = getbits(0, 2, data)
+    if self.area < 2:
+      self.parse_parameter(patch, data, bit)
+    else:
+      self.parse_morph(patch, data, bit)
+
+  def format(self, patch):
+    if self.area < 2:
+      return self.format_parameter(patch)
+    else:
+      return self.format_morph(patch)
 
 class ModuleNames(Section):
   '''ModuleNames Section subclass'''
@@ -841,49 +847,68 @@ class Pch2File(object):
    just by handling the performance sections (and perhaps others)
    and parsing all 4 patches within the .prf2 file.
 '''
-  patchsections = [
+  section_map = {
+      PatchDescription.type: PatchDescription,
+      ModuleList.type:       ModuleList,
+      CurrentNote.type:      CurrentNote,
+      CableList.type:        CableList,
+      Parameters.type:       Parameters,
+      MorphParameters.type:  MorphParameters,
+      KnobAssignments.type:  KnobAssignments,
+      CtrlAssignments.type:  CtrlAssignments,
+      Labels.type:           Labels,
+      ModuleNames.type:      ModuleNames,
+      TextPad.type:          TextPad,
+  }
+  patch_sections = [
     PatchDescription(),
-    ModuleList(area=1), ModuleList(area=0),
+    ModuleList(area=1),
+    ModuleList(area=0),
     CurrentNote(),
-    CableList(area=1), CableList(area=0),
-    PatchSettings(area=2),
-    ModuleParameters(area=1), ModuleParameters(area=0),
-    MorphParameters(),
+    CableList(area=1),
+    CableList(area=0),
+    Parameters(area=2),
+    Parameters(area=1),
+    Parameters(area=0),
+    MorphParameters(area=2),
     KnobAssignments(),
     CtrlAssignments(),
-    MorphLabels(area=2),
-    ParameterLabels(area=1), ParameterLabels(area=0),
-    ModuleNames(area=1), ModuleNames(area=0),
+    Labels(area=2),
+    Labels(area=1),
+    Labels(area=0),
+    ModuleNames(area=1),
+    ModuleNames(area=0),
     TextPad(),
   ]
-  standardtxthdr = '''Version=Nord Modular G2 File Format 1\r
+  standard_text_header = '''Version=Nord Modular G2 File Format 1\r
 Type=%s\r
 Version=%d\r
 Info=BUILD %d\r
 \0'''
-  standardbinhdr = 23
-  standardbuild = 266
+  standard_binary_header = 23
+  standard_build = 266
   def __init__(self, filename=None):
     self.type = 'Patch'
-    self.binrev = 0
+    self.binary_revision = 0
     self.patch = Patch(fromname)
     if filename:
       self.read(filename)
 
-  def parsepatch(self, patch, data, off):
-    for section in Pch2File.patchsections:
-      sectiontype, l = struct.unpack('>BH', data[off:off+3])
+  def parse_patch(self, patch, data, off):
+    while off < len(data):
+      type, l = struct.unpack('>BH', data[off:off+3])
       off += 3
-      if sectiondebug:
+      section = Pch2File.section_map[type]()
+      if section_debug:
         nm = section.__class__.__name__
-        printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', sectiontype, nm, off, l)
+        printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', type, nm, off, l)
         printf('%s\n', binhexdump(data[off:off+l]))
       section.parse(patch, data[off:off+l])
       off += l
     return off
 
   def parse(self, data, off):
-    return self.parsepatch(self.patch, data, off)
+    return self.parse_patch(self.patch, data, off)
 
   # read - this is where the rubber meets the road.  it start here....
   def read(self, filename):
@@ -895,47 +920,47 @@ Info=BUILD %d\r
     self.txthdr = data[:null]
     off = null+1
     self.binhdr = struct.unpack('BB', data[off:off+2])
-    if self.binhdr[0] != self.standardbinhdr:
+    if self.binhdr[0] != self.standard_binary_header:
       printf('Warning: %s version %d\n', filename, self.binhdr[0])
       printf('         version %d supported. it may fail to load.\n',
-          self.standardbinhdr)
+          self.standard_binary_header)
     off += 2
-    off = self.parse(data, off)
+    off = self.parse(data[:-2], off)
 
     ecrc = struct.unpack('>H', data[-2:])[0]
     acrc = crc(data[null+1:-2])
     if ecrc != acrc:
       printf('Bad CRC\n')
 
-  def formatpatch(self, patch):
+  def format_patch(self, patch):
     s = ''
-    for section in Pch2File.patchsections:
+    for section in Pch2File.patch_sections:
       section.data = array('B', zeros) # max 64k section size
       f = section.format(patch)
 
-      if sectiondebug:
+      if section_debug:
         nm = section.__class__.__name__
         printf('0x%02x %-25s len:0x%04x total: 0x%04x\n',
             section.type, nm, len(f), self.off+len(s))
         tbl = string.maketrans(string.ascii_lowercase, ' '*26)
         nm = nm.translate(tbl).replace(' ', '')
         printf('%s\n', nm)
-        if titlesection and len(nm) < len(f):
+        if title_section and len(nm) < len(f):
           f = nm+f[len(nm):]
 
       s += struct.pack('>BH', section.type, len(f)) + f
     return s
 
   def format(self):
-    return self.formatpatch(self.patch)
+    return self.format_patch(self.patch)
 
   # write - this looks a lot easier then read ehhhh???
   def write(self, filename=None):
     out = open(filename, 'wb')
-    hdr = Pch2File.standardtxthdr % (self.type,
-        self.standardbinhdr, self.standardbuild)
+    hdr = Pch2File.standard_text_header % (self.type,
+        self.standard_binary_header, self.standard_build)
     self.off = len(hdr)
-    s = struct.pack('BB', Pch2File.standardbinhdr, self.binrev)
+    s = struct.pack('BB', self.standard_binary_header, self.binary_revision)
     self.off += len(s)
     s += self.format()
     out.write(hdr + s)
@@ -952,7 +977,7 @@ class PerformanceDescription(Section):
     ['unk1', 8], ['active', 8], ['keyboard', 8], ['keyhold', 8],
     ['unk2', 16], ['keylow', 8], ['keyhigh', 8], ['unk3', 8], ['unk4', 8],
   ]
-  def parse(self, perf, data):
+  def parse_performance(self, perf, data):
     description = perf.description = Description()
 
     bit = 0
@@ -1007,17 +1032,17 @@ class Prf2File(Pch2File):
   '''Prf2File(filename) -> load a nord modular g2 performance.'''
   def __init__(self, filename=None):
     self.type = 'Performance'
-    self.binrev = 1
+    self.binary_revision = 1
     self.performance = Performance(fromname)
-    self.perfsection = PerformanceDescription()
-    self.globalsection = GlobalKnobAssignments()
+    self.performance_section = PerformanceDescription()
+    self.global_section = GlobalKnobAssignments()
     if filename:
       self.read(filename)
 
-  def parsesection(self, section, data, off):
+  def parse_section(self, section, data, off):
     sid, l = struct.unpack('>BH', data[off:off+3])
     off += 3
-    if sectiondebug:
+    if section_debug:
       nm = section.__class__.__name__
       printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', sid, nm, off, l)
 
@@ -1025,19 +1050,19 @@ class Prf2File(Pch2File):
     return off + l
 
   def parse(self, data, off):
-    off = self.parsesection(self.perfsection, data, off)
+    off = self.parse_section(self.performance_section, data, off)
     for i in range(4):
-      off = self.parsepatch(self.performance.patches[i], data, off)
-    return self.parsesection(self.globalsection, data, off)
+      off = self.parse_patch(self.performance.patches[i], data, off)
+    return self.parse_section(self.global_section, data, off)
 
-  def formatsection(self, section, total=0):
+  def format_section(self, section, total=0):
     section.data = array('B', [0] * (64<<10)) # max 64k section size
     f = section.format(self.performance)
-    if sectiondebug:
+    if section_debug:
       nm = section.__class__.__name__
       printf('0x%02x %-25s             len:0x%04x total: 0x%04x\n',
           section.type, nm, len(f), total)
-      if titlesection:
+      if title_section:
         tbl = string.maketrans(string.ascii_lowercase, ' '*26)
         nm = nm.translate(tbl).replace(' ', '')
         l = len(nm)
@@ -1046,10 +1071,10 @@ class Prf2File(Pch2File):
     return struct.pack('>BH', section.type, len(f)) + f
 
   def format(self):
-    s = self.formatsection(self.perfsection)
+    s = self.format_section(self.performance_section)
     for i in range(4):
-      s += self.formatpatch(self.performance.patches[i])
-    return s + self.formatsection(self.globalsection, len(s))
+      s += self.format_patch(self.performance.patches[i])
+    return s + self.format_section(self.global_section, len(s))
 
 # this is what comes out the other end:
 #   pch2 = Pch2File('test.pch2')

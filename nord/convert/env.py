@@ -28,8 +28,8 @@ from nord.convert.convert import updatevals
 def handleretrig(conv):
   gatein, retrig = conv.g2module.inputs.Gate, None
   if len(conv.nmmodule.inputs.Retrig.cables):
-    flipflop = conv.addmodule('FlipFlop')
-    gate = conv.addmodule('Gate')
+    flipflop = conv.add_module('FlipFlop')
+    gate = conv.add_module('Gate')
     gate.modes.GateMode2.value = 1
     conv.connect(flipflop.outputs.Q, flipflop.inputs.Rst)
     conv.connect(flipflop.outputs.NotQ, gate.inputs.In1_1)
@@ -106,19 +106,19 @@ class ConvMod_Env(Convert):
     # handle special parameters
     updatevals(g2mp, ['Attack', 'Decay', 'Release'], nm1adsrtime, g2adsrtime)
     if len(nmm.inputs.AttackMod.cables):
-      levconv = self.addmodule('LevConv', name='Attack')
+      levconv = self.add_module('LevConv', name='Attack')
       setv(levconv.params.InputType, 0)  # Bip
       setv(levconv.params.OutputType, 5) # BipInv
       self.connect(levconv.outputs.Out, g2m.inputs.AttackMod)
       self.inputs[2] = levconv.inputs.In
     if len(nmm.inputs.DecayMod.cables):
-      levconv = self.addmodule('LevConv', name='Decay')
+      levconv = self.add_module('LevConv', name='Decay')
       setv(levconv.params.InputType, 0)  # Bip
       setv(levconv.params.OutputType, 5) # BipInv
       self.connect(levconv.outputs.Out, g2m.inputs.DecayMod)
       self.inputs[3] = levconv.inputs.In
     if len(nmm.inputs.ReleaseMod.cables):
-      levconv = self.addmodule('LevConv', name='Release')
+      levconv = self.add_module('LevConv', name='Release')
       setv(levconv.params.InputType, 0)  # Bip
       setv(levconv.params.OutputType, 5) # BipInv
       self.connect(levconv.outputs.Out, g2m.inputs.ReleaseMod)
@@ -140,13 +140,13 @@ class ConvAHD_Env(Convert):
     # handle special parameters
     updatevals(g2mp, ['Attack', 'Hold', 'Decay'], nm1adsrtime, g2adsrtime)
     if len(nmm.inputs.AttackMod.cables):
-      levconv = self.addmodule('LevConv', name='Attack')
+      levconv = self.add_module('LevConv', name='Attack')
       setv(levconv.params.InputType, 0)  # Bip
       setv(levconv.params.OutputType, 5) # BipInv
       self.connect(levconv.outputs.Out, g2m.inputs.AttackMod)
       self.inputs[1] = levconv.inputs.In
     if len(nmm.inputs.DecayMod.cables):
-      levconv = self.addmodule('LevConv', name='Decay')
+      levconv = self.add_module('LevConv', name='Decay')
       setv(levconv.params.InputType, 0)  # Bip
       setv(levconv.params.OutputType, 5) # BipInv
       self.connect(levconv.outputs.Out, g2m.inputs.DecayMod)
@@ -182,7 +182,7 @@ class ConvMulti_Env(Convert):
     # if L4 is sustain, deal with it.
     sustain = getv(nmmp.Sustain)
     if sustain == 4:
-      adsr = self.addmodule('EnvADSR')
+      adsr = self.add_module('EnvADSR')
       setv(adsr.params.Shape, [3, 2, 1][getv(nmmp.Curve)])
       setv(adsr.params.KB, getv(g2mp.KB))
       setv(adsr.params.Attack, 0)

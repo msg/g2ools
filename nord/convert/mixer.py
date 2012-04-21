@@ -141,7 +141,7 @@ class ConvGainControl(Convert):
 
     shift = getv(nmmp.Shift)
     if shift:
-      conv = self.addmodule('LevConv')
+      conv = self.add_module('LevConv')
       self.connect(conv.outputs.Out, g2m.inputs.Mod)
       setv(conv.params.OutputType, 0) # Pos
       self.params[0] = conv.params.OutputType
@@ -192,10 +192,10 @@ class ConvLevMult(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    shpexp = self.addmodule('ShpExp')
+    shpexp = self.add_module('ShpExp')
     setv(shpexp.params.Curve, 2) # x4
     setv(shpexp.params.Amount, 127)
-    constswt = self.addmodule('ConstSwT')
+    constswt = self.add_module('ConstSwT')
     setv(constswt.params.On, 1)
     setv(constswt.params.Lev, getv(nmmp.Gain))
     setv(constswt.params.BipUni, getv(nmmp.Unipolar))
@@ -249,7 +249,7 @@ class Conv4_1Switch(Convert):
         if level == 0 or level == 127:
           continue
         if len(nmm.inputs[i-1].cables):
-          mix11a = self.addmodule('Mix1-1A')
+          mix11a = self.add_module('Mix1-1A')
           self.connect(mix11a.outputs.Out, getattr(g2m.inputs, 'In%d' % i))
           setv(mix11a.params.On, 1)
           setv(mix11a.params.Lev, modtable[level][0])
@@ -281,7 +281,7 @@ class Conv1_4Switch(Convert):
     if level != 0 or level != 127 or \
       nmmp.Level.knob or nmmp.Level.morph or nmmp.Level.ctrl:
       # add LevAmp module
-      mix11a = self.addmodule('Mix1-1A')
+      mix11a = self.add_module('Mix1-1A')
       self.connect(mix11a.outputs.Out, g2m.inputs.In)
       setv(mix11a.params.On, 1)
       setv(mix11a.params.Lev, modtable[level][0])

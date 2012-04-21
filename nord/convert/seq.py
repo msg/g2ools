@@ -30,7 +30,7 @@ def handlelength(conv):
     link = g2m.outputs.Link
     setv(g2mp.Length, 16)
     for l in range(16, length, 16):
-      seq = conv.addmodule(g2m.type.shortnm)
+      seq = conv.add_module(g2m.type.shortnm)
       if l + 16 > length:
         setv(seq.params.Length, length - l)
       else:
@@ -42,7 +42,7 @@ def handlelength(conv):
       link = seq.outputs.Link
     return link
   if length > 16:
-    clkdiv = conv.addmodule('ClkDiv')
+    clkdiv = conv.add_module('ClkDiv')
     clkdiv.modes.DivMode.value = 0
     setv(clkdiv.params.Divider, length)
     conv.connect(clkdiv.outputs.Out, g2m.inputs.Rst)

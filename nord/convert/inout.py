@@ -71,13 +71,13 @@ class ConvPolyAreaIn(Convert):
     nmmp, g2mp = nmm.params, g2m.params
 
     setv(g2mp.Pad, [2, 1][getv(getattr(nmmp, '+6Db'))])
-    lboost = self.addmodule('LevAmp', name='L-Boost')
+    lboost = self.add_module('LevAmp', name='L-Boost')
     setv(lboost.params.Type, 0) # Lin
     setv(lboost.params.Gain, 96) # x2.00
     self.connect(g2m.outputs.OutL, lboost.inputs.In)
     self.outputs[0] = lboost.outputs.Out
 
-    rboost = self.addmodule('LevAmp', name='R-Boost')
+    rboost = self.add_module('LevAmp', name='R-Boost')
     setv(rboost.params.Type, 0) # Lin
     setv(rboost.params.Gain, 96) # x2.00
     self.connect(g2m.outputs.OutR, rboost.inputs.In)
@@ -104,7 +104,7 @@ class Conv1Output(Convert):
       setv(g2mp.On, 1)
       setv(g2mp.ExpLin, 2)
       setv(g2mp.Lev, modtable[getv(nmmp.Level)][0])
-      out2 = self.addmodule('2-Out')
+      out2 = self.add_module('2-Out')
       lev = g2m.params.Lev
     else:
       out2 = g2m
@@ -140,7 +140,7 @@ class Conv2Output(Convert):
     if self.maing2module == 'Mix1-1S':
       setv(g2mp.Lev, modtable[getv(nmmp.Level)][0])
       setv(g2mp.On, 1)
-      out2 = self.addmodule('2-Out')
+      out2 = self.add_module('2-Out')
       self.connect(g2m.outputs.OutL, out2.inputs.InL)
       self.connect(g2m.outputs.OutR, out2.inputs.InR)
       lev = g2mp.Lev
@@ -183,7 +183,7 @@ class ConvKeyboardSplit(Convert):
                ['CompSig', '<=Upper'],
                ['Gate', 'Gate'], ]
     for mod, nm in struct:
-      self.addmodule(mod, name=nm)
+      self.add_module(mod, name=nm)
 
     u, l, lu, g = self.g2modules
 
@@ -200,7 +200,7 @@ class ConvKeyboardSplit(Convert):
 
     nout = None
     if len(nmm.outputs.Note.cables):
-      n = self.addmodule('DlyClock', name='Note')
+      n = self.add_module('DlyClock', name='Note')
       self.connect(gout, n.inputs.Clk)
       self.connect(lu.inputs.B, n.inputs.In)
       gout = n.inputs.Clk
@@ -208,7 +208,7 @@ class ConvKeyboardSplit(Convert):
 
     vin = vout = None
     if len(nmm.outputs.Vel.cables) or len(nmm.inputs.Vel.cables):
-      v = self.addmodule('DlyClock', name='Vel')
+      v = self.add_module('DlyClock', name='Vel')
       self.connect(gout, v.inputs.Clk)
       vin = v.inputs.In
       vout = v.outputs.Out

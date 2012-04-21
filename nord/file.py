@@ -126,8 +126,8 @@ for the voice and fx areas of a nord modules g2 patch.
       possibles.remove(m.index)
     return possibles[:nindexes]
 
-  def addmodule(self, shortnm, **kw):
-    '''addmodule(shortnm, **kw) -> Module
+  def add_module(self, shortnm, **kw):
+    '''add_module(shortnm, **kw) -> Module
 \tshortnm\tmodule short type name to add.
 
 \t**kw:

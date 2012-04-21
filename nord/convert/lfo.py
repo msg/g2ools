@@ -32,7 +32,7 @@ def handleslv(conv, ratemodin, ratemodparam):
   slv, kbt = None, g2m.inputs.Rate
 
   if len(nmm.outputs.Slv.cables):
-    oscmaster = conv.addmodule('OscMaster')
+    oscmaster = conv.add_module('OscMaster')
     setv(g2mp.Rate, 64)
     setv(oscmaster.params.Kbt, 0) # Off
     setv(oscmaster.params.FreqCoarse, getv(nmmp.Rate))
@@ -56,7 +56,7 @@ def handleslv(conv, ratemodin, ratemodparam):
       setv(ratemodparam, mod)
     else:
       setv(ratemodparam, modtable[mod][0])
-      adj = conv.addmodule('Mix2-1B', name='PitchAdj')
+      adj = conv.add_module('Mix2-1B', name='PitchAdj')
       conv.connect(adj.outputs.Out, ratemodin)
       conv.connect(adj.inputs.Chain, adj.inputs.In1)
       conv.connect(adj.inputs.In1, adj.inputs.In2)
@@ -86,11 +86,11 @@ def postmst(conv, mstindex):
     setv(g2mp.Kbt, getv(mst.params.Kbt))
 
   if mstin.net.output.rate != nm1conncolors.slave:
-    oscc = conv.addmodule('OscC', name='')
+    oscc = conv.add_module('OscC', name='')
     setv(oscc.params.FreqCoarse, 0)
     setv(oscc.params.FmAmount, 79)
     setv(oscc.params.Kbt, 0)
-    pout = conv.addmodule('ZeroCnt', name='')
+    pout = conv.add_module('ZeroCnt', name='')
     conv.connect(oscc.outputs.Out, pout.inputs.In)
     conv.connect(pout.outputs.Out, g2m.inputs.Rate)
     setv(g2mp.Range, 2)
@@ -255,15 +255,15 @@ class ConvClkGen(Convert):
     setv(g2mp.Active, getv(getattr(nmmp, 'On/Off')))
     setv(g2mp.Source, 0)  # Internal
     if len(nmm.outputs.Sync.cables) != 0:
-      pulse = self.addmodule('Pulse')
+      pulse = self.add_module('Pulse')
       setv(pulse.params.Time, 32)
       self.connect(g2m.outputs.ClkActive, pulse.inputs.In)
       self.outputs[3] = pulse.outputs.Out
     
     #handle Slv connections
     if len(nmm.outputs.Slv.cables):
-      zerocnt = self.addmodule('ZeroCnt', name='96th In')
-      oscmaster = self.addmodule('OscMaster', name='26-241 BPM')
+      zerocnt = self.add_module('ZeroCnt', name='96th In')
+      oscmaster = self.add_module('OscMaster', name='26-241 BPM')
       setv(oscmaster.params.FreqCoarse, 9) # -55 semi
       setv(oscmaster.params.Kbt, 0) # off
       self.connect(getattr(g2m.outputs, '1/96'), zerocnt.inputs.In)
@@ -301,7 +301,7 @@ class ConvRndPulseGen(Convert):
     nmmp, g2mp = nmm.params, g2m.params
 
     setv(g2mp.StepProb, 96)
-    lfoc = self.addmodule('LfoC', name='Clk')
+    lfoc = self.add_module('LfoC', name='Clk')
     self.connect(lfoc.outputs.Out, g2m.inputs.Clk)
     setv(lfoc.params.Rate, getv(nmmp.Density))
     self.params[0] = lfoc.params.Rate
@@ -328,7 +328,7 @@ class ConvPatternGen(Convert):
       self.connect(g2m.inputs.A, g2m.inputs.B) 
     lowdelta = getv(nmmp.LowDelta)
     if lowdelta:
-      notequant = self.addmodule('NoteQuant')
+      notequant = self.add_module('NoteQuant')
       self.connect(g2m.outputs.Out, notequant.inputs.In)
       setv(notequant.params.Range, 77)
       setv(notequant.params.Notes, 1)
@@ -338,7 +338,7 @@ class ConvPatternGen(Convert):
     else:
       stepprob, add = 127, 74
     setv(g2mp.StepProb, stepprob)
-    levadd = self.addmodule('LevAdd')
+    levadd = self.add_module('LevAdd')
     self.connect(self.outputs[0], levadd.inputs.In)
     setv(levadd.params.Level, add)
     self.outputs[0] = levadd.outputs.Out
