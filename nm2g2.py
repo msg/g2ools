@@ -525,10 +525,11 @@ class NM2G2Converter:
     self.log.info('knobs:')
     #knobmap = [0, 1,  2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21]
     knobmap = [0, 8, 16, 1, 9, 17, 2, 10, 18, 3, 11, 19, 4, 12, 20, 5, 13, 21]
+    knoboffset = 24 * 4 # Effect knobs
     for knob in nmpatch.knobs:
       if knob.knob > 18: # 19=pedal, 20=afttch, 22=on/off
         continue
-      g2knob = g2patch.knobs[knobmap[knob.knob]]
+      g2knob = g2patch.knobs[knobmap[knob.knob]+knoboffset]
       index = knob.param.index
       if hasattr(knob.param, 'module'): # module parameter
         # Place parameters in A1(knobs 1-6), A2(knobs 7-12), A3(knobs 13-18)
@@ -702,11 +703,11 @@ def main(argv, stream):
   (options, args) = parser.parse_args(argv)
   options.programpath = args.pop(0)
   verbosity = [
-      logging.CRITICAL,
-      logging.ERROR,
-      logging.WARNING,
-      logging.INFO,
-      logging.DEBUG,
+    logging.CRITICAL,
+    logging.ERROR,
+    logging.WARNING,
+    logging.INFO,
+    logging.DEBUG,
   ][int(options.verbosity)]
 
   nm2g2log = logging.getLogger('nm2g2')
