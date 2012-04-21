@@ -5,6 +5,7 @@
 import os, struct, sys
 from nord import printf
 from nord.g2.categories import g2categories
+from nord.g2.file import Pch2File
 from array import array
 
 # vim: set sw=2:
@@ -182,7 +183,9 @@ CMD_C    = 0x0a
 CMD_D    = 0x0b
 CMD_SYS  = 0x0c
 CMD_INIT = 0x80
+CMD_MASK = 0xf0
 CMD_REQ  = 0x20
+CMD_SEND = 0x30
 CMD_RESP = 0x00
 
 class G2USBInterface:
@@ -212,17 +215,17 @@ class G2USBInterface:
     self.g2h.reset()
 
   def bwrite(self, addr, data):
-    return self.g2h.bulkWrite(addr, data.tostring())
+    return self.g2h.bulkWrite(addr, data.tostring()) # self.g2bout
 
   def bread(self, addr, len, timeout=100):
     try:
-      data = self.g2h.bulkRead(addr, len, timeout)
+      data = self.g2h.bulkRead(addr, len, timeout) # self.g2bin
       return array('B', [ byte & 0xff for byte in data ])
     except:
       return []
 
   def iread(self, addr, len, timeout=100):
-    data = self.g2h.interruptRead(addr, len, timeout)
+    data = self.g2h.interruptRead(addr, len, timeout) # self.g2iin
     return array('B', [ byte & 0xff for byte in data ])
 
   def read_message(self):
@@ -234,7 +237,7 @@ class G2USBInterface:
       diin = None
     return diin
 
-  def format_message(self, data):
+  def format_message(self, data, type):
     # handle 0x80 (init) messages specially
     if data[0] == CMD_INIT:
       # message 0x80 is just itself
@@ -245,7 +248,7 @@ class G2USBInterface:
       # R: 0x2 when request, 0x0 for response
       #    0x3 ? maybe response-less request
       # DD: data for command
-      s = array('B', [0x01]+[data[0]|CMD_REQ]+data[1:]).tostring()
+      s = array('B', [0x01]+[data[0]|type]+data[1:]).tostring()
 
     # messages are sent formatted as bytes:
     # SS SS MM MM MM .. MM CC CC
@@ -297,13 +300,16 @@ class G2USBInterface:
   def is_embedded(self, data):
     return data[0] & 0xf == 2
 
-  def send_message(self, data):
+  def send_message(self, data, type=CMD_REQ):
 
-    packets = self.format_message(data)
+    packets = self.format_message(data, type)
     for packet in packets:
       self.bwrite(self.g2bout, packet)
       s = hexdump(packet.tostring()).replace('\n','\n   ')
       debug('>%d %s\n', self.g2bout & 0x7f, s)
+
+    if type != CMD_REQ:
+      return ''
 
     # retry 5 times or til the correct reponse is returned
     # which is usually the command without the request bit (0x20) set
@@ -394,11 +400,6 @@ def cmd_list(command):
   return 0
 add_command('list', [], 'list all patches and performances', cmd_list)
 
-def cmd_dump(command, bank):
-  printf('unimplimented\n')
-  return 0
-add_command('dump', ['bank'], 'dump patches from bank', cmd_dump)
-
 def read_g2_file(filename):
   data = open(filename).read()
   null = data.find('\0')
@@ -425,6 +426,26 @@ def cmd_loadslot(command, slot, filename):
 add_command('loadslot', ['slot', 'file'], 'load patch into a slot',
     cmd_loadslot)
 
+def cmd_showslot(command, slot):
+  slot = 'abcd'.find(slot.lower())
+  if slot < 0:
+    return -1
+  sloti = g2usb.send_message([CMD_SYS, 0x41, 0x35, slot])
+  data = g2usb.send_message([CMD_A+slot, sloti[5], 0x3c])
+  name = g2usb.send_message([CMD_A+slot, sloti[5], 0x28])
+  name, junk = parse_name(name[4:])
+  #printf("%s\n", hexdump(data[1:-2].tostring()))
+  pch2 = Pch2File()
+  data = data[0x03:0x15] + data[0x17:-2]
+  pch2.parse(data.tostring(), 0)
+
+  from pch2tog2 import print_patch
+  printf('# %s\n', name)
+  print print_patch(pch2.patch)
+  return 0
+add_command('showslot', ['slot'], 'show patch in a slot',
+    cmd_showslot)
+
 def parse_bank_patch(location):
   bank, patch = map(int, location.split(':'))
   if bank < 1 or bank > 32:
@@ -445,8 +466,8 @@ def cmd_store(command, location, filename):
     return -1
   name, ext = os.path.splitext(os.path.basename(filename))
   name = format_name(name)
-  print name, ext
-  if ext.lower() == 'prf2':
+  printf('%s %s\n', name, ext)
+  if ext.lower() == '.prf2':
     mode = 1
   else:
     mode = 0
@@ -469,6 +490,25 @@ def cmd_clear(command, location):
   return 0
 add_command('clear', ['loc'], 'clear location', cmd_clear)
 
+def cmd_dump(command, bank):
+  bank = int(bank) - 1
+  if bank < 0:
+    return -1
+  #name, ext = os.path.splitext(os.path.basename(filename))
+  #name = format_name(name)
+  #printf('%s %s\n', name, ext)
+  for patch in range(128):
+    data = g2usb.send_message([CMD_SYS, 0x41, 0x17, 0x00, bank, patch])
+    if data[3] == 0x18:
+      continue
+    data = data[5:]
+    #bank, patch = data[:2]
+    name, data = parse_name(data[2:])
+    printf('%d:%d %s\n', bank+1, patch+1, name)
+  #print hexdump(pch2.tostring())
+  return 0
+add_command('dump', ['loc'], 'dump location to .pch2 file', cmd_dump)
+
 def cmd_settings(command):
   g2usb.send_message([CMD_SYS, 0x41, 0x35, 0x04])
   syst = g2usb.send_message([CMD_SYS, 0x41, 0x02])
@@ -476,11 +516,7 @@ def cmd_settings(command):
   printf('%s:\n', synthname)
   printf(' mode: %s\n', ['Patch', 'Performance'][syst[0]>>7])
   printf(' midi:\n')
-  printf('  slota: %d\n', syst[5]+1) 
-  printf('  slotb: %d\n', syst[6]+1) 
-  printf('  slotc: %d\n', syst[7]+1) 
-  printf('  slotd: %d\n', syst[8]+1) 
-  printf('  glob : %d\n', syst[9]+1)
+  printf('  slots: a:%d b:%d c:%d d:%d glob:%d\n', *syst[5:5+5])
   printf('  sysex: %d\n', syst[10]+1)
   printf('  local: %s\n', ['off','on'][syst[11]>>7])
   printf('  prgch: %s\n', ['off','send','recv','send/recv'][syst[12]])
