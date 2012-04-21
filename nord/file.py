@@ -145,8 +145,9 @@ for the voice and fx areas of a nord modules g2 patch.
     m.index = self.freeindexes(1)[0]
     m.color = m.horiz = m.vert = m.uprate = m.leds = 0
     for member in Area.modmembers:
-      if kw.has_key(member):
-        setattr(m, member, kw[member])
+      v = kw.get(member)
+      if v:
+        setattr(m, member, v)
     self.modules.append(m)
     return m
 
@@ -182,7 +183,7 @@ for the voice and fx areas of a nord modules g2 patch.
     cable.dest = dest
     dest.cables.append(cable)
 
-    self.netlist.add(cable.source, cable.dest)
+    self.netlist.add(source, dest)
 
   def disconnect(self, cable):
     '''disconnect(cable) -> None
