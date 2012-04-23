@@ -58,13 +58,13 @@ def printpatch(patch):
     for net in area.netlist.nets:
       source = net.output
       if source:
-        smod = area.findmodule(source.module.index)
+        smod = area.find_module(source.module.index)
         s = '%s.%s' % (smod.name, source.type.name)
       else:
         s = 'nosrc'
       t = []
       for dest in net.inputs:
-        dmod = area.findmodule(dest.module.index)
+        dmod = area.find_module(dest.module.index)
         dtype = dmod.type
         t.append('%s.%s' % (dmod.name, dest.type.name))
       printf('  %s -> %s\n', s, ','.join(t))
