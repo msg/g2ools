@@ -8,6 +8,12 @@ from nord.g2.categories import g2categories
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf, sprintf
 
+def clean_variations(variations):
+  v = variations[:]
+  while len(v) > 1 and v[-2] == v[-1]:
+    v.pop(-1)
+  return v
+
 def print_description(patch):
   s = sprintf('# description\n')
   description = patch.description
@@ -15,7 +21,7 @@ def print_description(patch):
   s += sprintf('setting voices %d\n', description.voices)
   s += sprintf('setting height %d\n', description.height)
   s += sprintf('setting monopoly %d\n', description.monopoly)
-  s += sprintf('setting variation %d\n', description.variation)
+  s += sprintf('setting variation %d\n', description.variation+1)
   x = [ description.red, description.blue, description.yellow,
         description.orange, description.green, description.purple,
         description.white ]
@@ -28,9 +34,7 @@ def print_settings(patch):
   s = sprintf('# settings\n')
   for group in settings.groups:
     for attr in group:
-      variations = getattr(settings, attr).variations[:]
-      while len(variations) > 1 and variations[-2] == variations[-1]:
-        variations.pop(-1)
+      variations = clean_variations(getattr(settings, attr).variations[:])
       variations = ' '.join([ '%d' % v for v in variations])
       s += sprintf('setting %s %s\n', attr, variations)
   return s
@@ -43,7 +47,7 @@ def print_modes(module, loc):
   if hasattr(module, 'modes') and len(module.modes):
     for m, mode in enumerate(module.modes):
       mtype = module.type.modes[m]
-      s += sprintf('    set %s.%s %s\n', loc, mtype.name, mode.value)
+      s += sprintf('    mode %s.%s %s\n', loc, mtype.name, mode.value)
   return s
 
 def print_params(module, loc):
@@ -57,7 +61,7 @@ def print_params(module, loc):
       variations = ' '.join([ '%d' % v for v in variations])
       s += sprintf('    set %s.%s %s\n', loc, name, variations)
       if hasattr(param, 'labels'):
-        labels = ' '.join(param.labels)
+        labels = ':'.join(param.labels)
         s += sprintf('    label %s.%s %s\n', loc, name, labels)
   return s
 
@@ -89,7 +93,7 @@ def print_modules(area):
     # print module
     loc = module_loc(module)
     module.loc = loc
-    name = module.name.replace(' ', '\\ ')
+    name = module.name
     s += sprintf('  add %s %s %s\n', module.type.shortnm.lower(), loc, name)
     name = name.lower()
     last_vert = module.vert
@@ -103,7 +107,7 @@ def print_modules(area):
 def print_netlist(area):
   s = sprintf('  # %s netlist\n', area.name)
   for net in area.netlist.nets:
-    s += sprintf('%s\n', area.netlist.nettos(net))
+    s += sprintf('# %s\n', area.netlist.nettos(net))
   return s
 
 def print_cables(area):
@@ -116,10 +120,10 @@ def print_cables(area):
     dname = dest.type.name.lower()
     sloc = module_loc(smod)
     dloc = module_loc(dmod)
-    s = sprintf('connect %s.%s %s.%s', sloc, sname, dloc, dname)
-    t = sprintf('# %s -%s %s', stype.shortnm,
+    t = sprintf('connect %s.%s %s.%s', sloc, sname, dloc, dname)
+    u = sprintf('# %s -%s %s', stype.shortnm,
         '->'[source.direction], dtype.shortnm)
-    s += sprintf('  %-35s %s\n', s, t)
+    s += sprintf('  %-35s %s\n', t, u)
   return s
 
 def print_area(area):
@@ -141,14 +145,18 @@ def print_knobs(patch):
     if not hasattr(knob.param, 'module'):
       continue
 
+    area = {0:'fx', 1:'voice', 2:'settings'}[knob.param.module.area.index]
     loc = module_loc(knob.param.module)
-    s = sprintf('knob %s%d.%d %s.%s',
-          'abcde'[i/24], ((i/8)%3) + 1, (i&7) + 1, loc,
+    row = i / 24
+    t = sprintf('knob %s%d.%d %s.%s.%s',
+          'abcde'[row], ((i/8)%3) + 1, (i&7) + 1, area, loc,
           knob.param.type.name.lower())
-    t = ''
+    names = ['osc', 'lfo', 'env', 'filter', 'effect']
+    u = '  # %s %d.%d:' % (names[row], ((i/8)%3)+1, (i&7)+1)
     if knob.param.module.name != last_name:
-      t = '  # %s' % knob.param.module.name
-    s += sprintf('%-35s %s\n', s, t)
+      u += ' ' + knob.param.module.name + \
+           ' (' + knob.param.module.type.shortnm.lower() + ')'
+    s += sprintf('%-35s %s\n', t, u)
     last_name = knob.param.module.name
   return s
 
@@ -156,7 +164,7 @@ def print_midicc(patch):
   s = sprintf('\n# midicc\n')
   for ctrl in patch.ctrls:
     index = ctrl.param.index
-    area = {0:'fx', 1:'voice', 2:'system'}[ctrl.type]
+    area = {0:'fx', 1:'voice', 2:'settings'}[ctrl.type]
     if ctrl.type != 2:
       loc = module_loc(ctrl.param.module)
       t = sprintf('%s.%s.%s', area, loc, ctrl.param.type.name.lower())
@@ -170,33 +178,33 @@ def print_midicc(patch):
 def print_morphs(patch):
   settings = patch.settings
   s = sprintf('\n# morphs\n')
+  s += '# '
+  for morphmap in settings.morphmaps:
+    s += sprintf('%d ', len(morphmap))
+  s += '\n'
   morphs = settings.morphs
   for i in range(len(morphs)):
     morph = morphs[i]
-    s += sprintf('morph %d name %s\n', i+1, morph.label)
-    t = ' '.join(map(lambda a: '%d' % a, morph.dials.variations))
-    sprintf('  morph %d dial %s\n', i+1, t)
-    t = ' '.join(map(lambda a: '%d' % a, morph.modes.variations))
-    s += sprintf('  morph %d mode %s\n', i+1, t)
+    s += sprintf('label morph.%d %s\n', i, morph.label)
+    variations = clean_variations(morph.dials.variations)
+    t = ' '.join(map(lambda a: '%d' % a, variations))
+    sprintf('set morph.%d.dial %s\n', i, t)
+    variations = clean_variations(morph.modes.variations)
+    t = ' '.join(map(lambda a: '%d' % a, variations))
+    s += sprintf('set morph.%d.mode %s\n', i, t)
 
     maps = morph.maps
-    params = {}
     for variation in range(len(maps)):
       if not len(maps[variation]):
         continue
-      for parami in range(len(maps[variation])):
-        mmap = maps[variation][parami]
-        loc = module_loc(mmap.param.module)
-        ranges = params.get(mmap.param, [ 0 ] * 9)
-        ranges[variation] = mmap.range
-        params[mmap.param] = ranges
+      for mmap in maps[variation]:
+        param = mmap.param
+        loc = module_loc(param.module)
+        area = ['fx', 'voice', 'settings'][param.module.area.index]
+        t = sprintf('%s.%s.%s ', area, loc, param.type.name.lower())
+        t += sprintf('%d ' % mmap.range)
+        s += sprintf('  add morph.%d %d %s\n', i, variation, t)
 
-    for param in params:
-      ranges = params[param]
-      area = {0:'fx', 1:'voice', 2:'system'}[param.module.area.index]
-      t = sprintf('%s.%s.%s ', area, loc, param.type.name.lower())
-      t += ' '.join(map(lambda a: '%d' % a, ranges))
-      s += sprintf('  morph %d add %s\n', i+1, t)
   return s
 
 def print_patch(patch):

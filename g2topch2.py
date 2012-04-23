@@ -1,13 +1,14 @@
 #!/usr/bin/env python2
 
 import os, string, sys, traceback
-from nord.g2.file import Pch2File, Prf2File
+from nord.g2.file import Pch2File, Prf2File, MorphMap
+from nord.g2.file import NVARIATIONS, NMORPHS, NMORPHMAPS
 from nord.g2.misc import handle_uprate, midicc_reserved
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
 from nord import printf
 from nord.file import Ctrl
 
-DEBUG = 0
+DEBUG = 1
 
 def debug(fmt, *a):
   if DEBUG:
@@ -23,22 +24,32 @@ def clean_line(line):
   else:
     return line[:comment].strip()
 
-class G2ModuleParam(object):
+class G2Param(object):
   def __init__(self, param):
     self.param = param
   
   def set(self, *a):
-    for i in range(9):
-      v = a[0][i % len(a[0])]
-      if v[0] == '=':
+    for i in range(NVARIATIONS):
+      v = a[i % len(a)]
+      if v[0] == '.':
+        name = v[1:]
         map = self.param.type.type.map[0]
-        if not map.has_key(v[1:]):
+        if not map.has_key(name):
           raise G2Exception('No name %s: pick from %s' % (v[1:], map.keys()))
-        v = map[v[1:]]
+        v = map[name]
       self.param.variations[i] = int(v)
 
   def label(self, *a):
-    self.param.labels = a
+    labels = [ label.strip() for label in (' '.join(a)).split(':') ]
+    self.param.labels = labels
+
+class G2Morph(object):
+  def __init__(self, morph):
+    self.morph = morph
+    self.params = {
+      'mode': G2Param(self.morph.mode),
+      'dial': G2Param(self.morph.dial),
+    }
 
 class G2ModulePort(object):
   def __init__(self, port):
@@ -48,15 +59,13 @@ class G2Module(object):
   def __init__(self, module):
     self.module = module
     self.height = self.module.type.height
-    self.params = { }
-    self.ports = { }
     self.setup()
 
   def setup(self):
     self.params = { }
     module = self.module
     for param in module.params:
-      self.params[param.type.name.lower()] = G2ModuleParam(param)
+      self.params[param.type.name.lower()] = G2Param(param)
 
     self.ports = { }
     # adjust input/output conflicts by appending <name>in <name>in
@@ -101,27 +110,29 @@ class G2Section(object):
     mt = module_types.get(typename)
     m = mt.add(self.section.current_area, name=name,
         horiz=self.section.horiz, vert=self.section.vert,
-        color=self.module_color)
+        color=self.section.module_color)
     self.section.vert += m.height
     return m
 
   def parse_connection(self, connection):
-    ref, port = connection.split('.')
-    if not self.modules.has_key(ref):
-      raise G2Exception('No module "%s".' % ref)
-    module = self.modules[ref]
-    if not module.ports.has_key(port):
-      raise G2Exception('No port "%s" on module "%s".' % (port, ref))
-    return module.ports[port]
+    module_name, name = connection.split('.')
+    module = self.modules.get(module_name)
+    if not module:
+      raise G2Exception('No module "%s".' % module_name)
+    port = module.ports.get(name)
+    if not port:
+      raise G2Exception('No port "%s" on module "%s".' % (name, module_name))
+    return port
 
   def parse_parameter(self, parameter):
-    ref, param = parameter.split('.')
-    if not self.modules.has_key(ref):
-      raise G2Exception('No module "%s".' % ref)
-    module = self.modules[ref]
-    if not module.params.has_key(param):
-      raise G2Exception('No param "%s" on module "%s"' % (param, ref))
-    return module.params[param]
+    module_name, name = parameter.split('.', 1)
+    module = self.modules.get(module_name)
+    if not module:
+      raise G2Exception('No module "%s".' % module_name)
+    param = module.params.get(name)
+    if not param:
+      raise G2Exception('No param "%s" on module "%s"' % (name, module_name))
+    return param
 
   def connect(self, *args):
     connections = []
@@ -145,50 +156,56 @@ class G2Section(object):
   def modulecolor(self, color):
     self.module_color = getattr(g2modulecolors, color)
 
-class G2GroupParamCalc(object):
+class G2ModelParamCalc(object):
   def __init__(self, param, equation):
     self.param = param
     self.equation = equation
 
-class G2GroupParam(object):
-  def __init__(self, group, name, default, minimum, maximum):
+class G2ModelParam(object):
+  def __init__(self, model, name, default, minimum, maximum):
     self.calcs = []
-    self.group = group
+    self.model = model
     self.name = name
-    self.variations = [ int(default) ] * 9
+    self.variations = [ int(default) ] * NVARIATIONS
     self.minimum = minimum
     self.maximum = maximum
 
   def add_calc(self, param, equation):
-    self.calcs.append(G2GroupParamCalc(param, equation))
+    self.calcs.append(G2ModelParamCalc(param, equation))
     variations = self.variations[:]
     self.set(*variations)
 
   def setup_vars(self, variation, value):
     paramvars = { }
-    for param in self.group.params:
-      paramvars[param] = self.group.params[param].variations[variation]
+    for param in self.model.params:
+      paramvars[param] = self.model.params[param].variations[variation]
     paramvars[self.name] = value
     return paramvars
 
+  #def set(self, *variations):
+  #  for variation in range(len(variations)):
+  #    value = variations[variation]
+  #    self.variations[variation] = value
+  #  for calc in self.calcs:
+  #    values = []
+  #    for variation in range(len(variations)):
+  #      paramvars = self.setup_vars(variation, value)
+  #      value = eval(calc.equation, paramvars)
+  #      values.append('%s' % value)
+  #    calc.param.set(values)
   def set(self, *variations):
-    for variation in range(len(variations)):
-      value = variations[variation]
-      self.variations[variation] = value
-    for calc in self.calcs:
-      values = []
-      for variation in range(len(variations)):
-        paramvars = self.setup_vars(variation, value)
-        value = eval(calc.equation, paramvars)
-        values.append('%s' % value)
-      calc.param.set(values)
+    for i in range(NVARIATIONS):
+      v = variations[i % len(variations)]
+      self.variations[i] = v
+    self.model.do_calc()
 
   def label(self, *a):
     pass
 
-class G2Group(G2Section):
+class G2Model(G2Section):
   def __init__(self, section):
-    super(G2Group, self).__init__(section)
+    super(G2Model, self).__init__(section)
+    self.calcs = []
     self.params = { }
     self.ports = { }
     self.height = 0
@@ -203,7 +220,7 @@ class G2Group(G2Section):
     param = self.parse_parameter(name)
     if param == None:
       raise G2Exception('No parameter "%s"' % name)
-    param.set(variations)
+    param.set(*variations)
     #getattr(param, 'set', map(int, variations))
 
   def label(self, param, *names):
@@ -213,18 +230,34 @@ class G2Group(G2Section):
     param.label(*names)
 
   def param(self, name, default, minimum, maximum):
-    self.params[name] = G2GroupParam(self, name, default, minimum, maximum)
+    self.params[name] = G2ModelParam(self, name, default, minimum, maximum)
 
   def mparam(self, name, parameter, default):
     modparam = self.parse_parameter(parameter)
     type = modparam.param.type.type
-    self.params[name] = G2GroupParam(self, name, default, type.low, type.high)
+    self.params[name] = G2ModelParam(self, name, default, type.low, type.high)
     self.params[name].add_calc(modparam, name)
 
-  def calc(self, name, parameter, equation):
-    param = self.params[name]
-    modparam = self.parse_parameter(parameter)
-    param.add_calc(modparam, equation)
+  def add_calc(self, param, equation):
+    self.calcs.append(G2ModelParamCalc(param, equation))
+
+  def setup_vars(self, variation):
+    paramvars = { }
+    for param in self.params:
+      paramvars[param] = self.params[param].variations[variation]
+    return paramvars
+
+  def do_calc(self):
+    for calc in self.calcs:
+      variations = []
+      for variation in range(NVARIATIONS):
+        paramvars = self.setup_vars(variation)
+        variations.append(str(eval(calc.equation, paramvars)))
+      calc.param.set(*variations)
+
+  def calc(self, parameter, equation):
+    param = self.parse_parameter(parameter)
+    self.add_calc(param, equation)
 
   def port(self, name, modport):
     port = self.parse_connection(modport)
@@ -247,21 +280,21 @@ class G2ModuleType(object):
     self.height = 0
 
   def add(self, area, **kw):
-    m = G2Module(area.addmodule(self.shortnm, **kw))
+    m = G2Module(area.add_module(self.shortnm, **kw))
     self.height = m.module.type.height
     return m
 
-class G2GroupType(G2ModuleType):
+class G2ModelType(G2ModuleType):
   def __init__(self, g2patch, code):
     self.g2patch = g2patch
     self.code = code
 
   def add(self, area, **kw):
-    gm = G2Group(self.g2patch)
+    gm = G2Model(self.g2patch)
     for lineno, line in self.code:
       args = [ l.lower() for l in line.split() ]
       cmd = args.pop(0)
-      debug('group %d: %s(%s)\n', lineno, cmd, args)
+      debug('model %d: %s(%s)\n', lineno, cmd, args)
       try:
         getattr(gm, cmd)(*args)
       except G2Exception as e:
@@ -275,7 +308,7 @@ class G2Patch(G2Section):
     global g2oolsdir
     self.horiz = 0
     self.vert = 0
-    super(G2Patch, self).__init__(self)
+    G2Section.__init__(self, self)
     self.pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
     self.filename = filename[:filename.rfind('.')]
     self.current_area = self.pch2.patch.voice
@@ -323,8 +356,43 @@ class G2Patch(G2Section):
     printf('Writing %s\n', self.filename + '.pch2')
     self.pch2.write(self.filename + '.pch2')
 
+  def parse_knob(self, knob):
+    rowcol, index = knob.split('.', 1)
+    row, col = list(rowcol)
+    row = 'abcde'.find(row.lower())
+    col = '123'.find(col)
+    index = '12345678'.find(index)
+    if index < 0 or col < 0 or row < 0:
+      raise G2Exception('Invalid knob %s.' % knob)
+    return index, row, col
+
+  def parse_morph(self, morph):
+    name, morph = morph.split('.', 1)
+    return self.pch2.patch.settings.morphs[int(morph)]
+
+  def is_area(self, name):
+    return name in [ 'voice', 'fx', 'settings' ]
+
+  def parse_control(self, control, nomorph=False):
+    area_or_module, param = control.split('.', 1)
+    if self.is_area(area_or_module):
+      saved_area, saved_modules = self.current_area, self.modules
+      self.area(area_or_module)
+      control = self.parse_parameter(param)
+      area_type = self.current_area.index
+      self.current_area, self.modules = saved_area, saved_modules
+    elif not nomorph and area_or_module == 'morph':
+      control = int(param) - 1
+      if not (0 < control < NMORPHS):
+        raise G2Exception('Invalid morph %s.' % param)
+      area_type = 2
+    else:
+      control = self.parse_parameter(control)
+      area_type = self.current_area.index
+    return control, area_type
+
   def separate(self, rows):
-    self.vert += rows
+    self.vert += int(rows)
 
   def column(self, col):
     horiz = (string.lowercase + string.uppercase).find(col)
@@ -353,7 +421,24 @@ class G2Patch(G2Section):
       return -1
     return 0
 
+  def add_morph(self, morph, variation, control, range):
+    settings = self.pch2.patch.settings
+    if len(settings.morphmaps) >= NMORPHMAPS:
+      raise G2Exception('Only %d morphs allowed per variation' % NMORPHMAPS)
+    morph = self.parse_morph(morph)
+    mmap = MorphMap()
+    mmap.variation = int(variation)  # make variations base 1
+    param, area_type = self.parse_control(control)
+    mmap.param = param.param
+    mmap.range = int(range)
+    mmap.morph = morph
+    mmap.morph.maps[mmap.variation].append(mmap)
+    settings.morphmaps[mmap.variation].append(mmap)
+
   def add(self, typename, name, *args):
+    if typename.startswith('morph'):
+      return self.add_morph(typename, name, *args)
+
     if self.modules.has_key(name):
       raise G2Exception('Module %s already exists.' % name)
     if len(args) == 0:
@@ -362,99 +447,80 @@ class G2Patch(G2Section):
       label = ' '.join(args)
     self.modules[name] = self.add_module(typename, label)
 
-  def label(self, param, *names):
-    param = self.parse_parameter(param)
-    if param == None:
-      return -1
-    param.label(names)
+  def label(self, param, *name):
+    if param.startswith('morph'):
+      morph = self.parse_morph(param)
+      morph.label = ' '.join(name)
+    else:
+      param = self.parse_parameter(param)
+      if param == None:
+        return -1
+      param.label(*name)
+
+  def set_morph(self, name, *args):
+    morph = self.parse_morph(name)
+
+  def mode(self, name, value):
+    mode = self.parse_mode(name)
+    if mode == None:
+      raise G2Exception('Node mode %s' % name)
+    mode.value = int(value)
 
   def set(self, name, *variations):
+    if name.startswith('morph'):
+      return self.set_morph(name, *variations)
+
     param = self.parse_parameter(name)
     if param == None:
       return -1
-    param.set(variations)
-
-  def parse_knob(self, knob):
-    rc, index = knob.split('.', 1)
-    row, col = list(rc)
-    col = 'abcde'.find(col.lower())
-    row = '123'.find(row)
-    index = '12345678'.find(index)
-    if index < 0 or col < 0 or row < 0:
-      raise G2Exception('Invalid knob %s.' % knob)
-    return knob-1, row, col
-    
-  def parse_morph(self, morph):
-    m = int(morph)-1
-    if morph < 0 or morph > 7:
-      raise G2Exception('Invalid morph %s.' % morph)
-    return m
-
-  def parse_control(self, control, nomorph=False):
-    area_or_module, param = control.split('.', 1)
-    if area_or_module == 'voice' or area_or_module == 'fx':
-      saved_area, saved_modules = self.current_area, self.modules
-      self.area(area)
-      control = self.parse_parameter(param)
-      area_type = self.current_area.index
-      self.current_area, self.modules = saved_area, saved_modules
-    elif not nomorph and area_or_module == 'morph':
-      control = self.parse_morph(param)
-      area_type = 2
-    else:
-      control = self.parse_parameter(param)
-      area_type = self.current_area.index
-    return control, area_type
+    param.set(*variations)
 
   def knob(self, knob, control):
     knob, row, col = self.parse_knob(knob)
     index = (col * 24) + (row * 8) + knob
-    knob = self.pch2.knobs[index]
-    knob.param, area_type = self.parse_control(control)
+    knob = self.pch2.patch.knobs[index]
+    param, area_type = self.parse_control(control)
+    knob.param = param.param
     knob.assigned = 1
     knob.isled = 0
 
   def midicc(self, cc, control):
     cc = int(cc)
+    if control.startswith('settings'):
+      return
     if midicc_reserved(cc):
-      raise G2Exception('midicc %d reserved' % cc)
+      #raise G2Exception('midicc %d reserved' % cc)
+      printf('midicc %d reserved\n', cc)
+      return
     m = None
-    for ctrl in self.pch2.ctrls:
+    ctrls = self.pch2.patch.ctrls
+    for ctrl in ctrls:
       if ctrl.midicc == cc:
         m = ctrl
         break
     if m == None:
       m = Ctrl()
-      self.pch2.ctrls.append(m)
+      ctrls.append(m)
     m.midicc = cc
     m.param, m.type = self.parse_control(control)
    
-  def morph(self, morph, command, *args):
-    #control = self.parse_control(control, nomorph=True)[0]
-    command = command.lower()
-    if command == 'name':
-      pass
-    elif command == 'dial':
-      pass
-    elif command == 'mode':
-      pass
-    elif command == 'add':
-      pass
-
   def table(self, name, filename):
     pass
 
   def setting(self, setting, *variations):
-    nonvariation = [ 'category', 'voices', 'height', 'monopoly', 'variation' ]
+    nonvariation = [ 'voices', 'height', 'monopoly', 'variation' ]
     if setting in nonvariation:
-      setattr(self.pch2.patch.description, setting, variations[0])
+      setattr(self.pch2.patch.description, setting, int(variations[0]))
     elif setting in self.pch2.patch.settings.groups:
+      variations = map(int, variations)
       variations = variations[:] + [variations[-1]] * 9
       variations = variations[:9]
       getattr(self.pch2.patch.settings, setting).varations = variations
+    elif setting == 'category':
+      self.pch2.patch.description.category = 0
     elif setting == 'cables':
       for color in 'red blue yellow orange green purple white'.split():
-        if color[0] in variations[0]:
+        if color[0].lower() in variations[0]:
           setattr(self.pch2.patch.description, color, 1)
         else:
           setattr(self.pch2.patch.description, color, 0)
@@ -505,18 +571,18 @@ class G2File(object):
       if not line:
         continue
       fields = line.strip().split()
-      if fields[0] == 'module':
+      if fields[0] == 'model':
         inmodule = True
-      if fields[0] == 'endmodule':
+      if fields[0] == 'endmodel':
         inmodule = False
       elif fields[0] == 'include':
         if inmodule:
-          printf('%s:%d - include inside module definition\n', filename, lineno)
+          printf('%s:%d - include inside model definition\n', filename, lineno)
         else:
           self.handle_include(fields[1])
 
-  def build_module(self, name, lines):
-    module_types.add(name, G2GroupType(self.g2patch, lines))
+  def build_group(self, name, lines):
+    module_types.add(name, G2ModelType(self.g2patch, lines))
 
   def build_file(self, filename):
     filelines = []
@@ -524,17 +590,17 @@ class G2File(object):
     module_name = ''
     inmodule = 0
     for lineno, line in self.files[filename]:
-      debug('%d: %s\n', lineno, line)
+      #debug('%d: %s\n', lineno, line)
       args = clean_line(line).split()
-      debug('args=%s\n', args)
+      #debug('args=%s\n', args)
       if len(args) < 1:
         continue
       cmd = args.pop(0)
-      if cmd == 'module':
+      if cmd == 'model':
         inmodule = 1
         module_name = args[0]
-      elif cmd == 'endmodule':
-        self.build_module(module_name, module)
+      elif cmd == 'endmodel':
+        self.build_group(module_name, module)
         inmodule = 0
         module = []
       elif cmd == 'include':
@@ -546,7 +612,7 @@ class G2File(object):
         filelines.append((lineno, line))
 
     if inmodule:
-      printf('%s: no endmodule tag found\n', self.topfile)
+      printf('%s: no endmodel tag found\n', self.topfile)
       return
       
     return filelines
@@ -556,10 +622,10 @@ class G2File(object):
       self.parse_command(clean_line(line), lineno)
 
   def parse_command(self, line, lineno):
-    args = [ l.strip().lower() for l in line.split() ]
+    args = line.split()
     if len(args) < 1:
       return
-    cmd = args.pop(0)
+    cmd = args.pop(0).lower()
 
     debug('%d: %s(%s)\n', lineno, cmd, args)
     try:
