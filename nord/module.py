@@ -22,32 +22,31 @@
 #
 from nord import printf
 
-class Member(object):
-  '''Member abstract class for all Module members.'''
+class Input(object):
+  '''Input IOMember subclass'''
+  direction = 0
   def __init__(self, module, type, index):
-    '''Member(module, type, index) -> Member object'''
+    '''Input(module, type, index) -> Input object'''
     self.module = module
     self.type = type
     self.index = index
-
-class IOMember(Member):
-  '''IOMember abstract Member subclass for all Module Input/Output objects.'''
-  def __init__(self, module, type, index):
-    '''IOMember(module, type, index) -> IOMember object'''
-    super(IOMember, self).__init__(module, type, index)
     self.rate = type.type
     self.cables = []
     self.net = None
 
-class Input(IOMember):
-  '''Input IOMember subclass'''
-  direction = 0
-
-class Output(IOMember):
+class Output(object):
   '''Output IOMember subclass'''
   direction = 1
+  def __init__(self, module, type, index):
+    '''Output(module, type, index) -> Output object'''
+    self.module = module
+    self.type = type
+    self.index = index
+    self.rate = type.type
+    self.cables = []
+    self.net = None
 
-class Param(Member):
+class Param(object):
   '''Param class representing dynamic parameters for a nord modular Module.'''
   def __init__(self, module, type, index):
     '''Param(module, type, index) -> Param object
@@ -59,7 +58,9 @@ class Param(Member):
 \tmorph\tMorph object if a morph is assigned.
 \tlabels\tif module type parameter has labels, this is an array of those.
 '''
-    super(Param, self).__init__(module, type, index)
+    self.module = module
+    self.type = type
+    self.index = index
     self.variations = [ type.type.default ] * 9
     self.knob = None
     self.ctrl = None
@@ -67,11 +68,13 @@ class Param(Member):
     if len(type.labels):
       self.labels = type.labels[:] # make a copy so they can be changed.
 
-class Mode(Member):
+class Mode(object):
   '''Mode class representing static parameters for a nord modular Module.'''
   def __init__(self, module, type, index):
     '''Mode(module, type, index) -> Mode object'''
-    super(Mode, self).__init__(module, type, index)
+    self.module = module
+    self.type = type
+    self.index = index
     self.value = type.type.default
 
 def sattr(obj, nm, val):
@@ -104,6 +107,7 @@ class Module(object):
     self.type = type
     self.area = area
     self.__dict__.update(kw)
+
     for nm, cls in Module.Groups:
       t = getattr(type, nm)
       a = Array([ None ] * len(t))
