@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-import sys, os
+import os, sys, traceback
 from nord import printf
 from nord.g2.file import Pch2File
 
@@ -47,6 +47,10 @@ def chkports(modmap, aport, bport):
 
 def chknet(modmap, anet, bnet):
   # output module/port must match
+  if anet.output == None:
+    return -1
+  if bnet.output == None:
+    return 1
   x = chkports(modmap, anet.output, bnet.output)
   if x: return x
   # length of netlist must match
@@ -105,10 +109,16 @@ for k in p.keys():
     matches = [b]
     j = 0
     while j < len(a):
-      if cmpnetlist(b.patch.voice.netlist,a[j].patch.voice.netlist) == 0:
-        matches.append(a.pop(j))
-      else:
-        j += 1
+      try:
+        if cmpnetlist(b.patch.voice.netlist,a[j].patch.voice.netlist) == 0:
+          matches.append(a.pop(j))
+        else:
+          j += 1
+      except:
+        raise Exception('%s\n patches: %s %s' % (
+            traceback.format_exc(),
+            os.path.basename(b.filename), os.path.basename(a[j].filename)))
+
     if len(matches) == 1:
       continue
     printf(' matches:\n')
