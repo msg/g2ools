@@ -118,7 +118,7 @@ class ModuleList(Section):
     area = [patch.fx, patch.voice][self.area]
 
     area.modules = [ None ] * nmodules
-    for i in range(nmodules):
+    for i in xrange(nmodules):
       bit, id = getbits(bit, 8, data)
       m = Module(modules.fromid(id), area)
       area.modules[i] = m
@@ -134,14 +134,14 @@ class ModuleList(Section):
       self.fixleds(m)
 
       # mode data for module (if there is any)
-      for mode in range(nmodes):
-        bit, m.modes[mode].value = getbits(bit, 6, data)
+      for mode in m.modes:
+        bit, mode.value = getbits(bit, 6, data)
 
       # add missing mode data. some .pch2 versions didn't contain
       #   all the modes in version 23 BUILD 266
       mt = m.type
       if len(m.modes) < len(mt.modes):
-        for mode in range(len(m.modes), len(mt.modes)):
+        for mode in xrange(len(m.modes), len(mt.modes)):
           m.modes[mode].value = mt.modes[mode].type.default
 
   # make sure leds bit is set for specific modules
@@ -169,8 +169,7 @@ class ModuleList(Section):
     bit  = setbits(0, 2, data, self.area)
     bit  = setbits(bit, 8, data, len(area.modules))
 
-    for i in range(len(area.modules)):
-      m = area.modules[i]
+    for m in area.modules:
       bit = setbits(bit, 8, data, m.type.id)
       values = [m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, 0]
       bit = setbitsa(bit, self.module_bit_sizes, data, values)
@@ -182,8 +181,8 @@ class ModuleList(Section):
 
       nmodes = len(m.modes)
       bit = setbits(bit, 4, data, nmodes)
-      for mode in range(nmodes):
-        bit = setbits(bit, 6, data, area.modules[i].modes[mode].value)
+      for mode in m.modes:
+        bit = setbits(bit, 6, data, mode.value)
 
     return data[:(bit+7)>>3].tostring()
 
@@ -195,11 +194,11 @@ class CurrentNote(Section):
     bit, values = getbitsa(0, [7, 7, 7], data)
     lastnote.note, lastnote.attack, lastnote.release = values
     bit, nnotes = getbits(bit, 5, data)
-    notes = patch.notes = [ Note() for i in range(nnotes +1) ]
-    for i in range(len(notes)):
-      bit, notes[i].note    = getbits(bit, 7, data)
-      bit, notes[i].attack  = getbits(bit, 7, data)
-      bit, notes[i].release = getbits(bit, 7, data)
+    notes = patch.notes = [ Note() for i in xrange(nnotes + 1) ]
+    for i, note in enumerate(notes):
+      bit, note.note    = getbits(bit, 7, data)
+      bit, note.attack  = getbits(bit, 7, data)
+      bit, note.release = getbits(bit, 7, data)
 
   def format(self, patch):
     data = self.data
@@ -245,7 +244,7 @@ class CableList(Section):
     area = [patch.fx, patch.voice][self.area]
 
     area.cables = [ None ] * ncables 
-    for i in range(ncables ):
+    for i in xrange(ncables ):
       c = Cable(area)
       bit, c.color = getbits(bit, 3, data)
       bit, smod    = getbits(bit, 8, data)
@@ -283,8 +282,7 @@ class CableList(Section):
 
     bit = setbits(8, 16, data, len(area.cables))
 
-    for i in range(len(area.cables)):
-      c = area.cables[i]
+    for i, c in enumerate(area.cables):
       bit = setbits(bit, 3, data, c.color)
       bit = setbits(bit, 8, data, c.source.module.index)
       bit = setbits(bit, 6, data, c.source.index)
@@ -310,7 +308,7 @@ class Morph(object):
   def __init__(self, index):
     self.dials = Parameter(0, 0, 0)
     self.modes = Parameter(0, 0, 1)
-    self.maps = [[] for variation in range(NVARIATIONS) ]
+    self.maps = [[] for variation in xrange(NVARIATIONS) ]
     self.index = index
     self.ctrl = None
     self.name = 'morph%d' % (index+1)
@@ -327,13 +325,11 @@ class Settings(object):
   ]
 
   def __init__(self):
-    for i in range(len(self.groups)):
-      group = self.groups[i]
-      for j in range(len(group)):
-        name = group[j]
+    for i, group in enumerate(self.groups):
+      for j, name in enumerate(group):
         setattr(self, name, Parameter(i+2, j, name=name))
-    self.morphs = [ Morph(morph) for morph in range(NMORPHS) ]
-    self.morphmaps = [ [] for variation in range(NVARIATIONS) ]
+    self.morphs = [ Morph(morph) for morph in xrange(NMORPHS) ]
+    self.morphmaps = [ [] for variation in xrange(NVARIATIONS) ]
 
 class Parameters(Section):
   '''Parameters Section subclass'''
@@ -348,14 +344,14 @@ class Parameters(Section):
     bit, section  = getbits(bit, 8, data) # 1 for morph settings
     bit, nentries = getbits(bit, 7, data) # 16 parameters per variation
                                           # 8 dials, 8 modes 
-    for i in range(nvariations): # morph groups
+    for i in xrange(nvariations): # morph groups
       bit, variation = getbits(bit, 8, data) # variation number
-      for morph in range(NMORPHS):
+      for morph in xrange(NMORPHS):
         bit, dial = getbits(bit, 7, data)
         if variation < NVARIATIONS:
           settings.morphs[morph].dials.variations[variation] = dial
 
-      for morph in range(NMORPHS):
+      for morph in xrange(NMORPHS):
         bit, mode = getbits(bit, 7, data)
         if variation < NVARIATIONS:
           settings.morphs[morph].modes.variations[variation] = mode
@@ -363,9 +359,9 @@ class Parameters(Section):
     for group in settings.groups:
       bit, section  = getbits(bit, 8, data)
       bit, nentries = getbits(bit, 7, data)
-      for i in range(nvariations):
+      for i in xrange(nvariations):
         bit, variation = getbits(bit, 8, data)
-        for entry in range(nentries):
+        for entry in xrange(nentries):
           bit, value = getbits(bit, 7, data)
           if variation < NVARIATIONS:
             getattr(settings, group[entry]).variations[variation] = value
@@ -381,12 +377,12 @@ class Parameters(Section):
     bit = setbits(bit, 8, data, 1)  # 1 for morph settings
     bit = setbits(bit, 7, data, 16) # 16 parameters per variation
 
-    for variation in range(NVARIATIONS): # morph groups
+    for variation in xrange(NVARIATIONS): # morph groups
       bit = setbits(bit, 8, data, variation) # variation
-      for morph in range(NMORPHS):
+      for morph in xrange(NMORPHS):
         dial = settings.morphs[morph].dials
         bit = setbits(bit, 7, data, dial.variations[variation])
-      for morph in range(NMORPHS):
+      for morph in xrange(NMORPHS):
         mode = settings.morphs[morph].modes
         bit = setbits(bit, 7, data, mode.variations[variation])
 
@@ -395,9 +391,9 @@ class Parameters(Section):
       nentries = len(group)
       bit = setbits(bit, 8, data, section)
       bit = setbits(bit, 7, data, nentries)
-      for variation in range(NVARIATIONS):
+      for variation in xrange(NVARIATIONS):
         bit = setbits(bit, 8, data, variation)
-        for entry in range(nentries):
+        for entry in xrange(nentries):
           value = getattr(settings, group[entry]).variations[variation]
           bit = setbits(bit, 7, data, value)
       section += 1
@@ -410,15 +406,15 @@ class Parameters(Section):
 
     area = [patch.fx, patch.voice][self.area]
 
-    for i in range(nmodules):
+    for i in xrange(nmodules):
       bit, index = getbits(bit, 8, data)
       bit, nparams = getbits(bit, 7, data)
 
       m = area.find_module(index)
       params = m.params
-      for i in range(nvariations):
+      for i in xrange(nvariations):
         bit, variation = getbits(bit, 8, data)
-        for param in range(nparams):
+        for param in xrange(nparams):
           bit, value = getbits(bit, 7, data)
           if param < len(params) and variation < NVARIATIONS:
             params[param].variations[variation] = value
@@ -429,12 +425,12 @@ class Parameters(Section):
     area = [patch.fx, patch.voice][self.area]
 
     modules = []
-    for i in range(len(area.modules)):
-      if not hasattr(area.modules[i], 'params'):
+    for module in area.modules:
+      if not hasattr(module, 'params'):
         continue
-      elif not len(area.modules[i].params):
+      elif not len(module.params):
         continue
-      modules.append(area.modules[i])
+      modules.append(module)
     modules.sort(lambda a, b: cmp(a.index, b.index))
 
     bit = setbits(0, 2, data, self.area)
@@ -444,17 +440,15 @@ class Parameters(Section):
       return data[:(bit+7)>>3].tostring()
     bit = setbits(bit, 8, data, NVARIATIONS)
 
-    for i in range(len(modules)):
-      m = modules[i]
-
+    for i, m in enumerate(modules):
       bit = setbits(bit, 8, data, m.index)
 
       params = m.params
       bit = setbits(bit, 7, data, len(params))
-      for variation in range(NVARIATIONS):
+      for variation in xrange(NVARIATIONS):
         bit = setbits(bit, 8, data, variation)
-        for param in range(len(params)):
-          bit = setbits(bit, 7, data, params[param].variations[variation])
+        for param in params:
+          bit = setbits(bit, 7, data, param.variations[variation])
 
     return data[:(bit+7)>>3].tostring()
 
@@ -485,12 +479,12 @@ class MorphParameters(Section):
     morphs = patch.settings.morphs
     morphmaps = patch.settings.morphmaps
 
-    for i in range(nvariations):
+    for i in xrange(nvariations):
       bit, variation = getbits(bit, 4, data)
       bit += 4+(6*8)+4 # zeros
 
       bit, nmorphs = getbits(bit, 8, data)
-      for i in range(nmorphs):
+      for i in xrange(nmorphs):
         mmap = MorphMap()
         bit, area       = getbits(bit, 2, data)
         bit, index      = getbits(bit, 8, data)
@@ -520,19 +514,18 @@ class MorphParameters(Section):
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
     morphs = patch.settings.morphs
 
-    for variation in range(NVARIATIONS):
+    for variation in xrange(NVARIATIONS):
       bit = setbits(bit, 4, data, variation)
       bit += 4+(6*8)+4 # zeros
 
       # collect all params of this variation into 1 array
       mparams = []
-      for morph in range(len(morphs)):
-        mparams.extend(morphs[morph].maps[variation])
+      for morph in morphs:
+        mparams.extend(morph.maps[variation])
       mparams.sort(lambda a, b: cmp(a.param.module.index, b.param.module.index))
 
       bit = setbits(bit, 8, data, len(mparams))
-      for i in range(len(mparams)):
-        mparam = mparams[i]
+      for mparam in mparams:
         bit = setbits(bit, 2, data, mparam.param.module.area.index)
         bit = setbits(bit, 8, data, mparam.param.module.index)
         bit = setbits(bit, 7, data, mparam.param.index)
@@ -549,40 +542,39 @@ class KnobAssignments(Section):
   type = 0x62
   def parse(self, patch, data):
     bit, nknobs = getbits(0, 16, data)
-    patch.knobs = [ Knob() for i in range(nknobs)]
+    patch.knobs = [ Knob() for i in xrange(nknobs)]
     perf = patch
 
-    for i in range(nknobs):
-      k = perf.knobs[i]
-      bit, k.assigned = getbits(bit, 1, data)
-      if k.assigned:
+    for knob in perf.knobs:
+      bit, knob.assigned = getbits(bit, 1, data)
+      if knob.assigned:
         bit, area = getbits(bit, 2, data)
         bit, index = getbits(bit, 8, data)
-        bit, k.isled = getbits(bit, 2, data)
+        bit, knob.isled = getbits(bit, 2, data)
         bit, param = getbits(bit, 7, data)
         if type(perf) == Performance:
-          bit, k.slot = getbits(bit, 2, data)
-          patch = perf.patches[k.slot]
+          bit, knob.slot = getbits(bit, 2, data)
+          patch = perf.patches[knob.slot]
         else:
-          k.slot = 0
+          knob.slot = 0
 
         if area == FX or area == VOICE:
           m = [patch.fx, patch.voice][area].find_module(index)
           if m:
-            k.param = m.params[param]
+            knob.param = m.params[param]
           else:
-            k.assigned = 0
+            knob.assigned = 0
             continue
         elif area == SETTINGS:
-          k.param = patch.settings.morphs[param]
-        k.param.knob = k
+          knob.param = patch.settings.morphs[param]
+        knob.param.knob = knob
 
   def format(self, patch):
     data = self.data
     perf = patch
 
     bit = setbits(0, 16, data, NKNOBS)
-    for i in range(NKNOBS):
+    for i in xrange(NKNOBS):
       k = perf.knobs[i]
       bit = setbits(bit, 1, data, k.assigned)
       if k.assigned:
@@ -605,11 +597,10 @@ class CtrlAssignments(Section):
   type = 0x60
   def parse(self, patch, data):
     bit, nctrls  = getbits(0, 7, data)
-    patch.ctrls = [ Ctrl() for i in range(nctrls)]
+    patch.ctrls = [ Ctrl() for i in xrange(nctrls)]
     settings = patch.settings
 
-    for i in range(nctrls):
-      m = patch.ctrls[i]
+    for m in patch.ctrls:
       bit, m.midicc = getbits(bit, 7, data)
       bit, m.type = getbits(bit, 2, data) # FX, VOICE, SETTINGS
       bit, index = getbits(bit, 8, data)
@@ -631,8 +622,7 @@ class CtrlAssignments(Section):
 
     bit = setbits(0, 7, data, len(patch.ctrls))
 
-    for i in range(len(patch.ctrls)):
-      m = patch.ctrls[i]
+    for m in patch.ctrls:
       bit = setbits(bit, 7, data, m.midicc)
       bit = setbits(bit, 2, data, m.type)
       if m.type < SETTINGS:
@@ -651,11 +641,11 @@ class Labels(Section):
     bit, nentries = getbits(bit, 8, data)
 
     bit, (entry, length) = getbitsa(bit, [8, 8], data) # 1, 1, 0x50
-    for i in range(NMORPHS):
+    for i in xrange(NMORPHS):
       bit, (morph, morphlen, entry) = getbitsa(bit, [8, 8, 8], data)
       morphlen -= 1
       s = ''
-      for l in range(morphlen):
+      for l in xrange(morphlen):
         bit, c = getbits(bit, 8, data)
         if c != 0:
           s += chr(c&0xff)
@@ -667,12 +657,12 @@ class Labels(Section):
     bit = setbits(  0, 2, data, self.area)
 
     t = '\1\1\x50'
-    for morph in range(NMORPHS):
+    for morph in xrange(NMORPHS):
       t += ''.join(map(chr, [1, 8, 8+morph]))
       s = patch.settings.morphs[morph].label[:7]
       s += '\0' * (7-len(s))
-      for i in range(len(s)):
-        t += s[i]
+      for e in s:
+        t += e
 
     for c in t:
       bit = setbits(bit, 8, data, ord(c))
@@ -684,7 +674,7 @@ class Labels(Section):
 
     area = [patch.fx, patch.voice][self.area]
 
-    for mod in range(nmodules):
+    for mod in xrange(nmodules):
 
       bit, index = getbits(bit, 8, data)
       bit, modlen = getbits(bit, 8, data)
@@ -696,7 +686,7 @@ class Labels(Section):
         # mag: 0=3-octaves, 1=2-octaves, 2=1-octave
         # octave: 0-9 (c0-c9)
         m.editmodes = []
-        for i in range(modlen):
+        for i in xrange(modlen):
           bit, c = getbits(bit, 8, data)
           m.editmodes.append(c)
         continue
@@ -709,9 +699,9 @@ class Labels(Section):
 
         paramlen -= 1 # decrease because we got param index
         if paramlen:
-          for i in range(paramlen/7):
+          for i in xrange(paramlen/7):
             s = ''
-            for i in range(7):
+            for i in xrange(7):
               bit, c = getbits(bit, 8, data)
               s += chr(c)
             modlen -= 7
@@ -732,11 +722,10 @@ class Labels(Section):
 
     modules = []
     # collect all modules with parameters that have labels
-    for i in range(len(area.modules)):
-      m = area.modules[i]
+    for m in area.modules:
       if hasattr(m, 'params'):
-        for j in range(len(m.params)):
-          if hasattr(m.params[j], 'labels'):
+        for param in m.params:
+          if hasattr(param, 'labels'):
             modules.append(m)
             break
       if hasattr(m, 'editmodes'):
@@ -745,17 +734,14 @@ class Labels(Section):
     bit = setbits(0, 2, data, self.area)
 
     t = chr(len(modules))
-    for mod in range(len(modules)):
-      m = modules[mod]
-
+    for m in modules:
       s = ''
       if m.type.id == 121: # SeqNote
         for ep in m.editmodes:
           s += chr(ep)
       else:
         # build up the labels and then write them
-        for i in range(len(m.params)):
-          param = m.params[i]
+        for i, param in enumerate(m.params):
           if not hasattr(param, 'labels'):
             continue
           if section_debug:
@@ -803,7 +789,7 @@ class ModuleNames(Section):
     area = [patch.fx, patch.voice][self.area]
 
     names = data[bit/8:]
-    for i in range(nmodules):
+    for i in xrange(nmodules):
       null = names.find('\0')
       index = ord(names[0])
       if null < 0 or null > 17:
@@ -823,9 +809,9 @@ class ModuleNames(Section):
     area = [patch.fx, patch.voice][self.area]
 
     bit = setbits(bit, 8, data, len(area.modules)) # unknown, see if zero works
-    for i in range(len(area.modules)):
-      bit = setbits(bit, 8, data, area.modules[i].index)
-      nm = area.modules[i].name[:16]
+    for module in area.modules:
+      bit = setbits(bit, 8, data, module.index)
+      nm = module.name[:16]
       if len(nm) < 16:
         nm += '\0'
       for c in nm:
@@ -986,9 +972,8 @@ class PerformanceDescription(Section):
       bit, value = getbits(bit, nbits, data)
       setattr(description, name, value)
 
-    patches = description.patches = [ Description() for i in range(4) ] 
-    for i in range(4):
-      patch = patches[i]
+    patches = description.patches = [ Description() for i in xrange(4) ] 
+    for patch in patches:
       pdata = data[bit/8:]
       null = pdata.find('\0')
       if null < 0 or null > 16:
@@ -1011,8 +996,7 @@ class PerformanceDescription(Section):
       bit = setbits(bit, nbits, data, getattr(description, name))
 
     patches = description.patches
-    for i in range(4):
-      patch = patches[i]
+    for patch in patches:
       nm = patch.name
       if len(nm) < 16:
         nm += '\0'
@@ -1052,8 +1036,8 @@ class Prf2File(Pch2File):
 
   def parse(self, data, off):
     off = self.parse_section(self.performance_section, data, off)
-    for i in range(4):
-      off = self.parse_patch(self.performance.patches[i], data, off)
+    for patch in self.performance.patches:
+      off = self.parse_patch(patch, data, off)
     return self.parse_section(self.global_section, data, off)
 
   def format_section(self, section, total=0):
@@ -1073,8 +1057,8 @@ class Prf2File(Pch2File):
 
   def format(self):
     s = self.format_section(self.performance_section)
-    for i in range(4):
-      s += self.format_patch(self.performance.patches[i])
+    for patch in self.performance.patches:
+      s += self.format_patch(patch)
     return s + self.format_section(self.global_section, len(s))
 
 # this is what comes out the other end:
