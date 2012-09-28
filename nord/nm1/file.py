@@ -35,7 +35,10 @@ class NM1Error(Exception):
     return repr(self.value)
 
 def eval_fields(s):
-  return [ eval(f.capitalize()) for f in s.split() ]
+  try:
+    return [ int(f) for f in s.split() ]
+  except:
+    return [ eval(f.capitalize()) for f in s.split() ]
 
 class Section(object):
   def __init__(self, patch, lines):
@@ -104,13 +107,13 @@ class CurrentNoteDumpV3(Section):
     values = values[3:]
     l -= 1
     currentnotes = []
-    for i in range(0, l, 3):
+    for i in xrange(0, l, 3):
       if values[i] in currentnotes:
         continue
       currentnotes.append(values[i])
     l = len(currentnotes)
-    notes = self.patch.notes = [ Note() for i in range(l) ]
-    for i in range(l):
+    notes = self.patch.notes = [ Note() for i in xrange(l) ]
+    for i in xrange(l):
       note, attack, release = values[i*3:i*3+3]
       notes[i].note = note
       notes[i].attack = attack
@@ -128,7 +131,7 @@ class CableDumpV3(Section):
         lines.insert(0, line)
       sect = int(l)
     else:
-      sect = eval(line.capitalize())
+      sect = int(line)
     if sect:
       area = self.patch.voice
     else:
@@ -136,7 +139,7 @@ class CableDumpV3(Section):
     area.cables = []
     area.netlist = NetList()
     area.cables = [ None ] * len(self.lines)
-    for i in range(len(self.lines)):
+    for i in xrange(len(self.lines)):
       values = eval_fields(lines[i])
       c = Cable(area)
       c.color, dmod, dconn, ddir, smod, sconn, sdir = values
@@ -167,7 +170,7 @@ class CableDumpV3(Section):
 class ParameterDumpV3(Section):
   def parse(self):
     lines = self.lines[:]
-    sect = eval(lines.pop(0).capitalize())
+    sect = int(lines.pop(0))
     if sect:
       area = self.patch.voice
     else:
@@ -183,8 +186,8 @@ class ParameterDumpV3(Section):
       count = values.pop(0)
       if len(values) < count:
         values.extend(eval_fields(lines.pop(0)))
-      for i in range(min(len(values), len(module.params))):
-        module.params[i].variations = [ values[i] for variations in range(9) ]
+      for i in xrange(min(len(values), len(module.params))):
+        module.params[i].variations = [ values[i] for variations in xrange(9) ]
 
 class CustomDumpV3(Section):
   def parse(self):
@@ -200,19 +203,19 @@ class CustomDumpV3(Section):
       if not module:
         raise NM1Error('CustomDump: invalid module index %s' % index)
       modes = values.pop(0)
-      for i in range(len(module.modes)):
-        module.modes[i].value = values[i]
+      for i, mode in enumerate(module.modes):
+        mode.value = values[i]
 
 class MorphMapDumpV3(Section):
   def parse(self):
     morphs = self.patch.morphs
     dials = eval_fields(self.lines[0])
-    for i in range(NMORPHS):
-      morphs[i].dial = dials[i]
+    for i, morph in enumerate(morphs):
+      morph.dial = dials[i]
     values = []
     for line in self.lines[1:]:
       values.extend(eval_fields(line))
-    for i in range(len(values)/5):
+    for i in xrange(len(values)/5):
       morphmap = MorphMap()
       sect, index, param, morph, morphmap.range = values[i*5:i*5+5]
       if sect:
@@ -221,22 +224,21 @@ class MorphMapDumpV3(Section):
         area = self.patch.fx
       morphmap.param = area.find_module(index).params[param]
       morphmap.param.morph = morphs[morph]
-      if not morph in range(NMORPHS):
+      if not (0 <= morph < NMORPHS):
         raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
       morphs[morph].maps.append(morphmap)
 
 class KeyboardAssignmentV3(Section):
   def parse(self):
     keyassign = eval_fields(self.lines[0])
-    morphs = self.patch.morphs
-    for i in range(NMORPHS):
-      morphs[i].keyassign = keyassign[i]
+    for i, morph in enumerate(self.patch.morphs):
+      morph.keyassign = keyassign[i]
 
 class KnobMapDumpV3(Section):
   def parse(self):
-    knobs = self.patch.knobs = [ Knob() for i in range(len(self.lines)) ]
-    for i in range(len(self.lines)):
-      values = eval_fields(self.lines[i])
+    knobs = self.patch.knobs = [ Knob() for i in xrange(len(self.lines)) ]
+    for i, line in enumerate(self.lines):
+      values = eval_fields(line)
       sect, index, param, knob = values
       knobs[i].knob = knob
       if sect == 1:
@@ -249,9 +251,9 @@ class KnobMapDumpV3(Section):
 
 class CtrlMapDumpV3(Section):
   def parse(self):
-    ctrls = self.patch.ctrls = [ Ctrl() for i in range(len(self.lines)) ]
-    for i in range(len(self.lines)):
-      sect, index, param, midicc = eval_fields(self.lines[i])
+    ctrls = self.patch.ctrls = [ Ctrl() for i in xrange(len(self.lines)) ]
+    for i, line in enumerate(self.lines):
+      sect, index, param, midicc = eval_fields(line)
       if sect == 1:
         ctrls[i].param = self.patch.voice.find_module(index).params[param]
       elif sect == 0:
@@ -349,15 +351,15 @@ class ModulesV2(V2Section):
   def update_module_params(self, moduledef, module):
     params = getv2params(moduledef, 'p')
     lp, lmp = len(params), len(module.params)
-    for i in range(min(lp, lmp)):
+    for i in xrange(min(lp, lmp)):
       val = int(params[i][1])
       val = max(val, module.params[i].type.type.low)
       val = min(val, module.params[i].type.type.high)
-      module.params[i].variations = [ val for variations in range(9) ]
+      module.params[i].variations = [ val for variations in xrange(9) ]
 
     if module.type.id == 17: # event seq has bp0 as triggers
       val = int(moduledef.bp0)
-      for i in range(16):
+      for i in xrange(16):
         step = getattr(module.params, 'Seq1Step%d' % (i+1))
         on = (val >> i) & 1
         step.variations = [on] * 9
@@ -374,7 +376,7 @@ class ModulesV2(V2Section):
 
     mutereversed = [ 9, 96, 10, 11, 12, 13, 85, 95, 58 ]
     if module.type.id == 106: # sine bank has mutes reversed
-      for i in range(1, 7):
+      for i in xrange(1, 7):
         param = getattr(module.params, 'Osc%dMute' % i)
         mute = 1 - param.variations[0]
         param.variations = [mute]*9
@@ -384,8 +386,8 @@ class ModulesV2(V2Section):
 
   def create_modules(self):
     area = self.patch.voice
-    for i in range(len(self.moduledefs)):
-      index, moduledef = self.moduledefs[i]
+    for i, moduledefs in enumerate(self.moduledefs):
+      index, moduledef = moduledefs
       if moduledef.type == MORPH_TYPE: # handle this later
         continue
 
@@ -398,16 +400,16 @@ class ModulesV2(V2Section):
   def create_cables(self):
     OUTPUT = 0x40
     area = self.patch.voice
-    for i in range(len(self.moduledefs)):
-      index, moduledef = self.moduledefs[i]
+    for i, moduledefs in enumerate(self.moduledefs):
+      index, moduledef = moduledefs
       if moduledef.type == MORPH_TYPE: # handle this later
         continue
       module = area.find_module(index)
       ims = getv2params(moduledef, 'im') # module to connect to
       ihs = getv2params(moduledef, 'ih') # port (0x40=output) rest index
       ics = getv2params(moduledef, 'ic') # cable color
-      for j in range(len(ims)):
-        dconn, smod = ims[j]
+      for j, im in enumerate(ims):
+        dconn, smod = im
         sconn, color = ihs[j][1], ics[j][1]
         smoduledef = findv2moduledef(self.moduledefs, smod)
         if not smoduledef or smoduledef[1].type == MORPH_TYPE:
@@ -463,14 +465,14 @@ class VoicesV2(V2Section):
     values = values[1:]
     l -= 1
     currentnotes = []
-    for i in range(l):
-      if values[i] in currentnotes:
+    for value in values:
+      if value in currentnotes:
         continue
-      currentnotes.append(values[i])
+      currentnotes.append(value)
     l = len(currentnotes)
-    notes = self.patch.notes = [ Note() for i in range(l) ]
-    for i in range(l):
-      notes[i].note, notes[i].attack, notes[i].release = values[i]
+    notes = self.patch.notes = [ Note() for i in xrange(l) ]
+    for i, note in enumerate(notes):
+      note.note, note.attack, note.release = values[i]
 
 class ControllersV2(V2Section):
   def parse(self):
@@ -480,8 +482,8 @@ class ControllersV2(V2Section):
 
     modules = getv2params(define, 'm')   # module to connect to
     params = getv2params(define, 'p')    # parameters to connecto to
-    for i in range(len(modules)):
-      midicc, modindex = modules[i]
+    for i, module in enumerate(modules):
+      midicc, modindex = module
       midicc, param = params[i]
       moduledef = findv2moduledef(self.moduledefs, modindex)
       if moduledef and moduledef[1].type == MORPH_TYPE:
@@ -491,12 +493,12 @@ class MorphsV2(V2Section):
   def parse(self):
     morphs = self.patch.morphs
     morphmod = None
-    for i in range(len(self.moduledefs)):
-      if self.moduledefs[i][1].type == MORPH_TYPE:
-        morphdmod = self.moduledefs[i][1]
+    for i, moduledefs in enumerate(self.moduledefs):
+      if moduledefs[1].type == MORPH_TYPE:
+        morphdmod = moduledefs[1]
     if morphmod:
-      for i in range(NMORPHS):
-        morphs[i].dial = getattr(morphmod, 'p%d' % i)
+      for i, morph in enumerate(morphs):
+        morph.dial = getattr(morphmod, 'p%d' % i)
     define = self.defines.get('Morphs', None)
     if define == None:
       return
@@ -506,12 +508,12 @@ class MorphsV2(V2Section):
     dials = getv2params(define, 'd')   # morph dial of parameter
     groups = getv2params(define, 'g')  # morph groups
     area = self.patch.voice
-    for i in range(len(modules)):
-      morph, index = modules[i]
+    for i, module in enumerate(modules):
+      morph, index = module
       morph, param  = params[i]
       morph, dial   = dials[i]
       morph, group  = groups[i]
-      if not morph in range(25): ### HACK
+      if not (0 <= morph <= 25): ### HACK
         #raise NM1Error('MorphMapDump: invalid morph index %d' % morph)
         continue
       morphmap = MorphMap()
@@ -531,9 +533,9 @@ class KnobsV2(V2Section):
 
     modules = getv2params(define, 'm') # module to connect to
     params = getv2params(define, 'p')  # parameters to connecto to
-    knobs = self.patch.knobs = [ Knob() for i in range(len(modules)) ]
-    for i in range(len(modules)):
-      knob, index = modules[i]
+    knobs = self.patch.knobs = [ Knob() for i in xrange(len(modules)) ]
+    for i, module in enumerate(modules):
+      knob, index = module
       knob, param = params[i]
       moduledef = findv2moduledef(self.moduledefs, index)
       knobs[i].knob = knob
@@ -555,7 +557,7 @@ class NotesV2(V2Section):
     define = self.defines.get('Notes', None)
     if define == None:
       return
-    lines = [ getattr(define, 'l%d' % i) for i in range(define.count) ]
+    lines = [ getattr(define, 'l%d' % i) for i in xrange(define.count) ]
     self.patch.textpad = '\r\n'.join(lines)
 
 class Morph(object):
@@ -570,7 +572,7 @@ class Morph(object):
 class NM1Patch(Patch):
   def __init__(self, fromname_):
     super(NM1Patch, self).__init__(fromname_)
-    self.morphs = [ Morph(i+1) for i in range(NMORPHS) ]
+    self.morphs = [ Morph(i) for i in xrange(1, NMORPHS+1) ]
     self.knobs = []
     self.textpad = ''
 
@@ -639,8 +641,8 @@ class PchFile(object):
 
   def parsev3data(self, data, sections):
     l = len(sections)
-    for i in range(l):
-      tag, start, end = sections[i]
+    for i, section in enumerate(sections):
+      tag, start, end = section
       if start < 0:
         printf('no start tag %s\n', tag)
         continue
@@ -653,7 +655,8 @@ class PchFile(object):
       lines = [ f.strip() for f in data[start:end].splitlines() ]
       lines = [ line for line in lines if line ]
       if len(lines) > 2:
-        sect = eval(tag + 'V3(self.patch, lines[1:-1])')
+        sect_class = globals()[tag + 'V3']
+        sect = sect_class(self.patch, lines[1:-1])
 
   def readv3(self, data):
     sections = self.findv3sections(data)

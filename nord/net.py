@@ -32,6 +32,7 @@ class NetError(Exception):
     return repr(self.value)
 
 class Net:
+  __slots__ = ( 'output', 'inputs' )
   def __init__(self, output, inputs):
     self.output = output
     self.inputs = inputs
@@ -81,7 +82,6 @@ class NetList:
       self.combine(source, dest)
       return
 
-    net = None
     if snet:
       net = snet
       net.inputs.append(dest)
@@ -96,6 +96,8 @@ class NetList:
         net.output = source
       else:
         net.inputs.append(source)
+    else:
+      net = None
 
     # add new net if one not found
     if not net:
@@ -116,7 +118,7 @@ class NetList:
       raise NetError('source=%s:%s dest=%s:%s not connected' % (
         source.module.name, source.type.name,
         dest.module.name, dest.type.name))
-    if not source.net in self.nets:
+    if 0 and not source.net in self.nets:
       raise NetError('source=%s:%s dest=%s:%s not in netlist' % (
         source.module.name, source.type.name,
         dest.module.name, dest.type.name))

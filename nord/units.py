@@ -20,11 +20,11 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def nm2g2val(nm1midival,nm1vals,g2vals):
+def nm2g2val(nm1midival, nm1vals, g2vals):
   nm1val = nm1vals[nm1midival]
   g2min = 1000000 # nothing here will never be that big
   g2midival = 0
-  for midival in range(128):
+  for midival in xrange(128):
     g2val = g2vals[midival]
     if abs(g2val-nm1val) < g2min:
       g2min = abs(g2val-nm1val)
@@ -69,6 +69,10 @@ g2adsrtime = [
     32000,  33600,  35300,  37100,  38900,  40900,  42900,  45000,
 ]
 
+adsrtime_map = []
+for midi in xrange(128):
+  adsrtime_map.append(nm2g2val(midi, nm1adsrtime, g2adsrtime))
+
 nm1fltfreq = [
     10.00,  11.00,  12.00,  12.00,  13.00,  14.00,  15.00,  15.00,
     16.00,  17.00,  18.00,  19.00,  21.00,  22.00,  23.00,  24.00,
@@ -106,6 +110,10 @@ g2fltfreq = [
     8870.,  9400.,  9960., 10500., 11200., 11800., 12500., 13300.,
    14100., 14900., 15800., 16700., 17700., 18800., 19900., 21100.,
 ]
+
+fltfreq_map = []
+for midi in xrange(128):
+  fltfreq_map.append(nm2g2val(midi, nm1fltfreq, g2fltfreq))
 
 nm1logictime = [
      1.00,   1.10,   1.20,   1.30,   1.40,   1.50,   1.60,   1.70,
@@ -145,6 +153,10 @@ g2logictime = [
     5900.,  6360.,  6860.,  7400.,  7980.,  8600.,  9280., 10000.,
 ]
 
+logictime_map = []
+for midi in xrange(128):
+  logictime_map.append(nm2g2val(midi, nm1logictime, g2logictime))
+
 nm1levamp = [
      0.25,   0.26,   0.26,   0.27,   0.27,   0.28,   0.28,   0.29,
      0.30,   0.30,   0.31,   0.32,   0.32,   0.33,   0.34,   0.35,
@@ -182,6 +194,10 @@ g2levamp = [
      2.86,   2.92,   2.99,   3.06,   3.13,   3.20,   3.27,   3.34,
      3.42,   3.50,   3.58,   3.66,   3.74,   3.83,   3.91,   4.00,
 ]
+
+levamp_map = []
+for midi in xrange(128):
+  levamp_map.append(nm2g2val(midi, nm1levamp, g2levamp))
 
 ratios = [
    0.0248, 0.0263, 0.0278, 0.0295, 0.0312, 0.0331, 0.0351, 0.0372,

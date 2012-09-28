@@ -24,6 +24,7 @@ from nord import printf
 
 class Input(object):
   '''Input IOMember subclass'''
+  __slots__ = ( 'module', 'type', 'index', 'rate', 'cables', 'net', 'conv' )
   direction = 0
   def __init__(self, module, type, index):
     '''Input(module, type, index) -> Input object'''
@@ -36,6 +37,7 @@ class Input(object):
 
 class Output(object):
   '''Output IOMember subclass'''
+  __slots__ = ( 'module', 'type', 'index', 'rate', 'cables', 'net', 'conv' )
   direction = 1
   def __init__(self, module, type, index):
     '''Output(module, type, index) -> Output object'''
@@ -47,6 +49,9 @@ class Output(object):
     self.net = None
 
 class Param(object):
+  __slots__ = (
+    'module', 'type', 'index', 'variations', 'knob', 'ctrl', 'morph', 'labels'
+  )
   '''Param class representing dynamic parameters for a nord modular Module.'''
   def __init__(self, module, type, index):
     '''Param(module, type, index) -> Param object
@@ -69,6 +74,7 @@ class Param(object):
       self.labels = type.labels[:] # make a copy so they can be changed.
 
 class Mode(object):
+  __slots__ = ( 'module', 'type', 'index', 'value' )
   '''Mode class representing static parameters for a nord modular Module.'''
   def __init__(self, module, type, index):
     '''Mode(module, type, index) -> Mode object'''
@@ -77,44 +83,34 @@ class Mode(object):
     self.index = index
     self.value = type.type.default
 
-def sattr(obj, nm, val):
-  '''sattr(obj, nm, val) -> None  helper function for Array (internal).'''
-  if hasattr(obj, nm):
-    printf('  %s name "%s" exists\n', obj.__class__.__name__, nm)
-  setattr(obj, nm, val)
-
 class Array(list):
   '''Array class for managing arrays within a Module object (internal).'''
-  def add(self, nm, obj, index):
-    setattr(self, nm.lower(), obj)
-    self[index] = obj
+  def __init__(self, parent, items, item_class):
+    self[:] = [ item_class(parent, e, i) for i, e in enumerate(items) ]
+    for o in self:
+      self.__dict__[o.type.name] = o
 
-  def __setattr__(self, nm, val):
-    self.__dict__[nm.lower()] = val
+  #def __setattr__(self, nm, val):
+  #  self.__dict__[nm] = val
 
-  def __getattr__(self, nm):
-    return self.__dict__[nm.lower()]
-  
+  #def __getattr__(self, nm):
+  #  return self.__dict__[nm]
 
 class Module(object):
   '''Module class representing a nord modular module within a patch.'''
-  Groups = [ ['inputs', Input ], ['outputs', Output ],
-             ['params', Param ], ['modes', Mode ] ]
-
   def __init__(self, type, area, **kw):
     '''Module(type, area, **kw) -> Module object'''
+    #self.__dict__ = kw
     self.name = ''
     self.type = type
     self.area = area
     self.__dict__.update(kw)
 
-    for nm, cls in Module.Groups:
-      t = getattr(type, nm)
-      a = Array([ None ] * len(t))
-      setattr(self, nm, a)
-      for i in range(len(t)):
-        o = cls(self, t[i], i)
-        a.add(t[i].name, o, i)
+    self.inputs  = Array(self, type.inputs,  Input)
+    self.outputs = Array(self, type.outputs, Output)
+    self.params  = Array(self, type.params,  Param)
+    self.modes   = Array(self, type.modes,   Mode)
+
     if type.id == 121: # SeqNote mag/octave additions
       # [0, 1, mag, 0, 1, octave]
       # mag: 0=3-octaves, 1=2-octaves, 2=1-octave

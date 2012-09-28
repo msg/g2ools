@@ -89,7 +89,7 @@ class Ctrl(object):
   '''Ctrl class for patch midi assignments.'''
   pass
 
-MAX_MODULES = 256
+MAX_MODULES = 127
 
 class Area(object):
   '''Area class for patch voice and fx area data (modules, cables, etc...)
@@ -110,6 +110,7 @@ for the voice and fx areas of a nord modules g2 patch.
     self.modules = []
     self.cables = []
     self.netlist = NetList()
+    self.free_indexes = range(MAX_MODULES)
 
   def find_module(self, index):
     '''find_module(index) -> module at index or None'''
@@ -119,12 +120,6 @@ for the voice and fx areas of a nord modules g2 patch.
     return None
 
   modmembers = [ 'name', 'index', 'color', 'horiz', 'vert', 'uprate', 'leds' ]
-
-  def free_indexes(self, nindexes):
-    possibles = range(1, MAX_MODULES+1)
-    for m in self.modules:
-      possibles.remove(m.index)
-    return possibles[:nindexes]
 
   def add_module(self, shortnm, **kw):
     '''add_module(shortnm, **kw) -> Module
@@ -137,25 +132,26 @@ for the voice and fx areas of a nord modules g2 patch.
 \tvert\trow where module is placed (<127)
 '''
     if len(self.modules) >= MAX_MODULES:
-      return None
+      raise Exception('Too many modules')
 
     type = self.fromname(shortnm)
     m = Module(type, self)
     m.name = type.shortnm
-    m.index = self.free_indexes(1)[0]
+    if len(self.free_indexes) == 0:
+      raise Exception('No free module indexes')
+    m.index = self.free_indexes.pop(0)
     m.color = m.horiz = m.vert = m.uprate = m.leds = 0
-    for member in Area.modmembers:
-      v = kw.get(member)
-      if v:
-        setattr(m, member, v)
+    #print 'update kw=', kw
+    m.__dict__.update(kw)
     self.modules.append(m)
     return m
 
-  def delmodule(self, module):
-    '''delmodule(module) -> None
+  def del_module(self, module):
+    '''del_module(module) -> None
 
 \tdelete module from modules sequence.
 '''
+    self.free_indexes.insert(0, module.index)
     self.modules.remove(module)
 
 
@@ -349,5 +345,5 @@ Basically a holder for 4 patches, one each for slot a, slot b,
 slot c, and slot d.
 '''
   def __init__(self, fromname):
-    self.patches = [ Patch(fromname) for slot in range(4) ]
+    self.patches = [ Patch(fromname) for slot in xrange(4) ]
 

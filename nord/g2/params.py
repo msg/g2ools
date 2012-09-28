@@ -1283,9 +1283,9 @@ params = [
 
 def setup_map(param):
   param.map = []
-  for i in range(len(param.definitions)):
+  for definition in param.definitions:
     map = { }
-    for nmval in param.definitions[i].split(','):
+    for nmval in definition.split(','):
       val, name = [ s.strip() for s in nmval.split('~') ]
       name = name.replace(' ', '_').lower()
       map[name] = val

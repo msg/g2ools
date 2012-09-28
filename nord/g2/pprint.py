@@ -32,7 +32,7 @@ def printdescription(patch):
   printf(' variation: %d\n', desc.variation)
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white ]
-  colors = ''.join(['RBYOGPW'[i] for i in range(len(x)) if x[i]])
+  colors = ''.join(['RBYOGPW'[i] for i in xrange(len(x)) if x[i]])
   printf(' colors: %s\n', colors)
   #printf(' unk2=0x%02x\n', desc.unk2)
     
@@ -54,14 +54,12 @@ def printmodules(patch):
         module.type.id, module.uprate, module.leds)
     if hasattr(module, 'modes') and len(module.modes):
       printf('  modes:\n')
-      for m in range(len(module.modes)):
-        mode = module.modes[m]
+      for m, mode in enumerate(module.modes):
         mtype = module.type.modes[m]
         printf('  %-16s %r\n', mtype.name+':', mode)
     if hasattr(module, 'params') and len(module.params):
       printf('  params:\n')
-      for p in range(len(module.params)):
-        param = module.params[p]
+      for p, param in enumerate(module.params):
         ptype = module.type.params[p]
         printf('  %-16s %r\n', ptype.name+':', param.variations)
         if hasattr(param, 'labels'):
@@ -80,8 +78,7 @@ def printcables(patch):
 
 def printknobs(patch):
   printf('knobs:\n')
-  for i in range(len(patch.knobs)):
-    knob = patch.knobs[i]
+  for i, knob in enumerate(patch.knobs):
     if knob.assigned:
       printf(' %s%d:%d ', 'ABCDE'[i/24], (i/8)%3, i&7)
       if hasattr(knob.param, 'module'):

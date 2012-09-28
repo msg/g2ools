@@ -23,7 +23,7 @@ def crc16(val, icrc):
   '''crc16(val, ircr) - calculate crc of 1 char.'''
   k = (((icrc>>8)^val)&0xff)<<8
   crc_ = 0
-  for bits in range(8):
+  for bits in xrange(8):
     if (crc_^k)&0x8000 != 0:
       crc_ = (crc_<<1)^0x1021
     else:
