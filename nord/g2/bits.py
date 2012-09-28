@@ -69,8 +69,35 @@ def setbits(bit, nbits, data, value):
   #printf('%s\n', data)
   return bit+nbits
 
+class BitStream(object):
+  def __init__(self, data):
+    self.data = data
+    self.bit = 0
+
+  def setup(self, bit=0, data=None):
+    self.bit = bit
+    if data:
+      self.data = data
+
+  def read_bits(self, nbits):
+    self.bit, value = getbits(self.bit, nbits, self.data)
+    return value
+
+  def read_bitsa(self, nbitsa):
+    return [ self.read_bits(nbits) for nbits in nbitsa ]
+
+  def write_bits(self, nbits, value):
+    self.bit = setbits(self.bit, nbits, self.data, value)
+
+  def write_bitsa(self, nbitsa, values):
+    for nbits, value in zip(nbitsa, values):
+      self.write_bits(nbits, value)
+
+  def string(self):
+    return str(self.data[:(self.bit+7)>>3])
+
 try:
-  from nord.g2._bits import setbits, getbits
+  from nord.g2._bits import setbits, getbits, BitStream
 except:
   pass
 
