@@ -20,7 +20,6 @@
 #
 
 import string, struct, sys
-from array import array
 
 from nord import printf
 from nord.module import Module
@@ -31,8 +30,8 @@ from nord.g2 import modules
 from nord.g2.crc import crc
 from nord.g2.bits import setbits, getbits
 
-section_debug = 0 # outputs section debug 
-title_section = 0 # replace end of section with section title
+section_debug = 1 # outputs section debug 
+title_section = 1 # replace end of section with section title
 
 NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
@@ -40,8 +39,6 @@ NKNOBS = 120    # 120 knob settings
 NMORPHMAPS = 25 # max morphmaps per variation
 
 FX, VOICE, SETTINGS = 0, 1, 2
-
-zeros = '\0' * (16<<10) # [0] * (8<<10)
 
 class G2Error(Exception):
   '''G2Error - exception for throwing an unrecoverable error.'''
@@ -69,10 +66,10 @@ class Section(object):
   '''Section abstract class that represents a section of .pch2 file.
   all sections objects have parse() and format() methods.
 '''
-  default = [0] * (4 << 10) # max 64k section size
+  default = [0] * (2 << 10) # max 64k section size
   def __init__(self, **kw):
     self.__dict__ = kw
-    self.data = array('B', Section.default)
+    self.data = bytearray(2<<10)
 
 class Description(object):
   '''Description class for patch/performance description.'''
@@ -105,7 +102,7 @@ class PatchDescription(Section):
     bit = setbits(bit, 8, data, 0)
 
     last = (bit+7)>>3
-    return data[:last].tostring()
+    return str(data[:last])
 
 class ModuleList(Section):
   '''ModuleList Section subclass'''
@@ -184,7 +181,7 @@ class ModuleList(Section):
       for mode in m.modes:
         bit = setbits(bit, 6, data, mode.value)
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
 class CurrentNote(Section):
   '''CurrentNote Section subclass'''
@@ -215,7 +212,7 @@ class CurrentNote(Section):
         bit = setbits(bit, 7, data, note.note)
         bit = setbits(bit, 7, data, note.attack)
         bit = setbits(bit, 7, data, note.release)
-      return data[:(bit+7)>>3].tostring()
+      return str(data[:(bit+7)>>3])
     else:
       return '\x80\x00\x00\x20\x00\x00'  # normal default
 
@@ -290,7 +287,7 @@ class CableList(Section):
       bit = setbits(bit, 8, data, c.dest.module.index)
       bit = setbits(bit, 6, data, c.dest.index)
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
 class Parameter(object):
   '''Parameter class for module parameters/settings.'''
@@ -398,7 +395,7 @@ class Parameters(Section):
           bit = setbits(bit, 7, data, value)
       section += 1
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
   def parse_module(self, patch, data, bit):
     bit, nmodules    = getbits(bit, 8, data)
@@ -437,7 +434,7 @@ class Parameters(Section):
     bit = setbits(bit, 8, data, len(modules))
     if not len(modules):
       bit = setbits(bit, 8, data, 0) # 0 variations
-      return data[:(bit+7)>>3].tostring()
+      return str(data[:(bit+7)>>3])
     bit = setbits(bit, 8, data, NVARIATIONS)
 
     for i, m in enumerate(modules):
@@ -450,7 +447,7 @@ class Parameters(Section):
         for param in params:
           bit = setbits(bit, 7, data, param.variations[variation])
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
   def parse(self, patch, data):
     bit, self.area = getbits(0, 2, data)
@@ -535,7 +532,7 @@ class MorphParameters(Section):
       bit = setbits(bit, 4, data, 0) # always 0
 
     bit -= 4
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
 class KnobAssignments(Section):
   '''KnobAssignments Section subclass'''
@@ -590,7 +587,7 @@ class KnobAssignments(Section):
         if type(perf) == Performance:
           bit = setbits(bit, 2, data, k.slot)
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
 class CtrlAssignments(Section):
   '''CtrlAssignments Section subclass'''
@@ -632,7 +629,7 @@ class CtrlAssignments(Section):
       bit = setbits(bit, 8, data, index)
       bit = setbits(bit, 7, data, param)
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
 class Labels(Section):
   '''Labels Section subclass'''
@@ -667,7 +664,7 @@ class Labels(Section):
     for c in t:
       bit = setbits(bit, 8, data, ord(c))
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
   def parse_parameter(self, patch, data, bit):
     bit, nmodules = getbits(bit, 8, data)
@@ -763,7 +760,7 @@ class Labels(Section):
     for c in t:
       bit = setbits(bit, 8, data, ord(c))
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
   def parse(self, patch, data):
     bit, self.area = getbits(0, 2, data)
@@ -817,7 +814,7 @@ class ModuleNames(Section):
       for c in nm:
         bit = setbits(bit, 8, data, ord(c))
 
-    return data[:(bit+7)>>3].tostring()
+    return str(data[:(bit+7)>>3])
 
 class TextPad(Section):
   '''TextPad Section subclass'''
@@ -917,12 +914,12 @@ Info=BUILD %d\r
     ecrc = struct.unpack('>H', data[-2:])[0]
     acrc = crc(data[null+1:-2])
     if ecrc != acrc:
-      printf('Bad CRC\n')
+      printf('Bad CRC 0x%x 0x%x\n' % (ecrc, acrc))
 
   def format_patch(self, patch):
-    s = ''
+    s = bytearray()
     for section in Pch2File.patch_sections:
-      section.data = array('B', zeros) # max 64k section size
+      section.data = bytearray(4<<10)
       f = section.format(patch)
 
       if section_debug:
@@ -936,7 +933,7 @@ Info=BUILD %d\r
           f = nm+f[len(nm):]
 
       s += struct.pack('>BH', section.type, len(f)) + f
-    return s
+    return str(s)
 
   def format(self):
     return self.format_patch(self.patch)
@@ -1007,7 +1004,7 @@ class PerformanceDescription(Section):
         bit = setbits(bit, nbits, data, getattr(patch, name))
 
     last = (bit+7)>>3
-    return data[:last].tostring()
+    return str(data[:last])
 
 class GlobalKnobAssignments(KnobAssignments):
   '''GlobalKnobAssignments Section subclasss'''
@@ -1041,7 +1038,7 @@ class Prf2File(Pch2File):
     return self.parse_section(self.global_section, data, off)
 
   def format_section(self, section, total=0):
-    section.data = array('B', [0] * (64<<10)) # max 64k section size
+    section.data = bytearray(4<<10)
     f = section.format(self.performance)
     if section_debug:
       nm = section.__class__.__name__
