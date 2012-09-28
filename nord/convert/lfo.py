@@ -109,7 +109,7 @@ class ConvLFOA(Convert):
   parammap = ['Rate', 'Range', 'Waveform', 'RateMod', ['PolyMono', 'Mono'],
               None, 'Phase', ['Active', 'Mute']]
   inputmap = ['Rate', 'Rst']
-  outputmap = [None, 'Out'] # Slv
+  outputmap = ['', 'Out'] # Slv
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -140,7 +140,7 @@ class ConvLFOB(Convert):
   parammap = ['Rate', 'Range', 'Phase', 'RateMod', ['PolyMono', 'Mono'],
               None, ['PhaseMod', 'PwMod'], ['Shape', 'Pw']]
   inputmap = ['Rate', 'Rst', 'ShapeMod']
-  outputmap = ['Out', None] # Slv
+  outputmap = ['Out', ''] # Slv
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -165,7 +165,7 @@ class ConvLFOC(Convert):
   parammap = ['Rate', 'Range', 'Waveform', 'RateMod', ['PolyMono', 'Mono'],
               ['Active', 'Mute']]
   inputmap = ['RateVar']
-  outputmap = ['Out', None]
+  outputmap = ['Out', '']
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -246,7 +246,7 @@ class ConvClkGen(Convert):
   maing2module = 'ClkGen'
   parammap = ['Rate', ['Active', 'On/Off']]
   inputmap = ['Rst']
-  outputmap = ['1/96', '1/16', None, 'Sync']
+  outputmap = ['1/96', '1/16', '', 'Sync']
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module

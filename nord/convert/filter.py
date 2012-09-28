@@ -20,14 +20,14 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import setv, getv
-from nord.units import nm1fltfreq, g2fltfreq
+from nord.units import nm1fltfreq, g2fltfreq, fltfreq_map
 from nord.convert import Convert
 from nord.convert.convert import handlekbt, updatevals
 from nord.convert.table import modtable, lphpfreq
 
 class ConvFilter(Convert):
   def domodule(self):
-    updatevals(self.g2module.params, ['Freq'], nm1fltfreq, g2fltfreq)
+    updatevals(self.g2module.params, ['Freq'], fltfreq_map)
 
 class ConvFilterA(ConvFilter):
   maing2module = 'FltLP'
@@ -97,7 +97,7 @@ class ConvFilterE(ConvFilter):
   parammap = ['FilterType', ['GC', 'GainControl'], None,
               'Freq', None, 'ResMod', 'Res',
               'Slope', None, ['Active', 'Bypass']]
-  inputmap = ['PitchVar', 'Res', 'In', None]
+  inputmap = ['PitchVar', 'Res', 'In', '']
   outputmap = ['Out']
 
   def domodule(self):
@@ -118,7 +118,7 @@ class ConvFilterF(ConvFilter):
   maing2module = 'FltClassic'
   parammap = ['Freq', None, 'Res', None, None,
               'Slope', ['Active', 'Bypass']]
-  inputmap = ['PitchVar', None, 'In', None]
+  inputmap = ['PitchVar', '', 'In', '']
   outputmap = ['Out']
 
   def domodule(self):
@@ -147,7 +147,7 @@ class ConvVocalFilter(ConvFilter):
 
 class ConvVocoder(Convert):
   maing2module = 'Vocoder'
-  parammap = ['Band%d' % i for i in range(1, 17)]+[None, 'Emphasis', 'Monitor']
+  parammap = ['Band%d' % i for i in xrange(1, 17)]+[None, 'Emphasis', 'Monitor']
   inputmap = ['Ctrl', 'In']
   outputmap = ['Out']
 
@@ -155,7 +155,7 @@ class ConvFilterBank(Convert):
   maing2module = 'LevAmp'
   parammap = [None]*14
   inputmap = ['In']
-  outputmap = [None]
+  outputmap = ['']
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -261,7 +261,7 @@ class ConvFilterBank(Convert):
     mixfaderp = mixfader.params
     onnms = ['1-3', '4-5', '6', '7', '8', '9-10', '11-12', '13-14']
     setv(mixfaderp.ExpLin, 2) # dB
-    for i in range(len(onnms)):
+    for i in xrange(len(onnms)):
       onp = getattr(mixfaderp, 'On%d'%(i+1))
       setv(onp, 1)
       onp.labels = [onnms[i]]

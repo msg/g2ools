@@ -26,14 +26,13 @@ from nord.units import nm2g2val
 from nord.utils import toascii
 from nord.convert.table import kbttable
 
-def updatevals(g2mp, params, nm1tab, g2tab):
-  '''updatevals(g2mp, params, nm1tab, g2tab) -> None
+def updatevals(g2mp, params, nm1g2_map):
+  '''updatevals(g2mp, params, nm1g2_map) -> None
   change the time values of g2 module based on tables in ./units.py.
   '''
   for param in params:
     midival = getv(getattr(g2mp, param))
-    newmidival = nm2g2val(midival, nm1tab, g2tab)
-    setv(getattr(g2mp, param), newmidival)
+    setv(getattr(g2mp, param), nm1g2_map[midival])
 
 class Convert(object):
 
@@ -68,8 +67,7 @@ class Convert(object):
 
     # setup parameters from parammap static member of convert module class
     self.params = [ None ] * len(self.parammap)
-    for i in range(len(self.parammap)):
-      param = self.parammap[i]
+    for i, param in enumerate(self.parammap):
       if type(param) == type(''):
         setv(getattr(g2m.params, param), getv(getattr(nmm.params, param)))
         self.params[i] = getattr(g2m.params, param)
@@ -80,20 +78,10 @@ class Convert(object):
         self.params[i] = param # None: placeholder for other parameters
 
     # setup inputs from inputmap static member of convert module class
-    self.inputs = [ None ] * len(self.inputmap)
-    for i in range(len(self.inputmap)):
-      input = self.inputmap[i]
-      if input:
-        input = getattr(g2m.inputs, input)
-      self.inputs[i] = input
-          
+    self.inputs = [ getattr(g2m.inputs, i, None) for i in self.inputmap ]
+
     # setup outputs from outputmap static member of convert module class
-    self.outputs = [ None ] * len(self.outputmap)
-    for i in range(len(self.outputmap)):
-      output = self.outputmap[i]
-      if output:
-        output = getattr(g2m.outputs, output)
-      self.outputs[i] = output
+    self.outputs = [ getattr(g2m.outputs, o, None) for o in self.outputmap ]
 
   def add_module(self, shortnm, **kw):
     '''add_module(shortnm, **kw) -> module
@@ -106,17 +94,17 @@ class Convert(object):
     self.g2modules.append(mod)
     return mod
   
-  def delmodule(self, module):
-    '''delmodule(module) -> None
+  def del_module(self, module):
+    '''del_module(module) -> None
     remove module from pch2, area, and convert object and update geometry.
     '''
-    self.g2area.delmodule(module)
+    self.g2area.del_module(module)
     self.g2modules.remove(module)
     # update vertical position of all modules with the one removed
     def byvert(a, b):
       return cmp(a.vert, b.vert)
     self.g2modules.sort(byvert)
-    for i in range(1, len(self.g2modules)):
+    for i in xrange(1, len(self.g2modules)):
       above = self.g2modules[i-1]
       self.g2modules[i].vert = above.vert + above.height
 

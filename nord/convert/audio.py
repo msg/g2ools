@@ -32,8 +32,8 @@ class ConvClip(Convert):
 class ConvOverdrive(Convert):
   maing2module = 'Clip'
   parammap = [None, None]
-  inputmap = ['In', None]
-  outputmap = [None]
+  inputmap = ['In', '']
+  outputmap = ['']
 
   def __init__(self, nmarea, g2area, nmmodule, options):
     if options.g2overdrive:
@@ -169,7 +169,7 @@ class ConvDelay(Convert):
       self.maing2module = 'DlySingleB'
       self.parammap = [['TimeMod', 'Modulation'], ['Time', 'Time']]
       self.inputmap = ['In', 'Time']
-      self.outputmap = [None, 'Out']
+      self.outputmap = ['', 'Out']
     else:
       self.maing2module = 'DelayDual'
       self.parammap = [['Time1Mod', 'Modulation'], ['Time1', 'Time']]
@@ -226,7 +226,7 @@ class ConvPhaser(Convert):
   parammap = [None, None, ['PitchMod', 'FreqMod'], 'Freq', 'SpreadMod',
               ['FB', 'Feedback'], ['NotchCount', 'Peaks'], 'Spread', 'Level',
               ['Active', 'Bypass'], None]
-  inputmap = ['In', None, 'Spr']
+  inputmap = ['In', '', 'Spr']
   outputmap = ['Out']
 
   def domodule(self):
@@ -306,8 +306,8 @@ class ConvCompressor(Convert):
 class ConvExpander(Convert):
   maing2module = 'Sw2-1'
   parammap = [None]*9
-  inputmap = [None, None, 'In1'] # L, R
-  outputmap = [None, None] # L, R
+  inputmap = ['', '', 'In1'] # L, R
+  outputmap = ['', ''] # L, R
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module

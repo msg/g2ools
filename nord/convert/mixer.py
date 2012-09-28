@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import setv, getv
-from nord.units import nm1levamp, g2levamp
+from nord.units import nm1levamp, g2levamp, levamp_map
 from nord.convert import Convert
 from nord.convert.convert import updatevals
 from nord.g2.colors import g2conncolors
@@ -34,9 +34,9 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
       usepad = True
     
   # remove all inputs and parameters (level settings)
-  for i in range(maxinputs):
+  for i in xrange(maxinputs):
     parammap[i] = None
-    inputmap[i] = None
+    inputmap[i] = '' # None
 
   # get levels and inputs 
   ins = range(1, maxinputs+1)
@@ -46,7 +46,7 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
   # levels[i].knob and levels[i].ctrl and levels[i].morph
   # move inputs/levels to lowest available and count them
   o = 1
-  for i in range(maxinputs):
+  for i in xrange(maxinputs):
     if inputs[i].net:
       parammap[i] = [ 'Lev%d' % o, 'Lev%d' % (i+1) ]
       inputmap[i] = 'In%d' % o
@@ -56,7 +56,7 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
   if o < 2:
     maing2mod = 'Mix1-1A'
     # Mix1-1A doesn't have Lev1 or In1, has Lev and In
-    for i in range(len(parammap)):
+    for i in xrange(len(parammap)):
       if i < maxinputs and parammap[i]:
         parammap[i] = [ 'Lev', 'Lev%d' % (i+1) ]
         inputmap[i] = 'In'
@@ -73,7 +73,7 @@ def mixeroptimize(nmmodule, parammap, inputmap, maxinputs, usepad=False):
     
   # if not usingMix8-1B, remove Pad param
   if maing2mod != 'Mix8-1B':
-    for i in range(len(parammap)):
+    for i in xrange(len(parammap)):
       if type(parammap[i]) == type([]) and parammap[i][0] == 'Pad':
         parammap[i] = None
   #printf('mixeroptimize "%s" mod="%s" o=%d\n', nmmodule.name, maing2mod, o)
@@ -114,7 +114,7 @@ class Conv3Mixer(Convert):
       setv(g2mp.On3, 1)
       setv(g2mp.On4, 1)
 
-    for i in range(1, self.maxinputs+1):
+    for i in xrange(1, self.maxinputs+1):
       getattr(g2m.inputs, 'In%d' % i).rate = g2conncolors.red
       l = getattr(g2mp, 'Lev%d' % i)
       setv(l, modtable[getv(l)][0])
@@ -224,7 +224,7 @@ class Conv4_1Switch(Convert):
   def __init__(self, nmarea, g2area, nmmodule, options):
     # use mixer if knobs, morphs, or midi cc's assigned and connected
     usemixer = False
-    for i in range(1, 5):
+    for i in xrange(1, 5):
       level = getattr(nmmodule.params, 'Level%d' % i)
       innet = getattr(nmmodule.inputs, 'In%d' % i).net
       if not innet:
@@ -244,7 +244,7 @@ class Conv4_1Switch(Convert):
 
     if self.maing2module == 'Sw4-1':
       # add a LevAmp and reorient inputs
-      for i in range(1, 5):
+      for i in xrange(1, 5):
         level = getv(getattr(nmmp, 'Level%d' % i))
         if level == 0 or level == 127:
           continue
@@ -257,7 +257,7 @@ class Conv4_1Switch(Convert):
           self.inputs[i-1] = mix11a.inputs.In
     else:
       sel = getv(nmmp.Sel)
-      for i in range(1, 5):
+      for i in xrange(1, 5):
         level = getv(getattr(nmmp, 'Level%d' % i))
         lev = getattr(g2mp, 'Lev%d' % i)
         setv(lev, modtable[level][0])
@@ -298,4 +298,4 @@ class ConvAmplifier(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    updatevals(g2mp, ['Gain'], nm1levamp, g2levamp)
+    updatevals(g2mp, ['Gain'], levamp_map)

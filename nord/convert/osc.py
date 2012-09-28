@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 from nord.utils import setv, getv, isnm1lfo
-from nord.units import nm1adsrtime, g2adsrtime
+from nord.units import nm1adsrtime, g2adsrtime, adsrtime_map
 from nord.nm1.colors import nm1conncolors
 from nord.g2.colors import g2conncolors
 from nord.convert.convert import Convert, \
@@ -361,8 +361,8 @@ class ConvOscA(Convert):
   parammap = ['FreqCoarse', 'FreqFine', None, ['Shape', 'PulseWidth'],
               'Waveform', None, None,
               ['FmAmount', 'FmMod'], ['ShapeMod', 'PwMod'], ['Active', 'Mute']]
-  inputmap = [ 'Sync', 'FmMod', None, None, 'ShapeMod' ]
-  outputmap = [ 'Out', None ]
+  inputmap = [ 'Sync', 'FmMod', '', '', 'ShapeMod' ]
+  outputmap = [ 'Out', '' ]
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -394,8 +394,8 @@ class ConvOscB(Convert):
   maing2module = 'OscB'
   parammap = ['FreqCoarse', 'FreqFine', None, 'Waveform', None, None,
               ['FmAmount', 'FmMod'], ['ShapeMod', 'PwMod'], ['Active', 'Mute']]
-  inputmap = [ 'FmMod', None, None, 'ShapeMod' ]
-  outputmap = [ 'Out', None ]
+  inputmap = [ 'FmMod', '', '', 'ShapeMod' ]
+  outputmap = [ 'Out', '' ]
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -433,8 +433,8 @@ class ConvOscC(Convert):
   maing2module = 'OscC'
   parammap = ['FreqCoarse', 'FreqFine', 'Kbt', ['PitchMod', 'FreqMod'],
       ['FmAmount', 'FmMod'], ['Active', 'Mute']]
-  inputmap = [ 'FmMod', 'Pitch', None]
-  outputmap = [ 'Out', None ]
+  inputmap = [ 'FmMod', 'Pitch', '']
+  outputmap = [ 'Out', '' ]
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -469,8 +469,8 @@ class ConvSpectralOsc(Convert):
   parammap = ['FreqCoarse', 'FreqFine', None, None, None, None,
   #                                ShpM
               ['FmAmount', 'FmMod'], None, 'Kbt', ['Active', 'Mute']]
-  inputmap = ['FmMod', None, None, None]
-  outputmap = [None, None]
+  inputmap = ['FmMod', '', '', '']
+  outputmap = ['', '']
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -550,7 +550,7 @@ class ConvSpectralOsc(Convert):
 class ConvFormantOsc(Convert):
   maing2module = 'OscC'                                    #Timbre, PMod1, PMod2
   parammap = ['FreqCoarse', 'FreqFine', 'Kbt', None, None, None, None]
-  inputmap = [None, None, None]
+  inputmap = ['', '', '']
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
@@ -571,8 +571,7 @@ class ConvFormantOsc(Convert):
       modnms = ['Invert', 'RndClkB', 'EqPeak', 'ConstSwT']
 
     modules = [ None ] * len(modnms)
-    for i in range(len(modnms)):
-      modnm = modnms[i]
+    for i, modnm in enumerate(modnms):
       mod = self.add_module(modnm, name=modnm)
       modules[i] = mod
 
@@ -684,7 +683,7 @@ class ConvOscSlvC(Convert):
   def __init__(self, nmarea, g2area, nmmodule, options):
     if len(nmmodule.inputs.FmMod.cables) == 0:
       self.parammap[2] = None
-      self.inputmap[1] = None
+      self.inputmap[1] = '' # None
       self.maing2module = 'OscD'
     super(ConvOscSlvC, self).__init__(nmarea, g2area, nmmodule, options)
 
@@ -754,7 +753,7 @@ class ConvOscSineBank(Convert):
   parammap = [ None ] * 24
   outputmap = ['Out']
   #           Mst  Mixin   Sync O1Am O2Am O3Am O4Am O5Am O6Am
-  inputmap = [None, 'Chain', None, None, None, None, None, None, None]
+  inputmap = ['', 'Chain', '', '', '', '', '', '', '']
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -770,7 +769,7 @@ class ConvOscSineBank(Convert):
     else:
       osctype = 'OscD'
     oscs = []
-    for i in range(6, 0, -1): # 6 Sine Osc
+    for i in xrange(6, 0, -1): # 6 Sine Osc
       # if osc muted, don't addit
       if getv(getattr(nmmp, 'Osc%dMute'%i))==0:
         if len(getattr(nmm.inputs, 'Osc%dAm'%i).cables) == 0 and \
@@ -800,12 +799,12 @@ class ConvOscSineBank(Convert):
     if len(nmm.inputs.Sync.cables):
       self.inputs[2] = oscs[0].inputs.Sync
       if len(oscs) > 1:
-        for i in range(1, len(oscs)):
+        for i in xrange(1, len(oscs)):
           self.connect(oscs[i-1].inputs.Sync, oscs[i].inputs.Sync)
     if len(nmm.inputs.Mst.cables):
       self.inputs[0] = oscs[0].inputs.Pitch
       if len(oscs) > 1:
-        for i in range(1, len(oscs)):
+        for i in xrange(1, len(oscs)):
           self.connect(oscs[i-1].inputs.Pitch, oscs[i].inputs.Pitch)
     self.oscs = oscs
 
@@ -860,7 +859,7 @@ class ConvPercOsc(Convert):
   maing2module = 'OscPerc'
   parammap = ['FreqCoarse', 'Click', 'Decay', 'Punch', 'PitchMod', 'FreqFine',
               ['Active', 'Mute']]
-  inputmap = ['Trig', None, 'PitchVar']
+  inputmap = ['Trig', '', 'PitchVar']
   outputmap = ['Out']
 
   def domodule(self):
@@ -909,13 +908,13 @@ class ConvDrumSynth(Convert):
     nmmp, g2mp = nmm.params, g2m.params
 
     # parameters are exactly the same
-    for i in range(len(nmm.params)):
+    for i in xrange(len(nmm.params)):
       setv(g2mp[i], getv(nmmp[i]))
       self.params[i] = g2mp[i]
 
     updatevals(g2mp,
         ['MasterDecay', 'SlaveDecay', 'NoiseFltDecay', 'BendDecay'],
-        nm1adsrtime, g2adsrtime)
+        adsrtime_map)
 
     setv(g2mp.MasterLevel, modtable[getv(g2mp.MasterLevel)][0])
     setv(g2mp.SlaveLevel, modtable[getv(g2mp.SlaveLevel)][0])

@@ -29,7 +29,7 @@ def handlelength(conv):
   if getv(nmmp.Loop) == 0 and length > 15:
     link = g2m.outputs.Link
     setv(g2mp.Length, 16)
-    for l in range(16, length, 16):
+    for l in xrange(16, length, 16):
       seq = conv.add_module(g2m.type.shortnm)
       if l + 16 > length:
         setv(seq.params.Length, length - l)
@@ -61,8 +61,8 @@ class ConvEventSeq(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    for j in range(2):
-      for i in range(16):
+    for j in xrange(2):
+      for i in xrange(16):
         s = 'Seq%dStep%d' % (j+1, i+1)
         step = getattr(g2mp, s)
         setv(step, getv(getattr(nmmp, s)))
@@ -80,7 +80,7 @@ class ConvCtrlSeq(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    for i in range(16):
+    for i in xrange(16):
       s = 'Seq1Step%d' % (i+1)
       step = getattr(g2mp, s)
       t = 'Ctrl%d' % (i+1)
@@ -99,7 +99,7 @@ class ConvNoteSeqA(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    for i in range(16):
+    for i in xrange(16):
       s = 'Seq1Step%d' % (i+1)
       t = 'Note%d' % (i+1)
       step = getattr(g2mp, s)
@@ -121,7 +121,7 @@ class ConvNoteSeqB(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    for i in range(16):
+    for i in xrange(16):
       s = 'Seq1Step%d' % (i+1)
       t = 'Note%d' % (i+1)
       step = getattr(g2mp, s)

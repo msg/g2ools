@@ -34,7 +34,7 @@ class ConvKeyboard(Convert):
       if getattr(self.g2module.outputs, output).net:
         noconnections = False
     if noconnections:
-      self.g2module.area.delmodule(self.g2module)
+      self.g2module.area.del_module(self.g2module)
 
 class ConvKeyboardPatch(Convert):
   maing2module = 'MonoKey'
@@ -89,7 +89,7 @@ def isxoutput(module):
 class Conv1Output(Convert):
   maing2module = 'Mix1-1A'
   parammap = [None, None, None] # Level, Destination, Mute
-  inputmap = [None]
+  inputmap = ['']
 
   def __init__(self, nmarea, g2area, nmmodule, options):
     lev = nmmodule.params.Level

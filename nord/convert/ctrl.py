@@ -112,7 +112,7 @@ class ConvControlMixer(Convert):
 class ConvNoteVelScal(Convert):
   maing2module = 'LevScaler'
   parammap = [None, ['L', 'LeftGain'], ['BP', 'Breakpoint'], ['R', 'RightGain']]
-  inputmap = [None, 'Note'] # no Vel
+  inputmap = ['', 'Note'] # no Vel
   outputmap = ['Level']
 
   def domodule(self):

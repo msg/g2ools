@@ -21,7 +21,7 @@
 #
 from nord import printf
 from nord.utils import setv, getv
-from nord.units import nm1adsrtime, g2adsrtime
+from nord.units import nm1adsrtime, g2adsrtime, adsrtime_map
 from nord.convert import Convert
 from nord.convert.convert import updatevals
 
@@ -53,7 +53,7 @@ class ConvADSR_Env(Convert):
   maing2module = 'EnvADSR'
   parammap = [['Shape', 'AttackShape'],
       'Attack', 'Decay', 'Sustain', 'Release', None ]
-  inputmap = ['In', 'Gate', None, 'AM']
+  inputmap = ['In', 'Gate', '', 'AM']
   outputmap = ['Env', 'Out']
               
   def domodule(self):
@@ -62,7 +62,7 @@ class ConvADSR_Env(Convert):
     handlegate(self)
 
     # handle special parameters
-    updatevals(g2mp, ['Attack', 'Decay', 'Release'], nm1adsrtime, g2adsrtime)
+    updatevals(g2mp, ['Attack', 'Decay', 'Release'], adsrtime_map)
     setv(g2mp.OutputType, [0, 3][getv(nmmp.Invert)])
     self.inputs[1:3] = handleretrig(self)
 
@@ -84,7 +84,7 @@ class ConvAD_Env(Convert):
     handlegate(self, 'Trigger')
 
     # handle special parameters
-    updatevals(g2mp, ['Attack', 'Release'], nm1adsrtime, g2adsrtime)
+    updatevals(g2mp, ['Attack', 'Release'], adsrtime_map)
     if self.options.adsrforad:
       printf('%s\n', g2m.type.shortnm)
       setv(g2mp.Sustain, 0)
@@ -94,7 +94,7 @@ class ConvMod_Env(Convert):
   maing2module = 'ModADSR'
   parammap = ['Attack', 'Decay', 'Sustain', 'Release',
               'AttackMod', 'DecayMod', 'SustainMod', 'ReleaseMod', None]
-  inputmap = ['Gate', None, 'AttackMod', 'DecayMod', 'SustainMod', 'ReleaseMod',
+  inputmap = ['Gate', '', 'AttackMod', 'DecayMod', 'SustainMod', 'ReleaseMod',
               'In', 'AM']
   outputmap = ['Env', 'Out']
 
@@ -104,7 +104,7 @@ class ConvMod_Env(Convert):
     handlegate(self)
 
     # handle special parameters
-    updatevals(g2mp, ['Attack', 'Decay', 'Release'], nm1adsrtime, g2adsrtime)
+    updatevals(g2mp, ['Attack', 'Decay', 'Release'], adsrtime_map)
     if len(nmm.inputs.AttackMod.cables):
       levconv = self.add_module('LevConv', name='Attack')
       setv(levconv.params.InputType, 0)  # Bip
@@ -138,7 +138,7 @@ class ConvAHD_Env(Convert):
     handlegate(self, 'Trig')
 
     # handle special parameters
-    updatevals(g2mp, ['Attack', 'Hold', 'Decay'], nm1adsrtime, g2adsrtime)
+    updatevals(g2mp, ['Attack', 'Hold', 'Decay'], adsrtime_map)
     if len(nmm.inputs.AttackMod.cables):
       levconv = self.add_module('LevConv', name='Attack')
       setv(levconv.params.InputType, 0)  # Bip
@@ -163,9 +163,9 @@ class ConvMulti_Env(Convert):
   def closesttime(self, time):
     timeval = 0
     timemin = abs(g2adsrtime[0]-time)
-    for i in range(1, len(g2adsrtime)):
-      if abs(g2adsrtime[i]-time) < timemin:
-        timemin = abs(g2adsrtime[i]-time)
+    for i, adsrtime in enumerate(g2adsrtime):
+      if abs(adsrtime-time) < timemin:
+        timemin = abs(adsrtime-time)
         timeval = i
     return timeval
 
@@ -177,8 +177,7 @@ class ConvMulti_Env(Convert):
     setv(g2mp.SustainMode, [3, 0, 1, 2, 3][getv(nmmp.Sustain)])
     setv(g2mp.Shape, [3, 2, 1][getv(nmmp.Curve)])
     # handle special parameters
-    updatevals(g2mp, ['Time%d' % i for i in range(1, 5)]+['NR'],
-        nm1adsrtime, g2adsrtime)
+    updatevals(g2mp, ['Time%d' % i for i in xrange(1, 5)]+['NR'], adsrtime_map)
     # if L4 is sustain, deal with it.
     sustain = getv(nmmp.Sustain)
     if sustain == 4:
@@ -189,7 +188,7 @@ class ConvMulti_Env(Convert):
       setv(adsr.params.Decay, 0)
       setv(adsr.params.Sustain, 127)
       setv(adsr.params.Release, getv(nmmp.Time5))
-      updatevals(adsr.params, ['Release'], nm1adsrtime, g2adsrtime)
+      updatevals(adsr.params, ['Release'], adsrtime_map)
       self.connect(g2m.inputs.Gate, adsr.inputs.Gate)
       self.connect(adsr.outputs.Env, g2m.inputs.AM)
       self.inputs[2] = adsr.inputs.AM

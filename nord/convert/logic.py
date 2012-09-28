@@ -89,7 +89,7 @@ class ConvClkDiv(Convert):
   maing2module = 'ClkDiv'
   parammap = ['Divider']
   inputmap = ['Clk', 'Rst']
-  outputmap = ['Out', None, None]
+  outputmap = ['Out', '', '']
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
@@ -100,7 +100,7 @@ class ConvClkDiv(Convert):
 class ConvClkDivFix(Convert):
   maing2module = 'ClkDiv'
   inputmap = ['Clk', 'Rst']
-  outputmap = [None, None, None]  # 16, T8, 8
+  outputmap = ['', '', '']  # 16, T8, 8
 
   def domodule(self):
     nmm, g2m = self.nmmodule, self.g2module
