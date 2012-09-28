@@ -30,8 +30,8 @@ from nord.g2 import modules
 from nord.g2.crc import crc
 from nord.g2.bits import setbits, getbits
 
-section_debug = 1 # outputs section debug 
-title_section = 1 # replace end of section with section title
+section_debug = 0 # outputs section debug 
+title_section = 0 # replace end of section with section title
 
 NVARIATIONS = 9 # 1-8, init
 NMORPHS = 8     # 8 morphs
@@ -69,7 +69,7 @@ class Section(object):
   default = [0] * (2 << 10) # max 64k section size
   def __init__(self, **kw):
     self.__dict__ = kw
-    self.data = bytearray(2<<10)
+    self.data = bytearray(64<<10)
 
 class Description(object):
   '''Description class for patch/performance description.'''
@@ -415,7 +415,7 @@ class Parameters(Section):
           bit, value = getbits(bit, 7, data)
           if param < len(params) and variation < NVARIATIONS:
             params[param].variations[variation] = value
-            
+
   def format_module(self, patch):
     data = self.data
 
@@ -423,24 +423,26 @@ class Parameters(Section):
 
     modules = []
     for module in area.modules:
-      if not hasattr(module, 'params'):
-        continue
-      elif not len(module.params):
-        continue
-      modules.append(module)
+      try:
+        if not len(module.params):
+          continue
+        modules.append(module)
+      except:
+        pass
     modules.sort(lambda a, b: cmp(a.index, b.index))
 
+    mlen = len(modules)
     bit = setbits(0, 2, data, self.area)
-    bit = setbits(bit, 8, data, len(modules))
-    if not len(modules):
+    bit = setbits(bit, 8, data, mlen)
+    if mlen == 0:
       bit = setbits(bit, 8, data, 0) # 0 variations
       return str(data[:(bit+7)>>3])
     bit = setbits(bit, 8, data, NVARIATIONS)
 
-    for i, m in enumerate(modules):
-      bit = setbits(bit, 8, data, m.index)
+    for module in modules:
+      bit = setbits(bit, 8, data, module.index)
 
-      params = m.params
+      params = module.params
       bit = setbits(bit, 7, data, len(params))
       for variation in xrange(NVARIATIONS):
         bit = setbits(bit, 8, data, variation)
@@ -919,7 +921,7 @@ Info=BUILD %d\r
   def format_patch(self, patch):
     s = bytearray()
     for section in Pch2File.patch_sections:
-      section.data = bytearray(4<<10)
+      section.data = bytearray(64<<10)
       f = section.format(patch)
 
       if section_debug:
@@ -1038,7 +1040,7 @@ class Prf2File(Pch2File):
     return self.parse_section(self.global_section, data, off)
 
   def format_section(self, section, total=0):
-    section.data = bytearray(4<<10)
+    section.data = bytearray(64<<10)
     f = section.format(self.performance)
     if section_debug:
       nm = section.__class__.__name__
