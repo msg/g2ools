@@ -116,7 +116,7 @@ class ModuleList(Section):
 
     area.modules = [ None ] * nmodules
     for i in xrange(nmodules):
-      id = readbits(8)
+      id = read_bits(8)
       m = Module(modules.fromid(id), area)
       area.modules[i] = m
 
@@ -823,7 +823,7 @@ class ModuleNames(Section):
 
     area = [patch.fx, patch.voice][self.area]
 
-    names = data[bitstream.tell_bit()>>3:]
+    names = str(data[bitstream.tell_bit()>>3:])
     for i in xrange(nmodules):
       null = names[1:].find('\0') + 1
       if 0 < null < 17:
