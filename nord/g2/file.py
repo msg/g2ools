@@ -99,7 +99,7 @@ class PatchDescription(Section):
       bitstream.write_bits(nbits, getattr(description, name))
     bitstream.write_bits(8, 0)
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class ModuleList(Section):
   '''ModuleList Section subclass'''
@@ -182,7 +182,7 @@ class ModuleList(Section):
       for mode in m.modes:
         write_bits(6, mode.value)
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class CurrentNote(Section):
   '''CurrentNote Section subclass'''
@@ -217,9 +217,10 @@ class CurrentNote(Section):
         write_bits(7, note.note)
         write_bits(7, note.attack)
         write_bits(7, note.release)
-      return bitstream.string()
     else:
-      return '\x80\x00\x00\x20\x00\x00'  # normal default
+      bitstream.write_bits(24, 0x800000)
+      bitstream.write_bits(24, 0x200000)
+    return bitstream.tell_bit()
 
 def invalidcable(smodule, sconn, direction, dmodule, dconn):
   '''invalidcable(area, smodule, sconn, direction, dmodule, dconn) -> bool
@@ -298,7 +299,7 @@ class CableList(Section):
       write_bits(8, c.dest.module.index)
       write_bits(6, c.dest.index)
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class Parameter(object):
   '''Parameter class for module parameters/settings.'''
@@ -408,7 +409,7 @@ class Parameters(Section):
           write_bits(7, value)
       section += 1
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
   def parse_module(self, patch, bitstream):
     read_bits = bitstream.read_bits
@@ -452,7 +453,7 @@ class Parameters(Section):
     write_bits(8, mlen)
     if mlen == 0:
       write_bits(8, 0)
-      return bitstream.string()
+      return bitstream.tell_bit()
     write_bits(8, NVARIATIONS)
 
     for module in modules:
@@ -465,7 +466,7 @@ class Parameters(Section):
         for param in params:
           write_bits(7, param.variations[variation])
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
   def parse(self, patch, data):
     bitstream = BitStream(data)
@@ -555,7 +556,7 @@ class MorphParameters(Section):
       write_bits(4, 0) # always 0
 
     bitstream.seek_bit(-4, 1)
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class KnobAssignments(Section):
   '''KnobAssignments Section subclass'''
@@ -613,7 +614,7 @@ class KnobAssignments(Section):
         if type(perf) == Performance:
           write_bits(2, knob.slot)
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class CtrlAssignments(Section):
   '''CtrlAssignments Section subclass'''
@@ -659,7 +660,7 @@ class CtrlAssignments(Section):
       write_bits(8, index)
       write_bits(7, param)
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class Labels(Section):
   '''Labels Section subclass'''
@@ -688,16 +689,13 @@ class Labels(Section):
 
     t = '\1\1\x50'
     for morph in xrange(NMORPHS):
-      t += ''.join(map(chr, [1, 8, 8+morph]))
       s = patch.settings.morphs[morph].label[:7]
-      s += '\0' * (7-len(s))
-      for e in s:
-        t += e
+      t += '\1\1' + chr(8+morph) + s + '\0' * (7-len(s))
 
-    for c in t:
-      write_bits(8, ord(c))
+    for c in map(ord, t):
+      write_bits(8, c)
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
   def parse_parameter(self, patch, bitstream):
     read_bits = bitstream.read_bits
@@ -730,10 +728,7 @@ class Labels(Section):
         paramlen -= 1 # decrease because we got param index
         if paramlen:
           for i in xrange(paramlen/7):
-            s = ''
-            for i in xrange(7):
-              c = read_bits(8)
-              s += chr(c)
+            s = ''.join([ord(read_bits(8)) for i in xrange(7)])
             modlen -= 7
             null = s.find('\0')
             if null > -1:
@@ -794,7 +789,7 @@ class Labels(Section):
     for c in t:
       write_bits(8, ord(c))
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
   def parse(self, patch, data):
     bitstream = BitStream(data)
@@ -823,7 +818,7 @@ class ModuleNames(Section):
 
     area = [patch.fx, patch.voice][self.area]
 
-    names = str(data[bitstream.tell_bit()>>3:])
+    names = data[bitstream.tell_bit()>>3:].tobytes()
     for i in xrange(nmodules):
       null = names[1:].find('\0') + 1
       if 0 < null < 17:
@@ -853,7 +848,7 @@ class ModuleNames(Section):
       for c in nm:
         write_bits(8, ord(c))
 
-    return bitstream.string()
+    return bitstream.tell_bit()
 
 class TextPad(Section):
   '''TextPad Section subclass'''
@@ -862,7 +857,10 @@ class TextPad(Section):
     patch.textpad = data
 
   def format(self, patch):
-    return patch.textpad
+    bitstream = BitStream(self.data)
+    for c in map(ord, patch.textpad):
+      bitstream.write_bits(8, c)
+    return bitstream.tell_bit()
 
 class Pch2File(object):
   '''Pch2File(filename) - main reading/writing object for .pch2 files
@@ -917,62 +915,73 @@ Info=BUILD %d\r
     if filename:
       self.read(filename)
 
-  def parse_patch(self, patch, data, off):
-    while off < len(data):
-      type, l = struct.unpack('>BH', data[off:off+3])
-      off += 3
+  def parse_patch(self, patch, memview):
+    while len(memview):
+      x = memview[:3].tolist()
+      type, l = x[0], (x[1]<<8)|x[2]
       section = Pch2File.section_map[type]()
       if section_debug:
         nm = section.__class__.__name__
         printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', type, nm, off, l)
-        printf('%s\n', binhexdump(data[off:off+l]))
-      section.parse(patch, bytearray(data[off:off+l]))
-      off += l
-    return off
+        printf('%s\n', binhexdump(memview[:l]))
+      section.parse(patch, memview[3:3+l])
+      memview = memview[3+l:]
 
-  def parse(self, data, off):
-    return self.parse_patch(self.patch, data, off)
+  def parse(self, memview):
+    self.parse_patch(self.patch, memview)
 
   # read - this is where the rubber meets the road.  it start here....
   def read(self, filename):
     self.filename = filename
-    data = open(filename, 'rb').read()
+    data = bytearray(open(filename, 'rb').read())
     null = data.find('\0')
     if null < 0:
       raise G2Error('Invalid G2File "%s" missing null terminator.' % filename)
     self.txthdr = data[:null]
-    off = null+1
-    self.binhdr = struct.unpack('BB', data[off:off+2])
+    self.binhdr = data[null+1], data[null+2]
     if self.binhdr[0] != self.standard_binary_header:
       printf('Warning: %s version %d\n', filename, self.binhdr[0])
       printf('         version %d supported. it may fail to load.\n',
           self.standard_binary_header)
-    off += 2
-    off = self.parse(data[:-2], off)
+    memview = memoryview(data)
+    memview = memview[null+1:]
+    self.parse(memview[2:-2])
 
-    ecrc = struct.unpack('>H', data[-2:])[0]
-    acrc = crc(data[null+1:-2])
+    ecrc = (data[-2]<<8)|data[-1]
+    acrc = crc(memview[:-2])
     if ecrc != acrc:
       printf('Bad CRC 0x%x 0x%x\n' % (ecrc, acrc))
 
   def format_patch(self, patch):
-    s = bytearray()
+    s = bytearray(32<<10)
+    memview = memoryview(s)
+    total = 0
     for section in Pch2File.patch_sections:
-      section.data = bytearray(64<<10)
-      f = section.format(patch)
+
+      section.data = memview[3:]  # skip type, size 
+      #print section.__class__.__name__
+      bits = section.format(patch)
+      bytes = (bits+7)>>3
 
       if section_debug:
         nm = section.__class__.__name__
         printf('0x%02x %-25s len:0x%04x total: 0x%04x\n',
-            section.type, nm, len(f), self.off+len(s))
+            section.type, nm, bytes, total)
         tbl = string.maketrans(string.ascii_lowercase, ' '*26)
         nm = nm.translate(tbl).replace(' ', '')
         printf('%s\n', nm)
         if title_section and len(nm) < len(f):
           f = nm+f[len(nm):]
+      # write type, size
+      memview[0] = chr(section.type)
+      memview[1] = chr((bytes >> 8) & 0xff)
+      memview[2] = chr(bytes & 0xff)
 
-      s += struct.pack('>BH', section.type, len(f)) + f
-    return str(s)
+      bytes += 3
+      memview = memview[bytes:]
+      total += bytes
+
+    return str(s[:total])
 
   def format(self):
     return self.format_patch(self.patch)
