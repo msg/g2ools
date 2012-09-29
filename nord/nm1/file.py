@@ -88,7 +88,7 @@ class ModuleDumpV3(Section):
           area = self.patch.fx
         if not len(values):
           continue
-      (index, id, horiz, vert) = values
+      index, id, horiz, vert = values
       module = area.find_module(index)
       if not module:
         module = area.add_module(fromid(id).shortnm)
