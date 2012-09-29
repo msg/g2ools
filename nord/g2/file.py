@@ -825,13 +825,13 @@ class ModuleNames(Section):
 
     names = data[bitstream.tell_bit()>>3:]
     for i in xrange(nmodules):
-      null = names.find('\0')
-      index = ord(names[0])
-      if null < 0 or null > 17:
+      null = names[1:].find('\0') + 1
+      if 0 < null < 17:
+        name = names[1:null]
+      else:
         name = names[1:17]
         null = 16
-      else:
-        name = names[1:null]
+      index = ord(names[0])
       m = area.find_module(index)
       m.name = name
       names = names[null+1:]
