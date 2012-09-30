@@ -671,11 +671,12 @@ class Labels(Section):
     nentries = read_bits(8)
 
     entry, length = bitstream.read_bitsa([8, 8]) # 1, 1, 0x50
+
     for i in xrange(NMORPHS):
       morph, morphlen, entry = bitstream.read_bitsa([8, 8, 8])
       morphlen -= 1
       s = ''
-      for l in xrange(morphlen):
+      for l in xrange(7):
         c = read_bits(8)
         if c != 0:
           s += chr(c&0xff)
@@ -728,7 +729,7 @@ class Labels(Section):
         paramlen -= 1 # decrease because we got param index
         if paramlen:
           for i in xrange(paramlen/7):
-            s = ''.join([ord(read_bits(8)) for i in xrange(7)])
+            s = ''.join([chr(read_bits(8)) for i in xrange(7)])
             modlen -= 7
             null = s.find('\0')
             if null > -1:
@@ -916,16 +917,18 @@ Info=BUILD %d\r
       self.read(filename)
 
   def parse_patch(self, patch, memview):
+    total = 0
     while len(memview):
       x = memview[:3].tolist()
       type, l = x[0], (x[1]<<8)|x[2]
       section = Pch2File.section_map[type]()
       if section_debug:
         nm = section.__class__.__name__
-        printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', type, nm, off, l)
-        printf('%s\n', binhexdump(memview[:l]))
+        printf('0x%02x %-25s addr:0x%04x len:0x%04x\n', type, nm, total, l)
+        printf('%s\n', binhexdump(memview[:l].tobytes()))
       section.parse(patch, memview[3:3+l])
       memview = memview[3+l:]
+      total += 3+l
 
   def parse(self, memview):
     self.parse_patch(self.patch, memview)
