@@ -182,10 +182,16 @@ def print_morphs(patch):
   for morphmap in settings.morphmaps:
     s += sprintf('%d ', len(morphmap))
   s += '\n'
+  s += sprintf('# label morph.<morph> <label>\n')
+  s += sprintf('# set morph.<morph>.dial <variations>\n')
+  s += sprintf('# set morph.<morph>.mode <variations>\n')
+  s += sprintf('#  add morph.<morph> <area>.<loc>.<param> <range>\n')
   morphs = settings.morphs
   for i in range(len(morphs)):
     morph = morphs[i]
     s += sprintf('label morph.%d %s\n', i, morph.label)
+  for i in range(len(morphs)):
+    morph = morphs[i]
     variations = clean_variations(morph.dials.variations)
     t = ' '.join(map(lambda a: '%d' % a, variations))
     sprintf('set morph.%d.dial %s\n', i, t)
