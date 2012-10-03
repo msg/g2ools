@@ -990,7 +990,7 @@ Info=BUILD %d\r
     hdr = Pch2File.standard_text_header % (self.type,
         self.standard_binary_header, self.standard_build)
     out.write(hdr)
-    data = buffer(64<<10)
+    data = bytearray(64<<10)
     memview = memoryview(data)
     data[:2] = self.standard_binary_header, self.binary_revision
     bytes = self.format(memview[2:]) + 2
