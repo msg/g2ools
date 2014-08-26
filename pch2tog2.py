@@ -137,6 +137,7 @@ def print_area(area):
 def print_knobs(patch):
   s = sprintf("\n# knobs\n")
   last_name = ''
+  names = ['osc', 'lfo', 'env', 'filter', 'effect']
   for i in range(len(patch.knobs)):
     knob = patch.knobs[i]
     if not knob.assigned:
@@ -151,7 +152,6 @@ def print_knobs(patch):
     t = sprintf('knob %s%d.%d %s.%s.%s',
           'abcde'[row], ((i/8)%3) + 1, (i&7) + 1, area, loc,
           knob.param.type.name.lower())
-    names = ['osc', 'lfo', 'env', 'filter', 'effect']
     u = '  # %s %d.%d:' % (names[row], ((i/8)%3)+1, (i&7)+1)
     if knob.param.module.name != last_name:
       u += ' ' + knob.param.module.name + \
@@ -185,17 +185,17 @@ def print_morphs(patch):
   s += sprintf('# label morph.<morph> <label>\n')
   s += sprintf('# set morph.<morph>.dial <variations>\n')
   s += sprintf('# set morph.<morph>.mode <variations>\n')
-  s += sprintf('#  add morph.<morph> <area>.<loc>.<param> <range>\n')
+  s += sprintf('#  add morph.<morph> <variation> <area>.<loc>.<param> <range>\n')
   morphs = settings.morphs
   for i in range(len(morphs)):
     morph = morphs[i]
     s += sprintf('label morph.%d %s\n', i, morph.label)
   for i in range(len(morphs)):
     morph = morphs[i]
-    variations = clean_variations(morph.dials.variations)
+    variations = clean_variations(morph.dial.variations)
     t = ' '.join(map(lambda a: '%d' % a, variations))
     sprintf('set morph.%d.dial %s\n', i, t)
-    variations = clean_variations(morph.modes.variations)
+    variations = clean_variations(morph.mode.variations)
     t = ' '.join(map(lambda a: '%d' % a, variations))
     s += sprintf('set morph.%d.mode %s\n', i, t)
 
