@@ -49,8 +49,8 @@ class NetList:
   def combine(self, source, dest):
     sout, dout = source.net.output, dest.net.output
     if sout and dout and (sout != dout): # shouldn't happen
-      printf('source %s\n', self.netlist.nettos(source.net))
-      printf('dest %s\n', self.netlist.nettos(dest.net))
+      printf('source %s\n', self.nettos(source.net))
+      printf('dest %s\n', self.nettos(dest.net))
       raise NetError(
         'source and dest both have outputs: source=%s:%s dest=%s:%s' % (
         sout.module.type.shortnm, sout.type.name,
