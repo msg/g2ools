@@ -23,6 +23,9 @@ import sys
 from nord.g2.file import Prf2File
 from nord.g2.pprint import printpatch
 
+def printf(fmt, *a):
+  return sys.stdout.write(fmt % a)
+
 prog = sys.argv.pop(0)
 while len(sys.argv):
   filename = sys.argv.pop(0)
