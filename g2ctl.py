@@ -10,6 +10,137 @@ from array import array
 
 # vim: set sw=2:
 
+g2Message0x01                   = 0x01
+g2QuerySynthSettings            = 0x02
+g2SendSynthSettings             = 0x03
+g2QueryAssignedVoices           = 0x04
+g2RecvAssignedVoices            = 0x05
+g2Message0x06                   = 0x06
+g2Message0x07                   = 0x07
+g2Message0x08                   = 0x08
+g2SendSelectSlot                = 0x09
+g2SendRetrieveBankPatch         = 0x0a
+g2SendStoreBankPatch            = 0x0b
+g2SendClearBankPatch            = 0x0c
+g2RecvStoreBankPatch            = 0x0d
+g2SendClearBank                 = 0x0e
+g2Message0x0f                   = 0x0f
+g2QueryPerformanceSettings      = 0x10
+g2ChunkPerformanceSettings      = 0x11
+g2RecvClearBank                 = 0x12
+g2RecvListNames                 = 0x13
+g2QueryBankPatchList            = 0x14
+g2RecvClearBank                 = 0x15
+g2RecvAddNames                  = 0x16 # partially known
+g2SendPatchBankUpload           = 0x17
+g2RecvPatchBankUpload           = 0x18
+g2SendPatchBankData             = 0x19
+g2Message0x1a                   = 0x1a
+g2Message0x1b                   = 0x1b
+g2SendGlobalKnobAssignment      = 0x1c
+g2SendGlobalKnobDeassign        = 0x1d
+g2SendSelectGlobalPage          = 0x1e
+g2Message0x1f                   = 0x1f
+g2Message0x20                   = 0x20
+g2ChuckPatchDescription         = 0x21
+g2SendMidiCCAssignement         = 0x22
+g2SendMidiCCDeassign            = 0x23
+g2Message0x24                   = 0x24
+g2SendKnobAssignment            = 0x25
+g2SendKnobDeassign              = 0x26
+g2SendPatchName                 = 0x27
+g2QueryPatchName                = 0x28
+g2ChunkPerformanceName          = 0x29
+g2SendSetModuleUprateMode       = 0x2a
+g2SendSetModuleParameterMode    = 0x2b
+g2Message0x2c                   = 0x2c
+g2SendSelectParameterPage       = 0x2d
+g2QuerySelectedParameter        = 0x2e
+g2SendSelectParameter           = 0x2f
+g2SendAddModule                 = 0x30
+g2SendSetModuleColor            = 0x31
+g2SendDeleteModule              = 0x32
+g2SendSetModuleLabel            = 0x33
+g2SendMoveModule                = 0x34
+g2QuerySlotPatchVersion         = 0x35
+g2Message0x36                   = 0x36
+g2SendPatch                     = 0x37
+g2RecvPatchVersionChanged       = 0x38
+g2RecvLEDData                   = 0x39
+g2RecvVolumeData                = 0x3a
+g2QueryMasterClock              = 0x3b
+g2QueryPatch                    = 0x3c
+g2SendMidiDumpCommand           = 0x3d
+g2SendSetPerformanceMode        = 0x3e
+g2SendSetMasterClock            = 0x3f
+g2SendSetParameterValue         = 0x40
+g2Message0x41                   = 0x41
+g2SendSetParameterLabel         = 0x42
+g2SendSetMorphRange             = 0x43
+g2SendCopyVariation             = 0x44
+g2Message0x45                   = 0x45
+g2Message0x46                   = 0x46
+g2Message0x47                   = 0x47
+g2Message0x48                   = 0x48
+g2Message0x49                   = 0x49
+g2ChunkModuleList               = 0x4a
+g2Message0x4b                   = 0x4b
+g2QueryParameterList            = 0x4c
+g2ChunkParameterList            = 0x4d
+g2Message0x4c                   = 0x4e
+g2QueryParameterNames           = 0x4f
+g2SendAddCable                  = 0x50
+g2SendDeleteCable               = 0x51
+g2ChunkCableList                = 0x52
+g2Message0x53                   = 0x53
+g2SendSetCableColor             = 0x54
+g2SendMidiCCSnapshot            = 0x55
+g2SendPlayNote                  = 0x56
+g2Message0x57                   = 0x57
+g2Message0x58                   = 0x58
+g2Message0x59                   = 0x59
+g2ChunkModuleNames              = 0x5a
+g2ChunkParameterNames           = 0x5b
+g2Message0x5c                   = 0x5c
+g2RecvMasterClock               = 0x5d
+g2QueryGlobalKnobs              = 0x5e
+g2ChunkGlobalKnobs              = 0x5f
+g2ChunkControllers              = 0x60
+g2Message0x61                   = 0x61
+g2ChunkKnobs                    = 0x62
+g2Message0x63                   = 0x63
+g2Message0x64                   = 0x64
+g2ChunkMorphParamters           = 0x65
+g2Message0x66                   = 0x66
+g2Message0x67                   = 0x67
+g2QueryCurrentNote              = 0x68 # partially known
+g2ChunkCurrentNote              = 0x69 # partially known
+g2SendSelectVariation           = 0x6a
+g2Message0x6b                   = 0x6b
+g2Message0x6c                   = 0x6c
+g2Message0x6d                   = 0x6d
+g2QueryPatchNotes               = 0x6e
+g2ChunkPatchNotes               = 0x6f
+g2Message0x70                   = 0x70
+g2QueryResourcesUsed            = 0x71 # partially known
+g2RecvResourcesUsed             = 0x72 # partially known
+g2Message0x73                   = 0x73
+g2Message0x74                   = 0x74
+g2Message0x75                   = 0x75
+g2Message0x76                   = 0x76
+g2Message0x77                   = 0x77
+g2Message0x78                   = 0x78
+g2Message0x79                   = 0x79
+g2Message0x7a                   = 0x7a
+g2Message0x7b                   = 0x7b
+g2Message0x7c                   = 0x7c
+g2SendStartStopCommunication    = 0x7d
+g2RecvErrorMessage              = 0x7e # partially known
+g2RecvOK                        = 0x7f
+g2RecvMidiCC                    = 0x80
+g2Message0x81                   = 0x81
+# ...
+
 ############################################################
 # command processing
 class Command:
@@ -273,7 +404,7 @@ class G2USBInterface:
     debug('<%d %s\n', self.g2bin & 0x7f, s)
     if retries == 0:
       raise Exception('Could not get result')
-    elif bin[0] == CMD_INIT: # 0x80 special case
+    elif bin[0] == CMD_INIT: # special case
       pass
     elif bin[1] == data[0]: # if result is same as command we got message
       pass
@@ -376,7 +507,7 @@ def cmd_list(command):
   bank = 0
   patch = 0
   while mode < END_MODE:
-    cmd = [CMD_SYS, 0x41, 0x14, mode, bank, patch]
+    cmd = [CMD_SYS, 0x41, g2QueryBankPatchList, mode, bank, patch]
     data = g2usb.send_message(cmd)
     data = data[9:-2].tostring()
     while len(data):
@@ -508,6 +639,12 @@ def cmd_dump(command, bank):
   #print hexdump(pch2.tostring())
   return 0
 add_command('dump', ['loc'], 'dump location to .pch2 file', cmd_dump)
+
+def cmd_mode(command, mode):
+  modes = {'patch': 1, 'perf': 0}
+  data = getusb.set_message([CMD_SYS, 0x41, 0x3e, modes.get(mode, 0), 0x00])
+  return 0
+add_command('mode', ['mode'], 'set mode to patch or perf', cmd_mode)
 
 def cmd_settings(command):
   g2usb.send_message([CMD_SYS, 0x41, 0x35, 0x04])
