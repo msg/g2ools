@@ -75,7 +75,6 @@ def doconvert(filename, options):
   except KeyboardInterrupt:
     sys.exit(1)
   except NM1Error, s:
-    nm2g2log.error(s)
     return '%s\n%s' % (filename, s)
   except Exception, e:
     if options.debug:
