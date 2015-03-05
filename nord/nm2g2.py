@@ -479,15 +479,15 @@ class NM2G2Converter:
     for morph in range(len(morphmap)-1, -1, -1):
       if not morphmap[morph]:
         morphmap[morph] = unused.pop()
-        setv(morphmap[morph].modes, 0)
+        setv(morphmap[morph].mode, 0)
       else:
-        setv(morphmap[morph].modes, 1)
+        setv(morphmap[morph].mode, 1)
       self.log.debug(' nm morph%d -> g2 morph%d' % \
           (morph, morphmap[morph].index))
 
     for morph in range(len(morphmap)):
       g2morph = morphmap[morph]
-      setv(g2morph.dials, nmmorphs[morph].dial)
+      setv(g2morph.dial, nmmorphs[morph].dial)
       self.log.debug(' Morph%d: dial=%d' % (morph+1, nmmorphs[morph].dial))
       for nmap in nmmorphs[morph].maps:
         s = '  %s:%s range=%d' % (nmap.param.module.name, nmap.param.type.name,
