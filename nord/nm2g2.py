@@ -556,23 +556,22 @@ class NM2G2Converter:
       if midicc_reserved(ctrl.midicc):
         self.log.warning('%s cannot be used (reserved)' % s)
         continue
-      m = Ctrl()
-      m.midicc = ctrl.midicc
+      new_ctrl = Ctrl()
+      new_ctrl.midicc = ctrl.midicc
       if hasattr(ctrl.param,'module'): # module parameter
         index = param.index
         conv = param.module.conv
         if index < len(conv.params) and conv.params[index]:
-          m.param = conv.params[index]
-          m.type = conv.g2module.area.index
+          new_ctrl.param = conv.params[index]
+          new_ctrl.type = conv.g2module.area.index
           self.log.debug(s)
         else:
           self.log.warning(s + ' -- Parameter missing')
           continue
       else:
-        m.param = self.morphmap[ctrl.param.index-1]
-        m.type = 2 # settings
-      g2patch.ctrls.append(m)
-
+        new_ctrl.param = self.morphmap[ctrl.param.index-1]
+        new_ctrl.type = 2 # settings
+      g2patch.ctrls.append(new_ctrl)
 
   def docurrentnotes(self):
     g2patch, nmpatch = self.g2patch, self.nmpatch

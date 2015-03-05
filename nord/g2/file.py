@@ -104,7 +104,10 @@ class PatchDescription(Section):
 class ModuleList(Section):
   '''ModuleList Section subclass'''
   type = 0x4a
-  module_bit_sizes = [8, 7, 7, 8, 1, 1, 6]
+  module_params = [
+    ['index', 8 ], ['horiz', 7], ['vert', 7], ['color', 8],
+    ['uprate', 1 ], ['leds', 1], ['reserved', 6],
+  ]
   def parse(self, patch, data):
     bitstream = BitStream(data)
     read_bits = bitstream.read_bits
@@ -117,29 +120,29 @@ class ModuleList(Section):
     area.modules = [ None ] * nmodules
     for i in xrange(nmodules):
       id = read_bits(8)
-      m = Module(modules.fromid(id), area)
-      area.modules[i] = m
+      module = Module(modules.fromid(id), area)
+      area.modules[i] = module
 
-      values = bitstream.read_bitsa(self.module_bit_sizes)
-      m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, m.reserved = values
+      for attr, nbits in self.module_params:
+        setattr(module, attr, bitstream.read_bits(nbits))
       nmodes = read_bits(4)
       # NOTE: .leds seems to related to a group of modules. i cannot
       #       see the relationship but I have got a list of modules
       #       that require this to be set.  This will probably be handled
       #       without this property but added to the module types that
       #       set it.
-      self.fixleds(m)
+      self.fixleds(module)
 
       # mode data for module (if there is any)
-      for mode in m.modes:
+      for mode in module.modes:
         mode.value = read_bits(6)
 
       # add missing mode data. some .pch2 versions didn't contain
       #   all the modes in version 23 BUILD 266
-      mt = m.type
-      if len(m.modes) < len(mt.modes):
-        for mode in xrange(len(m.modes), len(mt.modes)):
-          m.modes[mode].value = mt.modes[mode].type.default
+      module_type = module.type
+      if len(module.modes) < len(module_type.modes):
+        for mode in xrange(len(module.modes), len(module_type.modes)):
+          module.modes[mode].value = module_type.modes[mode].type.default
 
   # make sure leds bit is set for specific modules
   # - some earlier generated .pch2 files where different
@@ -167,19 +170,20 @@ class ModuleList(Section):
     write_bits(2, self.area)
     write_bits(8, len(area.modules))
 
-    for m in area.modules:
-      write_bits(8, m.type.id)
-      values = [m.index, m.horiz, m.vert, m.color, m.uprate, m.leds, 0]
-      bitstream.write_bitsa(self.module_bit_sizes, values)
+    for module in area.modules:
+      write_bits(8, module.type.id)
+      module.reserved = 0 # just in case is wasn't set
+      for attr, nbits in self.module_params:
+        bitstream.write_bits(nbits, getattr(module, attr))
       # NOTE: .leds seems to related to a group of modules. i cannot
       #       see the relationship but I have got a list of modules
       #       that require this to be set.  This will probably be handled
       #       without this property.
-      self.fixleds(m)
+      self.fixleds(module)
 
-      nmodes = len(m.modes)
+      nmodes = len(module.modes)
       write_bits(4, nmodes)
-      for mode in m.modes:
+      for mode in module.modes:
         write_bits(6, mode.value)
 
     return bitstream.tell_bit()
@@ -250,35 +254,36 @@ class CableList(Section):
     area = [patch.fx, patch.voice][self.area]
 
     area.cables = [ None ] * ncables 
-    for i in xrange(ncables ):
-      c = Cable(area)
-      c.color = read_bits(3)
-      smod    = read_bits(8)
-      sconn   = read_bits(6)
-      dir     = read_bits(1)
-      dmod    = read_bits(8)
-      dconn   = read_bits(6)
+    for i in xrange(ncables):
+      cable       = Cable(area)
+      cable.color = read_bits(3)
 
-      smodule = area.find_module(smod)
-      dmodule = area.find_module(dmod)
+      source      = read_bits(8)
+      src_conn    = read_bits(6)
+      direction   = read_bits(1)
+      dest        = read_bits(8)
+      dest_conn   = read_bits(6)
 
-      if invalidcable(smodule, sconn, dir, dmodule, dconn):
+      src_module  = area.find_module(source)
+      dest_module = area.find_module(dest)
+
+      if invalidcable(src_module, src_conn, direction, dest_module, dest_conn):
         printf('Invalid cable %d: "%s"(%d,%d) -%d-> "%s"(%d,%d)\n',
-            i, smodule.type.shortnm, smodule.index, sconn, dir,
-            dmodule.type.shortnm, dmodule.index, dconn)
+            i, src_module.type.shortnm, src_module.index, src_conn, direction,
+            dest_module.type.shortnm, dest_module.index, dest_conn)
         continue
 
-      if dir == 1:
-        c.source = smodule.outputs[sconn]
+      if direction == 1:
+        cable.source = src_module.outputs[src_conn]
       else:
-        c.source = smodule.inputs[sconn]
-      c.dest = dmodule.inputs[dconn]
+        cable.source = src_module.inputs[src_conn]
+      cable.dest = dest_module.inputs[dest_conn]
 
-      area.cables[i] = c
-      c.source.cables.append(c)
-      c.dest.cables.append(c)
+      area.cables[i] = cable
+      cable.source.cables.append(cable)
+      cable.dest.cables.append(cable)
 
-      area.netlist.add(c.source, c.dest)
+      area.netlist.add(cable.source, cable.dest)
 
   def format(self, patch, data):
     bitstream = BitStream(data)
@@ -291,13 +296,13 @@ class CableList(Section):
     bitstream.seek_bit(8)
     write_bits(16, len(area.cables))
 
-    for i, c in enumerate(area.cables):
-      write_bits(3, c.color)
-      write_bits(8, c.source.module.index)
-      write_bits(6, c.source.index)
-      write_bits(1, c.source.direction)
-      write_bits(8, c.dest.module.index)
-      write_bits(6, c.dest.index)
+    for i, cable in enumerate(area.cables):
+      write_bits(3, cable.color)
+      write_bits(8, cable.source.module.index)
+      write_bits(6, cable.source.index)
+      write_bits(1, cable.source.direction)
+      write_bits(8, cable.dest.module.index)
+      write_bits(6, cable.dest.index)
 
     return bitstream.tell_bit()
 
@@ -315,12 +320,19 @@ class Parameter(object):
 class Morph(object):
   '''Morph class for morph settings.'''
   def __init__(self, index):
-    self.dials = Parameter(0, 0, 0)
-    self.modes = Parameter(0, 0, 1)
-    self.maps = [[] for variation in xrange(NVARIATIONS) ]
+    self.name  = 'morph%d' % (index+1)
+    self.maps  = [[] for variation in xrange(NVARIATIONS) ]
     self.index = index
-    self.ctrl = None
-    self.name = 'morph%d' % (index+1)
+    self.ctrl  = None
+    self.param = 1
+    self.area  = SETTINGS
+
+    # morph "module" has 2 parameters dial and mode
+    self.dial = Parameter(1, index, 0)
+    self.mode = Parameter(1, index+NMORPHS, 1)
+    self.dial.module = self
+    self.mode.module = self
+
 
 class Settings(object):
   '''Settings class for patch settings.'''
@@ -358,12 +370,12 @@ class Parameters(Section):
       for morph in xrange(NMORPHS):
         dial = read_bits(7)
         if variation < NVARIATIONS:
-          settings.morphs[morph].dials.variations[variation] = dial
+          settings.morphs[morph].dial.variations[variation] = dial
 
       for morph in xrange(NMORPHS):
         mode = read_bits(7)
         if variation < NVARIATIONS:
-          settings.morphs[morph].modes.variations[variation] = mode
+          settings.morphs[morph].mode.variations[variation] = mode
 
     for group in settings.groups:
       section   = read_bits(8)
@@ -391,10 +403,10 @@ class Parameters(Section):
     for variation in xrange(NVARIATIONS): # morph groups
       write_bits(8, variation)
       for morph in xrange(NMORPHS):
-        dial = settings.morphs[morph].dials
+        dial = settings.morphs[morph].dial
         write_bits(7, dial.variations[variation])
       for morph in xrange(NMORPHS):
-        mode = settings.morphs[morph].modes
+        mode = settings.morphs[morph].mode
         write_bits(7, mode.variations[variation])
 
     section = 2 # starts at 2 (above: morph is section 1)
@@ -423,8 +435,8 @@ class Parameters(Section):
       index   = read_bits(8)
       nparams = read_bits(7)
 
-      m = area.find_module(index)
-      params = m.params
+      module = area.find_module(index)
+      params = module.params
       for i in xrange(nvariations):
         variation = read_bits(8)
         for param in xrange(nparams):
@@ -504,21 +516,20 @@ class MorphParameters(Section):
       bitstream.seek_bit(4 + (6*8) + 4, 1) # zeros
 
       nmorphs = read_bits(8)
-      for i in xrange(nmorphs):
-        mmap = MorphMap()
-        area       = read_bits(2)
-        index      = read_bits(8)
-        param      = read_bits(7)
-        morph      = read_bits(4)
-        mmap.range = read_bits(8, 1)
-        if area:
-          mmap.param = patch.voice.find_module(index).params[param]
-        else:
-          mmap.param = patch.fx.find_module(index).params[param]
-        mmap.variation = variation
-        mmap.morph = morphs[morph]
-        mmap.morph.maps[variation].append(mmap)
-        morphmaps[variation].append(mmap)
+      for j in xrange(nmorphs):
+        morph_map       = MorphMap()
+        area            = read_bits(2)
+        index           = read_bits(8)
+        param           = read_bits(7)
+        morph           = read_bits(4)
+        morph_map.range = read_bits(8, 1)
+
+        module = [patch.fx, patch.voice][area].find_module(index)
+        morph_map.param = module.params[param]
+        morph_map.variation = variation
+        morph_map.morph = morphs[morph]
+        morph_map.morph.maps[variation].append(morph_map)
+        morphmaps[variation].append(morph_map)
 
       reserved = read_bits(4) # always 0
 
@@ -540,18 +551,20 @@ class MorphParameters(Section):
       bitstream.seek_bit(4 + (6 * 8) + 4, 1)
 
       # collect all params of this variation into 1 array
-      mparams = []
+      morph_params = []
       for morph in morphs:
-        mparams.extend(morph.maps[variation])
-      mparams.sort(lambda a, b: cmp(a.param.module.index, b.param.module.index))
+        morph_params.extend(morph.maps[variation])
+      def mod_param_index_cmp(a, b):
+        return cmp(a.param.module.index, b.param.module.index)
+      morph_params.sort(lambda a, b: mod_param_index_cmp)
 
-      write_bits(8, len(mparams))
-      for mparam in mparams:
-        write_bits(2, mparam.param.module.area.index)
-        write_bits(8, mparam.param.module.index)
-        write_bits(7, mparam.param.index)
-        write_bits(4, mparam.morph.index)
-        write_bits(8, mparam.range)
+      write_bits(8, len(morph_params))
+      for morph_param in morph_params:
+        write_bits(2, morph_param.param.module.area.index)
+        write_bits(8, morph_param.param.module.index)
+        write_bits(7, morph_param.param.index)
+        write_bits(4, morph_param.morph.index)
+        write_bits(8, morph_param.range)
 
       write_bits(4, 0) # always 0
 
@@ -567,51 +580,51 @@ class KnobAssignments(Section):
 
     nknobs = read_bits(16)
     patch.knobs = [ Knob() for i in xrange(nknobs)]
-    perf = patch
 
-    for knob in perf.knobs:
+    for knob in patch.knobs:
       knob.assigned = read_bits(1)
       if knob.assigned:
         area       = read_bits(2)
         index      = read_bits(8)
         knob.isled = read_bits(2)
         param      = read_bits(7)
-        if type(perf) == Performance:
+        if type(patch) == Performance:
+          perf = patch
           knob.slot = read_bits(2)
           patch = perf.patches[knob.slot]
         else:
           knob.slot = 0
 
-        if area == FX or area == VOICE:
-          m = [patch.fx, patch.voice][area].find_module(index)
-          if m:
-            knob.param = m.params[param]
+        if area == SETTINGS:
+          # TODO: handle morph dial and mode params
+          knob.param = patch.settings.morphs[param]
+        else:
+          module = [patch.fx, patch.voice][area].find_module(index)
+          if module:
+            knob.param = module.params[param]
           else:
             knob.assigned = 0
             continue
-        elif area == SETTINGS:
-          knob.param = patch.settings.morphs[param]
         knob.param.knob = knob
 
   def format(self, patch, data):
     bitstream = BitStream(data)
     write_bits = bitstream.write_bits
-    perf = patch
 
     write_bits(16, NKNOBS)
-    for knob in perf.knobs:
+    for knob in patch.knobs:
       write_bits(1, knob.assigned)
       if knob.assigned:
         if hasattr(knob.param, 'module'):
-          mod = knob.param.module
-          area, index, param = mod.area.index, mod.index, knob.param.index
+          module = knob.param.module
+          area, index, param = module.area.index, module.index, knob.param.index
         else:
           area, index, param = 2, 1, knob.param.index
         write_bits(2, area)
         write_bits(8, index)
         write_bits(2, knob.isled)
         write_bits(7, param)
-        if type(perf) == Performance:
+        if type(patch) == Performance:
           write_bits(2, knob.slot)
 
     return bitstream.tell_bit()
@@ -627,22 +640,22 @@ class CtrlAssignments(Section):
     patch.ctrls = [ Ctrl() for i in xrange(nctrls)]
     settings = patch.settings
 
-    for m in patch.ctrls:
-      m.midicc = read_bits(7)
-      m.type   = read_bits(2) # FX, VOICE, SETTINGS
-      index    = read_bits(8)
-      param    = read_bits(7)
-      m.index = index
-      if m.type == FX:
-        m.param = patch.fx.find_module(index).params[param]
-      elif m.type == VOICE:
-        m.param = patch.voice.find_module(index).params[param]
-      elif m.type == SETTINGS:
+    for ctrl in patch.ctrls:
+      ctrl.midicc = read_bits(7)
+      ctrl.type   = read_bits(2) # FX, VOICE, SETTINGS
+      index       = read_bits(8)
+      param       = read_bits(7)
+      ctrl.index  = index
+      if ctrl.type == SETTINGS:
+        # TODO: handle dial and mode morphs params
         if index < 2:
-          m.param = settings.morphs[param]
+          ctrl.param = settings.morphs[param]
         else:
-          m.param = getattr(settings, settings.groups[index-2][param])
-      m.param.ctrl = m
+          ctrl.param = getattr(settings, settings.groups[index-2][param])
+      else:
+        module = [patch.fx, patch.voice][ctrl.type].find_module(index)
+        ctrl.param = module.params[param]
+      ctrl.param.ctrl = ctrl
 
   def format(self, patch, data):
     bitstream = BitStream(data)
@@ -650,13 +663,13 @@ class CtrlAssignments(Section):
 
     write_bits(7, len(patch.ctrls))
 
-    for m in patch.ctrls:
-      write_bits(7, m.midicc)
-      write_bits(2, m.type)
-      if m.type < SETTINGS:
-        index, param = m.param.module.index, m.param.index
+    for ctrl in patch.ctrls:
+      write_bits(7, ctrl.midicc)
+      write_bits(2, ctrl.type)
+      if ctrl.type < SETTINGS:
+        index, param = ctrl.param.module.index, ctrl.param.index
       else:
-        index, param = 1, m.param.index
+        index, param = 1, ctrl.param.index
       write_bits(8, index)
       write_bits(7, param)
 
@@ -704,26 +717,26 @@ class Labels(Section):
     nmodules = read_bits(8)
     area = [patch.fx, patch.voice][self.area]
 
-    for mod in xrange(nmodules):
+    for i in xrange(nmodules):
       index  = read_bits(8)
       modlen = read_bits(8)
 
-      m = area.find_module(index)
-      if m.type.id == 121: # SeqNote
+      module = area.find_module(index)
+      if module.type.id == 121: # SeqNote
         # extra editor parameters 
         # [0, 1, mag, 0, 1, octave]
         # mag: 0=3-octaves, 1=2-octaves, 2=1-octave
         # octave: 0-9 (c0-c9)
-        m.editmodes = []
+        module.editmodes = []
         for i in xrange(modlen):
           c = read_bits(8)
-          m.editmodes.append(c)
+          module.editmodes.append(c)
         continue
       while modlen > 0:
         stri, paramlen, param = bitstream.read_bitsa([8, 8, 8]) 
         modlen -= 3
 
-        p = m.params[param]
+        p = module.params[param]
         p.labels = []
 
         paramlen -= 1 # decrease because we got param index
@@ -735,57 +748,59 @@ class Labels(Section):
         else:
           p.labels.append('')
         if section_debug:
-          printf('%d %s %d %d %s\n', index, m.type.shortnm,
+          printf('%d %s %d %d %s\n', index, module.type.shortnm,
               paramlen, param, p.labels)
+
+  def write_str_bits(self, bitstream, s):
+    write_bits = bitstream.write_bits
+    for char in s:
+      write_bits(8, ord(char))
 
   def format_parameter(self, patch, data):
     area = [patch.fx, patch.voice][self.area]
 
     modules = []
     # collect all modules with parameters that have labels
-    for m in area.modules:
-      if hasattr(m, 'params'):
-        for param in m.params:
+    for module in area.modules:
+      if hasattr(module, 'params'):
+        for param in module.params:
           if hasattr(param, 'labels'):
-            modules.append(m)
+            modules.append(module)
             break
-      if hasattr(m, 'editmodes'):
-        modules.append(m)
+      if hasattr(module, 'editmodes'):
+        modules.append(module)
 
     bitstream = BitStream(data)
     write_bits = bitstream.write_bits
 
     write_bits(2, self.area)
 
-    t = chr(len(modules))
-    for m in modules:
+    write_bits(8, len(modules))
+    for module in modules:
       s = ''
-      if m.type.id == 121: # SeqNote
-        for ep in m.editmodes:
+      if module.type.id == 121: # SeqNote
+        for ep in module.editmodes:
           s += chr(ep)
       else:
         # build up the labels and then write them
-        for i, param in enumerate(m.params):
+        for i, param in enumerate(module.params):
           if not hasattr(param, 'labels'):
             continue
           if section_debug:
-            printf('%d %s %d %d %s\n', m.index, m.type.shortnm,
+            printf('%d %s %d %d %s\n', module.index, module.type.shortnm,
                 7*len(param.labels), i, param.labels)
-          ps = ''
+          ps = chr(i)
           for nm in param.labels:
             ps += nm.ljust(7,'\0')[:7]
-          ps = chr(i)+ps
-          ps = chr(1)+chr(len(ps))+ps
-          s += ps
+          s += chr(1)+chr(len(ps))+ps
 
-      t += chr(m.index) + chr(len(s)) + s
+      write_bits(8, module.index)
+      write_bits(8, len(s))
+      self.write_str_bits(bitstream, s)
 
     if section_debug:
       printf('paramlabels:\n')
       printf('%s\n', hexdump(t))
-
-    for c in t:
-      write_bits(8, ord(c))
 
     return bitstream.tell_bit()
 
@@ -825,8 +840,8 @@ class ModuleNames(Section):
         name = names[1:17]
         null = 16
       index = ord(names[0])
-      m = area.find_module(index)
-      m.name = name
+      module = area.find_module(index)
+      module.name = name
       names = names[null+1:]
 
   def format(self, patch, data):

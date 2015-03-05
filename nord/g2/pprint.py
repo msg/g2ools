@@ -143,10 +143,10 @@ def printmorphs(patch):
   printf('morphs:\n')
   printf(' dial settings:\n')
   for i in range(len(settings.morphs)):
-    printf(' %s\n', settings.morphs[i].dials.variations)
+    printf(' %s\n', settings.morphs[i].dial.variations)
   printf(' modes:\n')
   for i in range(len(settings.morphs)):
-    printf(' %s\n', settings.morphs[i].modes.variations)
+    printf(' %s\n', settings.morphs[i].mode.variations)
   printf(' names:\n')
   printf(' %s\n', ', '.join(
       [ settings.morphs[i].label for i in range(len(settings.morphs))]))

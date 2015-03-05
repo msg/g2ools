@@ -210,9 +210,9 @@ def convert(filename, options):
       # sync
       morph = dxconv.pch2.patch.settings.morphs[7]
       if dxpatch.OscKeySync:
-        morph.dials.variations[i] = 127
+        morph.dial.variations[i] = 127
       else:
-        morph.dials.variations[i] = 0
+        morph.dial.variations[i] = 0
     #
     def addnamebars(pch2, lines, horiz, vert):
       for line in lines:
