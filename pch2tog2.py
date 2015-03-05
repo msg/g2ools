@@ -139,16 +139,19 @@ def print_knobs(patch):
   last_name = ''
   names = ['osc', 'lfo', 'env', 'filter', 'effect']
   for i in range(len(patch.knobs)):
+    row = i / 24
     knob = patch.knobs[i]
     if not knob.assigned:
       continue
 
     if not hasattr(knob.param, 'module'):
+      s += sprintf('knob %s%d.%d settings.%s',
+            'abcde'[row], ((i/8)%3)+1, (i&7)+1,
+            knob.param.name.lower())
       continue
 
     area = {0:'fx', 1:'voice', 2:'settings'}[knob.param.module.area.index]
     loc = module_loc(knob.param.module)
-    row = i / 24
     t = sprintf('knob %s%d.%d %s.%s.%s',
           'abcde'[row], ((i/8)%3) + 1, (i&7) + 1, area, loc,
           knob.param.type.name.lower())
