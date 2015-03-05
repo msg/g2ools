@@ -110,7 +110,7 @@ for the voice and fx areas of a nord modules g2 patch.
     self.modules = []
     self.cables = []
     self.netlist = NetList()
-    self.free_indexes = range(MAX_MODULES)
+    self.free_indexes = range(1, MAX_MODULES+1)
 
   def find_module(self, index):
     '''find_module(index) -> module at index or None'''
