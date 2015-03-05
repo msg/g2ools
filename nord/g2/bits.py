@@ -42,7 +42,7 @@ def getbits(bit, nbits, data, signed=0):
   # grab 32-bits starting with the byte that contains bit
   byte = bit >> 3
   # align size to a 32-bit word
-  long_ = struct.unpack('>L', (data[byte:byte+4]+'\x00'*4)[:4])[0]
+  long_ = struct.unpack('>L', (str(data[byte:byte+4])+'\x00'*4)[:4])[0]
   val = getbits_(long_, 32-(bit&7)-nbits, nbits)
   if signed and (val>>(nbits-1)):
     val |= ~0 << nbits
@@ -82,6 +82,17 @@ class BitStream(object):
   def read_bits(self, nbits):
     self.bit, value = getbits(self.bit, nbits, self.data)
     return value
+
+  def seek_bit(self, int bit, int where=0):
+    if where == 0:
+      self.bit = bit
+    elif where == 1:
+      self.bit += bit
+    elif where == 2:
+      self.bit = len(self.data) * 8 - bit
+
+  def tell_bit(self):
+    return self.bit
 
   def read_bitsa(self, nbitsa):
     return [ self.read_bits(nbits) for nbits in nbitsa ]
