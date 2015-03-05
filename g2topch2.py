@@ -27,7 +27,7 @@ def clean_line(line):
 class G2Param(object):
   def __init__(self, param):
     self.param = param
-  
+
   def set(self, *a):
     for i in range(NVARIATIONS):
       v = a[i % len(a)]
@@ -59,6 +59,8 @@ class G2Module(object):
   def __init__(self, module):
     self.module = module
     self.height = self.module.type.height
+    self.params = { }
+    self.ports = { }
     self.setup()
 
   def setup(self):
@@ -105,6 +107,10 @@ class G2Section(object):
     self.modules = { }
     self.horiz = section.horiz
     self.vert = section.vert
+    self.actions = { }
+    self.actions['connect']     = self.connect
+    self.actions['cablecolor']  = self.cablecolor
+    self.actions['modulecolor'] = self.modulecolor
 
   def add_module(self, typename, name):
     mt = module_types.get(typename)
@@ -209,6 +215,14 @@ class G2Model(G2Section):
     self.params = { }
     self.ports = { }
     self.height = 0
+    self.actions['add']    = self.add
+    self.actions['set']    = self.set
+    self.actions['label']  = self.label
+    self.actions['param']  = self.param
+    self.actions['mparam'] = self.mparam
+    self.actions['calc']   = self.calc
+    self.actions['input']  = self.input
+    self.actions['output'] = self.output
 
   def add(self, typename, name):
     self.modules[name] = self.add_module(typename, name)
@@ -284,7 +298,7 @@ class G2ModuleType(object):
     self.height = m.module.type.height
     return m
 
-class G2ModelType(G2ModuleType):
+class G2ModelType(object):
   def __init__(self, g2patch, code):
     self.g2patch = g2patch
     self.code = code
@@ -316,6 +330,16 @@ class G2Patch(G2Section):
     self.voice_modules = { }
     self.fx_modules = { }
     self.modules = self.voice_modules
+    self.actions['separate'] = self.separate
+    self.actions['column']   = self.column
+    self.actions['area']     = self.area
+    self.actions['add']      = self.add
+    self.actions['label']    = self.label
+    #self.actions['mode']     = self.mode
+    self.actions['set']      = self.set
+    self.actions['knob']     = self.knob
+    self.actions['midicc']   = self.midicc
+    self.actions['setting']  = self.setting
 
   def update_inputs(self, net, uprate):
     # loop through all net inputs
@@ -460,11 +484,11 @@ class G2Patch(G2Section):
   def set_morph(self, name, *args):
     morph = self.parse_morph(name)
 
-  def mode(self, name, value):
-    mode = self.parse_mode(name)
-    if mode == None:
-      raise G2Exception('Node mode %s' % name)
-    mode.value = int(value)
+  #def mode(self, name, value):
+  #  mode = self.parse_mode(name)
+  #  if mode == None:
+  #    raise G2Exception('Node mode %s' % name)
+  #  mode.value = int(value)
 
   def set(self, name, *variations):
     if name.startswith('morph'):
@@ -503,7 +527,7 @@ class G2Patch(G2Section):
       ctrls.append(m)
     m.midicc = cc
     m.param, m.type = self.parse_control(control)
-   
+
   def table(self, name, filename):
     pass
 
@@ -532,6 +556,9 @@ class G2File(object):
     self.files = { }
     self.file_stack = [ ]
     self.include_path = [ '.' ]
+
+  def slot(self, slot_location, name):
+    pass
 
   def parse(self):
     self.build_files(self.topfile)
@@ -581,8 +608,8 @@ class G2File(object):
         else:
           self.handle_include(fields[1])
 
-  def build_group(self, name, lines):
-    module_types.add(name, G2ModelType(self.g2patch, lines))
+  def build_group(self, name, code):
+    module_types.add(name, G2ModelType(self.g2patch, code))
 
   def build_file(self, filename):
     filelines = []
@@ -614,7 +641,7 @@ class G2File(object):
     if inmodule:
       printf('%s: no endmodel tag found\n', self.topfile)
       return
-      
+
     return filelines
 
   def build(self):
@@ -629,7 +656,9 @@ class G2File(object):
 
     debug('%d: %s(%s)\n', lineno, cmd, args)
     try:
-      getattr(self.g2patch, cmd)(*args)
+      #print self.g2patch.actions[cmd]
+      self.g2patch.actions[cmd](*args)
+      #getattr(self.g2patch, cmd)(*args)
     except Exception as e:
       printf('%d: %s\n\t%s\n', lineno, line.rstrip(), e)
       debug('%s\n', traceback.format_exc())
