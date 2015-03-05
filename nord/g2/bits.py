@@ -83,7 +83,7 @@ class BitStream(object):
     self.bit, value = getbits(self.bit, nbits, self.data)
     return value
 
-  def seek_bit(self, int bit, int where=0):
+  def seek_bit(self, bit, where=0):
     if where == 0:
       self.bit = bit
     elif where == 1:
