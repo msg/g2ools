@@ -6,6 +6,7 @@ from nord.g2.file import Pch2File
 import nord.g2.file
 from nord.g2.categories import g2categories
 from nord.g2.colors import g2cablecolors, g2conncolors, g2modulecolors
+from nord.g2.file import Morph
 from nord import printf, sprintf
 
 def clean_variations(variations):
@@ -144,13 +145,14 @@ def print_knobs(patch):
     if not knob.assigned:
       continue
 
-    if not hasattr(knob.param, 'module'):
-      s += sprintf('knob %s%d.%d settings.%s',
+    area = {0:'fx', 1:'voice', 2:'settings'}[knob.param.module.area.index]
+    if area == 'settings': # not hasattr(knob.param, 'module'):
+      s += sprintf('knob %s%d.%d morph.%d.%s\n',
             'abcde'[row], ((i/8)%3)+1, (i&7)+1,
+            knob.param.module.index,
             knob.param.name.lower())
       continue
 
-    area = {0:'fx', 1:'voice', 2:'settings'}[knob.param.module.area.index]
     loc = module_loc(knob.param.module)
     t = sprintf('knob %s%d.%d %s.%s.%s',
           'abcde'[row], ((i/8)%3) + 1, (i&7) + 1, area, loc,
@@ -170,9 +172,11 @@ def print_midicc(patch):
     area = {0:'fx', 1:'voice', 2:'settings'}[ctrl.type]
     if ctrl.type != 2:
       loc = module_loc(ctrl.param.module)
-      t = sprintf('%s.%s.%s', area, loc, ctrl.param.type.name.lower())
+      t = sprintf('%s.%s', loc, ctrl.param.type.name.lower())
     elif index < 2:
-      t = sprintf('%s.morph.%d', area, ctrl.param.param)
+      t = sprintf('%s.morph.%d.%s', area,
+                  ctrl.param.module.index,
+                  ctrl.param.name.lower())
     else:
       t = sprintf('%s.%s', area, ctrl.param.name)
     s += sprintf('midicc %2d %s\n', ctrl.midicc, t)
@@ -181,7 +185,7 @@ def print_midicc(patch):
 def print_morphs(patch):
   settings = patch.settings
   s = sprintf('\n# morphs\n')
-  s += '# '
+  s += '# morphs per variation: '
   for morphmap in settings.morphmaps:
     s += sprintf('%d ', len(morphmap))
   s += '\n'
