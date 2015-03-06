@@ -479,15 +479,15 @@ class NM2G2Converter:
     for morph in range(len(morphmap)-1, -1, -1):
       if not morphmap[morph]:
         morphmap[morph] = unused.pop()
-        setv(morphmap[morph].mode, 0)
+        setv(morphmap[morph], 0)
       else:
-        setv(morphmap[morph].mode, 1)
+        setv(morphmap[morph], 1)
       self.log.debug(' nm morph%d -> g2 morph%d' % \
           (morph, morphmap[morph].index))
 
     for morph in range(len(morphmap)):
       g2morph = morphmap[morph]
-      setv(g2morph.dial, nmmorphs[morph].dial)
+      setv(g2morph, nmmorphs[morph])
       self.log.debug(' Morph%d: dial=%d' % (morph+1, nmmorphs[morph].dial))
       for nmap in nmmorphs[morph].maps:
         s = '  %s:%s range=%d' % (nmap.param.module.name, nmap.param.type.name,
@@ -537,7 +537,7 @@ class NM2G2Converter:
           self.log.warning(s + ' Unknown param %d' % index)
       else: # morph
         #self.log.debug(' Knob%d: Morph%d' % (knob.knob, knob.param.index))
-        g2knob.param = self.morphmap[knob.param.index-1]
+        g2knob.param = self.morphmap[knob.param.index-1].dial
         g2knob.assigned = 1
         g2knob.isled = 0
 
@@ -569,7 +569,7 @@ class NM2G2Converter:
           self.log.warning(s + ' -- Parameter missing')
           continue
       else:
-        new_ctrl.param = self.morphmap[ctrl.param.index-1]
+        new_ctrl.param = self.morphmap[ctrl.param.index-1].dial
         new_ctrl.type = 2 # settings
       g2patch.ctrls.append(new_ctrl)
 
