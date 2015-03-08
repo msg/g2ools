@@ -141,6 +141,12 @@ cdef class BitStream(object):
   def read_bitsa(self, nbitsa):
     return [ self.read_bits(nbits) for nbits in nbitsa ]
 
+  def read_bytes(self, int nbytes):
+    return [ self.read_bits(8) for i in xrange(nbytes) ]
+
+  def read_str(self, int nbytes):
+    return str(bytearray(self.read_bytes(nbytes)))
+
   def write_bits(self, int nbits, int value):
     cdef int byte = self.bit >> 3
     cdef short *sp = <short *>(self.info.buf + byte)
@@ -150,6 +156,14 @@ cdef class BitStream(object):
   def write_bitsa(self, object nbitsa, object values):
     for nbits, value in zip(nbitsa, values):
       self.write_bits(nbits, value)
+
+  def write_bytes(self, bytes):
+    for byte in bytes:
+      self.write_bits(8, byte)
+
+  def write_str(self, s):
+    for c in s:
+      self.write_bits(8, ord(c))
 
   def string(self):
     return str(self.data[:(self.bit+7)>>3])

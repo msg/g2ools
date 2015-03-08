@@ -83,6 +83,18 @@ class BitStream(object):
     self.bit, value = getbits(self.bit, nbits, self.data)
     return value
 
+  def read_bitsa(self, nbitsa):
+    return [ self.read_bits(nbits) for nbits in nbitsa ]
+
+  def read_bytes(self, nbytes):
+    return [ self.read_bits(8) for byte in xrange(nbytes) ]
+
+  def read_str(self, nbytes):
+    s = bytearray(nbytes)
+    for byte in xrange(nbytes):
+      s[byte] = self.read_bits(8)
+    return str(s)
+
   def seek_bit(self, bit, where=0):
     if where == 0:
       self.bit = bit
@@ -94,15 +106,20 @@ class BitStream(object):
   def tell_bit(self):
     return self.bit
 
-  def read_bitsa(self, nbitsa):
-    return [ self.read_bits(nbits) for nbits in nbitsa ]
-
   def write_bits(self, nbits, value):
     self.bit = setbits(self.bit, nbits, self.data, value)
 
   def write_bitsa(self, nbitsa, values):
     for nbits, value in zip(nbitsa, values):
       self.write_bits(nbits, value)
+
+  def write_bytes(self, bytes):
+    for byte in bytes:
+      self.write_bits(8, byte)
+
+  def write_str(self, str):
+    for c in str:
+      self.write_bits(8, ord(c))
 
   def string(self):
     return str(self.data[:(self.bit+7)>>3])
