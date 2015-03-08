@@ -434,14 +434,16 @@ class G2Patch(G2Section):
     self.vert = vert
     return 0
 
-  def area(self, areaname):
-    if areaname == 'voice':
+  def area(self, area_name):
+    if area_name == 'voice':
       self.current_area = self.pch2.patch.voice
       self.modules = self.voice_modules
-    elif areaname == 'fx':
+    elif area_name == 'fx':
       self.current_area = self.pch2.patch.fx
       self.modules = self.fx_modules
     else:
+      self.current_area = self.pch2.patch.settings.area
+      self.modules = None
       return -1
     return 0
 
