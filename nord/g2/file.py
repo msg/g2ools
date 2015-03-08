@@ -48,6 +48,28 @@ class G2Error(Exception):
   def __str__(self):
     return repr(self.value)
 
+def read_string_null(bitstream, l):
+  read_bits = bitstream.read_bits
+  s = bytearray(l)
+  for l in xrange(l):
+    s[l] = read_bits(8)
+    if s[l] == 0:
+      break
+  return str(s[:l])
+
+def write_string_null(bitstream, s, l):
+  if len(s) < l:
+    s = s + '\0'
+  bitstream.write_str(s)
+
+def read_string_null_pad(bitstream, l):
+  return bitstream.read_str(l).strip('\0')
+
+def write_string_null_pad(bitstream, s, l):
+  if len(s) < l:
+    s = s + '\0' * (l - len(s))
+  bitstream.write_str(s[:l])
+
 def get_patch_area(patch, area):
   return [patch.fx, patch.voice][area]
 
@@ -668,34 +690,29 @@ class Labels(Section):
   type = 0x5b
   def parse_morph(self, patch, bitstream):
     read_bits = bitstream.read_bits
+    read_bitsa = bitstream.read_bitsa
+    read_bytes = bitstream.read_bytes
 
-    nentries = read_bits(8)
+    nentries, entry, length = read_bitsa([8, 8, 8]) # 1, 1, 0x50
 
-    entry, length = bitstream.read_bitsa([8, 8]) # 1, 1, 0x50
-
-    for i in xrange(NMORPHS):
-      morph, morphlen, entry = bitstream.read_bitsa([8, 8, 8])
-      morphlen -= 1
-      s = ''
-      for l in xrange(7):
-        c = read_bits(8)
-        if c != 0:
-          s += chr(c&0xff)
-      patch.settings.morphs[i].label = s
+    for morph in patch.settings.morphs:
+      index, morphlen, entry = read_bytes(3)
+      # morphlen -= 1
+      morph.label = read_string_null_pad(bitstream, 7)
 
   def format_morph(self, patch, data):
     bitstream = BitStream(data)
     write_bits = bitstream.write_bits
+    write_str = bitstream.write_str
 
     write_bits(2, self.area)
 
-    t = '\1\1\x50'
-    for morph in xrange(NMORPHS):
-      s = patch.settings.morphs[morph].label[:7]
-      t += '\1\1' + chr(8+morph) + s.ljust(7,'\0')
-
-    for c in map(ord, t):
-      write_bits(8, c)
+    write_str('\1\1\x50')
+    s = bytearray([1, 1, 0])
+    for morph in patch.settings.morphs:
+      s[2] = 8 + morph.index
+      write_str(str(s))
+      write_string_null_pad(bitstream, morph.label, 7)
 
     return bitstream.tell_bit()
 
@@ -730,19 +747,13 @@ class Labels(Section):
         paramlen -= 1 # decrease because we got param index
         if paramlen:
           for i in xrange(paramlen/7):
-            s = ''.join([chr(read_bits(8)) for i in xrange(7)])
+            p.labels.append(read_string_null_pad(bitstream, 7))
             modlen -= 7
-            p.labels.append(s.strip('\0'))
         else:
           p.labels.append('')
         if section_debug:
           printf('%d %s %d %d %s\n', index, module.type.shortnm,
               paramlen, param, p.labels)
-
-  def write_str_bits(self, bitstream, s):
-    write_bits = bitstream.write_bits
-    for char in s:
-      write_bits(8, ord(char))
 
   def format_parameter(self, patch, data):
     area = get_patch_area(patch, self.area)
@@ -767,8 +778,7 @@ class Labels(Section):
     for module in modules:
       s = ''
       if module.type.id == 121: # SeqNote
-        for ep in module.editmodes:
-          s += chr(ep)
+        s += str(bytearray(module.editmodes))
       else:
         # build up the labels and then write them
         for i, param in enumerate(module.params):
@@ -784,7 +794,7 @@ class Labels(Section):
 
       write_bits(8, module.index)
       write_bits(8, len(s))
-      self.write_str_bits(bitstream, s)
+      bitstream.write_str(s)
 
     if section_debug:
       printf('paramlabels:\n')
@@ -819,18 +829,9 @@ class ModuleNames(Section):
 
     area = get_patch_area(patch, self.area)
 
-    names = data[bitstream.tell_bit()>>3:].tobytes()
     for i in xrange(nmodules):
-      null = names[1:].find('\0') + 1
-      if 0 < null < 17:
-        name = names[1:null]
-      else:
-        name = names[1:17]
-        null = 16
-      index = ord(names[0])
-      module = area.find_module(index)
-      module.name = name
-      names = names[null+1:]
+      module = area.find_module(read_bits(8))
+      module.name = read_string_null(bitstream, 16)
 
   def format(self, patch, data):
     bitstream = BitStream(data)
@@ -843,11 +844,7 @@ class ModuleNames(Section):
     write_bits(8, len(area.modules)) # unknown, see if zero works
     for module in area.modules:
       write_bits(8, module.index)
-      nm = module.name[:16]
-      if len(nm) < 16:
-        nm += '\0'
-      for c in nm:
-        write_bits(8, ord(c))
+      write_string_null(bitstream, module.name, 16)
 
     return bitstream.tell_bit()
 
@@ -924,13 +921,14 @@ Info=BUILD %d\r
       printf('0x%02x %-25s len:0x%04x\n', type, nm, l)
       printf('%s\n', binhexdump(memview[:l].tobytes()))
     section.parse(patch_or_perf, memview[3:l])
-    return l
+    return memview[l:]
 
   def parse_patch(self, patch, memview):
     size = len(memview)
-    for section in Pch2File.patch_sections:
-      bytes = self.parse_section(section, patch, memview)
-      memview = memview[bytes:]
+    while len(memview) > 0:
+      type = memview[:1].tolist()[0]
+      section = Pch2File.section_map[type]()
+      memview = self.parse_section(section, patch, memview)
     return size - len(memview)
 
   def parse(self, memview):
