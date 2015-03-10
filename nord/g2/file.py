@@ -312,39 +312,39 @@ class CableList(Section):
 
     return bitstream.tell_bit()
 
-class Parameter(object):
-  '''Parameter class for module parameters/settings.'''
-  def __init__(self, index, param, default=0, name='', module=None):
-    self.index      = index
-    self.param      = param
-    self.variations = [default]*NVARIATIONS
-    self.name       = name
-    self.module     = module
-    self.knob       = None
-    self.mmap       = None
-    self.ctrl       = None
-
 class SettingsArea(object):
   def __init__(self):
     self.index  = SETTINGS
     self.name   = 'settings'
 
-class SettingsModule(object):
-  def __init__(self, area):
-    self.index  = 1
+class ParameterModule(object):
+  def __init__(self, area, index):
     self.area   = area
+    self.index  = index
+
+class Parameter(object):
+  '''Parameter class for module parameters/settings.'''
+  def __init__(self, area, mod_index, index, default=0, name='', module=None):
+    self.area       = area
+    self.index      = index
+    self.variations = [default]*NVARIATIONS
+    self.name       = name
+    self.module     = ParameterModule(area, mod_index)
+    self.knob       = None
+    self.mmap       = None
+    self.ctrl       = None
 
 class Morph(object):
   '''Morph class for morph settings.'''
-  def __init__(self, index, area):
+  def __init__(self, area, index):
     self.name  = 'morph%d' % (index+1)
     self.maps  = [[] for variation in xrange(NVARIATIONS) ]
     self.index = index
     self.area  = area
 
     # morph "module" has 2 parameters dial and mode
-    self.dial = Parameter(1, index, 0, name='dial', module=self)
-    self.mode = Parameter(1, index+NMORPHS, 1, name='mode', module=self)
+    self.dial = Parameter(area, 1, index, 0, name='dial')
+    self.mode = Parameter(area, 1, index+NMORPHS, 1, name='mode')
 
 class Settings(object):
   '''Settings class for patch settings.'''
@@ -359,11 +359,10 @@ class Settings(object):
 
   def __init__(self):
     self.area = SettingsArea()
-    self.module = SettingsModule(self.area)
-    for i, group in enumerate(self.groups):
+    for i, group in enumerate(self.groups, 2):
       for j, name in enumerate(group):
-        setattr(self, name, Parameter(i+2, j, name=name, module=self.module))
-    self.morphs = [ Morph(morph, self.area) for morph in xrange(NMORPHS) ]
+        setattr(self, name, Parameter(self.area, i, j, name=name))
+    self.morphs = [ Morph(self.area, morph+1) for morph in xrange(NMORPHS) ]
     self.morphmaps = [ [] for variation in xrange(NVARIATIONS) ]
 
 class Parameters(Section):
@@ -638,11 +637,10 @@ class KnobAssignments(Section):
       write_bits(1, knob.assigned)
       if knob.assigned:
         module = knob.param.module
-        area, index, param = module.area.index, module.index, knob.param.index
-        write_bits(2, area)
-        write_bits(8, index)
+        write_bits(2, module.area.index)
+        write_bits(8, module.index)
         write_bits(2, knob.isled)
-        write_bits(7, param)
+        write_bits(7, knob.param.index)
         if type(patch) == Performance:
           write_bits(2, knob.slot)
 
@@ -657,18 +655,15 @@ class CtrlAssignments(Section):
 
     nctrls = read_bits(7)
     patch.ctrls = [ Ctrl() for i in xrange(nctrls)]
-    settings = patch.settings
-
     for ctrl in patch.ctrls:
       ctrl.midicc = read_bits(7)
-      ctrl.type   = read_bits(2) # FX, VOICE, SETTINGS
+      area        = read_bits(2) # FX, VOICE, SETTINGS
       index       = read_bits(8)
       param       = read_bits(7)
-      ctrl.index  = index
-      if ctrl.type == SETTINGS:
+      if area == SETTINGS:
         ctrl.param = get_settings_param(patch, index, param)
       else:
-        module = get_patch_area(patch, ctrl.type).find_module(index)
+        module = get_patch_area(patch, area).find_module(index)
         ctrl.param = module.params[param]
       ctrl.param.ctrl = ctrl
 
@@ -677,10 +672,9 @@ class CtrlAssignments(Section):
     write_bits = bitstream.write_bits
 
     write_bits(7, len(patch.ctrls))
-
     for ctrl in patch.ctrls:
       write_bits(7, ctrl.midicc)
-      write_bits(2, ctrl.type)
+      write_bits(2, ctrl.param.module.area.index)
       write_bits(8, ctrl.param.module.index)
       write_bits(7, ctrl.param.index)
 
@@ -796,10 +790,6 @@ class Labels(Section):
       write_bits(8, module.index)
       write_bits(8, len(s))
       bitstream.write_str(s)
-
-    if section_debug:
-      printf('paramlabels:\n')
-      printf('%s\n', hexdump(t))
 
     return bitstream.tell_bit()
 
