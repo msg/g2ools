@@ -98,8 +98,8 @@ class Conv3Mixer(Convert):
     nmm, g2m = self.nmmodule, self.g2module
     nmmp, g2mp = nmm.params, g2m.params
 
-    g2m.outputs.Out.rate = g2conncolors.red
-    g2m.uprate = 1
+    #g2m.outputs.Out.rate = g2conncolors.red
+    #g2m.uprate = 1
 
     if self.maing2module == 'Mix1-1A':
       setv(g2mp.On, 1)
@@ -115,7 +115,7 @@ class Conv3Mixer(Convert):
       setv(g2mp.On4, 1)
 
     for i in xrange(1, self.maxinputs+1):
-      getattr(g2m.inputs, 'In%d' % i).rate = g2conncolors.red
+      #getattr(g2m.inputs, 'In%d' % i).rate = g2conncolors.red
       l = getattr(g2mp, 'Lev%d' % i)
       setv(l, modtable[getv(l)][0])
 
