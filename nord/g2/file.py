@@ -19,7 +19,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import string, struct, sys
+import string, sys
+from struct import pack, unpack
 
 from nord import printf
 from nord.module import Module
@@ -904,8 +905,9 @@ Type=%s\r
 Version=%d\r
 Info=BUILD %d\r
 \0'''  # needs the null byte
-  standard_binary_header = 23
-  standard_build = 266
+  binary_version = 23
+  build_version = 266
+
   def __init__(self, filename=None):
     self.type = 'Patch'
     self.binary_revision = 0
@@ -914,8 +916,8 @@ Info=BUILD %d\r
       self.read(filename)
 
   def parse_section(self, section, patch_or_perf, memview):
-    x = memview[:3].tolist()
-    type, l = x[0], 3+((x[1]<<8)|x[2])
+    type, l = unpack('>BH', memview[:3])
+    l += 3
     if section_debug:
       nm = section.__class__.__name__
       printf('0x%02x %-25s len:0x%04x\n', type, nm, l)
@@ -924,33 +926,40 @@ Info=BUILD %d\r
     return memview[l:]
 
   def parse_patch(self, patch, memview):
-    size = len(memview)
+    memview = self.parse_section(PatchDescription(), patch, memview)
     while len(memview) > 0:
-      type = memview[:1].tolist()[0]
-      section = Pch2File.section_map[type]()
-      memview = self.parse_section(section, patch, memview)
-    return size - len(memview)
+      type = ord(memview[0])
+      if type == PatchDescription.type:
+        break
+      section_class = Pch2File.section_map.get(type, None)
+      if not section_class:
+        break
+      memview = self.parse_section(section_class(), patch, memview)
+    return memview
 
   def parse(self, memview):
     return self.parse_patch(self.patch, memview)
+
+  def parse_header(self, memview, filename):
+    header2x = bytearray(memview[:2*len(self.standard_text_header)])
+    null = header2x.find('\0')
+    if null < 0:
+      raise G2Error('Invalid G2File "%s" missing null terminator.' % filename)
+    self.txthdr = str(header2x[:null])
+    self.binhdr = header2x[null+1], header2x[null+2]
+    if self.binhdr[0] != self.binary_version:
+      printf('Warning: %s version %d\n', filename, self.binhdr[0])
+      printf('         version %d supported. it may fail to load.\n',
+          self.binary_version)
+    return memview[null+1:]  # include binhdr for crc
 
   # read - this is where the rubber meets the road.  it start here....
   def read(self, filename):
     self.filename = filename
     data = bytearray(open(filename, 'rb').read())
-    null = data.find('\0')
-    if null < 0:
-      raise G2Error('Invalid G2File "%s" missing null terminator.' % filename)
-    self.txthdr = data[:null]
-    self.binhdr = data[null+1], data[null+2]
-    if self.binhdr[0] != self.standard_binary_header:
-      printf('Warning: %s version %d\n', filename, self.binhdr[0])
-      printf('         version %d supported. it may fail to load.\n',
-          self.standard_binary_header)
-    memview = memoryview(data)[null+1:]
-    bytes = self.parse(memview[2:-2])
-
-    ecrc = (data[-2]<<8)|data[-1]
+    memview = self.parse_header(memoryview(data), filename)
+    bytes = len(self.parse(memview[2:-2]))
+    ecrc = unpack('>H', data[-2:])[0]
     acrc = crc(memview[:-2])
     if ecrc != acrc:
       printf('Bad CRC 0x%x 0x%x\n' % (ecrc, acrc))
@@ -960,9 +969,7 @@ Info=BUILD %d\r
     bits = section.format(patch_or_perf, memview[3:]) # skip type, size 
     bytes = (bits + 7) >> 3
     # write type, size
-    memview[0] = chr(section.type)
-    memview[1] = chr((bytes >> 8) & 0xff)
-    memview[2] = chr(bytes & 0xff)
+    memview[:3] = pack('>BH', section.type, bytes)
 
     if section_debug:
       nm = section.__class__.__name__
@@ -973,31 +980,37 @@ Info=BUILD %d\r
       #if title_section and len(nm) < len(f):
       #  f = nm+f[len(nm):]
 
-    return bytes + 3
+    return memview[bytes + 3:]
 
   def format_patch(self, patch, memview):
-    size = len(memview)
     for section in Pch2File.patch_sections:
-      bytes = self.format_section(section, patch, memview)
-      memview = memview[bytes:]
-    return size - len(memview)
+      memview = self.format_section(section, patch, memview)
+    return memview
 
   def format(self, memview):
     return self.format_patch(self.patch, memview)
 
+  def format_file(self):
+    data = bytearray(64<<10)
+    memview = memoryview(data)
+    hdr = Pch2File.standard_text_header % (self.type,
+        self.binary_version, self.build_version)
+    memview[:len(hdr)] = hdr
+    memview = memview[len(hdr):]
+    #memview = self.format_header(memview)
+    memview[0] = chr(self.binary_version)
+    memview[1] = chr(self.binary_revision)
+    fmemview = self.format(memview[2:])
+    bytes = len(memview) - len(fmemview)
+    data_crc = crc(memview[:bytes])
+    memview[bytes:bytes+2] = pack('>H', crc(memview[:bytes]))
+    bytes = len(data) - len(fmemview) + 2
+    return data[:bytes]
+
   # write - this looks a lot easier then read ehhhh???
   def write(self, filename=None):
     out = open(filename, 'wb')
-    hdr = Pch2File.standard_text_header % (self.type,
-        self.standard_binary_header, self.standard_build)
-    out.write(hdr)
-    data = bytearray(64<<10)
-    memview = memoryview(data)
-    data[:2] = self.standard_binary_header, self.binary_revision
-    bytes = self.format(memview[2:]) + 2
-    data_crc = crc(data[:bytes])
-    data[bytes:bytes+2] = (data_crc >> 8) & 0xff, data_crc & 0xff
-    out.write(data[:bytes+2])
+    out.write(str(self.format_file()))
 
 class PerformanceDescription(Section):
   '''PerformanceDescription Section subclass'''
@@ -1071,27 +1084,23 @@ class Prf2File(Pch2File):
 
   def parse(self, memview):
     performance = self.performance
-    size = len(memview)
-    bytes = self.parse_section(self.performance_section, performance, memview)
-    memview = memview[bytes:]
+    performance_section = self.performance_section
+    globalknobs_section = self.globalknobs_section
+    memview = self.parse_section(performance_section, performance, memview)
     for patch in performance.patches:
-      bytes = self.parse_patch(patch, memview)
-      memview = memview[bytes:]
-    bytes = self.parse_section(self.globalknobs_section, performance, memview)
-    memview = memview[bytes:]
-    return size - len(memview)
+      memview = self.parse_patch(patch, memview)
+    memview = self.parse_section(globalknobs_section, performance, memview)
+    return memview
 
   def format_performance(self, memview):
     performance = self.performance
-    size = len(memview)
-    bytes = self.format_section(self.performance_section, performance, memview)
-    memview = memview[bytes:]
-    for patch in self.performance.patches:
-      bytes = self.format_patch(patch, memview)
-      memview = memview[bytes:]
-    bytes = self.format_section(self.globalknobs_section, performance, memview)
-    memview = memview[bytes:]
-    return size - len(memview)
+    performace_section = self.performance_section
+    globalknobs_section = self.globalknobs_section
+    memview = self.format_section(performance_section, performance, memview)
+    for patch in performance.patches:
+      memview = self.format_patch(patch, memview)
+    memview = self.format_section(globalknobs_section, performance, memview)
+    return memview
 
   def format(self, memview):
     return self.format_performace(memview)
