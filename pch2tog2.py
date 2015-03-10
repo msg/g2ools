@@ -15,7 +15,7 @@ def clean_variations(variations):
     v.pop(-1)
   return v
 
-def print_description(patch):
+def format_description(patch):
   s = sprintf('# description\n')
   description = patch.description
   s += sprintf('setting category %s\n', g2categories[description.category])
@@ -30,7 +30,7 @@ def print_description(patch):
   s += sprintf('setting cables %s\n', colors)
   return s
     
-def print_settings(patch):
+def format_settings(patch):
   settings = patch.settings
   s = sprintf('# settings\n')
   for group in settings.groups:
@@ -43,7 +43,7 @@ def print_settings(patch):
 def module_loc(module):
   return '%s%d' % (string.ascii_lowercase[module.horiz], module.vert)
 
-def print_modes(module, loc):
+def format_modes(module, loc):
   s = ''
   if hasattr(module, 'modes') and len(module.modes):
     for m, mode in enumerate(module.modes):
@@ -51,7 +51,7 @@ def print_modes(module, loc):
       s += sprintf('    mode %s.%s %s\n', loc, mtype.name, mode.value)
   return s
 
-def print_params(module, loc):
+def format_params(module, loc):
   s = ''
   if hasattr(module, 'params') and len(module.params):
     for p, param in enumerate(module.params):
@@ -66,7 +66,7 @@ def print_params(module, loc):
         s += sprintf('    label %s.%s %s\n', loc, name, labels)
   return s
 
-def print_modules(area):
+def format_modules(area):
   s = sprintf('  # modules\n')
   modules = area.modules[:]
   def by_position(a, b):
@@ -100,18 +100,18 @@ def print_modules(area):
     last_vert = module.vert
     last_horiz = module.horiz
 
-    s += print_modes(module, loc)
+    s += format_modes(module, loc)
 
-    s += print_params(module, loc)
+    s += format_params(module, loc)
   return s
 
-def print_netlist(area):
+def format_netlist(area):
   s = sprintf('  # %s netlist\n', area.name)
   for net in area.netlist.nets:
     s += sprintf('# %s\n', area.netlist.nettos(net))
   return s
 
-def print_cables(area):
+def format_cables(area):
   s = sprintf('  # cables\n')
   for cable in area.cables:
     source, dest = cable.source, cable.dest
@@ -127,62 +127,67 @@ def print_cables(area):
     s += sprintf('  %-35s %s\n', t, u)
   return s
 
-def print_area(area):
+def format_area(area):
   s = sprintf('\n# area %s modules\n', area.name)
   s += sprintf('area %s\n', area.name)
-  s += print_modules(area)
-  #print_netlist(area)
-  s += print_cables(area)
+  s += format_modules(area)
+  #format_netlist(area)
+  s += format_cables(area)
   return s
 
-def print_knobs(patch):
+def format_settings_param(param):
+  if param.module.index < 2: # morph
+    return sprintf('morph.%d.%s', (param.index & 7) + 1, param.name.lower())
+  else:
+    return sprintf('setting.%s', param.name.lower())
+
+def format_knob_location(location):
+  row = location / 24
+  col = ((location / 8 ) % 3) + 1
+  knob = (location & 7) + 1
+  names = ['osc', 'lfo', 'env', 'filter', 'effect']
+  return sprintf('%s%d.%d', 'abcde'[row], col, knob), names[row]
+
+def format_knobs(patch):
   s = sprintf("\n# knobs\n")
   last_name = ''
-  names = ['osc', 'lfo', 'env', 'filter', 'effect']
   for i in range(len(patch.knobs)):
     row = i / 24
     knob = patch.knobs[i]
     if not knob.assigned:
       continue
 
-    area = {0:'fx', 1:'voice', 2:'settings'}[knob.param.module.area.index]
+    module = knob.param.module
+    knob_loc, name = format_knob_location(i)
+    area = {0:'fx', 1:'voice', 2:'settings'}[module.area.index]
     if area == 'settings': # not hasattr(knob.param, 'module'):
-      s += sprintf('knob %s%d.%d morph.%d.%s\n',
-            'abcde'[row], ((i/8)%3)+1, (i&7)+1,
-            knob.param.module.index,
-            knob.param.name.lower())
+      s += sprintf('knob %s %s\n', knob_loc, format_settings_param(knob.param))
       continue
 
-    loc = module_loc(knob.param.module)
-    t = sprintf('knob %s%d.%d %s.%s.%s',
-          'abcde'[row], ((i/8)%3) + 1, (i&7) + 1, area, loc,
+    loc = module_loc(module)
+    t = sprintf('knob %s %s.%s.%s', knob_loc, area, loc,
           knob.param.type.name.lower())
-    u = '  # %s %d.%d:' % (names[row], ((i/8)%3)+1, (i&7)+1)
-    if knob.param.module.name != last_name:
-      u += ' ' + knob.param.module.name + \
-           ' (' + knob.param.module.type.shortnm.lower() + ')'
+    u = sprintf('  # %s:', name)
+    if module.name != last_name:
+      u += ' ' + module.name + ' (' + module.type.shortnm.lower() + ')'
     s += sprintf('%-35s %s\n', t, u)
-    last_name = knob.param.module.name
+    last_name = module.name
   return s
 
-def print_midicc(patch):
+def format_midicc(patch):
   s = sprintf('\n# midicc\n')
   for ctrl in patch.ctrls:
     index = ctrl.param.index
-    area = {0:'fx', 1:'voice', 2:'settings'}[ctrl.type]
-    if ctrl.type != 2:
+    area = {0:'fx', 1:'voice', 2:'settings'}[ctrl.param.module.area.index]
+    if ctrl.param.module.area.index != 2:
       loc = module_loc(ctrl.param.module)
       t = sprintf('%s.%s', loc, ctrl.param.type.name.lower())
-    elif index < 2:
-      t = sprintf('%s.morph.%d.%s', area,
-                  ctrl.param.module.index,
-                  ctrl.param.name.lower())
     else:
-      t = sprintf('%s.%s', area, ctrl.param.name)
+      t = format_settings_param(ctrl.param)
     s += sprintf('midicc %2d %s\n', ctrl.midicc, t)
   return s
 
-def print_morphs(patch):
+def format_morphs(patch):
   settings = patch.settings
   s = sprintf('\n# morphs\n')
   s += '# morphs per variation: '
@@ -194,18 +199,17 @@ def print_morphs(patch):
   s += sprintf('# set morph.<morph>.mode <variations>\n')
   s += sprintf('#  add morph.<morph> <variation> <area>.<loc>.<param> <range>\n')
   morphs = settings.morphs
-  for i in range(len(morphs)):
-    morph = morphs[i]
+  for i, morph in enumerate(morphs, 1):
     s += sprintf('label morph.%d %s\n', i, morph.label)
-  for i in range(len(morphs)):
-    morph = morphs[i]
+  for i, morph in enumerate(morphs, 1):
     variations = clean_variations(morph.dial.variations)
     t = ' '.join(map(lambda a: '%d' % a, variations))
-    sprintf('set morph.%d.dial %s\n', i, t)
+    s += sprintf('set morph.%d.dial %s\n', i, t)
     variations = clean_variations(morph.mode.variations)
     t = ' '.join(map(lambda a: '%d' % a, variations))
     s += sprintf('set morph.%d.mode %s\n', i, t)
 
+  for i, morph in enumerate(morphs, 1):
     maps = morph.maps
     for variation in range(len(maps)):
       if not len(maps[variation]):
@@ -213,23 +217,24 @@ def print_morphs(patch):
       for mmap in maps[variation]:
         param = mmap.param
         loc = module_loc(param.module)
+        index = mmap.morph.dial.index
         area = ['fx', 'voice', 'settings'][param.module.area.index]
         t = sprintf('%s.%s.%s ', area, loc, param.type.name.lower())
         t += sprintf('%d ' % mmap.range)
-        s += sprintf('  add morph.%d %d %s\n', i, variation, t)
+        s += sprintf('  add morph.%d %d %s\n', index, variation, t)
 
   return s
 
-def print_patch(patch):
-  s = print_description(patch)
-  s += print_settings(patch)
+def format_patch(patch):
+  s = format_description(patch)
+  s += format_settings(patch)
   if len(patch.voice.modules):
-    s += print_area(patch.voice)
+    s += format_area(patch.voice)
   if len(patch.fx.modules):
-    s += print_area(patch.fx)
-  s += print_knobs(patch)
-  s += print_midicc(patch)
-  s += print_morphs(patch)
+    s += format_area(patch.fx)
+  s += format_knobs(patch)
+  s += format_midicc(patch)
+  s += format_morphs(patch)
   return s
 
 if __name__ == '__main__':
@@ -237,6 +242,6 @@ if __name__ == '__main__':
   while len(sys.argv):
     filename = sys.argv.pop(0)
     pch = Pch2File(filename)
-    s = sprintf('# %s\n', filename) + print_patch(pch.patch)
+    s = sprintf('# %s\n', filename) + format_patch(pch.patch)
     printf("%s\n", s)
 

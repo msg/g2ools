@@ -123,7 +123,7 @@ midicctable = {
 def printmidicc(patch):
   printf('midicc:\n')
   for ctrl in patch.ctrls:
-    if ctrl.type == 2:
+    if ctrl.param.module.area.index == 2:
       name = ctrl.param.name
       index, param = ctrl.param.index, ctrl.param.param
     else:
@@ -134,8 +134,9 @@ def printmidicc(patch):
       s = '"' + midicctable[ctrl.midicc] + '"'
     else:
       s = ''
+    area = param.module.area.index
     printf(' %-8s midicc=%2d %s(%d, %d) %s\n',
-        {0:'fx', 1:'voice', 2:'settings'}[ctrl.type], ctrl.midicc,
+        {0:'fx', 1:'voice', 2:'settings'}[area], ctrl.midicc,
         name, index, param, s)
 
 def printmorphs(patch):

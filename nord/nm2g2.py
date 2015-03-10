@@ -454,41 +454,50 @@ class NM2G2Converter:
         # ignore Volume cannot be assigned anyways
         if nmmorphs[morph].ctrl.midicc == 1:
           morphmap[morph] = g2morphs[0]
-          unused.remove(g2morphs[0])
+          unused[0] = None
           continue
         elif nmmorphs[morph].ctrl.midicc == 4:
           morphmap[morph] = g2morphs[5]
-          unused.remove(g2morphs[5])
+          unused[5] = None
           continue
       if nmmorphs[morph].keyassign:
         self.log.debug(' nm morph%d: keyassign=%d' %
             (morph, nmmorphs[morph].keyassign))
-        m = g2morphs[nmmorphs[morph].keyassign]
-        unused.remove(m)
-        morphmap[morph] = m
+        g2morph = g2morphs[nmmorphs[morph].keyassign]
+        unused[morph] = None
+        morphmap[morph] = g2morph
         continue
       if nmmorphs[morph].knob:
         knob = nmmorphs[morph].knob
         self.log.debug(' nm morph%d: knob=%d' % (morph, knob.knob))
         if knob.knob > 18:                  #  v: 0 unused
-          m = g2morphs[[4, 3, 0, 6][knob.knob-19]]
-          morphmap[morph] = m
-          unused.remove(m)
+          g2morph = g2morphs[[4, 3, 0, 6][knob.knob-19]]
+          if hasattr(knob, 'dial'):
+            setv(g2morph.dial, knob.dial)
+          morphmap[morph] = g2morph
+          unused[morph] = None
 
+    def find_unused():
+      for i, morph in enumerate(unused):
+        if morph:
+          unused[i] = None
+          return morph
+      return None
     # if morphmap[morph] empty assign unused morph and set it to knob
     for morph in range(len(morphmap)-1, -1, -1):
       if not morphmap[morph]:
-        morphmap[morph] = unused.pop()
-        setv(morphmap[morph], 0)
+        morphmap[morph] = find_unused()
+        setv(morphmap[morph].mode, 0)
       else:
-        setv(morphmap[morph], 1)
+        setv(morphmap[morph].mode, 1)
       self.log.debug(' nm morph%d -> g2 morph%d' % \
           (morph, morphmap[morph].index))
 
     for morph in range(len(morphmap)):
       g2morph = morphmap[morph]
-      setv(g2morph, nmmorphs[morph])
-      self.log.debug(' Morph%d: dial=%d' % (morph+1, nmmorphs[morph].dial))
+      self.log.debug(' Morph%d: dial=%d g2morph%d' % (morph+1,
+              nmmorphs[morph].dial, g2morph.dial.index))
+      setv(g2morph.dial, nmmorphs[morph].dial)
       for nmap in nmmorphs[morph].maps:
         s = '  %s:%s range=%d' % (nmap.param.module.name, nmap.param.type.name,
             nmap.range)
@@ -536,8 +545,9 @@ class NM2G2Converter:
         else:
           self.log.warning(s + ' Unknown param %d' % index)
       else: # morph
-        #self.log.debug(' Knob%d: Morph%d' % (knob.knob, knob.param.index))
+        self.log.debug(' Knob%d: Morph%d' % (knob.knob, knob.param.index))
         g2knob.param = self.morphmap[knob.param.index-1].dial
+        self.log.debug('   G2Morph%d' % (g2knob.param.module.index))
         g2knob.assigned = 1
         g2knob.isled = 0
 
@@ -563,14 +573,12 @@ class NM2G2Converter:
         conv = param.module.conv
         if index < len(conv.params) and conv.params[index]:
           new_ctrl.param = conv.params[index]
-          new_ctrl.type = conv.g2module.area.index
           self.log.debug(s)
         else:
           self.log.warning(s + ' -- Parameter missing')
           continue
       else:
         new_ctrl.param = self.morphmap[ctrl.param.index-1].dial
-        new_ctrl.type = 2 # settings
       g2patch.ctrls.append(new_ctrl)
 
   def docurrentnotes(self):
