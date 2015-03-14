@@ -127,7 +127,7 @@ def main(argv, stream):
     arg = args.pop(0)
     pathlist = glob(arg)
     if len(pathlist) == 0:
-      failedpatches.append(arg)
+      options.failedpatches.append(arg)
       continue
     for path in pathlist:
       if os.path.isdir(path) and options.recursive:
