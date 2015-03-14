@@ -29,7 +29,7 @@ def format_description(patch):
   colors = ''.join(['rbyogpw'[i] for i in range(len(x)) if x[i]])
   s += sprintf('setting cables %s\n', colors)
   return s
-    
+
 def format_settings(patch):
   settings = patch.settings
   s = sprintf('# settings\n')
