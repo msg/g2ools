@@ -66,7 +66,7 @@ def format_string(s, l, pad=False):
     s = s + '\0'
   if pad == True:
     s = s.ljust(l, '\0')
-  return s
+  return s[:l]
 
 def write_string(bitstream, s, l, pad=False):
   bitstream.write_str(format_string(s, l, pad))
@@ -448,6 +448,7 @@ class Parameters(Section):
     bitstream.write_bitsa([2, 8], [area.index, mlen])
     if mlen == 0:
       write_bits(8, 0)
+      return
 
     write_bits(8, NVARIATIONS)
     for module in modules:
@@ -905,10 +906,10 @@ Info=BUILD %d\r
   # read - this is where the rubber meets the road.  it start here....
   def read(self, filename):
     self.filename = filename
-    data = bytearray(open(filename, 'rb').read())
-    memview = self.parse_header(memoryview(data), filename)
+    self.data = bytearray(open(filename, 'rb').read())
+    memview = self.parse_header(memoryview(self.data), filename)
     bytes = len(self.parse(memview[2:-2]))
-    ecrc = unpack('>H', data[-2:])[0]
+    ecrc = unpack('>H', self.data[-2:])[0]
     acrc = crc(memview[:-2])
     if ecrc != acrc:
       printf('Bad CRC 0x%x 0x%x\n' % (ecrc, acrc))
