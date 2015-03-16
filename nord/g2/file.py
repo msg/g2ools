@@ -258,7 +258,7 @@ class CableList(Section):
   '''CableList Section subclass'''
   type = 0x52
   def parse_area(self, area, bitstream):
-    _, ncables = bitstream.read_bitsa([8, 16])
+    _, ncables = bitstream.read_bitsa([6, 16])
     area.cables = [ None ] * ncables
     for i in xrange(ncables):
       cable       = Cable(area)
@@ -287,7 +287,7 @@ class CableList(Section):
       area.netlist.add(cable.source, cable.dest)
 
   def format_area(self, area, bitstream):
-    bitstream.write_bitsa([2, 8, 16], [area.index, 0, len(area.cables)])
+    bitstream.write_bitsa([2, 6, 16], [area.index, 0, len(area.cables)])
     for cable in area.cables:
       bitstream.write_bitsa([3, 8, 6, 1, 8, 6],
         [ cable.color, cable.source.module.index, cable.source.index,
@@ -448,7 +448,7 @@ class Parameters(Section):
     bitstream.write_bitsa([2, 8], [area.index, mlen])
     if mlen == 0:
       write_bits(8, 0)
-      return
+      return bitstream.tell_bit()
 
     write_bits(8, NVARIATIONS)
     for module in modules:
@@ -519,7 +519,7 @@ class MorphParameters(Section):
         module = get_patch_area(patch, area).find_module(index)
         morph_map.param     = module.params[param]
         morph_map.variation = variation
-        morph_map.morph     = morphs[morph]
+        morph_map.morph     = morphs[morph-1]
         morph_map.morph.maps[variation].append(morph_map)
         morphmaps[variation].append(morph_map)
 
@@ -549,10 +549,11 @@ class MorphParameters(Section):
 
       write_bits(8, len(morph_maps))
       for morph_map in morph_maps:
-        bitstream.write_bitsa([2, 8, 7, 4, 8], [
+        values = [
             morph_map.param.module.area.index, morph_map.param.module.index,
-            morph_map.param.index, morph_map.morph.index, morph_map.range])
-        # range is signed
+            morph_map.param.index, morph_map.morph.index, morph_map.range,
+        ] # range is signed
+        bitstream.write_bitsa([2, 8, 7, 4, 8], values)
       write_bits(4, 0) # always 0
 
     bitstream.seek_bit(-4, 1) # remove last 4-bits
@@ -670,7 +671,7 @@ class Labels(Section):
         else:
           param.labels = ['']
         if section_debug:
-          printf('%d %s %d %d %s\n', index, module.type.shortnm,
+          printf('%d %s %d %d %s\n', module.index, module.type.shortnm,
               paramlen, parami, param.labels)
 
   def parse_area(self, area, bitstream):
