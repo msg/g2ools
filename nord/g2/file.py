@@ -66,7 +66,7 @@ def format_string(s, l, pad=False):
     s = s + '\0'
   if pad == True:
     s = s.ljust(l, '\0')
-  return s[:l]
+  return s[:l] # in case the string is longer
 
 def write_string(bitstream, s, l, pad=False):
   bitstream.write_str(format_string(s, l, pad))
