@@ -27,21 +27,21 @@ def hexdump(data, addr=0, size=1):
   '''hexdump(data, addr, size) -> return hex dump
   of size itmes using addr as address'''
   def out(x):
-    return [chr(x), '.'][x < 32 or x > 127]
+    return [chr(x), '.'][x < 32 or x > 126]
 
   s = []
   if size == 4:
-    a, fmt, l = array('L', []), '%08x', 17
+    type, fmt, l = 'L', '%08x', 17
   elif size == 2:
-    a, fmt, l = array('H', []), '%04x', 19
+    type, fmt, l = 'H', '%04x', 19
   else:
-    a, fmt, l = array('B', []), '%02x', 23
-  a.fromstring(data)
+    type, fmt, l = 'B', '%02x', 23
+  a = array(type, str(data))
   for off in range(0, len(data), 16):
     hexs = [fmt % i for i in a[off/size:(off+16)/size]]
     s.append('%06x: %-*s  %-*s | %s' % (addr+off,
       l, ' '.join(hexs[:8/size]), l, ' '.join(hexs[8/size:]),
-      ''.join([out(ord(byte)) for byte in data[off:off+16]])))
+      ''.join([out(byte) for byte in data[off:off+16]])))
   return '\n'.join(s)
 
 def binhexdump(data, addr=0, bits=None):
