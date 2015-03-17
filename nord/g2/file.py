@@ -781,12 +781,13 @@ class PerformanceDescription(Section):
   '''PerformanceDescription Section subclass'''
   type = 0x11
   description_attrs = [
-    ['unk1', 8], ['hold', 1], ['unk2', 7], ['rangesel', 8], ['rate', 8],
-    ['unk3', 8], ['clock', 8], ['unk4', 8], ['unk5', 8],
+    ['unk1', 4], ['focus', 2], [ 'unk2', 2 ],
+    ['rangesel', 8], ['bpm', 8],
+    ['split', 8], ['clock', 8], ['unk4', 8], ['unk5', 8],
   ]
   patch_attrs = [
-    ['unk1', 8], ['active', 8], ['keyboard', 8], ['keyhold', 8],
-    ['unk2', 16], ['keylow', 8], ['keyhigh', 8], ['unk3', 8], ['unk4', 8],
+    ['active', 8], ['keyboard', 8], ['hold', 8], ['bank', 8 ], [ 'patch', 8 ],
+    ['keylow', 8], ['keyhigh', 8], ['unk3', 8], ['unk4', 8], ['unk5', 8],
   ]
   def parse(self, performance, data):
     description = performance.description = Description() # G2Performance
@@ -880,7 +881,7 @@ Info=BUILD %d\r
     memview = self.parse_section(PatchDescription(), patch, memview)
     while len(memview) > 0:
       type = ord(memview[0])
-      if type == PatchDescription.type:
+      if type == PatchDescription.type: # prf2 concats patches
         break
       section_class = section_map.get(type, None)
       if not section_class:
