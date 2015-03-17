@@ -55,10 +55,10 @@ def read_string(bitstream, l, pad=False):
     return read_str(l).strip('\0')
   else:
     s = bytearray(l)
-    for l in xrange(l):
-      s[l] = read_str(1)
-      if s[l] == 0:
-        break
+    for i in xrange(l):
+      s[i] = read_str(1)
+      if s[i] == 0:
+        return str(s[:i])
     return str(s[:l])
 
 def format_string(s, l, pad=False):
