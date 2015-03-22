@@ -40,9 +40,9 @@ def setv(g2param, val):
   '''setv(g2param, val) - set all variations to val.'''
   g2param.variations = [ val ] * 9
 
-def getv(nmparam):
-  '''getv(nmparam) - get variation[0].'''
-  return nmparam.variations[0]
+def getv(nmparam, variation=0):
+  '''getv(nmparam) - get variations[variation].'''
+  return nmparam.variations[variation]
 
 def setav(g2param, array):
   '''setv(g2param, array) - set variations from array.'''
