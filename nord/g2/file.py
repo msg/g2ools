@@ -785,7 +785,7 @@ class PerformanceDescription(Section):
     ['rangesel', 8], ['bpm', 8],
     ['split', 8], ['clock', 8], ['unk4', 8], ['unk5', 8],
   ]
-  patch_attrs = [
+  slot_attrs = [
     ['active', 8], ['keyboard', 8], ['hold', 8], ['bank', 8 ], [ 'patch', 8 ],
     ['keylow', 8], ['keyhigh', 8], ['unk3', 8], ['unk4', 8], ['unk5', 8],
   ]
@@ -797,15 +797,16 @@ class PerformanceDescription(Section):
       value = read_bits(nbits)
       setattr(description, name, value)
 
-    patches = description.patches = [ Description() for i in xrange(4) ]
+    for slot in performacne.slots:
+      slot.description = Description()
     bit = bitstream.tell_bit()
     if bit & 7:  # align to next byte
       read_bits(bit & 7)
-    for patch in patches:
-      patch.name = read_string(bitstream, 16)
-      for name, nbits in self.patch_attrs:
+    for slot in slots:
+      slot.name = read_string(bitstream, 16)
+      for name, nbits in self.slot_attrs:
         value = read_bits(nbits)
-        setattr(patch, name, value)
+        setattr(slot.description, name, value)
 
   def format(self, performance, data):
     bitstream = BitStream(data)
@@ -814,11 +815,10 @@ class PerformanceDescription(Section):
     for name, nbits in self.description_attrs:
       write_bits(nbits, getattr(description, name))
 
-    patches = description.patches
-    for patch in patches:
-      write_string(bitstream, patch.name, 16)
-      for name, nbits in self.patch_attrs:
-        write_bits(nbits, getattr(patch, name))
+    for slot in slots:
+      write_string(bitstream, slot.name, 16)
+      for name, nbits in self.slot_attrs:
+        write_bits(nbits, getattr(slot.description, name))
 
     return bitstream.tell_bit()
 
@@ -980,8 +980,8 @@ class Prf2File(Pch2File):
     performance_section = self.performance_section
     globalknobs_section = self.globalknobs_section
     memview = self.parse_section(performance_section, performance, memview)
-    for patch in performance.patches:
-      memview = self.parse_patch(patch, memview)
+    for slot in performance.slots:
+      memview = self.parse_patch(slot.patch, memview)
     memview = self.parse_section(globalknobs_section, performance, memview)
     return memview
 
@@ -990,8 +990,8 @@ class Prf2File(Pch2File):
     performace_section = self.performance_section
     globalknobs_section = self.globalknobs_section
     memview = self.format_section(performance_section, performance, memview)
-    for patch in performance.patches:
-      memview = self.format_patch(patch, memview)
+    for slot in performance.slots:
+      memview = self.format_patch(slot.patch, memview)
     memview = self.format_section(globalknobs_section, performance, memview)
     return memview
 
