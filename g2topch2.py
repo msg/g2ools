@@ -43,6 +43,10 @@ class G2Param(object):
     labels = [ label.strip() for label in (' '.join(a)).split(':') ]
     self.param.labels = labels
 
+class G2Mode(object):
+  def __init__(self, mode):
+    self.mode = mode
+
 class G2Morph(object):
   def __init__(self, morph):
     self.morph = morph
@@ -60,6 +64,7 @@ class G2Module(object):
     self.module = module
     self.height = self.module.type.height
     self.params = { }
+    self.modes = { }
     self.ports = { }
     self.setup()
 
@@ -68,6 +73,8 @@ class G2Module(object):
     module = self.module
     for param in module.params:
       self.params[param.type.name.lower()] = G2Param(param)
+    for mode in module.modes:
+      self.modes[mode.type.name.lower()] = G2Mode(mode)
 
     self.ports = { }
     # adjust input/output conflicts by appending <name>in <name>in
@@ -112,33 +119,41 @@ class G2Section(object):
     self.actions['cablecolor']  = self.cablecolor
     self.actions['modulecolor'] = self.modulecolor
 
-  def add_module(self, typename, name):
-    mt = module_types.get(typename)
-    m = mt.add(self.section.current_area, name=name,
-        horiz=self.section.horiz, vert=self.section.vert,
-        color=self.section.module_color)
-    self.section.vert += m.height
-    return m
+  def add_module(self, typename, label):
+    module_type = module_types.get(typename)
+    section = self.section
+    module = module_type.add(section.current_area, name=label,
+        horiz=section.horiz, vert=section.vert, color=section.module_color)
+    section.vert += module.height
+    return module
 
-  def parse_connection(self, connection):
-    module_name, name = connection.split('.')
+  def parse_member(self, path):
+    module_name, postfix = path.split('.')
     module = self.modules.get(module_name)
     if not module:
       raise G2Exception('No module "%s".' % module_name)
+    return module, postfix
+
+  def parse_connection(self, connection):
+    module, name = self.parse_member(connection)
     port = module.ports.get(name)
     if not port:
-      raise G2Exception('No port "%s" on module "%s".' % (name, module_name))
+      raise G2Exception('No port "%s" on module "%s".' % (name, connection))
     return port
 
   def parse_parameter(self, parameter):
-    module_name, name = parameter.split('.', 1)
-    module = self.modules.get(module_name)
-    if not module:
-      raise G2Exception('No module "%s".' % module_name)
+    module, name = self.parse_member(parameter)
     param = module.params.get(name)
     if not param:
-      raise G2Exception('No param "%s" on module "%s"' % (name, module_name))
+      raise G2Exception('No param "%s" on module "%s"' % (name, param))
     return param
+
+  def parse_mode(self, path):
+    module, name = self.parse_member(path)
+    mode = module.modes.get(name)
+    if not mode:
+      raise G2Exception('No mode "%s" on module "%s"' % (name, path))
+    return mode
 
   def connect(self, *args):
     connections = []
@@ -225,12 +240,18 @@ class G2Model(G2Section):
     self.actions['output'] = self.output
 
   def add(self, typename, name):
+    name = self.name + '-' + name
     self.modules[name] = self.add_module(typename, name)
+
+  def connect(self, *args):
+    args = [ self.name + '-' + arg for arg in args ]
+    G2Section.connect(self, *args)
 
   def separate(self, rows):
     self.section.vert += int(rows)
 
   def set(self, name, *variations):
+    name = self.name + '-' + name
     param = self.parse_parameter(name)
     if param == None:
       raise G2Exception('No parameter "%s"' % name)
@@ -238,6 +259,7 @@ class G2Model(G2Section):
     #getattr(param, 'set', map(int, variations))
 
   def label(self, param, *names):
+    param = self.name + '-' + param
     param = self.parse_parameter(param)
     if param == None:
       return -1
@@ -270,10 +292,12 @@ class G2Model(G2Section):
       calc.param.set(*variations)
 
   def calc(self, parameter, equation):
+    parameter = self.name + '-' + parameter
     param = self.parse_parameter(parameter)
     self.add_calc(param, equation)
 
   def port(self, name, modport):
+    modport = self.name + '-' + modport
     port = self.parse_connection(modport)
     if port == None:
       raise G2Exception('No module port "%s"' % modport)
@@ -294,9 +318,9 @@ class G2ModuleType(object):
     self.height = 0
 
   def add(self, area, **kw):
-    m = G2Module(area.add_module(self.shortnm, **kw))
-    self.height = m.module.type.height
-    return m
+    module = G2Module(area.add_module(self.shortnm, **kw))
+    self.height = module.module.type.height
+    return module
 
 class G2ModelType(object):
   def __init__(self, g2patch, code):
@@ -305,16 +329,26 @@ class G2ModelType(object):
 
   def add(self, area, **kw):
     gm = G2Model(self.g2patch)
+    gm.name = kw['name']
+    d = ' '.join('%s=%s' % (k, kw[k]) for k in kw)
+    # save colors, setup models colors
+    gm.cable_color = orig_cable_color  = self.g2patch.cable_color
+    gm.module_color = orig_module_color = self.g2patch.module_color
     for lineno, line in self.code:
+      self.g2patch.cable_color = gm.cable_color
+      self.g2patch.module_color = gm.module_color
       args = [ l.lower() for l in line.split() ]
       cmd = args.pop(0)
-      debug('model %d: %s(%s)\n', lineno, cmd, args)
+      debug('model %d: %s(%s) %s\n', lineno, cmd, args, d)
       try:
         getattr(gm, cmd)(*args)
       except G2Exception as e:
         printf('%d: %s\n\t%s\n', lineno, line.strip(), e)
         debug('%s\n', traceback.format_exc())
     gm.height = 0 # height calculated on each module
+    # restore colors
+    self.g2patch.cable_color  = orig_cable_color
+    self.g2patch.module_color = orig_module_color
     return gm
 
 class G2Patch(G2Section):
@@ -335,7 +369,7 @@ class G2Patch(G2Section):
     self.actions['area']     = self.area
     self.actions['add']      = self.add
     self.actions['label']    = self.label
-    #self.actions['mode']     = self.mode
+    self.actions['mode']     = self.mode
     self.actions['set']      = self.set
     self.actions['knob']     = self.knob
     self.actions['midicc']   = self.midicc
@@ -392,7 +426,15 @@ class G2Patch(G2Section):
 
   def parse_morph(self, morph):
     name, morph = morph.split('.', 1)
-    return self.pch2.patch.settings.morphs[int(morph)]
+    return self.pch2.patch.settings.morphs[int(morph)-1]
+
+  def parse_morph_param(self, morph_param):
+    name, morphi, param = morph_param.split('.')
+    morph = self.pch2.patch.settings.morphs[int(morphi)-1]
+    if param == 'mode':
+      return morph.mode
+    elif param == 'dial':
+      return morph.dial
 
   def is_area(self, name):
     return name in [ 'voice', 'fx', 'settings' ]
@@ -452,14 +494,14 @@ class G2Patch(G2Section):
     if len(settings.morphmaps) >= NMORPHMAPS:
       raise G2Exception('Only %d morphs allowed per variation' % NMORPHMAPS)
     morph = self.parse_morph(morph)
-    mmap = MorphMap()
-    mmap.variation = int(variation)  # make variations base 1
+    morph_map = MorphMap()
+    morph_map.variation = int(variation)  # make variations base 1
     param, area_type = self.parse_control(control)
-    mmap.param = param.param
-    mmap.range = int(range)
-    mmap.morph = morph
-    mmap.morph.maps[mmap.variation].append(mmap)
-    settings.morphmaps[mmap.variation].append(mmap)
+    morph_map.param = param.param
+    morph_map.range = int(range)
+    morph_map.morph = morph
+    morph_map.morph.maps[morph_map.variation].append(morph_map)
+    settings.morphmaps[morph_map.variation].append(morph_map)
 
   def add(self, typename, name, *args):
     if typename.startswith('morph'):
@@ -471,6 +513,8 @@ class G2Patch(G2Section):
       label = name
     else:
       label = ' '.join(args)
+      if label[0] == '"' or label[0] == "'":
+        label = label[1:-1]
     self.modules[name] = self.add_module(typename, label)
 
   def label(self, param, *name):
@@ -484,13 +528,13 @@ class G2Patch(G2Section):
       param.label(*name)
 
   def set_morph(self, name, *args):
-    morph = self.parse_morph(name)
+    morph = self.parse_morph_param(name)
 
-  #def mode(self, name, value):
-  #  mode = self.parse_mode(name)
-  #  if mode == None:
-  #    raise G2Exception('Node mode %s' % name)
-  #  mode.value = int(value)
+  def mode(self, name, value):
+    mode = self.parse_mode(name)
+    if mode == None:
+      raise G2Exception('Node mode %s' % name)
+    mode.value = int(value)
 
   def set(self, name, *variations):
     if name.startswith('morph'):
@@ -512,23 +556,23 @@ class G2Patch(G2Section):
 
   def midicc(self, cc, control):
     cc = int(cc)
-    if control.startswith('settings'):
+    if control.startswith('setting'):
       return
     if midicc_reserved(cc):
       #raise G2Exception('midicc %d reserved' % cc)
       printf('midicc %d reserved\n', cc)
       return
-    m = None
+    new_ctrl = None
     ctrls = self.pch2.patch.ctrls
     for ctrl in ctrls:
       if ctrl.midicc == cc:
-        m = ctrl
+        new_ctrl = ctrl
         break
-    if m == None:
-      m = Ctrl()
-      ctrls.append(m)
-    m.midicc = cc
-    m.param, m.type = self.parse_control(control)
+    if new_ctrl == None:
+      new_ctrl = Ctrl()
+      ctrls.append(new_ctrl)
+    new_ctrl.midicc = cc
+    new_ctrl.param, new_ctrl.type = self.parse_control(control)
 
   def table(self, name, filename):
     pass
@@ -562,10 +606,6 @@ class G2File(object):
   def slot(self, slot_location, name):
     pass
 
-  def parse(self):
-    self.build_files(self.topfile)
-    self.build()
-
   def write(self):
     self.g2patch.update_rates()
     self.g2patch.write()
@@ -590,22 +630,40 @@ class G2File(object):
       self.build_files(path)
     self.file_stack.remove(path)
 
+  def parse_command(self, line, lineno):
+    args = line.split()
+    if len(args) < 1:
+      return
+    cmd = args.pop(0).lower()
+
+    debug('%d: %s(%s)\n', lineno, cmd, args)
+    try:
+      self.g2patch.actions[cmd](*args)
+    except Exception as e:
+      printf('%d: %s\n\t%s\n', lineno, line.rstrip(), e)
+      debug('%s\n', traceback.format_exc())
+
+  def build(self):
+    for lineno, line in self.build_file(self.topfile):
+      self.parse_command(clean_line(line), lineno)
+
   def build_files(self, filename):
     lines = [ line.rstrip() for line in open(filename).readlines() ]
     self.file_stack = [ filename ]
+    #self.files[filename] = list(enumerate(lines, 1)
     self.files[filename] = zip(range(1, 1+len(lines)), lines)
-    inmodule = False
+    in_module = False
     for lineno, line in self.files[filename]:
       line = clean_line(line)
       if not line:
         continue
       fields = line.strip().split()
-      if fields[0] == 'model':
-        inmodule = True
-      if fields[0] == 'endmodel':
-        inmodule = False
+      if   fields[0] == 'model':
+        in_module = True
+      elif fields[0] == 'endmodel':
+        in_module = False
       elif fields[0] == 'include':
-        if inmodule:
+        if in_module:
           printf('%s:%d - include inside model definition\n', filename, lineno)
         else:
           self.handle_include(fields[1])
@@ -617,7 +675,7 @@ class G2File(object):
     filelines = []
     module = []
     module_name = ''
-    inmodule = 0
+    in_module = 0
     for lineno, line in self.files[filename]:
       #debug('%d: %s\n', lineno, line)
       args = clean_line(line).split()
@@ -625,45 +683,30 @@ class G2File(object):
       if len(args) < 1:
         continue
       cmd = args.pop(0)
-      if cmd == 'model':
-        inmodule = 1
+      if   cmd == 'model':
+        in_module = 1
         module_name = args[0]
       elif cmd == 'endmodel':
         self.build_group(module_name, module)
-        inmodule = 0
+        in_module = 0
         module = []
       elif cmd == 'include':
         path = self.find_include(args[0])
         filelines += self.build_file(path)
-      elif inmodule:
+      elif in_module:
         module.append((lineno, line))
       else:
         filelines.append((lineno, line))
 
-    if inmodule:
+    if in_module:
       printf('%s: no endmodel tag found\n', self.topfile)
       return
 
     return filelines
 
-  def build(self):
-    for lineno, line in self.build_file(self.topfile):
-      self.parse_command(clean_line(line), lineno)
-
-  def parse_command(self, line, lineno):
-    args = line.split()
-    if len(args) < 1:
-      return
-    cmd = args.pop(0).lower()
-
-    debug('%d: %s(%s)\n', lineno, cmd, args)
-    try:
-      #print self.g2patch.actions[cmd]
-      self.g2patch.actions[cmd](*args)
-      #getattr(self.g2patch, cmd)(*args)
-    except Exception as e:
-      printf('%d: %s\n\t%s\n', lineno, line.rstrip(), e)
-      debug('%s\n', traceback.format_exc())
+  def parse(self):
+    self.build_files(self.topfile)
+    self.build()
 
 if __name__ == '__main__':
   g2oolsdir = os.path.dirname(sys.argv.pop(0))
