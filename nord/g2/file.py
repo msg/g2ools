@@ -83,14 +83,14 @@ class Section(object):
     self.__dict__ = kw
     self.data = bytearray(64<<10)
 
-class SectionMap(object):
+class SectionManager(object):
   def add(self, class_):
     self.__dict__[class_.type] = class_
 
   def get(self, type, default=None):
     return self.__dict__.get(type, default)
 
-section_map = SectionMap()
+section_manager = SectionManager()
 
 class Description(object):
   '''Description class for patch/performance description.'''
@@ -123,7 +123,7 @@ class PatchDescription(Section):
     bitstream = BitStream(data, 7*8)
     self.format_description(patch.description, bitstream)
     return bitstream.tell_bit()
-section_map.add(PatchDescription)
+section_manager.add(PatchDescription)
 
 class ModuleList(Section):
   '''ModuleList Section subclass'''
@@ -207,7 +207,7 @@ class ModuleList(Section):
     area      = get_patch_area(patch, self.area)
     self.format_area(area, bitstream)
     return bitstream.tell_bit()
-section_map.add(ModuleList)
+section_manager.add(ModuleList)
 
 class CurrentNote(Section):
   '''CurrentNote Section subclass'''
@@ -252,7 +252,7 @@ def invalid_cable(smodule, sconn, direction, dmodule, dconn):
     return 3
 
   return 0 # if we got here, everything's cool.
-section_map.add(CurrentNote)
+section_manager.add(CurrentNote)
 
 class CableList(Section):
   '''CableList Section subclass'''
@@ -304,7 +304,7 @@ class CableList(Section):
     area = get_patch_area(patch, self.area)
     self.format_area(area, bitstream)
     return bitstream.tell_bit()
-section_map.add(CableList)
+section_manager.add(CableList)
 
 class SettingsArea(object):
   def __init__(self):
@@ -479,7 +479,7 @@ class Parameters(Section):
       area = get_patch_area(patch, self.area)
       self.format_area(area, bitstream)
     return bitstream.tell_bit()
-section_map.add(Parameters)
+section_manager.add(Parameters)
 
 def get_settings_param(patch, index, param):
   if index < 2:
@@ -558,7 +558,7 @@ class MorphParameters(Section):
 
     bitstream.seek_bit(-4, 1) # remove last 4-bits
     return bitstream.tell_bit()
-section_map.add(MorphParameters)
+section_manager.add(MorphParameters)
 
 class KnobAssignments(Section):
   '''KnobAssignments Section subclass'''
@@ -575,7 +575,7 @@ class KnobAssignments(Section):
       if type(patch) == Performance:
         knob.slot = bitstream.read_bits(2)
         perf = patch
-        patch = perf.patches[knob.slot]
+        patch = perf.slots[knob.slot].patch
       else:
         knob.slot = 0
 
@@ -603,7 +603,7 @@ class KnobAssignments(Section):
       if type(patch) == Performance:
         bitstream.write_bits(2, knob.slot)
     return bitstream.tell_bit()
-section_map.add(KnobAssignments)
+section_manager.add(KnobAssignments)
 
 class CtrlAssignments(Section):
   '''CtrlAssignments Section subclass'''
@@ -629,7 +629,7 @@ class CtrlAssignments(Section):
       bitstream.write_bitsa([7, 2, 8, 7], [ ctrl.midicc,
           param.module.area.index, param.module.index, param.index ])
     return bitstream.tell_bit()
-section_map.add(CtrlAssignments)
+section_manager.add(CtrlAssignments)
 
 class Labels(Section):
   '''Labels Section subclass'''
@@ -735,7 +735,7 @@ class Labels(Section):
     else:
       area = get_patch_area(patch, self.area)
       return self.format_area(area, bitstream)
-section_map.add(Labels)
+section_manager.add(Labels)
 
 class ModuleNames(Section):
   '''ModuleNames Section subclass'''
@@ -763,7 +763,7 @@ class ModuleNames(Section):
     area = get_patch_area(patch, self.area)
     self.format_area(area, bitstream)
     return bitstream.tell_bit()
-section_map.add(ModuleNames)
+section_manager.add(ModuleNames)
 
 class TextPad(Section):
   '''TextPad Section subclass'''
@@ -775,13 +775,14 @@ class TextPad(Section):
     bitstream = BitStream(data)
     bitstream.write_str(patch.textpad)
     return bitstream.tell_bit()
-section_map.add(TextPad)
+section_manager.add(TextPad)
 
 class PerformanceDescription(Section):
   '''PerformanceDescription Section subclass'''
   type = 0x11
   description_attrs = [
-    ['unk1', 4], ['focus', 2], [ 'unk2', 2 ],
+    ['unk1', 8],
+    ['unk2', 4], ['focus', 2], [ 'unk3', 2 ],
     ['rangesel', 8], ['bpm', 8],
     ['split', 8], ['clock', 8], ['unk4', 8], ['unk5', 8],
   ]
@@ -793,16 +794,13 @@ class PerformanceDescription(Section):
     description = performance.description = Description() # G2Performance
     bitstream = BitStream(data)
     read_bits = bitstream.read_bits
+
     for name, nbits in self.description_attrs:
       value = read_bits(nbits)
       setattr(description, name, value)
 
     for slot in performance.slots:
       slot.description = Description()
-    bit = bitstream.tell_bit()
-    if bit & 7:  # align to next byte
-      read_bits(bit & 7)
-    for slot in performance.slots:
       slot.name = read_string(bitstream, 16)
       for name, nbits in self.slot_attrs:
         value = read_bits(nbits)
@@ -822,6 +820,7 @@ class PerformanceDescription(Section):
         write_bits(nbits, getattr(slot.description, name))
 
     return bitstream.tell_bit()
+section_manager.add(PerformanceDescription)
 
 class GlobalKnobAssignments(KnobAssignments):
   '''GlobalKnobAssignments Section subclasss'''
@@ -884,7 +883,7 @@ Info=BUILD %d\r
       type = ord(memview[0])
       if type == PatchDescription.type: # prf2 concats patches
         break
-      section_class = section_map.get(type, None)
+      section_class = section_manager.get(type, None)
       if not section_class:
         break
       memview = self.parse_section(section_class(), patch, memview)
