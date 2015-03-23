@@ -339,9 +339,9 @@ the nm1 and g2 implementations.
 
 class Slot(object):
   '''Slot class for performances.'''
-  def __init__(self, index):
+  def __init__(self, index, fromname):
     self.index = index
-    self.patch = Patch()
+    self.patch = Patch(fromname)
 
 class Performance(object):
   '''Performance class representing a nord modular performance.
@@ -350,5 +350,5 @@ Basically a holder for 4 patches, one each for slot a, slot b,
 slot c, and slot d.
 '''
   def __init__(self, fromname):
-    self.slots = [ Slot(slot) for slot in xrange(4) ]
+    self.slots = [ Slot(slot, fromname) for slot in xrange(4) ]
 

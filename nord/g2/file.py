@@ -797,12 +797,12 @@ class PerformanceDescription(Section):
       value = read_bits(nbits)
       setattr(description, name, value)
 
-    for slot in performacne.slots:
+    for slot in performance.slots:
       slot.description = Description()
     bit = bitstream.tell_bit()
     if bit & 7:  # align to next byte
       read_bits(bit & 7)
-    for slot in slots:
+    for slot in performance.slots:
       slot.name = read_string(bitstream, 16)
       for name, nbits in self.slot_attrs:
         value = read_bits(nbits)
@@ -810,12 +810,13 @@ class PerformanceDescription(Section):
 
   def format(self, performance, data):
     bitstream = BitStream(data)
+    write_bits = bitstream.write_bits
     description = performance.description
 
     for name, nbits in self.description_attrs:
       write_bits(nbits, getattr(description, name))
 
-    for slot in slots:
+    for slot in performance.slots:
       write_string(bitstream, slot.name, 16)
       for name, nbits in self.slot_attrs:
         write_bits(nbits, getattr(slot.description, name))
