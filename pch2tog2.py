@@ -48,7 +48,8 @@ def format_modes(module, loc):
   if hasattr(module, 'modes') and len(module.modes):
     for m, mode in enumerate(module.modes):
       mtype = module.type.modes[m]
-      s += sprintf('    mode %s.%s %s\n', loc, mtype.name, mode.value)
+      name = mtype.name.lower()
+      s += sprintf('    mode %s.%s %s\n', loc, name, mode.value)
   return s
 
 def format_params(module, loc):
@@ -85,9 +86,9 @@ def format_modules(area):
       s += sprintf('  column %s\n' % chr(ord('a')+module.horiz))
       last_vert = 0
     last_col = module.horiz
-    sep = last_vert - module.vert
+    sep = module.vert - last_vert
     if sep > module.type.height:
-      s += sprintf('  separate %d\n', sep)
+      s += sprintf('  separate %d\n', sep - module.type.height)
     if module.color != last_color:
       s += sprintf('  modulecolor %s\n', g2modulecolors.name(module.color))
     last_color = module.color
@@ -101,7 +102,6 @@ def format_modules(area):
     last_horiz = module.horiz
 
     s += format_modes(module, loc)
-
     s += format_params(module, loc)
   return s
 
