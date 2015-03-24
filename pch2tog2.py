@@ -96,6 +96,8 @@ def format_modules(area):
     loc = module_loc(module)
     module.loc = loc
     name = module.name
+    if name == '':
+      name = "''"
     s += sprintf('  add %s %s %s\n', module.type.shortnm.lower(), loc, name)
     name = name.lower()
     last_vert = module.vert
