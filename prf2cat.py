@@ -32,7 +32,21 @@ while len(sys.argv):
   printf('"%s"\n', filename)
   prf2 = Prf2File(filename)
   perf = prf2.performance
-  for i in range(4):
-    printf('Patch %d: "%s"\n', i+1, perf.description.patches[i].name)
-    printpatch(perf.patches[i])
+  printf(' focus: %s\n',                'abcd'[perf.description.focus])
+  printf(' range enable: %s\n',         ['off','on'][perf.description.rangesel])
+  printf(' master clock: %d BPM: %s\n', perf.description.bpm,
+      ['stop','run'][perf.description.clock])
+  printf(' kb split: %s\n',             ['off','on'][perf.description.split])
+  for sloti, slot in enumerate(perf.slots):
+    description = slot.description
+    name = '"%s"' % slot.name
+    printf(' slot %s: %d:%d %-16s\n', 'abcd'[sloti],
+        description.bank+1, description.patch+1, name)
+    printf('  active: %-3s, ',          ['off','on'][description.active])
+    printf('key: %-3s, ',               ['off','on'][description.keyboard])
+    printf('hold: %-3s, ',              ['off','on'][description.hold])
+    printf('range: %d-%d\n',            description.keylow, description.keyhigh)
+  for sloti, slot in enumerate(perf.slots, 1):
+    printf('Patch %d: "%s"\n', sloti, slot.name)
+    printpatch(slot.patch)
 
