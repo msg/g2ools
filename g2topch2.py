@@ -547,7 +547,7 @@ class G2Patch(G2Section):
 
   def knob(self, knob, control):
     knob, row, col = self.parse_knob(knob)
-    index = (col * 24) + (row * 8) + knob
+    index = (col * 8) + (row * 24) + knob
     knob = self.pch2.patch.knobs[index]
     param, area_type = self.parse_control(control)
     knob.param = param.param
