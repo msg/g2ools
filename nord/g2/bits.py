@@ -70,9 +70,9 @@ def setbits(bit, nbits, data, value):
   return bit+nbits
 
 class BitStream(object):
-  def __init__(self, data):
+  def __init__(self, data, bit=0):
     self.data = data
-    self.bit = 0
+    self.bit = bit
 
   def setup(self, bit=0, data=None):
     self.bit = bit
