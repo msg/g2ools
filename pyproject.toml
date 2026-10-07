@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "g2ools"
+version = "0.2.0"
+description = "Tools and libraries for Nord Modular G2 synthesizers"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-2.0-or-later" }
+authors = [
+    { name = "Matt Gerassimoff" },
+]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio",
+]
+
+[project.scripts]
+nm2g2 = "nm2g2:main_cli"
+pch2cat = "pch2cat:main_cli"
+dx2g2 = "dx2g2:main_cli"
+nmcat = "nmcat:main_cli"
+pch2cmp = "pch2cmp:main_cli"
+pch2tog2 = "pch2tog2:main_cli"
+prf2cat = "prf2cat:main_cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nord*"]
+
+[tool.setuptools]
+py-modules = ["nm2g2", "pch2cat", "dx2g2", "nmcat", "pch2cmp", "pch2tog2", "prf2cat"]
+
+[tool.setuptools.package-data]
+nord = ["*.pch2", "**/*.pch2"]

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -160,5 +160,8 @@ class StdoutStream:
     self.file.write(self.str)
     self.str = ''
 
+def main_cli():
+  sys.exit(main(sys.argv, StdoutStream()) or 0)
+
 if __name__ == '__main__':
-  main(sys.argv, StdoutStream())
+  main_cli()

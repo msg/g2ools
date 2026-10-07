@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -24,13 +24,26 @@ from nord.g2.file import Pch2File
 from nord.g2.pprint import printpatch
 from nord import printf
 
-prog = sys.argv.pop(0)
-try:
-  while len(sys.argv):
-    filename = sys.argv.pop(0)
-    pch2 = Pch2File(filename)
-    printf('"%s"\n', filename)
-    printpatch(pch2.patch)
-except IOError:
-  pass
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv[:]
+  else:
+    argv = list(argv)
+  if argv:
+    prog = argv.pop(0)
+  try:
+    while len(argv):
+      filename = argv.pop(0)
+      pch2 = Pch2File(filename)
+      printf('"%s"\n', filename)
+      printpatch(pch2.patch)
+  except IOError:
+    pass
+  return 0
+
+def main_cli():
+  sys.exit(main(sys.argv) or 0)
+
+if __name__ == '__main__':
+  main_cli()
 

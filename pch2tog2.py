@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import sys
 import string
@@ -239,11 +239,23 @@ def format_patch(patch):
   s += format_morphs(patch)
   return s
 
-if __name__ == '__main__':
-  prog = sys.argv.pop(0)
-  while len(sys.argv):
-    filename = sys.argv.pop(0)
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv[:]
+  else:
+    argv = list(argv)
+  if argv:
+    prog = argv.pop(0)
+  while len(argv):
+    filename = argv.pop(0)
     pch = Pch2File(filename)
     s = sprintf('# %s\n', filename) + format_patch(pch.patch)
     printf("%s\n", s)
+  return 0
+
+def main_cli():
+  sys.exit(main(sys.argv) or 0)
+
+if __name__ == '__main__':
+  main_cli()
 

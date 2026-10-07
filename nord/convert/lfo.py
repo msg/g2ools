@@ -122,7 +122,7 @@ class ConvLFOA(Convert):
       setv(g2mp.OutputType, 5) # BipInv
     else:
       # 180 phase
-      setv(g2mp.Phase, (range(64, 128)+range(64))[getv(nmmp.Phase)])
+      setv(g2mp.Phase, (list(range(64, 128)) + list(range(64)))[getv(nmmp.Phase)])
     setv(g2mp.Active, 1-getv(nmmp.Mute))
 
     self.kbt = g2m.params.Kbt
@@ -203,7 +203,7 @@ class ConvLFOSlvA(Convert):
       setv(g2mp.OutputType, 5) # BipInv
     else:
       # 180 phase
-      setv(g2mp.Phase, (range(64, 128)+range(64))[getv(nmmp.Phase)])
+      setv(g2mp.Phase, (list(range(64, 128)) + list(range(64)))[getv(nmmp.Phase)])
     setv(g2mp.Active, 1-getv(nmmp.Mute))
 
     postmst(self, 0)

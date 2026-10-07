@@ -1,0 +1,17 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+uv.lock
+
+# Tool logs and outputs
+failedpatches*.txt

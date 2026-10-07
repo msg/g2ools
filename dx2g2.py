@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import logging
 import os, sys, traceback
@@ -13,7 +13,17 @@ from nord.convert.dx7 import dxtable
 
 class DX7Converter: 
   def __init__(self):
-    self.pch2 = Pch2File('dx7.pch2')
+    dx7_path = 'dx7.pch2'
+    if not os.path.exists(dx7_path):
+      for candidate in [
+        os.path.join(os.path.dirname(__file__), 'dx7.pch2'),
+        os.path.join(os.path.dirname(__file__), 'nord', 'dx7.pch2'),
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dx7.pch2'),
+      ]:
+        if os.path.exists(candidate):
+          dx7_path = candidate
+          break
+    self.pch2 = Pch2File(dx7_path)
     self.dxrouter = self.module_by_name('DXRouter1')
     self.operators = [self.module_by_name('Operator%d'%i) for i in range(1, 7)]
     self.lfo = self.module_by_name('LFO')
@@ -317,7 +327,10 @@ def main(argv):
     f.write(s)
     logging.warning(s)
 
-if __name__ == '__main__':
+def main_cli():
   logging.basicConfig(format='%(message)s')
-  main(sys.argv)
+  sys.exit(main(sys.argv) or 0)
+
+if __name__ == '__main__':
+  main_cli()
 

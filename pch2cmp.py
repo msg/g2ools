@@ -1,8 +1,12 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
+import functools
 import os, sys, traceback
 from nord import printf
 from nord.g2.file import Pch2File
+
+def cmp(a, b):
+  return (a > b) - (a < b)
 
 def compare_shortnm(a, b):
   x = cmp(a.module.type.shortnm, b.module.type.shortnm)
@@ -19,7 +23,7 @@ def get_nets(pch2):
   nets = [ n for n in pch2.patch.voice.netlist.nets if n.output ]
   for net in nets:
     #ins = net.inputs[:]
-    net.inputs.sort(compare_shortnm)
+    net.inputs.sort(key=functools.cmp_to_key(compare_shortnm))
 
   def ordernets(a, b):
     x = compare_shortnm(a.output, b.output)
@@ -31,7 +35,7 @@ def get_nets(pch2):
       if x: return x
     return 0
 
-  nets.sort(ordernets)
+  nets.sort(key=functools.cmp_to_key(ordernets))
 
 def check_ports(modmap, aport, bport):
   x = compare_ports(aport, bport)
@@ -40,21 +44,21 @@ def check_ports(modmap, aport, bport):
   if x: return x
   # if index of aport.module not seen, create a new mapping to bport.module
   aidx, bidx = aport.module.index, bport.module.index
-  if modmap.has_key(aidx):
+  if aidx in modmap:
     return cmp(modmap[aidx], bidx)
   modmap[aidx] = bidx
   return 0 # only have one to check against, have to assume it's correct.
 
 def check_net(modmap, anet, bnet):
   # output module/port must match
-  if anet.output == None:
+  if anet.output is None:
     return -1
-  if bnet.output == None:
+  if bnet.output is None:
     return 1
   x = check_ports(modmap, anet.output, bnet.output)
   if x: return x
   # length of netlist must match
-  x = cmp(len(anet.inputs),len(bnet.inputs))
+  x = cmp(len(anet.inputs), len(bnet.inputs))
   if x: return x
   # all inputs must match
   for ain, bin in zip(anet.inputs, bnet.inputs):
@@ -77,52 +81,67 @@ def matchingnets(a, b):
   for anet in a.nets:
     for bnet in b.nets:
       if check_net(modmap, anet, bnet) == 0:
-        match += 1
+        matches += 1
   return matches
 
-filenames = [ f for f in sys.argv[1:] if f[-4:] == 'pch2' ]
-filenames.sort()
-pch2s = []
-for filename in filenames:
-  printf('%s\n', os.path.basename(filename))
-  p = Pch2File(filename)
-  get_nets(p)
-  pch2s.append(p)
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv[:]
+  else:
+    argv = list(argv)
+  if argv:
+    prog = argv.pop(0)
 
-def bynetsize(a, b):
-  return cmp(len(a.patch.voice.netlist.nets), len(b.patch.voice.netlist.nets))
-pch2s.sort(bynetsize)
+  filenames = [ f for f in argv if f.endswith('pch2') ]
+  filenames.sort()
+  pch2s = []
+  for filename in filenames:
+    printf('%s\n', os.path.basename(filename))
+    p = Pch2File(filename)
+    get_nets(p)
+    pch2s.append(p)
 
-p = {}
-for pch2 in pch2s:
-  k = len(pch2.patch.voice.netlist.nets)
-  d = p.get(k, None)
-  if not d:
-    d = p[k] = []
-  d.append(pch2)
+  def bynetsize(a, b):
+    return cmp(len(a.patch.voice.netlist.nets), len(b.patch.voice.netlist.nets))
+  pch2s.sort(key=functools.cmp_to_key(bynetsize))
 
-for k in p.keys():
-  a = p[k]
-  printf('net size %s:\n', k)
-  while len(a):
-    b = a.pop(0)
-    matches = [b]
-    j = 0
-    while j < len(a):
-      try:
-        if compare_netlist(b.patch.voice.netlist,a[j].patch.voice.netlist) == 0:
-          matches.append(a.pop(j))
-        else:
-          j += 1
-      except:
-        raise Exception('%s\n patches: %s %s' % (
-            traceback.format_exc(),
-            os.path.basename(b.filename), os.path.basename(a[j].filename)))
+  p = {}
+  for pch2 in pch2s:
+    k = len(pch2.patch.voice.netlist.nets)
+    d = p.get(k, None)
+    if not d:
+      d = p[k] = []
+    d.append(pch2)
 
-    if len(matches) == 1:
-      continue
-    printf(' matches:\n')
-    for match in matches:
-      filename = os.path.basename(match.filename)
-      printf('  %s\n', filename)
+  for k in p.keys():
+    a = p[k]
+    printf('net size %s:\n', k)
+    while len(a):
+      b = a.pop(0)
+      matches = [b]
+      j = 0
+      while j < len(a):
+        try:
+          if compare_netlist(b.patch.voice.netlist, a[j].patch.voice.netlist) == 0:
+            matches.append(a.pop(j))
+          else:
+            j += 1
+        except Exception:
+          raise Exception('%s\n patches: %s %s' % (
+              traceback.format_exc(),
+              os.path.basename(b.filename), os.path.basename(a[j].filename)))
+
+      if len(matches) == 1:
+        continue
+      printf(' matches:\n')
+      for match in matches:
+        filename = os.path.basename(match.filename)
+        printf('  %s\n', filename)
+  return 0
+
+def main_cli():
+  sys.exit(main(sys.argv) or 0)
+
+if __name__ == '__main__':
+  main_cli()
 

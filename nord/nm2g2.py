@@ -49,8 +49,23 @@ conn2cablecolors = {
 class NM2G2Converter:
   def __init__(self, pchfilename, options, log):
     self.pch = PchFile(pchfilename)
-    g2oolsdir = os.path.dirname(options.programpath)
-    self.pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
+    initpatch_path = None
+    if getattr(options, 'programpath', None):
+      candidate = os.path.join(os.path.dirname(options.programpath), 'initpatch.pch2')
+      if os.path.exists(candidate):
+        initpatch_path = candidate
+    if not initpatch_path:
+      for candidate in [
+        os.path.join(os.path.dirname(__file__), 'initpatch.pch2'),
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'initpatch.pch2'),
+        'initpatch.pch2',
+      ]:
+        if os.path.exists(candidate):
+          initpatch_path = candidate
+          break
+    if not initpatch_path:
+      initpatch_path = 'initpatch.pch2'
+    self.pch2 = Pch2File(initpatch_path)
     self.nmpatch = self.pch.patch
     self.g2patch = self.pch2.patch
     self.g2patch.voice.keyboard = None
