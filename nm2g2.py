@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -63,7 +63,7 @@ nm2g2_options = [
       dest='shorten', default=True,
       help='Turn off shorten cable connections'),
   make_option('-v', '--verbose', action='store',
-      dest='verbosity', default='2', choices=map(str, range(5)),
+      dest='verbosity', default='2', choices=list(map(str, range(5))),
       help='Set converter verbosity level 0-4'),
 ]
 
@@ -74,9 +74,9 @@ def doconvert(filename, options):
     nm2g2.convert()
   except KeyboardInterrupt:
     sys.exit(1)
-  except NM1Error, s:
+  except NM1Error as s:
     return '%s\n%s' % (filename, s)
-  except Exception, e:
+  except Exception as e:
     if options.debug:
       return '%s\n%s' % (filename, traceback.format_exc())
     else:
@@ -125,7 +125,10 @@ def main(argv, stream):
 
   while len(args):
     arg = args.pop(0)
-    pathlist = glob(arg)
+    if os.path.exists(arg):
+      pathlist = [arg]
+    else:
+      pathlist = glob(arg)
     if len(pathlist) == 0:
       options.failedpatches.append(arg)
       continue
@@ -157,5 +160,8 @@ class StdoutStream:
     self.file.write(self.str)
     self.str = ''
 
+def main_cli():
+  sys.exit(main(sys.argv, StdoutStream()) or 0)
+
 if __name__ == '__main__':
-  main(sys.argv, StdoutStream())
+  main_cli()

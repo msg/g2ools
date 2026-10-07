@@ -95,7 +95,7 @@ class Conv1Output(Convert):
     lev = nmmodule.params.Level
     if getv(lev) == 127 and not lev.knob and not lev.morph and not lev.ctrl:
       self.maing2module = '2-Out'
-    elif len(filter(isxoutput, nmarea.modules)) < 2:
+    elif len(list(filter(isxoutput, nmarea.modules))) < 2:
       self.maing2module = '2-Out'
     else:
       self.inputmap = ['In']
@@ -116,7 +116,7 @@ class Conv1Output(Convert):
       lev = None
 
     dest = getv(nmmp.Destination)
-    setv(out2.params.Destination, dest/2)
+    setv(out2.params.Destination, dest//2)
     setv(out2.params.Active, 1-getv(nmmp.Mute))
 
     inp = [out2.inputs.InL, out2.inputs.InR][dest % 2]
@@ -136,7 +136,7 @@ class Conv2Output(Convert):
     lev = nmmodule.params.Level
     if getv(lev) == 127 and not lev.knob and not lev.morph and not lev.ctrl:
       self.maing2module = '2-Out'
-    if len(filter(isxoutput, nmarea.modules)) < 2:
+    if len(list(filter(isxoutput, nmarea.modules))) < 2:
       self.maing2module = '2-Out'
     Convert.__init__(self, nmarea, g2area, nmmodule, options)
 

@@ -19,7 +19,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import os, sys
+import logging, os, sys
+from types import SimpleNamespace
 import nord.file
 from nord.g2.file import Pch2File
 from nord.g2.misc import handle_uprate, midicc_reserved
@@ -47,10 +48,41 @@ conn2cablecolors = {
 
 
 class NM2G2Converter:
-  def __init__(self, pchfilename, options, log):
+  def __init__(self, pchfilename, options=None, log=None):
+    if options is None:
+      options = SimpleNamespace(
+          programpath='nm2g2',
+          adsrforad=False,
+          compresscolumns=False,
+          debug=True,
+          keepold=False,
+          logiccombine=True,
+          nolog=True,
+          g2overdrive=False,
+          padmixer=False,
+          shorten=True,
+          verbosity='0',
+      )
+    if log is None:
+      log = logging.getLogger('nm2g2')
     self.pch = PchFile(pchfilename)
-    g2oolsdir = os.path.dirname(options.programpath)
-    self.pch2 = Pch2File(os.path.join(g2oolsdir, 'initpatch.pch2'))
+    initpatch_path = None
+    if getattr(options, 'programpath', None):
+      candidate = os.path.join(os.path.dirname(options.programpath), 'initpatch.pch2')
+      if os.path.exists(candidate):
+        initpatch_path = candidate
+    if not initpatch_path:
+      for candidate in [
+        os.path.join(os.path.dirname(__file__), 'initpatch.pch2'),
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'initpatch.pch2'),
+        'initpatch.pch2',
+      ]:
+        if os.path.exists(candidate):
+          initpatch_path = candidate
+          break
+    if not initpatch_path:
+      initpatch_path = 'initpatch.pch2'
+    self.pch2 = Pch2File(initpatch_path)
     self.nmpatch = self.pch.patch
     self.g2patch = self.pch2.patch
     self.g2patch.voice.keyboard = None
@@ -59,7 +91,7 @@ class NM2G2Converter:
     self.log = log
     osc.modindex.reset()
 
-  def convert(self):
+  def convert(self, output_filename=None):
     # loop through each module
     #   determine and store separation from module above >= 0
     #   if mod in convertion table
@@ -108,8 +140,11 @@ class NM2G2Converter:
 
     self.dotitleblock()
 
-    self.log.info('Writing patch "%s2"' % (self.pch.filename))
-    self.pch2.write(self.pch.filename+'2')
+    out_name = output_filename if output_filename is not None else (self.pch.filename+'2')
+    if out_name:
+      self.log.info('Writing patch "%s"' % (out_name))
+      self.pch2.write(out_name)
+    return self.pch2
 
 
   def doarea(self, nmarea, g2area):
@@ -192,7 +227,7 @@ class NM2G2Converter:
         return cmp(a.nmmodule.vert, b.nmmodule.vert)
       return cmp(a.nmmodule.horiz, b.nmmodule.horiz)
     locsorted = converters[:]
-    locsorted.sort(locationcmp)
+    locsorted.sort(key=lambda a: (a.nmmodule.horiz, a.nmmodule.vert))
 
     if len(locsorted):
       locsorted[0].reposition(None)
@@ -349,7 +384,7 @@ class NM2G2Converter:
         modcols[mod.horiz].append(mod)
       colpairs = []
       for col, mods in modcols.items():
-        mods.sort(locationcmp)
+        mods.sort(key=lambda a: (a.horiz, a.vert))
         if len(mods) % 2:
           oddmod = mods[-1]
         else:
@@ -638,3 +673,5 @@ class NM2G2Converter:
       return vert
 
     vert = addnamebars(lines, 0, vert+2)
+
+PatchConverter = NM2G2Converter

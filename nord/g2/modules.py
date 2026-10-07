@@ -3,7 +3,7 @@
 from nord import printf, Struct
 from nord.types import *
 from nord.g2.colors import g2conncolors
-from params import parammap
+from .params import parammap
 
 class ModuleMap(Struct):
   pass

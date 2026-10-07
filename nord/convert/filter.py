@@ -147,7 +147,7 @@ class ConvVocalFilter(ConvFilter):
 
 class ConvVocoder(Convert):
   maing2module = 'Vocoder'
-  parammap = ['Band%d' % i for i in xrange(1, 17)]+[None, 'Emphasis', 'Monitor']
+  parammap = ['Band%d' % i for i in range(1, 17)]+[None, 'Emphasis', 'Monitor']
   inputmap = ['Ctrl', 'In']
   outputmap = ['Out']
 
@@ -261,20 +261,20 @@ class ConvFilterBank(Convert):
     mixfaderp = mixfader.params
     onnms = ['1-3', '4-5', '6', '7', '8', '9-10', '11-12', '13-14']
     setv(mixfaderp.ExpLin, 2) # dB
-    for i in xrange(len(onnms)):
+    for i in range(len(onnms)):
       onp = getattr(mixfaderp, 'On%d'%(i+1))
       setv(onp, 1)
       onp.labels = [onnms[i]]
     def gv(p, nm):
       return getv(getattr(p, nm))
-    setv(mixfaderp.Lev1, (gv(nmmp, '50')+gv(nmmp, '75')+gv(nmmp, '110'))/3)
-    setv(mixfaderp.Lev2, (gv(nmmp, '170')+gv(nmmp, '250'))/2)
+    setv(mixfaderp.Lev1, (gv(nmmp, '50')+gv(nmmp, '75')+gv(nmmp, '110'))//3)
+    setv(mixfaderp.Lev2, (gv(nmmp, '170')+gv(nmmp, '250'))//2)
     setv(mixfaderp.Lev3, gv(nmmp, '380'))
     setv(mixfaderp.Lev4, gv(nmmp, '570'))
     setv(mixfaderp.Lev5, gv(nmmp, '850'))
-    setv(mixfaderp.Lev6, (gv(nmmp, '1.3')+gv(nmmp, '1.9'))/2)
-    setv(mixfaderp.Lev7, (gv(nmmp, '2.9')+gv(nmmp, '4.2'))/2)
-    setv(mixfaderp.Lev8, (gv(nmmp, '6.4')+gv(nmmp, '8.3'))/2)
+    setv(mixfaderp.Lev6, (gv(nmmp, '1.3')+gv(nmmp, '1.9'))//2)
+    setv(mixfaderp.Lev7, (gv(nmmp, '2.9')+gv(nmmp, '4.2'))//2)
+    setv(mixfaderp.Lev8, (gv(nmmp, '6.4')+gv(nmmp, '8.3'))//2)
     self.connect(band13.outputs.Out, mixfader.inputs.In1)
     self.connect(band45out.outputs.Out, mixfader.inputs.In2)
     self.connect(band6.outputs.Out, mixfader.inputs.In3)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -95,14 +95,29 @@ def printpatch(patch):
       printf('  %s:%s range %d\n', map.param.module.name,map.param.type.name,
           map.range)
     
-prog = sys.argv.pop(0)
-while len(sys.argv):
-  filename = sys.argv.pop(0)
-  printf('"%s"\n', filename)
-  try:
-    pch = PchFile(filename)
-    printpatch(pch.patch)
-  except NM1Error, s:
-    printf('%s: NM1Error %s\n', filename, s)
-    sys.exit(1)
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv[:]
+  else:
+    argv = list(argv)
+  prog = argv.pop(0) if argv else 'nmcat'
+  if '-h' in argv or '--help' in argv:
+    printf('usage: %s <pch-files>\n', prog)
+    return 0
+  while len(argv):
+    filename = argv.pop(0)
+    printf('"%s"\n', filename)
+    try:
+      pch = PchFile(filename)
+      printpatch(pch.patch)
+    except NM1Error as s:
+      printf('%s: NM1Error %s\n', filename, s)
+      return 1
+  return 0
+
+def main_cli():
+  sys.exit(main(sys.argv) or 0)
+
+if __name__ == '__main__':
+  main_cli()
 

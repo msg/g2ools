@@ -19,17 +19,43 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import string, sys
+import os, string, sys
 from struct import pack, unpack
 
 import nord.g2.modules
 from nord import printf
 from nord.module import Module
 from nord.file import hexdump, binhexdump
-from nord.file import Patch, Performance, Note, Cable, Knob, Ctrl, MorphMap
+from nord.file import Patch as _BasePatch, Performance, Note, Cable, Knob, Ctrl, MorphMap
 from nord.g2 import modules
 from nord.g2.crc import crc
 from nord.g2.bits import setbits, getbits, BitStream
+
+class Patch(_BasePatch):
+  def __init__(self, filename_or_fromname=None):
+    if isinstance(filename_or_fromname, (str, bytes)) or (hasattr(os, 'PathLike') and isinstance(filename_or_fromname, os.PathLike)):
+      super(Patch, self).__init__(nord.g2.modules.fromname)
+      pch2 = Pch2File(filename_or_fromname)
+      self.__dict__.update(pch2.patch.__dict__)
+      self._pch2file = pch2
+    elif callable(filename_or_fromname):
+      super(Patch, self).__init__(filename_or_fromname)
+    else:
+      super(Patch, self).__init__(nord.g2.modules.fromname)
+
+  def format_file(self):
+    if hasattr(self, '_pch2file'):
+      self._pch2file.patch = self
+      return self._pch2file.format_file()
+    pch2 = Pch2File()
+    pch2.patch = self
+    return pch2.format_file()
+
+  def write(self, filename):
+    with open(filename, 'wb') as f:
+      f.write(self.format_file())
+
+  save = write
 
 section_debug = 0 # outputs section debug 
 title_section = 0 # replace end of section with section title
@@ -50,16 +76,16 @@ class G2Error(Exception):
     return repr(self.value)
 
 def read_string(bitstream, l, pad=False):
-  read_str = bitstream.read_str
-  if pad == True:
-    return read_str(l).strip('\0')
+  if pad:
+    return bitstream.read_str(l).strip('\0')
   else:
-    s = bytearray(l)
-    for i in xrange(l):
-      s[i] = read_str(1)
-      if s[i] == 0:
-        return str(s[:i])
-    return str(s[:l])
+    chars = []
+    for _ in range(l):
+      b = bitstream.read_bits(8)
+      if b == 0:
+        break
+      chars.append(chr(b))
+    return ''.join(chars)
 
 def format_string(s, l, pad=False):
   if len(s) < l:
@@ -159,7 +185,7 @@ class ModuleList(Section):
     read_bits = bitstream.read_bits
     nmodules  = read_bits(8)
     area.modules = [ None ] * nmodules
-    for i in xrange(nmodules):
+    for i in range(nmodules):
       id = read_bits(8)
       module = Module(modules.fromid(id), area)
       area.modules[i] = module
@@ -177,7 +203,7 @@ class ModuleList(Section):
       #   all the modes in version 23 BUILD 266
       module_type = module.type
       if len(module.modes) < len(module_type.modes):
-        for mode in xrange(len(module.modes), len(module_type.modes)):
+        for mode in range(len(module.modes), len(module_type.modes)):
           module.modes[mode].value = module_type.modes[mode].type.default
 
   def format_area(self, area, bitstream):
@@ -218,7 +244,7 @@ class CurrentNote(Section):
     values    = bitstream.read_bitsa([7] * 3)
     lastnote.note, lastnote.attack, lastnote.release = values
     nnotes    = bitstream.read_bits(5) + 1
-    notes     = patch.notes = [ Note() for i in xrange(nnotes) ]  # G2Patch
+    notes     = patch.notes = [ Note() for i in range(nnotes) ]  # G2Patch
     for note in notes:
       note.note, note.attack, note.release = bitstream.read_bitsa([7, 7, 7]) 
 
@@ -260,7 +286,7 @@ class CableList(Section):
   def parse_area(self, area, bitstream):
     _, ncables = bitstream.read_bitsa([6, 16])
     area.cables = [ None ] * ncables
-    for i in xrange(ncables):
+    for i in range(ncables):
       cable       = Cable(area)
       cable.color, source, src_conn, direction, dest, dest_conn = \
           bitstream.read_bitsa([3, 8, 6, 1, 8, 6])
@@ -332,7 +358,7 @@ class Morph(object):
   '''Morph class for morph settings.'''
   def __init__(self, area, index):
     self.name  = 'morph%d' % (index+1)
-    self.maps  = [[] for variation in xrange(NVARIATIONS) ]
+    self.maps  = [[] for variation in range(NVARIATIONS) ]
     self.index = index
     self.area  = area
 
@@ -356,8 +382,8 @@ class Settings(object):
     for i, group in enumerate(self.groups, 2):
       for j, name in enumerate(group):
         setattr(self, name, Parameter(self.area, i, j, name=name))
-    self.morphs = [ Morph(self.area, morph+1) for morph in xrange(NMORPHS) ]
-    self.morphmaps = [ [] for variation in xrange(NVARIATIONS) ]
+    self.morphs = [ Morph(self.area, morph+1) for morph in range(NMORPHS) ]
+    self.morphmaps = [ [] for variation in range(NVARIATIONS) ]
 
 class Parameters(Section):
   '''Parameters Section subclass'''
@@ -368,7 +394,7 @@ class Parameters(Section):
 
     nsections, nvariations, section, nentries = read_bitsa([8, 8, 8, 7])
     # nentries: 16 parameters per variation: 8 dials, 8 modes 
-    for i in xrange(nvariations): # usually 9
+    for i in range(nvariations): # usually 9
       variation = read_bits(8)
       for morph in settings.morphs:
         dial = read_bits(7)
@@ -382,9 +408,9 @@ class Parameters(Section):
 
     for group in settings.groups:
       section, nentries = read_bitsa([8, 7])
-      for i in xrange(nvariations):
+      for i in range(nvariations):
         variation = read_bits(8)
-        for entry in xrange(nentries):
+        for entry in range(nentries):
           value = read_bits(7)
           if variation < NVARIATIONS:
             getattr(settings, group[entry]).variations[variation] = value
@@ -396,7 +422,7 @@ class Parameters(Section):
     #                                           1 for morph--.  .-- 16/var
     write_bitsa([2, 8, 8, 8, 7], [SETTINGS, 7, NVARIATIONS, 1, 16])
 
-    for variation in xrange(NVARIATIONS): # morph groups
+    for variation in range(NVARIATIONS): # morph groups
       write_bits(8, variation)
       for morph in settings.morphs:
         write_bits(7, morph.dial.variations[variation])
@@ -407,9 +433,9 @@ class Parameters(Section):
     for group in settings.groups:
       nentries = len(group)
       write_bitsa([8, 7], [section, nentries])
-      for variation in xrange(NVARIATIONS):
+      for variation in range(NVARIATIONS):
         write_bits(8, variation)
-        for entry in xrange(nentries):
+        for entry in range(nentries):
           value = getattr(settings, group[entry]).variations[variation]
           write_bits(7, value)
       section += 1
@@ -420,13 +446,13 @@ class Parameters(Section):
     read_bits = bitstream.read_bits
 
     nmodules, nvariations = bitstream.read_bitsa([8, 8])
-    for i in xrange(nmodules):
+    for i in range(nmodules):
       index, nparams = bitstream.read_bitsa([8, 7])
       module = area.find_module(index)
       params = module.params
-      for i in xrange(nvariations):
+      for i in range(nvariations):
         variation = read_bits(8)
-        for param in xrange(nparams):
+        for param in range(nparams):
           value = read_bits(7)
           if param < len(params) and variation < NVARIATIONS:
             params[param].variations[variation] = value
@@ -440,7 +466,7 @@ class Parameters(Section):
         modules.append(module)
       except:
         pass
-    modules.sort(lambda a, b: cmp(a.index, b.index))
+    modules.sort(key=lambda a: a.index)
 
     write_bits = bitstream.write_bits
 
@@ -456,7 +482,7 @@ class Parameters(Section):
 
       params = module.params
       write_bits(7, len(params))
-      for variation in xrange(NVARIATIONS):
+      for variation in range(NVARIATIONS):
         write_bits(8, variation)
         for param in params:
           write_bits(7, param.variations[variation])
@@ -506,12 +532,12 @@ class MorphParameters(Section):
     morphs = patch.settings.morphs
     morphmaps = patch.settings.morphmaps
 
-    for i in xrange(nvariations):
+    for i in range(nvariations):
       variation = read_bits(4)
       bitstream.seek_bit(4 + (6*8) + 4, 1) # zeros
 
       nmorphs = read_bits(8)
-      for j in xrange(nmorphs):
+      for j in range(nmorphs):
         morph_map       = MorphMap()
         area, index, param, morph = bitstream.read_bitsa([2, 8, 7, 4])
         morph_map.range = read_bits(8, 1)
@@ -535,7 +561,7 @@ class MorphParameters(Section):
     # number of morph parameters starts at byte 7-bit 0 for 5-bits
     morphs = patch.settings.morphs
 
-    for variation in xrange(NVARIATIONS):
+    for variation in range(NVARIATIONS):
       write_bits(4, variation)
       bitstream.seek_bit(4 + (6 * 8) + 4, 1)
 
@@ -545,7 +571,7 @@ class MorphParameters(Section):
         morph_maps.extend(morph.maps[variation])
       def mod_param_index_cmp(a, b):
         return cmp(a.param.module.index, b.param.module.index)
-      morph_maps.sort(mod_param_index_cmp)
+      morph_maps.sort(key=lambda a: a.param.module.index)
 
       write_bits(8, len(morph_maps))
       for morph_map in morph_maps:
@@ -566,7 +592,7 @@ class KnobAssignments(Section):
   def parse(self, patch, data):
     bitstream = BitStream(data)
     nknobs = bitstream.read_bits(16)
-    patch.knobs = [ Knob() for i in xrange(nknobs)] # G2Patch / G2Performance
+    patch.knobs = [ Knob() for i in range(nknobs)] # G2Patch / G2Performance
     for knob in patch.knobs:
       knob.assigned = bitstream.read_bits(1)
       if not knob.assigned:
@@ -611,7 +637,7 @@ class CtrlAssignments(Section):
   def parse(self, patch, data):
     bitstream = BitStream(data)
     nctrls = bitstream.read_bits(7)
-    patch.ctrls = [ Ctrl() for i in xrange(nctrls)]  # G2Patch? / G2Ctrl?
+    patch.ctrls = [ Ctrl() for i in range(nctrls)]  # G2Patch? / G2Ctrl?
     for ctrl in patch.ctrls:
       ctrl.midicc, area, index, param = bitstream.read_bitsa([7, 2, 8, 7])
       if area == SETTINGS:
@@ -646,7 +672,7 @@ class Labels(Section):
     s = bytearray([1, 1, 0])
     for morph in morphs:
       s[2] = 8 + morph.index
-      bitstream.write_str(str(s))
+      bitstream.write_bytes(s)
       write_string(bitstream, morph.label, 7, pad=True)
     return bitstream.tell_bit()
 
@@ -666,7 +692,7 @@ class Labels(Section):
         paramlen -= 1 # decrease because we got param index
         if paramlen:
           param.labels = [ read_string(bitstream, 7, pad=True)
-              for i in xrange(paramlen / 7) ]
+              for i in range(paramlen // 7) ]
           modlen -= paramlen
         else:
           param.labels = ['']
@@ -677,7 +703,7 @@ class Labels(Section):
   def parse_area(self, area, bitstream):
     read_bits = bitstream.read_bits
     nmodules = read_bits(8)
-    for i in xrange(nmodules):
+    for i in range(nmodules):
       index  = read_bits(8)
       module = area.find_module(index)
       self.parse_module(module, bitstream)
@@ -685,7 +711,7 @@ class Labels(Section):
   def format_module(self, module, bitstream):
     s = ''
     if module.type.id == 121: # SeqNote
-      s += str(bytearray(module.editmodes))
+      s = bytes(module.editmodes).decode('latin1')
     else:
       # build up the labels and then write them
       for i, param in enumerate(module.params):
@@ -742,7 +768,7 @@ class ModuleNames(Section):
   type = 0x5a
   def parse_area(self, area, bitstream):
     areai, nmodules = bitstream.read_bitsa([6, 8])
-    for i in xrange(nmodules):
+    for i in range(nmodules):
       module = area.find_module(bitstream.read_bits(8))
       module.name = read_string(bitstream, 16)
 
@@ -880,7 +906,7 @@ Info=BUILD %d\r
   def parse_patch(self, patch, memview):
     memview = self.parse_section(PatchDescription(), patch, memview)
     while len(memview) > 0:
-      type = ord(memview[0])
+      type = memview[0] if isinstance(memview[0], int) else ord(memview[0])
       if type == PatchDescription.type: # prf2 concats patches
         break
       section_class = section_manager.get(type, None)
@@ -894,10 +920,10 @@ Info=BUILD %d\r
 
   def parse_header(self, memview, filename):
     header2x = bytearray(memview[:2*len(self.standard_text_header)])
-    null = header2x.find('\0')
+    null = header2x.find(0)
     if null < 0:
       raise G2Error('Invalid G2File "%s" missing null terminator.' % filename)
-    self.txthdr = str(header2x[:null])
+    self.txthdr = bytes(header2x[:null]).decode('latin-1')
     self.binhdr = header2x[null+1], header2x[null+2]
     if self.binhdr[0] != self.binary_version:
       printf('Warning: %s version %d\n', filename, self.binhdr[0])
@@ -945,13 +971,13 @@ Info=BUILD %d\r
   def format_file(self):
     data = bytearray(64<<10)
     memview = memoryview(data)
-    hdr = Pch2File.standard_text_header % (self.type,
-        self.binary_version, self.build_version)
+    hdr = (Pch2File.standard_text_header % (self.type,
+        self.binary_version, self.build_version)).encode('latin1')
     memview[:len(hdr)] = hdr
     memview = memview[len(hdr):]
     #memview = self.format_header(memview)
-    memview[0] = chr(self.binary_version)
-    memview[1] = chr(self.binary_revision)
+    memview[0] = self.binary_version
+    memview[1] = self.binary_revision
     fmemview = self.format(memview[2:])
     bytes = len(memview) - len(fmemview)
     data_crc = crc(memview[:bytes])
@@ -962,7 +988,7 @@ Info=BUILD %d\r
   # write - this looks a lot easier then read ehhhh???
   def write(self, filename=None):
     out = open(filename, 'wb')
-    out.write(str(self.format_file()))
+    out.write(self.format_file())
 
 class Prf2File(Pch2File):
   '''Prf2File(filename) -> load a nord modular g2 performance.'''

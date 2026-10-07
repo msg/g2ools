@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
 # Copyright (c) 2006,2007 Matt Gerassimoff
 #
@@ -26,27 +26,42 @@ from nord.g2.pprint import printpatch
 def printf(fmt, *a):
   return sys.stdout.write(fmt % a)
 
-prog = sys.argv.pop(0)
-while len(sys.argv):
-  filename = sys.argv.pop(0)
-  printf('"%s"\n', filename)
-  prf2 = Prf2File(filename)
-  perf = prf2.performance
-  printf(' focus: %s\n',                'abcd'[perf.description.focus])
-  printf(' range enable: %s\n',         ['off','on'][perf.description.rangesel])
-  printf(' master clock: %d BPM: %s\n', perf.description.bpm,
-      ['stop','run'][perf.description.clock])
-  printf(' kb split: %s\n',             ['off','on'][perf.description.split])
-  for sloti, slot in enumerate(perf.slots):
-    description = slot.description
-    name = '"%s"' % slot.name
-    printf(' slot %s: %d:%d %-16s\n', 'abcd'[sloti],
-        description.bank+1, description.patch+1, name)
-    printf('  active: %-3s, ',          ['off','on'][description.active])
-    printf('key: %-3s, ',               ['off','on'][description.keyboard])
-    printf('hold: %-3s, ',              ['off','on'][description.hold])
-    printf('range: %d-%d\n',            description.keylow, description.keyhigh)
-  for sloti, slot in enumerate(perf.slots, 1):
-    printf('Patch %d: "%s"\n', sloti, slot.name)
-    printpatch(slot.patch)
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv[:]
+  else:
+    argv = list(argv)
+  prog = argv.pop(0) if argv else 'prf2cat'
+  if '-h' in argv or '--help' in argv:
+    printf('usage: %s <prf2-files>\n', prog)
+    return 0
+  while len(argv):
+    filename = argv.pop(0)
+    printf('"%s"\n', filename)
+    prf2 = Prf2File(filename)
+    perf = prf2.performance
+    printf(' focus: %s\n',                'abcd'[perf.description.focus])
+    printf(' range enable: %s\n',         ['off','on'][perf.description.rangesel])
+    printf(' master clock: %d BPM: %s\n', perf.description.bpm,
+        ['stop','run'][perf.description.clock])
+    printf(' kb split: %s\n',             ['off','on'][perf.description.split])
+    for sloti, slot in enumerate(perf.slots):
+      description = slot.description
+      name = '"%s"' % slot.name
+      printf(' slot %s: %d:%d %-16s\n', 'abcd'[sloti],
+          description.bank+1, description.patch+1, name)
+      printf('  active: %-3s, ',          ['off','on'][description.active])
+      printf('key: %-3s, ',               ['off','on'][description.keyboard])
+      printf('hold: %-3s, ',              ['off','on'][description.hold])
+      printf('range: %d-%d\n',            description.keylow, description.keyhigh)
+    for sloti, slot in enumerate(perf.slots, 1):
+      printf('Patch %d: "%s"\n', sloti, slot.name)
+      printpatch(slot.patch)
+  return 0
+
+def main_cli():
+  sys.exit(main(sys.argv) or 0)
+
+if __name__ == '__main__':
+  main_cli()
 
