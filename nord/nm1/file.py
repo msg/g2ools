@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import sys
+import os, sys
 
 from nord import printf
 from nord.net import NetList
@@ -570,11 +570,27 @@ class Morph(object):
     self.ctrl = None
 
 class NM1Patch(Patch):
-  def __init__(self, fromname_):
-    super(NM1Patch, self).__init__(fromname_)
-    self.morphs = [ Morph(i) for i in range(1, NMORPHS+1) ]
-    self.knobs = []
-    self.textpad = ''
+  def __init__(self, filename_or_fromname=None):
+    if isinstance(filename_or_fromname, (str, bytes)) or (hasattr(os, 'PathLike') and isinstance(filename_or_fromname, os.PathLike)):
+      super(NM1Patch, self).__init__(fromname)
+      self.morphs = [ Morph(i) for i in range(1, NMORPHS+1) ]
+      self.knobs = []
+      self.textpad = ''
+      pch = PchFile(filename_or_fromname)
+      self.__dict__.update(pch.patch.__dict__)
+      self._pchfile = pch
+    elif callable(filename_or_fromname):
+      super(NM1Patch, self).__init__(filename_or_fromname)
+      self.morphs = [ Morph(i) for i in range(1, NMORPHS+1) ]
+      self.knobs = []
+      self.textpad = ''
+    else:
+      super(NM1Patch, self).__init__(fromname)
+      self.morphs = [ Morph(i) for i in range(1, NMORPHS+1) ]
+      self.knobs = []
+      self.textpad = ''
+
+Patch = NM1Patch
 
 class PchFile(object):
   v3tags = [

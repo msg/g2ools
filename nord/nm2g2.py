@@ -19,7 +19,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import os, sys
+import logging, os, sys
+from types import SimpleNamespace
 import nord.file
 from nord.g2.file import Pch2File
 from nord.g2.misc import handle_uprate, midicc_reserved
@@ -47,7 +48,23 @@ conn2cablecolors = {
 
 
 class NM2G2Converter:
-  def __init__(self, pchfilename, options, log):
+  def __init__(self, pchfilename, options=None, log=None):
+    if options is None:
+      options = SimpleNamespace(
+          programpath='nm2g2',
+          adsrforad=False,
+          compresscolumns=False,
+          debug=True,
+          keepold=False,
+          logiccombine=True,
+          nolog=True,
+          g2overdrive=False,
+          padmixer=False,
+          shorten=True,
+          verbosity='0',
+      )
+    if log is None:
+      log = logging.getLogger('nm2g2')
     self.pch = PchFile(pchfilename)
     initpatch_path = None
     if getattr(options, 'programpath', None):
@@ -74,7 +91,7 @@ class NM2G2Converter:
     self.log = log
     osc.modindex.reset()
 
-  def convert(self):
+  def convert(self, output_filename=None):
     # loop through each module
     #   determine and store separation from module above >= 0
     #   if mod in convertion table
@@ -123,8 +140,11 @@ class NM2G2Converter:
 
     self.dotitleblock()
 
-    self.log.info('Writing patch "%s2"' % (self.pch.filename))
-    self.pch2.write(self.pch.filename+'2')
+    out_name = output_filename if output_filename is not None else (self.pch.filename+'2')
+    if out_name:
+      self.log.info('Writing patch "%s"' % (out_name))
+      self.pch2.write(out_name)
+    return self.pch2
 
 
   def doarea(self, nmarea, g2area):
@@ -653,3 +673,5 @@ class NM2G2Converter:
       return vert
 
     vert = addnamebars(lines, 0, vert+2)
+
+PatchConverter = NM2G2Converter

@@ -19,17 +19,43 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import string, sys
+import os, string, sys
 from struct import pack, unpack
 
 import nord.g2.modules
 from nord import printf
 from nord.module import Module
 from nord.file import hexdump, binhexdump
-from nord.file import Patch, Performance, Note, Cable, Knob, Ctrl, MorphMap
+from nord.file import Patch as _BasePatch, Performance, Note, Cable, Knob, Ctrl, MorphMap
 from nord.g2 import modules
 from nord.g2.crc import crc
 from nord.g2.bits import setbits, getbits, BitStream
+
+class Patch(_BasePatch):
+  def __init__(self, filename_or_fromname=None):
+    if isinstance(filename_or_fromname, (str, bytes)) or (hasattr(os, 'PathLike') and isinstance(filename_or_fromname, os.PathLike)):
+      super(Patch, self).__init__(nord.g2.modules.fromname)
+      pch2 = Pch2File(filename_or_fromname)
+      self.__dict__.update(pch2.patch.__dict__)
+      self._pch2file = pch2
+    elif callable(filename_or_fromname):
+      super(Patch, self).__init__(filename_or_fromname)
+    else:
+      super(Patch, self).__init__(nord.g2.modules.fromname)
+
+  def format_file(self):
+    if hasattr(self, '_pch2file'):
+      self._pch2file.patch = self
+      return self._pch2file.format_file()
+    pch2 = Pch2File()
+    pch2.patch = self
+    return pch2.format_file()
+
+  def write(self, filename):
+    with open(filename, 'wb') as f:
+      f.write(self.format_file())
+
+  save = write
 
 section_debug = 0 # outputs section debug 
 title_section = 0 # replace end of section with section title

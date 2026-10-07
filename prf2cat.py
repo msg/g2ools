@@ -31,8 +31,10 @@ def main(argv=None):
     argv = sys.argv[:]
   else:
     argv = list(argv)
-  if argv:
-    prog = argv.pop(0)
+  prog = argv.pop(0) if argv else 'prf2cat'
+  if '-h' in argv or '--help' in argv:
+    printf('usage: %s <prf2-files>\n', prog)
+    return 0
   while len(argv):
     filename = argv.pop(0)
     printf('"%s"\n', filename)

@@ -337,6 +337,14 @@ the nm1 and g2 implementations.
     self.lastnote = None
     self.notes = []
 
+  @property
+  def modules(self):
+    return self.voice.modules + self.fx.modules
+
+  @property
+  def cables(self):
+    return self.voice.cables + self.fx.cables
+
 class Slot(object):
   '''Slot class for performances.'''
   def __init__(self, index, fromname):

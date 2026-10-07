@@ -244,8 +244,10 @@ def main(argv=None):
     argv = sys.argv[:]
   else:
     argv = list(argv)
-  if argv:
-    prog = argv.pop(0)
+  prog = argv.pop(0) if argv else 'pch2tog2'
+  if '-h' in argv or '--help' in argv:
+    printf('usage: %s <pch2-files>\n', prog)
+    return 0
   while len(argv):
     filename = argv.pop(0)
     pch = Pch2File(filename)
