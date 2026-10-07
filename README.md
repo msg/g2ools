@@ -5,11 +5,11 @@
 - Nord Modular Classic / G1 patch files (`.pch`)
 - Yamaha DX7 SysEx patch conversion (`.syx`)
 
-Originally written by Matt Gerassimoff with extensive module modeling and conversion tables by 3phase (Sven Roehrig).
+Originally written by Matt Gerassimoff with extensive module modeling and conversion tables by 3phase (Sven Roehrig). Migrated to Python 3 by Lijah Shaw-Rutschman.
 
 ## Requirements
 
-- Python >= 3.10
+- Python >= 3.9
 - [`uv`](https://docs.astral.sh/uv/) (recommended) or standard `pip`
 
 ## Quick Start with `uv`
