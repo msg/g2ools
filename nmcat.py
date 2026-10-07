@@ -102,7 +102,7 @@ while len(sys.argv):
   try:
     pch = PchFile(filename)
     printpatch(pch.patch)
-  except NM1Error, s:
+  except NM1Error as s:
     printf('%s: NM1Error %s\n', filename, s)
     sys.exit(1)
 

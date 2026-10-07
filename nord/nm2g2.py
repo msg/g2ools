@@ -192,7 +192,7 @@ class NM2G2Converter:
         return cmp(a.nmmodule.vert, b.nmmodule.vert)
       return cmp(a.nmmodule.horiz, b.nmmodule.horiz)
     locsorted = converters[:]
-    locsorted.sort(locationcmp)
+    locsorted.sort(key=lambda a: (a.nmmodule.horiz, a.nmmodule.vert))
 
     if len(locsorted):
       locsorted[0].reposition(None)
@@ -349,7 +349,7 @@ class NM2G2Converter:
         modcols[mod.horiz].append(mod)
       colpairs = []
       for col, mods in modcols.items():
-        mods.sort(locationcmp)
+        mods.sort(key=lambda a: (a.horiz, a.vert))
         if len(mods) % 2:
           oddmod = mods[-1]
         else:

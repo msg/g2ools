@@ -251,7 +251,7 @@ dx2g2_options = [
       dest='recursive', default=False,
       help='On dir arguments, convert all .pch files'),
   make_option('-v', '--verbose', action='store',
-      dest='verbosity', default='3', choices=map(str, range(5)),
+      dest='verbosity', default='3', choices=list(map(str, range(5))),
       help='Set converter verbosity level 0-4'),
 ]
 

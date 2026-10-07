@@ -177,7 +177,7 @@ class ConvMulti_Env(Convert):
     setv(g2mp.SustainMode, [3, 0, 1, 2, 3][getv(nmmp.Sustain)])
     setv(g2mp.Shape, [3, 2, 1][getv(nmmp.Curve)])
     # handle special parameters
-    updatevals(g2mp, ['Time%d' % i for i in xrange(1, 5)]+['NR'], adsrtime_map)
+    updatevals(g2mp, ['Time%d' % i for i in range(1, 5)]+['NR'], adsrtime_map)
     # if L4 is sustain, deal with it.
     sustain = getv(nmmp.Sustain)
     if sustain == 4:

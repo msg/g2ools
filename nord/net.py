@@ -32,10 +32,11 @@ class NetError(Exception):
     return repr(self.value)
 
 class Net:
-  __slots__ = ( 'output', 'inputs' )
-  def __init__(self, output, inputs):
+  __slots__ = ( 'output', 'inputs', 'color' )
+  def __init__(self, output, inputs, color=None):
     self.output = output
     self.inputs = inputs
+    self.color = color
 
 class NetList:
   def __init__(self):

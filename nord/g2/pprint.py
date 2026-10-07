@@ -32,7 +32,7 @@ def printdescription(patch):
   printf(' variation: %d\n', desc.variation)
   x = [ desc.red, desc.blue, desc.yellow, desc.orange, desc.green,
       desc.purple, desc.white ]
-  colors = ''.join(['RBYOGPW'[i] for i in xrange(len(x)) if x[i]])
+  colors = ''.join(['RBYOGPW'[i] for i in range(len(x)) if x[i]])
   printf(' colors: %s\n', colors)
   #printf(' unk2=0x%02x\n', desc.unk2)
     
@@ -80,12 +80,13 @@ def printknobs(patch):
   printf('knobs:\n')
   for i, knob in enumerate(patch.knobs):
     if knob.assigned:
-      printf(' %s%d:%d ', 'ABCDE'[i/24], (i/8)%3, i&7)
+      printf(' %s%d:%d ', 'ABCDE'[i//24], (i//8)%3, i&7)
       if hasattr(knob.param, 'module'):
+        area_name = {0: 'fx', 1: 'voice', 2: 'settings'}.get(knob.param.module.area.index, 'unknown')
+        mod_name = getattr(knob.param.module, 'name', '')
+        param_type = getattr(knob.param, 'name', getattr(getattr(knob.param, 'type', None), 'name', ''))
         printf('%s:"%s":%s isled=0x%02x\n',
-            ['fx', 'voice'][knob.param.module.area.index],
-            knob.param.module.name, knob.param.type.name,
-            knob.isled)
+            area_name, mod_name, param_type, knob.isled)
       else:
         printf('morph:%d:"%s"\n', knob.param.index, knob.param.label)
 
@@ -128,7 +129,7 @@ def printmidicc(patch):
       name = param.name
     else:
       name = param.module.name + ':' + param.type.name
-    if midicctable.has_key(ctrl.midicc):
+    if ctrl.midicc in midicctable:
       s = '"' + midicctable[ctrl.midicc] + '"'
     else:
       s = ''

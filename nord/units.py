@@ -24,7 +24,7 @@ def nm2g2val(nm1midival, nm1vals, g2vals):
   nm1val = nm1vals[nm1midival]
   g2min = 1000000 # nothing here will never be that big
   g2midival = 0
-  for midival in xrange(128):
+  for midival in range(128):
     g2val = g2vals[midival]
     if abs(g2val-nm1val) < g2min:
       g2min = abs(g2val-nm1val)
@@ -70,7 +70,7 @@ g2adsrtime = [
 ]
 
 adsrtime_map = []
-for midi in xrange(128):
+for midi in range(128):
   adsrtime_map.append(nm2g2val(midi, nm1adsrtime, g2adsrtime))
 
 nm1fltfreq = [
@@ -112,7 +112,7 @@ g2fltfreq = [
 ]
 
 fltfreq_map = []
-for midi in xrange(128):
+for midi in range(128):
   fltfreq_map.append(nm2g2val(midi, nm1fltfreq, g2fltfreq))
 
 nm1logictime = [
@@ -154,7 +154,7 @@ g2logictime = [
 ]
 
 logictime_map = []
-for midi in xrange(128):
+for midi in range(128):
   logictime_map.append(nm2g2val(midi, nm1logictime, g2logictime))
 
 nm1levamp = [
@@ -196,7 +196,7 @@ g2levamp = [
 ]
 
 levamp_map = []
-for midi in xrange(128):
+for midi in range(128):
   levamp_map.append(nm2g2val(midi, nm1levamp, g2levamp))
 
 ratios = [

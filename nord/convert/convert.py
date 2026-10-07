@@ -103,8 +103,8 @@ class Convert(object):
     # update vertical position of all modules with the one removed
     def byvert(a, b):
       return cmp(a.vert, b.vert)
-    self.g2modules.sort(byvert)
-    for i in xrange(1, len(self.g2modules)):
+    self.g2modules.sort(key=lambda a: a.vert)
+    for i in range(1, len(self.g2modules)):
       above = self.g2modules[i-1]
       self.g2modules[i].vert = above.vert + above.height
 

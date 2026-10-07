@@ -42,7 +42,8 @@ def getbits(bit, nbits, data, signed=0):
   # grab 32-bits starting with the byte that contains bit
   byte = bit >> 3
   # align size to a 32-bit word
-  long_ = struct.unpack('>L', (str(data[byte:byte+4])+'\x00'*4)[:4])[0]
+  raw = bytes(data[byte:byte+4])
+  long_ = struct.unpack('>L', (raw + b'\x00'*4)[:4])[0]
   val = getbits_(long_, 32-(bit&7)-nbits, nbits)
   if signed and (val>>(nbits-1)):
     val |= ~0 << nbits
@@ -58,15 +59,13 @@ def setbits(bit, nbits, data, value):
   # grab 32-bits starting with the byte that contains bit
   byte = bit >> 3
   last = (bit+nbits+7)>>3
-  s = data[byte:byte+4].tostring()
+  raw = bytes(data[byte:byte+4])
+  s = (raw + b'\x00'*4)[:4]
   # align size to a 32-bit word
   long_ = setbits_(struct.unpack('>L', s)[0], 32-(bit&7)-nbits, nbits, value)
   # readjust array to fit (bits+nbits)/8 bytes
   a = array('B', struct.pack('>L', long_)[:last-byte])
-  #printf('bit=%d nbits=%d byte=%d last=%d last-byte+1=%d len=%d len(a)=%d\n',
-  #   bit, nbits, byte, last, last-byte, len(data), len(a))
   data[byte:last] = a
-  #printf('%s\n', data)
   return bit+nbits
 
 class BitStream(object):
@@ -79,21 +78,21 @@ class BitStream(object):
     if data:
       self.data = data
 
-  def read_bits(self, nbits):
-    self.bit, value = getbits(self.bit, nbits, self.data)
+  def read_bits(self, nbits, signed=0):
+    self.bit, value = getbits(self.bit, nbits, self.data, signed=signed)
     return value
 
   def read_bitsa(self, nbitsa):
     return [ self.read_bits(nbits) for nbits in nbitsa ]
 
   def read_bytes(self, nbytes):
-    return [ self.read_bits(8) for byte in xrange(nbytes) ]
+    return [ self.read_bits(8) for byte in range(nbytes) ]
 
   def read_str(self, nbytes):
     s = bytearray(nbytes)
-    for byte in xrange(nbytes):
+    for byte in range(nbytes):
       s[byte] = self.read_bits(8)
-    return str(s)
+    return bytes(s).decode('latin-1')
 
   def seek_bit(self, bit, where=0):
     if where == 0:
@@ -113,16 +112,16 @@ class BitStream(object):
     for nbits, value in zip(nbitsa, values):
       self.write_bits(nbits, value)
 
-  def write_bytes(self, bytes):
-    for byte in bytes:
-      self.write_bits(8, byte)
+  def write_bytes(self, data):
+    for byte in data:
+      self.write_bits(8, byte if isinstance(byte, int) else ord(byte))
 
-  def write_str(self, str):
-    for c in str:
-      self.write_bits(8, ord(c))
+  def write_str(self, s):
+    for c in s:
+      self.write_bits(8, ord(c) if isinstance(c, str) else c)
 
   def string(self):
-    return str(self.data[:(self.bit+7)>>3])
+    return bytes(self.data[:(self.bit+7)>>3])
 
 try:
   from nord.g2._bits import setbits, getbits, BitStream

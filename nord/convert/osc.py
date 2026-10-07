@@ -86,7 +86,7 @@ class ModIndexes:
   
   def __getattr__(self, name):
     d = self.__dict__['__values__']
-    if not d.has_key(name):
+    if name not in d:
       d[name] = 1
     ret = d[name]
     d[name] += 1
@@ -769,7 +769,7 @@ class ConvOscSineBank(Convert):
     else:
       osctype = 'OscD'
     oscs = []
-    for i in xrange(6, 0, -1): # 6 Sine Osc
+    for i in range(6, 0, -1): # 6 Sine Osc
       # if osc muted, don't addit
       if getv(getattr(nmmp, 'Osc%dMute'%i))==0:
         if len(getattr(nmm.inputs, 'Osc%dAm'%i).cables) == 0 and \
@@ -799,12 +799,12 @@ class ConvOscSineBank(Convert):
     if len(nmm.inputs.Sync.cables):
       self.inputs[2] = oscs[0].inputs.Sync
       if len(oscs) > 1:
-        for i in xrange(1, len(oscs)):
+        for i in range(1, len(oscs)):
           self.connect(oscs[i-1].inputs.Sync, oscs[i].inputs.Sync)
     if len(nmm.inputs.Mst.cables):
       self.inputs[0] = oscs[0].inputs.Pitch
       if len(oscs) > 1:
-        for i in xrange(1, len(oscs)):
+        for i in range(1, len(oscs)):
           self.connect(oscs[i-1].inputs.Pitch, oscs[i].inputs.Pitch)
     self.oscs = oscs
 
@@ -908,7 +908,7 @@ class ConvDrumSynth(Convert):
     nmmp, g2mp = nmm.params, g2m.params
 
     # parameters are exactly the same
-    for i in xrange(len(nmm.params)):
+    for i in range(len(nmm.params)):
       setv(g2mp[i], getv(nmmp[i]))
       self.params[i] = g2mp[i]
 

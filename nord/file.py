@@ -36,11 +36,11 @@ def hexdump(data, addr=0, size=1):
     type, fmt, l = 'H', '%04x', 19
   else:
     type, fmt, l = 'B', '%02x', 23
-  a = array(type, str(data))
+  a = array(type, bytes(data))
   for off in range(0, len(data), 16):
-    hexs = [fmt % i for i in a[off/size:(off+16)/size]]
+    hexs = [fmt % i for i in a[off//size:(off+16)//size]]
     s.append('%06x: %-*s  %-*s | %s' % (addr+off,
-      l, ' '.join(hexs[:8/size]), l, ' '.join(hexs[8/size:]),
+      l, ' '.join(hexs[:8//size]), l, ' '.join(hexs[8//size:]),
       ''.join([out(byte) for byte in data[off:off+16]])))
   return '\n'.join(s)
 
@@ -110,7 +110,7 @@ for the voice and fx areas of a nord modules g2 patch.
     self.modules = []
     self.cables = []
     self.netlist = NetList()
-    self.free_indexes = range(1, MAX_MODULES+1)
+    self.free_indexes = list(range(1, MAX_MODULES+1))
 
   def find_module(self, index):
     '''find_module(index) -> module at index or None'''
@@ -350,5 +350,5 @@ Basically a holder for 4 patches, one each for slot a, slot b,
 slot c, and slot d.
 '''
   def __init__(self, fromname):
-    self.slots = [ Slot(slot, fromname) for slot in xrange(4) ]
+    self.slots = [ Slot(slot, fromname) for slot in range(4) ]
 

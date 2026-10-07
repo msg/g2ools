@@ -183,11 +183,11 @@ class ConvDelay(Convert):
     
     if self.maing2module == 'DelayDual':
       setv(g2mp.Time2, 63) # 2.64mS
-      setv(g2mp.Time1, (getv(nmmp.Time)+1)/2)
-      setv(g2mp.Time1Mod, (getv(nmmp.Modulation)+1)/2)
+      setv(g2mp.Time1, (getv(nmmp.Time)+1)//2)
+      setv(g2mp.Time1Mod, (getv(nmmp.Modulation)+1)//2)
     else:
-      setv(g2mp.Time, (getv(nmmp.Time)+1)/2)
-      setv(g2mp.TimeMod, (getv(nmmp.Modulation)+1)/2)
+      setv(g2mp.Time, (getv(nmmp.Time)+1)//2)
+      setv(g2mp.TimeMod, (getv(nmmp.Modulation)+1)//2)
 
 class ConvSampleNHold(Convert):
   maing2module = 'S&H'
